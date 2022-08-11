@@ -325,10 +325,16 @@ def monster_random_move():
 def check_equip():
     global punch_image
 
+    # 장비 장착
     for equip in equip_group:
         if equip == "punch_v":
             punch_image = pygame.image.load(os.path.join(file_path, "images\\punch_v.png")).convert_alpha()
             player.damage = 15
+
+    # 장비 해제
+    if "punch_v" not in equip_group:
+        punch_image = pygame.image.load(os.path.join(file_path, "images\\punch.png")).convert_alpha()
+        player.damage = 10
 ##############################################################################################
 ##### CHARACTER CLASS
 class Character(pygame.sprite.Sprite):
@@ -425,7 +431,6 @@ class Punch(pygame.sprite.Sprite):
         
         self.rect = image.get_rect(center=position)
         self.time = pygame.time.get_ticks()
-        # self.damage = 10
 
     def get_time(self):
         return pygame.time.get_ticks() - self.time
@@ -435,13 +440,10 @@ class Punch(pygame.sprite.Sprite):
         if self.direction == "LEFT":
             self.rect = (player.rect.x-60, player.rect.y)
         elif self.direction == "RIGHT":
-            r_image = pygame.transform.rotozoom(punch_image, 180, 1)
             self.rect = (player.rect.x+60, player.rect.y)
         elif self.direction == "UP":
-            r_image = pygame.transform.rotozoom(punch_image, 270, 1)
             self.rect = (player.rect.x, player.rect.y-60)
         elif self.direction == "DOWN":
-            r_image = pygame.transform.rotozoom(punch_image, 90, 1)
             self.rect = (player.rect.x, player.rect.y+60)
 
         screen.blit(self.image, self.rect)
