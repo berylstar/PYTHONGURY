@@ -1,6 +1,8 @@
+from dis import code_info
 import pygame
 import os
 import random
+from class_weapon import *
 ##############################################################################################
 def scene_title_game():
     global running, ready
@@ -72,6 +74,11 @@ def display_game_ui():
     screen.blit(player_image, life_image_rect)
     screen.blit(msg_life, life_rect)                                  #COIN MESSAGE
 
+    for equip in equip_group:
+        idx = equip_group.index(equip) + 1
+        equip_rect = equip.image.get_rect(center=(1040, 160*idx))
+        screen.blit(equip.image, equip_rect)
+
 def scene_tutorial(doing):
     global running
 
@@ -98,7 +105,7 @@ def scene_tutorial(doing):
         pygame.display.update()
 
 def scene_skeleton_shop(doing):
-    global running
+    global running, shop_is_buy
 
     while doing:
         for event in pygame.event.get():
@@ -108,20 +115,52 @@ def scene_skeleton_shop(doing):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    equip_group.append("punch_v")
-                    print("GET PUNCH_V")
+                    if not shop_is_buy[0] and player.coin >= 3:
+                        equip_group[0] = Punch(punch_v_image, (-10,10), "UP")
+                        player.coin -= 3
+                        shop_is_buy[0] = True
+                if event.key == pygame.K_2:
+                    if not shop_is_buy[1] and player.coin >= 6:
+                        equip_group[0] = Punch(punch_f_image, (-10,10), "UP")
+                        player.coin -= 6
+                        shop_is_buy[1] = True
+                if event.key == pygame.K_3:
+                    if not shop_is_buy[2] and player.coin >= 3:
+                        equip_group[0] = Punch(punch_v_image, (-10,10), "UP")
+                        player.coin -= 3
+                        shop_is_buy[2] = True
                 if event.key == pygame.K_SPACE:
                     doing = False
 
         display_game_ui()
-        shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
-        shop_rect = shop_image.get_rect(center=(640, 300))
-        screen.blit(shop_image, shop_rect)
+
+        equip_showcase(0, punch_v_image, 3)
+        equip_showcase(1, punch_f_image, 6)
+        equip_showcase(2, punch_v_image, 3)
+
+        check_equip()
 
         msg_back = game_font.render("PRESS 'SPACE BAR' TO BACK", True, WHITE)
         exit_rect = msg_back.get_rect(center=(640, 640))
         screen.blit(msg_back, exit_rect)
         pygame.display.update()
+
+def equip_showcase(index, image, price):
+    pygame.draw.rect(screen, WHITE, ((450 + 150*index,120),(80,120)), 1)
+    if not shop_is_buy[index]:
+        equip_rect = image.get_rect(center=(490+ 150*index, 160))
+        screen.blit(image, equip_rect)
+
+        coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
+        coin_rect = coin_image.get_rect(center=(470+ 150*index,210))
+        screen.blit(coin_image, coin_rect)
+
+        msg_price = game_font.render("  x {0}".format(price), True, WHITE)
+        price_rect = msg_price.get_rect(center=(500+ 150*index, 210))
+        screen.blit(msg_price, price_rect)
+    else:
+        case_rect = sold_out_image.get_rect(center=(490+ 150*index,180))
+        screen.blit(sold_out_image, case_rect)
 
 def scene_player_dead(doing):
     global running
@@ -183,12 +222,13 @@ def scene_game_over(doing):
         pygame.display.update()
 
 def game_restart():
-    global floor, player
+    global floor, player, shop_is_buy, equip_group
 
     player = Player(player_image, player_first_position)
     floor_zero()
     floor = 0
-    equip_group.clear()
+    shop_is_buy = [False, False, False, False]
+    equip_group = [Punch(punch_d_image, (-10,-10), "UP")]
 
 def player_move_key():
     if event.type == pygame.KEYDOWN:
@@ -323,17 +363,19 @@ def monster_random_move():
                 pass
 
 def check_equip():
-    global punch_image
 
     # 장비 장착
-    for equip in equip_group:
-        if equip == "punch_v":
-            punch_image = pygame.image.load(os.path.join(file_path, "images\\punch_v.png")).convert_alpha()
-            player.damage = 15
+    if equip_group[0].image == punch_v_image:
+        player.punch = "punch_v"
+        player.damage = 15
 
+    elif equip_group[0].image == punch_f_image:
+        player.punch = "punch_f"
+        player.damae = 17
+        
     # 장비 해제
-    if "punch_v" not in equip_group:
-        punch_image = pygame.image.load(os.path.join(file_path, "images\\punch.png")).convert_alpha()
+    else:
+        player.punch = "punch_d"
         player.damage = 10
 ##############################################################################################
 ##### CHARACTER CLASS
@@ -387,26 +429,33 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.coin = 0
-        self.weapon = "punch"
+        self.punch = "punch_d"
+        self.equip = "None"
         self.damage = 10
 
-    def test_a(self):
-        if self.weapon == "punch":
-            self.attack()
+    def space_bar(self):
+        if self.punch == "punch_d":
+            self.attack(Punch, punch_group, punch_d_image)
+        elif self.punch == "punch_v":
+            self.attack(Punch, punch_group, punch_v_image)
+        elif self.punch == "punch_f":
+            self.attack(Punch, punch_group, punch_f_image)
 
-    def attack(self):
-        
+    def attack(self, weapon, group, image):
         if self.direction == "LEFT":
-            punch_group.add(Punch(punch_image, (self.rect.centerx-60, self.rect.centery), self.direction))
+            group.add(weapon(image, (self.rect.centerx-60, self.rect.centery), self.direction))
         elif self.direction == "RIGHT":
-            r_image = pygame.transform.rotozoom(punch_image, 180, 1)
-            punch_group.add(Punch(r_image, (self.rect.centerx+60, self.rect.centery), self.direction))
+            r_image = pygame.transform.rotozoom(image, 180, 1)
+            group.add(weapon(r_image, (self.rect.centerx+60, self.rect.centery), self.direction))
         elif self.direction == "UP":
-            r_image = pygame.transform.rotozoom(punch_image, 270, 1)
-            punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery-60), self.direction))
+            r_image = pygame.transform.rotozoom(image, 270, 1)
+            group.add(weapon(r_image, (self.rect.centerx, self.rect.centery-60), self.direction))
         elif self.direction == "DOWN":
-            r_image = pygame.transform.rotozoom(punch_image, 90, 1)
-            punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery+60), self.direction))
+            r_image = pygame.transform.rotozoom(image, 90, 1)
+            group.add(weapon(r_image, (self.rect.centerx, self.rect.centery+60), self.direction))
+    
+    def skill(self):
+        print(self.equip)
 
 ##### MONSTER CLASS
 class Monster(Character):
@@ -419,32 +468,6 @@ class Monster(Character):
         self.is_died = True
         drop_item(self.position)
         monster_group.remove(self)
-
-##### PUNCH CLASS
-class Punch(pygame.sprite.Sprite):
-    def __init__(self, image, position, direction):
-        super().__init__()
-        self.image = image
-        self.position = position
-        self.direction = direction
-        
-        self.rect = image.get_rect(center=position)
-        self.time = pygame.time.get_ticks()
-
-    def get_time(self):
-        return pygame.time.get_ticks() - self.time
-
-    def draw(self, screen):
-        if self.direction == "LEFT":
-            self.rect = (player.rect.x-60, player.rect.y)
-        elif self.direction == "RIGHT":
-            self.rect = (player.rect.x+60, player.rect.y)
-        elif self.direction == "UP":
-            self.rect = (player.rect.x, player.rect.y-60)
-        elif self.direction == "DOWN":
-            self.rect = (player.rect.x, player.rect.y+60)
-
-        screen.blit(self.image, self.rect)
 
 ##### STIAR CLASS
 class Stair(pygame.sprite.Sprite):
@@ -496,7 +519,6 @@ player_first_position = (700, 360)
 player = Player(player_image, player_first_position)
 player_speed = 0.5
 
-punch_image = pygame.image.load(os.path.join(file_path, "images\\punch.png")).convert_alpha()
 punch_group = pygame.sprite.Group()
 
 #####STAIR
@@ -535,9 +557,10 @@ item_group = pygame.sprite.Group()
 PROB_PORTION = 10
 PROB_COIN = 10
 
-equip_group = []
+equip_group = [Punch(punch_d_image, (10,10), "UP")] # index 0 : punch
 len_1 = 0
 len_2 = 0
+shop_is_buy = [False, False, False, False, False]
 ##############################################################################################
 ready = True
 running = True
@@ -552,7 +575,9 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                player.attack()
+                player.space_bar()
+            if event.key == pygame.K_c:
+                player.skill()
 
         player_move_key()
 
@@ -588,16 +613,15 @@ while running:
 
         for punch in punch_group:
             if pygame.sprite.collide_mask(monster, punch):
-                punch.draw(screen)
+                punch.draw(screen, player)
                 punch_group.remove(punch)
                 monster.hp -= player.damage
-                print(monster.hp, player.damage)
                 if monster.hp <= 0:
                     monster.die()
                 random_position(player.position, stair)
 
     for punch in punch_group:
-        punch.draw(screen)                                                          #PUNCH
+        punch.draw(screen, player)                                                          #PUNCH
 
         if punch.get_time() > 10:
             punch_group.remove(punch)
@@ -612,7 +636,7 @@ while running:
         item.draw(screen)                                                           #ITEM
         if pygame.sprite.collide_mask(item, player):
             if item.info == "portion":
-                player.hp += 5
+                player.hp = min(player.hp + 5, 100)
             if item.info == "coin":
                 player.coin += 1
             item_group.remove(item)
