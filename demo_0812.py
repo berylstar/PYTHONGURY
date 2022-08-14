@@ -1,8 +1,10 @@
 import pygame
 import os
 import random
+
 from class_equip import *
 from class_monster import *
+from class_item import *
 ##############################################################################################
 def scene_title_game():
     global running, ready
@@ -80,8 +82,8 @@ def display_game_ui():
         pygame.draw.line(screen, GRAY, (950, 120 + 60*i), (1130, 120 + 60*i))
 
     for equip in equip_group:
-        idx = equip_group.index(equip) + 1
-        equip.rect = equip.image.get_rect(center=(1040, 160*idx))
+    #     idx = equip_group.index(equip) + 1
+    #     equip.rect = equip.image.get_rect(center=(1040, 160*idx))
         screen.blit(equip.image, equip.rect)
 
 def scene_tutorial(doing):
@@ -121,17 +123,17 @@ def scene_skeleton_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if not shop_is_buy[0] and player.coin >= 3:
-                        equip_group[0] = Punch(punch_v_image, (-50,-50), "UP")
+                        equip_group[0] = Punch(punch_v_image, inven_position[0], "UP")
                         player.coin -= 3
                         shop_is_buy[0] = True
                 if event.key == pygame.K_2:
                     if not shop_is_buy[1] and player.coin >= 6:
-                        equip_group[0] = Punch(punch_f_image, (-50,-50), "UP")
+                        equip_group[0] = Punch(punch_f_image, inven_position[0], "UP")
                         player.coin -= 6
                         shop_is_buy[1] = True
                 if event.key == pygame.K_3:
                     if not shop_is_buy[2] and player.coin >= 3:
-                        equip_group[0] = Punch(punch_v_image, (-50,-50), "UP")
+                        equip_group.append(Whatisthis(wit_image, inven_position[0]))
                         player.coin -= 3
                         shop_is_buy[2] = True
                 if event.key == pygame.K_SPACE:
@@ -141,7 +143,7 @@ def scene_skeleton_shop(doing):
 
         equip_showcase(0, punch_v_image, 3)
         equip_showcase(1, punch_f_image, 6)
-        equip_showcase(2, punch_v_image, 3)
+        equip_showcase(2, wit_image, 3)
 
         check_equip()
 
@@ -233,9 +235,9 @@ def scene_game_over(doing):
 def scene_arrange_equip(doing):
     global running
 
-    is_picking = False
-    cursor_rect = cursor_image.get_rect(center=(980, 150))
-    cursor = Cursor(cursor_image, (980, 150))
+    cursor = Cursor(cursor_image, inven_position[0])
+    picked_equip = None
+    is_arranged = True
 
     while doing:
         for event in pygame.event.get():
@@ -245,18 +247,35 @@ def scene_arrange_equip(doing):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 cursor.move(event)
+                if cursor.is_picking:
+                    picked_equip.inven_move(event)
 
                 if event.key == pygame.K_i:
                     doing = False
+
                 if event.key == pygame.K_SPACE:
-                    for equip in equip_group:
-                        if pygame.sprite.collide_mask(equip, cursor):
-                            print(1)
+                    if cursor.is_picking:
+                        cursor.is_picking = False
+                        picked_equip = None
+
+                    else:
+                        for equip in equip_group:
+                            if pygame.sprite.collide_mask(equip, cursor):
+                                cursor.is_picking = True
+                                picked_equip = equip
+
+        # for equip_1 in equip_group:
+        #     for equip_2 in equip_group:
+        #         if pygame.sprite.collide_mask(equip_1, equip_2):
+        #             is_arranged = False
+        #             if not is_arranged:
+        #                 print(is_arranged)
+        #         else:
+        #             is_arranged = True    
+        #             print(is_arranged)      
 
         display_game_ui()
         cursor.draw(screen)
-    
-        # pygame.draw.circle(screen, GRAY, player.position, 60, 10)
         pygame.display.update()
 
 ##############################################################################################
@@ -268,31 +287,6 @@ def game_restart():
     floor = 0
     shop_is_buy = [False, False, False]
     equip_group = [Punch(punch_d_image, (-50,-50), "UP")]
-
-def player_move_key():
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_LEFT:
-            player.to[0] -= player_speed
-            player.direction = "LEFT"
-        if event.key == pygame.K_RIGHT:
-            player.to[1] += player_speed
-            player.direction = "RIGHT"
-        if event.key == pygame.K_UP:
-            player.to[2] -= player_speed
-            player.direction = "UP"
-        if event.key == pygame.K_DOWN:
-            player.to[3] += player_speed
-            player.direction = "DOWN"
-        
-    if event.type == pygame.KEYUP:
-        if event.key == pygame.K_LEFT:
-            player.to[0] = 0
-        if event.key == pygame.K_RIGHT:
-            player.to[1] = 0
-        if event.key == pygame.K_UP:
-            player.to[2] = 0
-        if event.key == pygame.K_DOWN:
-            player.to[3] = 0
 
 def floor_zero():
     global floor
@@ -335,7 +329,32 @@ def next_floor(pos):
         monster = prob_spawn_monster(90 - floor)
         random_position(pos, monster)
         monster_group.add(monster)
-     
+
+def player_move_key():
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            player.to[0] -= player_speed
+            player.direction = "LEFT"
+        if event.key == pygame.K_RIGHT:
+            player.to[1] += player_speed
+            player.direction = "RIGHT"
+        if event.key == pygame.K_UP:
+            player.to[2] -= player_speed
+            player.direction = "UP"
+        if event.key == pygame.K_DOWN:
+            player.to[3] += player_speed
+            player.direction = "DOWN"
+        
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_LEFT:
+            player.to[0] = 0
+        if event.key == pygame.K_RIGHT:
+            player.to[1] = 0
+        if event.key == pygame.K_UP:
+            player.to[2] = 0
+        if event.key == pygame.K_DOWN:
+            player.to[3] = 0
+
 def random_position(center, object):
     while True:
         rand_x = random.randint(370, 910)
@@ -346,20 +365,6 @@ def random_position(center, object):
                 object.position = (rand_x, rand_y)
                 object.rect = object.image.get_rect(center=object.position)
                 break 
-
-def drop_item(position):
-    randprob = random.randrange(0,101)
-
-    if randprob <= PROB_PORTION:
-        item_group.add(Item(item_images[0], position, "portion"))
-    elif PROB_PORTION < randprob <= PROB_PORTION + PROB_COIN:
-        item_group.add(Item(item_images[1], position, "coin"))
-
-def item_effect(item):
-    if item.info == "portion":
-        player.hp = min(player.hp + 5, 100)
-    if item.info == "coin":
-        player.coin += 1
 
 def prob_spawn_monster(percent):
     randprob = random.randrange(0,101)
@@ -406,6 +411,20 @@ def monster_random_move():
             elif monster.direction == "DOWN":
                 monster.move(0,0.1, fps)
 
+def drop_item(position):
+    randprob = random.randrange(0,101)
+
+    if randprob <= PROB_PORTION:
+        item_group.add(Item(item_images[0], position, "portion"))
+    elif PROB_PORTION < randprob <= PROB_PORTION + PROB_COIN:
+        item_group.add(Item(item_images[1], position, "coin"))
+
+def item_effect(item):
+    if item.info == "portion":
+        player.hp = min(player.hp + 5, 100)
+    if item.info == "coin":
+        player.coin += 1
+
 def check_equip():
 
     # 장비 장착
@@ -422,8 +441,6 @@ def check_equip():
         player.punch = "punch_d"
         player.damage = 10
 
-def cursor_move():
-    pass
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -432,7 +449,7 @@ class Player(Character):
 
         self.life = 3
         self.hp = 100
-        self.coin = 10000
+        self.coin = 100
         self.punch = "punch_d"
         self.equip = "None"
         self.damage = 10
@@ -473,45 +490,28 @@ class Stair(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-##### ITEM CLASS
-class Item(pygame.sprite.Sprite):
-    def __init__(self, image, position, info):
-        super().__init__()
-        self.image = image
-        self.position = position
-        self.info = info
-
-        self.rect = image.get_rect(center=position)
-    
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
 class Cursor(pygame.sprite.Sprite):
     def __init__(self, image, position):
         self.image = image
         self.poisiton = position
 
         self.rect = image.get_rect(center=position)
+        self.is_picking = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
     def move(self, event):
-        print(1)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 self.rect.centerx -= 60
-                print(1)
             if event.key == pygame.K_RIGHT:
                 self.rect.centerx += 60
-                print(1)
             if event.key == pygame.K_UP:
                 self.rect.centery -= 60
-                print(1)
             if event.key == pygame.K_DOWN:
                 self.rect.centery += 60
-                print(1)
-
+                
         if self.rect.centerx < 980:
             self.rect.centerx = 980
         elif self.rect.centerx > 1100:
@@ -572,21 +572,15 @@ npc_group = pygame.sprite.Group()
 npc_group.add(father_slime, skeleton)
 
 #####ITEM
-item_images = [
-    pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\coin.png")).convert_alpha()
-]
 item_group = pygame.sprite.Group()
-PROB_PORTION = 10
-PROB_COIN = 10
-
-equip_group = [Punch(punch_d_image, (-50,-50), "UP")] # index 0 : punch
-len_1 = 0
-len_2 = 0
-shop_is_buy = [False, False, False]
 
 ##### INVENTORY
 cursor_image = pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha()
+    
+equip_group = [Punch(punch_d_image, inven_position[0], "UP")] # index 0 : punch
+len_1 = 0
+len_2 = 0
+shop_is_buy = [False, False, False]
 ##############################################################################################
 ready = True
 running = True
