@@ -120,17 +120,17 @@ def scene_skeleton_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if not shop_is_buy[0] and player.coin >= 3:
-                        equip_group[0] = e_Punch(punch_v_image, 0)
+                        equip_group[0] = e_Punch(punch_v_image, (0,0))
                         player.coin -= 3
                         shop_is_buy[0] = True
                 if event.key == pygame.K_2:
                     if not shop_is_buy[1] and player.coin >= 6:
-                        equip_group[0] = e_Punch(punch_f_image, 0)
+                        equip_group.append(e_Banana(banana_image, (0,0)))
                         player.coin -= 6
                         shop_is_buy[1] = True
                 if event.key == pygame.K_3:
                     if not shop_is_buy[2] and player.coin >= 3:
-                        equip_group.append(e_Battery(battery_image, 0))
+                        equip_group.append(e_Battery(battery_image, (0,0)))
                         player.coin -= 3
                         shop_is_buy[2] = True
                 if event.key == pygame.K_SPACE:
@@ -139,7 +139,7 @@ def scene_skeleton_shop(doing):
         display_game_ui()
 
         equip_showcase(0, punch_v_image, 3)
-        equip_showcase(1, punch_f_image, 6)
+        equip_showcase(1, banana_image, 6)
         equip_showcase(2, battery_image, 3)
 
         check_equip()
@@ -261,6 +261,7 @@ def scene_arrange_equip(doing):
                             if pygame.sprite.collide_mask(equip, cursor):
                                 cursor.is_picking = True
                                 picked_equip = equip
+                                print(check_inven())
 
         # for equip_1 in equip_group:
         #     for equip_2 in equip_group:
@@ -284,7 +285,7 @@ def game_restart():
     floor_zero()
     floor = 0
     shop_is_buy = [False, False, False]
-    equip_group = [e_Punch(punch_d_image, 0)]
+    equip_group = [e_Punch(punch_d_image, (0,0))]
 
 def floor_zero():
     global floor
@@ -513,41 +514,6 @@ class Stair(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-
-class Cursor(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        self.image = image
-        self.poisiton = position
-
-        self.rect = image.get_rect(center=position)
-        self.is_picking = False
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-    def move(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.rect.centerx -= 60
-            if event.key == pygame.K_RIGHT:
-                self.rect.centerx += 60
-            if event.key == pygame.K_UP:
-                self.rect.centery -= 60
-            if event.key == pygame.K_DOWN:
-                self.rect.centery += 60
-                
-        if self.rect.centerx < 980:
-            self.rect.centerx = 980
-        elif self.rect.centerx > 1100:
-            self.rect.centerx = 1100
-
-        if self.rect.centery < 150:
-            self.rect.centery = 150
-        elif self.rect.centery > 570:
-            self.rect.centery = 570
-
-        self.position = (self.rect.centerx, self.rect.centery)
-
 ##############################################################################################
 pygame.init()
 screen_width = 1280
@@ -600,7 +566,7 @@ item_group = pygame.sprite.Group()
 
 ##### INVENTORY
     
-equip_group = [e_Punch(punch_d_image, 0)] # index 0 : punch
+equip_group = [e_Punch(punch_d_image, (0,0))] # index 0 : punch
 len_1 = 0
 len_2 = 0
 shop_is_buy = [False, False, False]
