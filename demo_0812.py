@@ -54,7 +54,6 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)      #MAIN GAME
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)      #INFO
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)      #INVEN
-    # pygame.draw.rect(screen, GREEN, ((410, 130),(460, 460)), 1)    # monster moving zone
 
     msg_floor = game_font.render(f"{floor} F", True, WHITE)
     floor_rect = msg_floor.get_rect(center=(240,90))
@@ -82,9 +81,7 @@ def display_game_ui():
         pygame.draw.line(screen, GRAY, (950, 120 + 60*i), (1130, 120 + 60*i))
 
     for equip in equip_group:
-    #     idx = equip_group.index(equip) + 1
-    #     equip.rect = equip.image.get_rect(center=(1040, 160*idx))
-        screen.blit(equip.image, equip.rect)
+        equip.draw(screen)
 
 def scene_tutorial(doing):
     global running
@@ -123,17 +120,17 @@ def scene_skeleton_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if not shop_is_buy[0] and player.coin >= 3:
-                        equip_group[0] = Punch(punch_v_image, inven_position[0], "UP")
+                        equip_group[0] = e_Punch(punch_v_image, 0)
                         player.coin -= 3
                         shop_is_buy[0] = True
                 if event.key == pygame.K_2:
                     if not shop_is_buy[1] and player.coin >= 6:
-                        equip_group[0] = Punch(punch_f_image, inven_position[0], "UP")
+                        equip_group[0] = e_Punch(punch_f_image, 0)
                         player.coin -= 6
                         shop_is_buy[1] = True
                 if event.key == pygame.K_3:
                     if not shop_is_buy[2] and player.coin >= 3:
-                        equip_group.append(Whatisthis(wit_image, inven_position[0]))
+                        equip_group.append(e_Battery(battery_image, 0))
                         player.coin -= 3
                         shop_is_buy[2] = True
                 if event.key == pygame.K_SPACE:
@@ -143,7 +140,7 @@ def scene_skeleton_shop(doing):
 
         equip_showcase(0, punch_v_image, 3)
         equip_showcase(1, punch_f_image, 6)
-        equip_showcase(2, wit_image, 3)
+        equip_showcase(2, battery_image, 3)
 
         check_equip()
 
@@ -159,8 +156,9 @@ def scene_skeleton_shop(doing):
 def equip_showcase(index, image, price):
     pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
     if not shop_is_buy[index]:
-        equip_rect = image.get_rect(center=(490+ 150*index, 390))
-        screen.blit(image, equip_rect)
+        equip_image = pygame.transform.scale(image, (60,60))
+        equip_rect = equip_image.get_rect(center=(490+ 150*index, 390))
+        screen.blit(equip_image, equip_rect)
 
         coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
         coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
@@ -235,7 +233,7 @@ def scene_game_over(doing):
 def scene_arrange_equip(doing):
     global running
 
-    cursor = Cursor(cursor_image, inven_position[0])
+    cursor = Cursor(cursor_image, (980,150))
     picked_equip = None
     is_arranged = True
 
@@ -286,7 +284,7 @@ def game_restart():
     floor_zero()
     floor = 0
     shop_is_buy = [False, False, False]
-    equip_group = [Punch(punch_d_image, (-50,-50), "UP")]
+    equip_group = [e_Punch(punch_d_image, 0)]
 
 def floor_zero():
     global floor
@@ -456,27 +454,53 @@ class Player(Character):
 
     def space_bar(self):
         if self.punch == "punch_d":
-            self.attack(Punch, punch_group, punch_d_image)
+            self.attack(punch_d_image)
         elif self.punch == "punch_v":
-            self.attack(Punch, punch_group, punch_v_image)
+            self.attack(punch_v_image)
         elif self.punch == "punch_f":
-            self.attack(Punch, punch_group, punch_f_image)
+            self.attack(punch_f_image)
 
-    def attack(self, equip, group, image):
+    def attack(self, image):
         if self.direction == "LEFT":
-            group.add(equip(image, (self.rect.centerx-60, self.rect.centery), self.direction))
+            punch_group.add(Punch(image, (self.rect.centerx-60, self.rect.centery), self.direction))
         elif self.direction == "RIGHT":
             r_image = pygame.transform.rotozoom(image, 180, 1)
-            group.add(equip(r_image, (self.rect.centerx+60, self.rect.centery), self.direction))
+            punch_group.add(Punch(r_image, (self.rect.centerx+60, self.rect.centery), self.direction))
         elif self.direction == "UP":
             r_image = pygame.transform.rotozoom(image, 270, 1)
-            group.add(equip(r_image, (self.rect.centerx, self.rect.centery-60), self.direction))
+            punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery-60), self.direction))
         elif self.direction == "DOWN":
             r_image = pygame.transform.rotozoom(image, 90, 1)
-            group.add(equip(r_image, (self.rect.centerx, self.rect.centery+60), self.direction))
+            punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery+60), self.direction))
     
     def skill(self):
         print(self.equip)
+
+#### PUNCH CLASS
+class Punch(pygame.sprite.Sprite):
+    def __init__(self, image, position, direction):
+        super().__init__()
+        self.image = image
+        self.position = position
+        self.direction = direction
+        
+        self.rect = image.get_rect(center=position)
+        self.time = pygame.time.get_ticks()
+
+    def get_time(self):
+        return pygame.time.get_ticks() - self.time
+
+    def draw(self, screen, object):
+        if object.direction == "LEFT":
+            self.rect = (object.rect.x-60, object.rect.y)
+        elif object.direction == "RIGHT":
+            self.rect = (object.rect.x+60, object.rect.y)
+        elif object.direction == "UP":
+            self.rect = (object.rect.x, object.rect.y-60)
+        elif object.direction == "DOWN":
+            self.rect = (object.rect.x, object.rect.y+60)
+
+        screen.blit(self.image, self.rect)
 
 ##### STIAR CLASS
 class Stair(pygame.sprite.Sprite):
@@ -575,9 +599,8 @@ npc_group.add(father_slime, skeleton)
 item_group = pygame.sprite.Group()
 
 ##### INVENTORY
-cursor_image = pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha()
     
-equip_group = [Punch(punch_d_image, inven_position[0], "UP")] # index 0 : punch
+equip_group = [e_Punch(punch_d_image, 0)] # index 0 : punch
 len_1 = 0
 len_2 = 0
 shop_is_buy = [False, False, False]

@@ -1,6 +1,5 @@
 import pygame
 import os
-import random
 ##############################################################################################
 ##### ITEM CLASS
 class Item(pygame.sprite.Sprite):

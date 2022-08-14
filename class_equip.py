@@ -2,92 +2,80 @@ import pygame
 import os
 ##############################################################################################
 ##############################################################################################
-##### EQUIP CLASS
+##### equip class
 class Equip(pygame.sprite.Sprite):
-    def __init__(self, image, position):
+    def __init__(self, image, index):
         super().__init__()
         self.image = image
-        self.position = position
-        
-        self.rect = image.get_rect(center=position)
-        self.time = pygame.time.get_ticks()
-        # self.is_picked = False
 
-    # def put_in(self):
-    #     inven_check[0] = 1
+        self.rect_left = inven_position[index][0]
+        self.rect_top = inven_position[index][1]
 
-    def get_time(self):
-        return pygame.time.get_ticks() - self.time
+        self.rect = (self.rect_left,self.rect_top)
 
-    def draw(self, screen, object):
-        if object.direction == "LEFT":
-            self.rect = (object.rect.x-60, object.rect.y)
-        elif object.direction == "RIGHT":
-            self.rect = (object.rect.x+60, object.rect.y)
-        elif object.direction == "UP":
-            self.rect = (object.rect.x, object.rect.y-60)
-        elif object.direction == "DOWN":
-            self.rect = (object.rect.x, object.rect.y+60)
-
+    def draw(self, screen):
         screen.blit(self.image, self.rect)
 
     def inven_move(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                self.rect.centerx -= 60
+                self.rect_left -= 60
             if event.key == pygame.K_RIGHT:
-                self.rect.centerx += 60
+                self.rect_left += 60
             if event.key == pygame.K_UP:
-                self.rect.centery -= 60
+                self.rect_top -= 60
             if event.key == pygame.K_DOWN:
-                self.rect.centery += 60
+                self.rect_top += 60
                 
-        if self.rect.centerx < 980:
-            self.rect.centerx = 980
-        elif self.rect.centerx > 1100:
-            self.rect.centerx = 1100
+        if self.rect_left < 950:
+            self.rect_left = 950
+        elif self.rect_left > 1070:
+            self.rect_left = 1070
 
-        if self.rect.centery < 150:
-            self.rect.centery = 150
-        elif self.rect.centery > 570:
-            self.rect.centery = 570
+        if self.rect_top < 120:
+            self.rect_top = 120
+        elif self.rect_top > 540:
+            self.rect_top = 540
 
-        self.position = (self.rect.centerx, self.rect.centery)
+        self.rect = (self.rect_left,self.rect_top)
 
-##### PUNCH CLASS
-class Punch(Equip):
-    def __init__(self, image, position, direction):
-        Equip.__init__(self, image, position)
-        self.direction = direction
+##### equip_punch class
+class e_Punch(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
 
-##### PORTION CLASS
-class Whatisthis(Equip):
-    def __init__(self, image, position):
-        Equip.__init__(self,image,position)
+##### battery class
+class e_Battery(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
 ##############################################################################################
 screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 file_path = os.path.dirname(__file__)
 
+# Punch Image
 punch_d_image = pygame.image.load(os.path.join(file_path, "images\\punch.png")).convert_alpha()
 punch_v_image = pygame.image.load(os.path.join(file_path, "images\\punch_v.png")).convert_alpha()
 punch_f_image = pygame.image.load(os.path.join(file_path, "images\\punch_f.png")).convert_alpha()
 
-wit_image = pygame.image.load(os.path.join(file_path, "images\\equip_1.png")).convert_alpha()
+# Equip Image
+battery_image = pygame.image.load(os.path.join(file_path, "images\\battery.png")).convert_alpha()
 
+# Others
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()
+cursor_image = pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha()
 
-
+# Inventory
 inven_position = [
-    (980,150),(1040,150),(1100,150),
-    (980,210),(1040,210),(1100,210),
-    (980,270),(1040,270),(1100,270),
-    (980,330),(1040,330),(1100,330),
-    (980,390),(1040,390),(1100,390),
-    (980,450),(1040,450),(1100,450),
-    (980,510),(1040,510),(1100,510),
-    (980,570),(1040,570),(1100,570),
+    (950,120),(1010,120),(1070,120),
+    (950,180),(1010,180),(1070,180),
+    (950,240),(1010,240),(1070,240),
+    (950,300),(1010,300),(1070,300),
+    (950,360),(1010,360),(1070,360),
+    (950,420),(1010,420),(1070,420),
+    (950,480),(1010,480),(1070,480),
+    (950,540),(1010,540),(1070,540),
     ]
 
 inven_check = [
