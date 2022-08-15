@@ -8,11 +8,8 @@ from class_item import *
 ##############################################################################################
 def scene_title_game():
     global running, ready
-
-    msg_title = game_font.render("SLIME PUNCH", True, GREEN)
-    title_rect = msg_title.get_rect(center=(screen_width//2,200))
         
-    msg_start = game_font.render("GAME START", True, BLACK)
+    msg_start = game_font.render("START", True, BLACK)
     start_rect = msg_start.get_rect(center=(screen_width//2,500))
     start_cursor = ((start_rect.left - 30, start_rect.top),(start_rect.left - 30,start_rect.bottom),(start_rect.left - 10,500))
 
@@ -43,9 +40,9 @@ def scene_title_game():
 
         screen.fill((125,125,125))                              #BACKGROUND
         pygame.draw.polygon(screen, GREEN, cursor)              #CURSOR
-        screen.blit(msg_title, title_rect)                      #TITLE
-        screen.blit(msg_start, start_rect)                      #GAME START
-        screen.blit(msg_exit, exit_rect)                        #EXIT
+        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200))
+        screen_message("START", BLACK, (screen_width//2,500))
+        screen_message("EXIT", BLACK, (screen_width//2,550))
 
         pygame.display.update()
 
@@ -54,31 +51,22 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)      #MAIN GAME
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)      #INFO
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)      #INVEN
+              
+    screen_message(f"{floor} F", WHITE, (240,90))                   #FLOOR MESSAGE
+    screen_message(f"HP : {player.hp}", WHITE, (240,190))           #HP MESSAGE
 
-    msg_floor = game_font.render(f"{floor} F", True, WHITE)
-    floor_rect = msg_floor.get_rect(center=(240,90))
-    screen.blit(msg_floor, floor_rect)                                #FLOOR MESSAGE
-
-    msg_hp = game_font.render(f"HP : {player.hp}", True, WHITE)
-    hp_rect = msg_hp.get_rect(center=(240,190))
-    screen.blit(msg_hp, hp_rect)                                      #HP MESSAGE
-
-    msg_coin = game_font.render(f"              X {player.coin}", True, WHITE)
-    coin_rect = msg_coin.get_rect(center=(220,290))
     coin_image_rect = item_images[1].get_rect(center=(215, 290))
     screen.blit(item_images[1], coin_image_rect)
-    screen.blit(msg_coin, coin_rect)                                  #COIN MESSAGE
+    screen_message(f"              X {player.coin}", WHITE, (220,290))      #COIN MESSAGE
 
-    msg_life = game_font.render(f"              X {player.life}", True, WHITE)
-    life_rect = msg_life.get_rect(center=(220,390))
     life_image_rect = player_image.get_rect(center=(210, 390))
     screen.blit(player_image, life_image_rect)
-    screen.blit(msg_life, life_rect)                                  #COIN MESSAGE
+    screen_message(f"              X {player.life}", WHITE, (220,390))      #LIFE MESSAGE
 
     for i in range(4):
-        pygame.draw.line(screen, GRAY, (950 + 60*i, 120), (950 + 60*i, 600))
-    for i in range(10):
-        pygame.draw.line(screen, GRAY, (950, 120 + 60*i), (1130, 120 + 60*i))
+        pygame.draw.line(screen, GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
+    for i in range(7):
+        pygame.draw.line(screen, GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
 
     for equip in equip_group:
         equip.draw(screen)
@@ -98,13 +86,8 @@ def scene_tutorial(doing):
 
         display_game_ui()
 
-        tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
-        tuto_rect = tuto_image.get_rect(center=(640, 300))
         screen.blit(tuto_image, tuto_rect)
-
-        msg_back = game_font.render("PRESS 'SPACE BAR' TO BACK", True, WHITE)
-        exit_rect = msg_back.get_rect(center=(640, 640))
-        screen.blit(msg_back, exit_rect)
+        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
 
         pygame.display.update()
 
@@ -144,17 +127,13 @@ def scene_skeleton_shop(doing):
 
         check_equip()
 
-        shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
-        shop_rect = shop_image.get_rect(center=(640, 200))
         screen.blit(shop_image, shop_rect)
-
-        msg_back = game_font.render("PRESS 'SPACE BAR' TO BACK", True, WHITE)
-        exit_rect = msg_back.get_rect(center=(640, 640))
-        screen.blit(msg_back, exit_rect)
+        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
         pygame.display.update()
 
 def equip_showcase(index, image, price):
     pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
+
     if not shop_is_buy[index]:
         equip_image = pygame.transform.scale(image, (60,60))
         equip_rect = equip_image.get_rect(center=(490+ 150*index, 390))
@@ -164,9 +143,7 @@ def equip_showcase(index, image, price):
         coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
         screen.blit(coin_image, coin_rect)
 
-        msg_price = game_font.render("  x {0}".format(price), True, WHITE)
-        price_rect = msg_price.get_rect(center=(500+ 150*index, 440))
-        screen.blit(msg_price, price_rect)
+        screen_message(f"  x {price}", WHITE, (500+ 150*index, 440))
     else:
         case_rect = sold_out_image.get_rect(center=(490+ 150*index,410))
         screen.blit(sold_out_image, case_rect)
@@ -188,13 +165,8 @@ def scene_player_dead(doing):
                     floor_zero()
 
         display_game_ui()
-        msg_gameover = game_font.render("YOU DIE", True, RED)
-        msg_gameover_rect = msg_gameover.get_rect(center=(screen_width//2, screen_height//2))
-        screen.blit(msg_gameover, msg_gameover_rect)
-
-        msg_back = game_font.render("PRESS 'R' TO REPLAY", True, WHITE)
-        exit_rect = msg_back.get_rect(center=(640, 640))
-        screen.blit(msg_back, exit_rect)
+        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2))
+        screen_message("PRESS 'R' TO REPLAY", WHITE, (640,640))
         pygame.display.update()
 
 def scene_game_over(doing):
@@ -217,25 +189,16 @@ def scene_game_over(doing):
                     ready = True
 
         screen.fill(BLACK)
-        msg_gameover = game_font.render("GAME OVER", True, RED)
-        msg_gameover_rect = msg_gameover.get_rect(center=(screen_width//2, screen_height//2))
-        screen.blit(msg_gameover, msg_gameover_rect)
-
-        msg_quit = game_font.render("PRESS 'ESC' TO QUIT", True, WHITE)
-        quit_rect = msg_quit.get_rect(center=(640, 590))
-        screen.blit(msg_quit, quit_rect)
-
-        msg_back = game_font.render("PRESS 'SPACE BAR' TO MAIN", True, WHITE)
-        exit_rect = msg_back.get_rect(center=(640, 640))
-        screen.blit(msg_back, exit_rect)
+        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2))
+        screen_message("PRESS 'ESC' TO QUIT", WHITE, (640,590))
+        screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640))
         pygame.display.update()
 
 def scene_arrange_equip(doing):
     global running
 
-    cursor = Cursor(cursor_image, (980,150))
+    cursor = Cursor(cursor_image, (980,210))
     picked_equip = None
-    is_arranged = True
 
     while doing:
         for event in pygame.event.get():
@@ -250,6 +213,7 @@ def scene_arrange_equip(doing):
 
                 if event.key == pygame.K_i:
                     doing = False
+                    print(inven_is_overlap(equip_group))
 
                 if event.key == pygame.K_SPACE:
                     if cursor.is_picking:
@@ -261,23 +225,19 @@ def scene_arrange_equip(doing):
                             if pygame.sprite.collide_mask(equip, cursor):
                                 cursor.is_picking = True
                                 picked_equip = equip
-                                print(check_inven())
-
-        # for equip_1 in equip_group:
-        #     for equip_2 in equip_group:
-        #         if pygame.sprite.collide_mask(equip_1, equip_2):
-        #             is_arranged = False
-        #             if not is_arranged:
-        #                 print(is_arranged)
-        #         else:
-        #             is_arranged = True    
-        #             print(is_arranged)      
 
         display_game_ui()
         cursor.draw(screen)
+        if inven_is_overlap(equip_group):
+            screen_message("ARRANGE EQUIP !", WHITE, (1040,150))
         pygame.display.update()
 
 ##############################################################################################
+def screen_message(writing, color, position):
+    msg = game_font.render(writing, True, color)
+    msg_rect = msg.get_rect(center=position)
+    screen.blit(msg, msg_rect)
+
 def game_restart():
     global floor, player, shop_is_buy, equip_group
 
@@ -474,7 +434,10 @@ class Player(Character):
             r_image = pygame.transform.rotozoom(image, 90, 1)
             punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery+60), self.direction))
     
-    def skill(self):
+    def skill_c(self):
+        print(self.equip)
+    
+    def skill_v(self):
         print(self.equip)
 
 #### PUNCH CLASS
@@ -561,6 +524,11 @@ skeleton = Character(skeleton_image, (840, 600))
 npc_group = pygame.sprite.Group()
 npc_group.add(father_slime, skeleton)
 
+tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
+tuto_rect = tuto_image.get_rect(center=(640, 300))
+shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
+shop_rect = shop_image.get_rect(center=(640, 200))
+
 #####ITEM
 item_group = pygame.sprite.Group()
 
@@ -586,7 +554,9 @@ while running:
             if event.key == pygame.K_SPACE:
                 player.space_bar()
             if event.key == pygame.K_c:
-                player.skill()
+                player.skill_c()
+            if event.key == pygame.K_v:
+                player.skill_v()
             if event.key == pygame.K_i:
                 player.stop()
                 scene_arrange_equip(True)
