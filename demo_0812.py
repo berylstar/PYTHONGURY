@@ -9,13 +9,15 @@ from class_item import *
 def scene_title_game():
     global running, ready
         
-    msg_start = game_font.render("START", True, BLACK)
-    start_rect = msg_start.get_rect(center=(screen_width//2,500))
-    start_cursor = ((start_rect.left - 30, start_rect.top),(start_rect.left - 30,start_rect.bottom),(start_rect.left - 10,500))
+    # msg_start = game_font.render("START", True, BLACK)
+    # start_rect = msg_start.get_rect(center=(screen_width//2,500))
+    # start_cursor = ((start_rect.left - 30, start_rect.top),(start_rect.left - 30,start_rect.bottom),(start_rect.left - 10,500))
+    start_cursor = ((578,490), (578,510), (598,500))
 
-    msg_exit = game_font.render("EXIT", True, BLACK)
-    exit_rect = msg_exit.get_rect(center=(screen_width//2,550))
-    exit_cursor = ((exit_rect.left - 30, exit_rect.top),(exit_rect.left - 30,exit_rect.bottom),(exit_rect.left - 10,550))
+    # msg_exit = game_font.render("EXIT", True, BLACK)
+    # exit_rect = msg_exit.get_rect(center=(screen_width//2,550))
+    # exit_cursor = ((exit_rect.left - 30, exit_rect.top),(exit_rect.left - 30,exit_rect.bottom),(exit_rect.left - 10,550))
+    exit_cursor = ((587,540), (587,560), (607,550))
 
     cursor = start_cursor
 
@@ -53,6 +55,7 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)      #INVEN
               
     screen_message(f"{floor} F", WHITE, (240,90))                   #FLOOR MESSAGE
+
     screen_message(f"HP : {player.hp}", WHITE, (240,190))           #HP MESSAGE
 
     coin_image_rect = item_images[1].get_rect(center=(215, 290))
@@ -63,7 +66,7 @@ def display_game_ui():
     screen.blit(player_image, life_image_rect)
     screen_message(f"              X {player.life}", WHITE, (220,390))      #LIFE MESSAGE
 
-    for i in range(4):
+    for i in range(4):                                                      #INVENTORY
         pygame.draw.line(screen, GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
     for i in range(7):
         pygame.draw.line(screen, GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
@@ -109,26 +112,28 @@ def scene_skeleton_shop(doing):
                         equip_group[0] = e_Punch(punch_v_image, (0,0))
                         player.coin -= 3
                         shop_is_buy[0] = True
+
                 if event.key == pygame.K_2:
                     if not shop_is_buy[1] and player.coin >= 6:
                         equip_group.append(e_Banana(banana_image, (0,0)))
                         player.coin -= 6
                         shop_is_buy[1] = True
+
                 if event.key == pygame.K_3:
                     if not shop_is_buy[2] and player.coin >= 3:
                         equip_group.append(e_Battery(battery_image, (0,0)))
                         player.coin -= 3
                         shop_is_buy[2] = True
+
                 if event.key == pygame.K_SPACE:
                     doing = False
+                    check_equip()
 
         display_game_ui()
 
         equip_showcase(0, punch_v_image, 3)
         equip_showcase(1, banana_image, 6)
         equip_showcase(2, battery_image, 3)
-
-        check_equip()
 
         screen.blit(shop_image, shop_rect)
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
@@ -200,6 +205,7 @@ def scene_game_over(doing):
 def scene_arrange_equip(doing):
     global running
 
+    player.stop()
     cursor = Cursor(cursor_image, (980,210))
     picked_equip = None
 
@@ -216,7 +222,7 @@ def scene_arrange_equip(doing):
 
                 if event.key == pygame.K_i:
                     doing = False
-                    print(inven_is_overlap(equip_group))
+                    check_equip()
 
                 if event.key == pygame.K_SPACE:
                     if cursor.is_picking:
@@ -231,8 +237,6 @@ def scene_arrange_equip(doing):
 
         display_game_ui()
         cursor.draw(screen)
-        if inven_is_overlap(equip_group):
-            screen_message("ARRANGE EQUIP !", RED, (1040,150))
         pygame.display.update()
 
 ##############################################################################################
@@ -242,26 +246,16 @@ def screen_message(writing, color, position):
     screen.blit(msg, msg_rect)
 
 def game_restart():
-    global floor, player, shop_is_buy, equip_group
+    global player, shop_is_buy, equip_group
 
     player = Player(player_image, player_first_position)
-    floor_zero()
-    floor = 0
+    make_floor_zero()
     shop_is_buy = [False, False, False]
     equip_group = [e_Punch(punch_d_image, (0,0))]
 
 def floor_zero():
-    global floor
-
     if floor != 0:
-        floor = 0
-        monster_group.empty()
-        item_group.empty()
-        stair.image = stair_images[0]
-        stair.rect = stair.image.get_rect(center=stair_zero_floor)
-
-        player.rect = player.image.get_rect(center=player_first_position)
-        player.hp = 100
+        make_floor_zero()
 
     npc_group.draw(screen)                                                      #NPC
 
@@ -273,6 +267,18 @@ def floor_zero():
         if pygame.sprite.collide_mask(punch, skeleton):
             player.stop()
             scene_skeleton_shop(True)  
+
+def make_floor_zero():
+    global floor 
+
+    floor = 0
+    monster_group.empty()
+    item_group.empty()
+    stair.image = stair_images[0]
+    stair.rect = stair.image.get_rect(center=stair_zero_floor)
+
+    player.rect = player.image.get_rect(center=player_first_position)
+    player.hp = 100
 
 def next_floor(pos):
     global floor
@@ -289,7 +295,7 @@ def next_floor(pos):
 
     for i in range(number_enemies):
         monster = prob_spawn_monster(90 - floor)
-        random_position(pos, monster)
+        random_away_position(pos, monster)
         monster_group.add(monster)
 
 def player_move_key():
@@ -317,7 +323,7 @@ def player_move_key():
         if event.key == pygame.K_DOWN:
             player.to[3] = 0
 
-def random_position(center, object):
+def random_away_position(center, object):
     while True:
         rand_x = random.randint(370, 910)
         rand_y = random.randint(150, 570)
@@ -329,14 +335,14 @@ def random_position(center, object):
                 break 
 
 def prob_spawn_monster(percent):
-    randprob = random.randrange(0,101)
+    randprob = random.randrange(0,101)  # 0 ~ 100
 
     if randprob <= percent:
         return Monster(monster_images[0], (0,0), MON_0_HP)
     else:
         return Monster(monster_images[1], (0,0), MON_1_HP)
 
-def monster_random_direction():
+def random_monster_direction():
     if monster_group:
         for monster in monster_group:
             rand = random.randrange(0,11)
@@ -361,7 +367,7 @@ def monster_random_direction():
             elif monster.rect.centery > 590:
                 monster.direction = "UP"
 
-def monster_random_move():
+def random_monster_move():
     if monster_group:
         for monster in monster_group:
             if monster.direction == "LEFT":
@@ -402,6 +408,12 @@ def check_equip():
     else:
         player.punch = punch_d_image
         player.damage = 10
+    
+    if e_Banana in equip_group:
+        print(1)
+
+
+    print(equip_group[-1])
 
 ##############################################################################################
 ##### PLAYER CLASS
@@ -515,7 +527,6 @@ stair_zero_floor = (640, 90)
 stair = Stair(stair_images[0], stair_zero_floor)
 
 ###### NPC
-
 father_slime = Character(father_slime_image, (540, 360))
 skeleton = Character(skeleton_image, (840, 600))
 
@@ -526,7 +537,6 @@ npc_group.add(father_slime, skeleton)
 item_group = pygame.sprite.Group()
 
 ##### INVENTORY
-    
 equip_group = [e_Punch(punch_d_image, (0,0))] # index 0 : punch
 len_1 = 0
 len_2 = 0
@@ -557,7 +567,6 @@ while running:
             if event.key == pygame.K_v:
                 player.skill_v()
             if event.key == pygame.K_i:
-                player.stop()
                 scene_arrange_equip(True)
 
         if not inven_is_overlap(equip_group):
@@ -575,8 +584,10 @@ while running:
         if second_counter != elapsed_time:
             #for 1 second
             player.hp -= 1
-            monster_random_direction()
+            random_monster_direction()
         second_counter = elapsed_time
+
+        random_monster_move()
 
         if player.hp <= 0:
             player.life -= 1
@@ -584,8 +595,6 @@ while running:
                 scene_game_over(True)
             else:
                 scene_player_dead(True)
-
-        monster_random_move()
 
     if not monster_group:
         stair.draw(screen)                                                          #STAIR
@@ -606,7 +615,7 @@ while running:
                 monster.hp -= player.damage
                 if monster.hp <= 0:
                     monster.die(drop_item, monster_group)
-                random_position(player.position, stair)
+                    random_away_position(player.position, stair)
 
     for punch in punch_group:
         punch.draw(screen)                                                          #PUNCH
@@ -620,10 +629,10 @@ while running:
             item_effect(item)
             item_group.remove(item)
 
-    len_1 = len(equip_group)
-    if len_1 != len_2:
-        check_equip()
-    len_2 = len(equip_group)
+    # len_1 = len(equip_group)
+    # if len_1 != len_2:
+    #     check_equip()
+    # len_2 = len(equip_group)
 
     player.draw(screen)                                                             #PLAYER
 
