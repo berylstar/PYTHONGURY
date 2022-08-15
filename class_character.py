@@ -12,7 +12,6 @@ class Character(pygame.sprite.Sprite):
         self.direction = "LEFT"
         self.to = [0, 0, 0, 0]  #LEFT, RIGHT, UP, DOWN
         self.flip = False
-        self.r_image = pygame.transform.flip(image, True, False)
 
     def draw(self, screen):
         if self.direction == "LEFT":
@@ -23,7 +22,8 @@ class Character(pygame.sprite.Sprite):
         if not self.flip:
             screen.blit(self.image, self.rect)
         else:
-            screen.blit(self.r_image, self.rect)
+            r_image = pygame.transform.flip(self.image, True, False)
+            screen.blit(r_image, self.rect)
 
     def move(self, to_x, to_y, fps):
         self.rect.x += to_x * fps
@@ -62,7 +62,7 @@ screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 file_path = os.path.dirname(__file__)
 
-#####MONSTER
+##### MONSTER
 monster_images = [
     pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()
@@ -70,3 +70,7 @@ monster_images = [
 monster_group = pygame.sprite.Group()
 MON_0_HP = 10
 MON_1_HP = 25
+
+##### NPC
+father_slime_image = pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()
+skeleton_image = pygame.image.load(os.path.join(file_path, "images\\skeleton.png")).convert_alpha()

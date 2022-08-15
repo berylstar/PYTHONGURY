@@ -3,7 +3,7 @@ import os
 import random
 
 from class_equip import *
-from class_monster import *
+from class_character import *
 from class_item import *
 ##############################################################################################
 def scene_title_game():
@@ -70,6 +70,9 @@ def display_game_ui():
 
     for equip in equip_group:
         equip.draw(screen)
+
+    if inven_is_overlap(equip_group):
+        screen_message("ARRANGE EQUIP !", RED, (1040,150))
 
 def scene_tutorial(doing):
     global running
@@ -229,7 +232,7 @@ def scene_arrange_equip(doing):
         display_game_ui()
         cursor.draw(screen)
         if inven_is_overlap(equip_group):
-            screen_message("ARRANGE EQUIP !", WHITE, (1040,150))
+            screen_message("ARRANGE EQUIP !", RED, (1040,150))
         pygame.display.update()
 
 ##############################################################################################
@@ -388,16 +391,16 @@ def check_equip():
 
     # 장비 장착
     if equip_group[0].image == punch_v_image:
-        player.punch = "punch_v"
+        player.punch = punch_v_image
         player.damage = 15
 
     elif equip_group[0].image == punch_f_image:
-        player.punch = "punch_f"
+        player.punch = punch_f_image
         player.damage = 17
         
     # 장비 해제
     else:
-        player.punch = "punch_d"
+        player.punch = punch_d_image
         player.damage = 10
 
 ##############################################################################################
@@ -409,36 +412,33 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.coin = 100
-        self.punch = "punch_d"
-        self.equip = "None"
-        self.damage = 10
+        self.punch = punch_d_image
+        self.equip_c = None
+        self.equip_v = None
+        self.damage = 10    
 
     def space_bar(self):
-        if self.punch == "punch_d":
-            self.attack(punch_d_image)
-        elif self.punch == "punch_v":
-            self.attack(punch_v_image)
-        elif self.punch == "punch_f":
-            self.attack(punch_f_image)
+        image = self.punch
 
-    def attack(self, image):
         if self.direction == "LEFT":
-            punch_group.add(Punch(image, (self.rect.centerx-60, self.rect.centery), self.direction))
+            position = (self.rect.centerx-60, self.rect.centery)
         elif self.direction == "RIGHT":
-            r_image = pygame.transform.rotozoom(image, 180, 1)
-            punch_group.add(Punch(r_image, (self.rect.centerx+60, self.rect.centery), self.direction))
+            image = pygame.transform.rotozoom(image, 180, 1)
+            position = (self.rect.centerx+60, self.rect.centery)
         elif self.direction == "UP":
-            r_image = pygame.transform.rotozoom(image, 270, 1)
-            punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery-60), self.direction))
+            image = pygame.transform.rotozoom(image, 270, 1)
+            position = (self.rect.centerx, self.rect.centery-60)
         elif self.direction == "DOWN":
-            r_image = pygame.transform.rotozoom(image, 90, 1)
-            punch_group.add(Punch(r_image, (self.rect.centerx, self.rect.centery+60), self.direction))
+            image = pygame.transform.rotozoom(image, 90, 1)
+            position = (self.rect.centerx, self.rect.centery+60)
+
+        punch_group.add(Punch(image, position, self.direction))
     
     def skill_c(self):
-        print(self.equip)
+        print(self.equip_c)
     
     def skill_v(self):
-        print(self.equip)
+        print(self.equip_v)
 
 #### PUNCH CLASS
 class Punch(pygame.sprite.Sprite):
@@ -454,15 +454,15 @@ class Punch(pygame.sprite.Sprite):
     def get_time(self):
         return pygame.time.get_ticks() - self.time
 
-    def draw(self, screen, object):
-        if object.direction == "LEFT":
-            self.rect = (object.rect.x-60, object.rect.y)
-        elif object.direction == "RIGHT":
-            self.rect = (object.rect.x+60, object.rect.y)
-        elif object.direction == "UP":
-            self.rect = (object.rect.x, object.rect.y-60)
-        elif object.direction == "DOWN":
-            self.rect = (object.rect.x, object.rect.y+60)
+    def draw(self, screen):
+        # if player.direction == "LEFT":
+        #     self.rect = (player.rect.x-60, player.rect.y)
+        # elif player.direction == "RIGHT":
+        #     self.rect = (player.rect.x+60, player.rect.y)
+        # elif player.direction == "UP":
+        #     self.rect = (player.rect.x, player.rect.y-60)
+        # elif player.direction == "DOWN":
+        #     self.rect = (player.rect.x, player.rect.y+60)
 
         screen.blit(self.image, self.rect)
 
@@ -489,7 +489,7 @@ game_font = pygame.font.Font(None, 30)
 start_ticks = pygame.time.get_ticks()
 second_counter = 0
 
-####GAME SYSTEM
+#### GAME SYSTEM
 WHITE = (255,255,255)
 GRAY = (64,64,64)
 BLACK = (0,0,0)
@@ -498,7 +498,7 @@ GREEN = (0,127,0)
 BLUE = (0,0,127)
 floor = 0
 
-#####PLAYER
+##### PLAYER
 player_image = pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()
 player_first_position = (700, 360)
 player = Player(player_image, player_first_position)
@@ -506,7 +506,7 @@ player_speed = 0.5
 
 punch_group = pygame.sprite.Group()
 
-#####STAIR
+##### STAIR
 stair_images = [
     pygame.image.load(os.path.join(file_path, "images\\stair.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "images\\stair_2.png")).convert_alpha()
@@ -514,22 +514,15 @@ stair_images = [
 stair_zero_floor = (640, 90)
 stair = Stair(stair_images[0], stair_zero_floor)
 
-######NPC
-father_slime_image = pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()
-father_slime = Character(father_slime_image, (540, 360))
+###### NPC
 
-skeleton_image = pygame.image.load(os.path.join(file_path, "images\\skeleton.png")).convert_alpha()
+father_slime = Character(father_slime_image, (540, 360))
 skeleton = Character(skeleton_image, (840, 600))
 
 npc_group = pygame.sprite.Group()
 npc_group.add(father_slime, skeleton)
 
-tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
-tuto_rect = tuto_image.get_rect(center=(640, 300))
-shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
-shop_rect = shop_image.get_rect(center=(640, 200))
-
-#####ITEM
+##### ITEM
 item_group = pygame.sprite.Group()
 
 ##### INVENTORY
@@ -538,6 +531,12 @@ equip_group = [e_Punch(punch_d_image, (0,0))] # index 0 : punch
 len_1 = 0
 len_2 = 0
 shop_is_buy = [False, False, False]
+
+##### ETC
+tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
+tuto_rect = tuto_image.get_rect(center=(640, 300))
+shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
+shop_rect = shop_image.get_rect(center=(640, 200))
 ##############################################################################################
 ready = True
 running = True
@@ -561,7 +560,8 @@ while running:
                 player.stop()
                 scene_arrange_equip(True)
 
-        player_move_key()
+        if not inven_is_overlap(equip_group):
+            player_move_key()
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
 
@@ -601,7 +601,7 @@ while running:
 
         for punch in punch_group:
             if pygame.sprite.collide_mask(monster, punch):
-                punch.draw(screen, player)
+                punch.draw(screen)
                 punch_group.remove(punch)
                 monster.hp -= player.damage
                 if monster.hp <= 0:
@@ -609,7 +609,7 @@ while running:
                 random_position(player.position, stair)
 
     for punch in punch_group:
-        punch.draw(screen, player)                                                          #PUNCH
+        punch.draw(screen)                                                          #PUNCH
 
         if punch.get_time() > 10:
             punch_group.remove(punch)   
