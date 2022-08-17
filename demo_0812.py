@@ -205,7 +205,7 @@ def scene_equip_setting(doing):
     global running
 
     player.stop()
-    cursor = Cursor(cursor_image, (980,210))
+    cursor = Cursor(cursor_image[0], (980,210))
     picked_equip = None
 
     while doing:
@@ -226,18 +226,35 @@ def scene_equip_setting(doing):
                 if event.key == pygame.K_r:
                     remove_from_equip_group(picked_equip)
                     cursor.is_picking = False
+                    cursor.image = cursor_image[0]
                     picked_equip = None
 
                 if event.key == pygame.K_SPACE:
                     if cursor.is_picking:
                         cursor.is_picking = False
+                        cursor.image = cursor_image[0]
                         picked_equip = None
 
                     else:
                         for equip in equip_group:
                             if pygame.sprite.collide_mask(equip, cursor):
                                 cursor.is_picking = True
+                                cursor.image = cursor_image[1]
                                 picked_equip = equip
+
+                if event.key == pygame.K_c:
+                    if cursor.is_picking:
+                        cursor.is_picking = False
+                        cursor.image = cursor_image[0]
+                        setting_active_skill("c", picked_equip)
+                        picked_equip = None
+                
+                if event.key == pygame.K_v:
+                    if cursor.is_picking:
+                        cursor.is_picking = False
+                        cursor.image = cursor_image[0]
+                        setting_active_skill("v", picked_equip)
+                        picked_equip = None
 
         display_game_ui()
         cursor.draw(screen)
@@ -398,7 +415,6 @@ def item_effect(item):
         player.coin += 1
 
 def equip_effect():
-
     if equip_group[0].image == punch_d_image:
         player.punch = punch_d_image
         player.damage = 10
@@ -413,32 +429,45 @@ def equip_effect():
 
     if equip_banana in equip_group:
         if not equip_banana.is_effected:
-            player.max_hp = 120
+            player.max_hp += 20
+            player.hp += 20
             equip_banana.is_effected = True
-            print("바나나 효과 발동")
-    else:
-        player.max_hp = 100
 
     if equip_battery in equip_group:
         if not equip_battery.is_effected:
-            player.speed = 0.6
+            player.speed += 0.1
             equip_battery.is_effected = True
-            print("배터리 효과 발동")
-    else:
-        player.speed = 0.5
-
-    print(equip_group)
 
 def remove_from_equip_group(equip):
-    #펀치면 안없어지게 하기
+    if equip == None:
+        return
+    elif equip == equip_group[0]:
+        return
+    else:
+        if equip == equip_banana:
+            player.max_hp -= 20
+            player.hp = min(player.max_hp, player.hp)
 
-    if equip == equip_banana:
-        print("바나나 없어짐")
-
-    if equip == e_Battery:
-        print("배터리 없어짐")
+        if equip == equip_battery:
+            player.speed -= 0.1
 
     equip_group.remove(equip)
+
+def setting_active_skill(key, picked_equip):
+    if picked_equip == equip_group[0]:
+        return
+
+    if key == "c":
+        for equip in equip_group:
+            equip.is_active_c = False
+        picked_equip.is_active_c = True
+        picked_equip.is_active_v = False
+
+    if key == "v":
+        for equip in equip_group:
+            equip.is_active_v = False
+        picked_equip.is_active_c = False
+        picked_equip.is_active_v = True
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):

@@ -63,9 +63,16 @@ class Equip(pygame.sprite.Sprite):
         self.rect = (self.rect_left,self.rect_top)
 
         self.is_effected = False
+        self.is_active_c = False
+        self.is_active_v = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        
+        if self.is_active_c:
+            screen.blit(skill_c_image, self.rect)
+        elif self.is_active_v:
+            screen.blit(skill_v_image, self.rect)
 
     def inven_move(self, event):
         if event.type == pygame.KEYDOWN:
@@ -92,6 +99,10 @@ class Equip(pygame.sprite.Sprite):
         self.rect_top = inven_position[self.row][self.col][1]
 
         self.rect = (self.rect_left,self.rect_top)
+
+    def c_setting(self):
+        c_rect = (self.rect_left,self.rect_top)
+
 
 ##### equip_punch class
 class e_Punch(Equip):
@@ -137,7 +148,12 @@ banana_image = pygame.image.load(os.path.join(file_path, "images\\e_banana.png")
 
 # Others
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()
-cursor_image = pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha()
+cursor_image = [
+    pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "images\\cursor_is_picking.png")).convert_alpha()
+]
+skill_c_image = pygame.image.load(os.path.join(file_path, "images\\skill_c.png")).convert_alpha()
+skill_v_image = pygame.image.load(os.path.join(file_path, "images\\skill_v.png")).convert_alpha()
 
 # Inventory
 MAX_ROW = 5

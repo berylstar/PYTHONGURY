@@ -1,15 +1,6 @@
-class Player():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-        self.position = None
+list = [1,2,3,4,5,6,7,8,9,10]
 
-    def print_name(self):
-        print(self.name)
-
-    def print_age(self):
-        print(self.age)
-
-num19 = Player("Elliott", 18)
-
-num19.print_name()
+for i in list:
+    if i % 2 == 0:
+        break
+    print(i)
