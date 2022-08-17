@@ -114,31 +114,36 @@ def scene_skeleton_shop(doing):
                         shop_is_buy[0] = True
 
                 if event.key == pygame.K_2:
-                    if not shop_is_buy[1] and player.coin >= 6:
-                        equip_group.append(equip_banana)
-                        player.coin -= 6
-                        shop_is_buy[1] = True
+                    equip_for_sale(1, equip_banana)
 
                 if event.key == pygame.K_3:
-                    if not shop_is_buy[2] and player.coin >= 3:
-                        equip_group.append(equip_battery)
-                        player.coin -= 3
-                        shop_is_buy[2] = True
+                    equip_for_sale(2, equip_battery)
 
                 if event.key == pygame.K_SPACE:
                     doing = False
-                    if not is_inven_overlapped:
+                    if not is_inven_overlapped(equip_group):
                         equip_effect()
 
         display_game_ui()
 
         equip_showcase(0, punch_v_image, 3)
         equip_showcase(1, banana_image, 6)
-        equip_showcase(2, battery_image, 3)
+        equip_showcase(2, battery_image, 4)
 
         screen.blit(shop_image, shop_rect)
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
         pygame.display.update()
+
+def equip_for_sale(index, equip):
+    global shop_is_buy, equip_group
+
+    if not shop_is_buy[index] and player.coin >= equip.price:
+        equip_group.append(equip)
+        player.coin -= equip.price
+        shop_is_buy[index] = True
+
+def random_for_sale():
+    pass
 
 def equip_showcase(index, image, price):
     pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
@@ -219,7 +224,7 @@ def scene_equip_setting(doing):
                     equip_effect()
 
                 if event.key == pygame.K_r:
-                    equip_group.remove(picked_equip)
+                    remove_from_equip_group(picked_equip)
                     cursor.is_picking = False
                     picked_equip = None
 
@@ -424,6 +429,16 @@ def equip_effect():
 
     print(equip_group)
 
+def remove_from_equip_group(equip):
+    #펀치면 안없어지게 하기
+
+    if equip == equip_banana:
+        print("바나나 없어짐")
+
+    if equip == e_Battery:
+        print("배터리 없어짐")
+
+    equip_group.remove(equip)
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):

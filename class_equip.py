@@ -110,12 +110,16 @@ class e_Battery(Equip):
         self.max_row = 4
         # self.max_col = 2
 
+        self.price = 4
+
 ##### banana class
 class e_Banana(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
         self.max_row = 4
         self.max_col = 1
+
+        self.price = 6
 ##############################################################################################
 screen_width = 1280
 screen_height = 720
