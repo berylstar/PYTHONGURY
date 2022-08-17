@@ -1,7 +1,7 @@
 import pygame
 import os
 ##############################################################################################
-def inven_is_overlap(equip_group):
+def is_inven_overlapped(equip_group):
     flag = False
     for equip_1 in equip_group:
         for equip_2 in equip_group:
@@ -55,12 +55,14 @@ class Equip(pygame.sprite.Sprite):
         self.row = index[0]
         self.col = index[1]
 
-        self.max_row = 5
-        self.max_col = 2
+        self.max_row = MAX_ROW
+        self.max_col = MAX_COL
 
         self.rect_left = inven_position[self.row][self.col][0]
         self.rect_top = inven_position[self.row][self.col][1]
         self.rect = (self.rect_left,self.rect_top)
+
+        self.is_effected = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -98,6 +100,9 @@ class e_Punch(Equip):
         # self.max_row = 5
         # self.max_col = 2
 
+    def get_index(self):
+        return (self.row, self.col)
+
 ##### battery class
 class e_Battery(Equip):
     def __init__(self, image, index):
@@ -123,8 +128,8 @@ punch_v_image = pygame.image.load(os.path.join(file_path, "images\\punch_v.png")
 punch_f_image = pygame.image.load(os.path.join(file_path, "images\\punch_f.png")).convert_alpha()
 
 # Equip Image
-battery_image = pygame.image.load(os.path.join(file_path, "images\\battery.png")).convert_alpha()
-banana_image = pygame.image.load(os.path.join(file_path, "images\\banana.png")).convert_alpha()
+battery_image = pygame.image.load(os.path.join(file_path, "images\\e_battery.png")).convert_alpha()
+banana_image = pygame.image.load(os.path.join(file_path, "images\\e_banana.png")).convert_alpha()
 
 # Others
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()
@@ -133,6 +138,7 @@ cursor_image = pygame.image.load(os.path.join(file_path, "images\\cursor.png")).
 # Inventory
 MAX_ROW = 5
 MAX_COL = 2
+
 inven_position = [
     [(950,180),(1010,180),(1070,180)],
     [(950,240),(1010,240),(1070,240)],
@@ -141,3 +147,8 @@ inven_position = [
     [(950,420),(1010,420),(1070,420)],
     [(950,480),(1010,480),(1070,480)]
     ]
+
+
+# EQUIPS
+equip_battery = e_Battery(battery_image, (0,0))
+equip_banana = e_Banana(banana_image, (0,0))
