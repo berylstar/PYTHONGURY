@@ -35,7 +35,7 @@ skeleton_image = pygame.image.load(os.path.join(file_path, "images\\skeleton.png
 ##### ITEM
 item_images = [
     pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\coin.png")).convert_alpha()
+    pygame.image.load(os.path.join(file_path, "design\\coin.png")).convert_alpha()
 ]
 
 # Punch Image

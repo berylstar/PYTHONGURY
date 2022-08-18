@@ -57,17 +57,17 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)              #INVEN
     screen.blit(background_zero, (340,60))
               
-    screen_message(f"{floor} F", WHITE, (240,90))                           #FLOOR MESSAGE
+    screen_message(f"{floor}F", WHITE, (240,90))                           #FLOOR MESSAGE
 
-    screen_message(f"HP : {player.hp}", WHITE, (240,190))                   #HP MESSAGE
+    screen_message(f"HP:{player.hp}", WHITE, (240,190))                   #HP MESSAGE
 
     coin_image_rect = item_images[1].get_rect(center=(215, 290))
     screen.blit(item_images[1], coin_image_rect)
-    screen_message(f"              X {player.coin}", WHITE, (220,290))      #COIN MESSAGE
+    screen_message(f"       X{player.coin}", WHITE, (220,290))      #COIN MESSAGE
 
     life_image_rect = player_image.get_rect(center=(210, 390))
     screen.blit(player_image, life_image_rect)
-    screen_message(f"              X {player.life}", WHITE, (220,390))      #LIFE MESSAGE
+    screen_message(f"       X{player.life}", WHITE, (220,390))      #LIFE MESSAGE
 
     for i in range(MAX_COL+2):                                                      #INVENTORY
         pygame.draw.line(screen, GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
@@ -326,7 +326,7 @@ def equip_showcase(index, equip):
         coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
         screen.blit(coin_image, coin_rect)
 
-        screen_message(f"  x {equip.price}", WHITE, (500+ 150*index, 440))
+        screen_message(f"x{equip.price}", WHITE, (500+ 150*index, 440))
     else:
         case_rect = sold_out_image.get_rect(center=(490+ 150*index,410))
         screen.blit(sold_out_image, case_rect)
@@ -691,7 +691,7 @@ while running:
     for punch in punch_group:
         punch.draw(screen)                                                          #PUNCH
 
-        if punch.get_time() > 10:
+        if punch.get_time() > 2*fps:
             punch_group.remove(punch)   
 
     for item in item_group:
