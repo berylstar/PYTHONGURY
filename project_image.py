@@ -7,8 +7,8 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 file_path = os.path.dirname(__file__)
 
 ##### PLAYER
-player_image = pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()
-# player_image = pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha()
+# player_image = pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()
+player_image = pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha()
 
 ##### STAIR
 stair_images = [
@@ -39,13 +39,14 @@ item_images = [
 ]
 
 # Punch Image
-punch_d_image = pygame.image.load(os.path.join(file_path, "images\\punch.png")).convert_alpha()
-punch_v_image = pygame.image.load(os.path.join(file_path, "images\\punch_v.png")).convert_alpha()
-punch_f_image = pygame.image.load(os.path.join(file_path, "images\\punch_f.png")).convert_alpha()
+punch_d_image = pygame.image.load(os.path.join(file_path, "design\\punch.png")).convert_alpha()
 
 # Equip Image
 battery_image = pygame.image.load(os.path.join(file_path, "images\\e_battery.png")).convert_alpha()
 banana_image = pygame.image.load(os.path.join(file_path, "images\\e_banana.png")).convert_alpha()
+pepper_image = pygame.image.load(os.path.join(file_path, "images\\e_pepper.png")).convert_alpha()
+ice_image = pygame.image.load(os.path.join(file_path, "images\\e_ice.png")).convert_alpha()
+dice_image = pygame.image.load(os.path.join(file_path, "images\\e_dice.png")).convert_alpha()
 
 # Others
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()

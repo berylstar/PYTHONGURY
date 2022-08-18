@@ -13,7 +13,12 @@ class Item(pygame.sprite.Sprite):
     
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
+class ItemController():
+    def __init__(self):
+        self.prob_portion = 10
+        self.prob_coin = 10
 ##############################################################################################
 
-PROB_PORTION = 10
-PROB_COIN = 10
+i_c = ItemController()
+##### item drop probability

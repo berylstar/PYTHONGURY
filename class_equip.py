@@ -100,19 +100,6 @@ class Equip(pygame.sprite.Sprite):
 
         self.rect = (self.rect_left,self.rect_top)
 
-    def c_setting(self):
-        c_rect = (self.rect_left,self.rect_top)
-
-
-##### equip_punch class
-class e_Punch(Equip):
-    def __init__(self, image, index):
-        Equip.__init__(self, image, index)
-        # self.max_row = 5
-        # self.max_col = 2
-
-        self.price = None
-
     def get_index(self):
         return (self.row, self.col)
 
@@ -123,7 +110,7 @@ class e_Battery(Equip):
         self.max_row = 4
         # self.max_col = 2
 
-        self.price = 4
+        self.price = 7
 
 ##### banana class
 class e_Banana(Equip):
@@ -132,7 +119,34 @@ class e_Banana(Equip):
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 6
+        self.price = 4
+
+##### pepper class
+class e_Pepper(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        # self.max_row = 5
+        self.max_col = 1
+
+        self.price = 3
+
+##### ice class
+class e_Ice(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 2
+
+##### dice class
+class e_Dice(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 3
 ##############################################################################################
 
 # Inventory
@@ -150,20 +164,17 @@ inven_position = [
 
 
 # EQUIPS
-equip_punch_d = e_Punch(punch_d_image, (0,0))
-equip_punch_v = e_Punch(punch_v_image, (0,0))
-equip_punch_v.price = 3
-equip_punch_f = e_Punch(punch_f_image, (0,0))
-equip_punch_f.price = 5
-
 equip_banana = e_Banana(banana_image, (0,0))
 equip_battery = e_Battery(battery_image, (0,0))
+equip_pepper = e_Pepper(pepper_image, (0,0))
+equip_ice = e_Ice(ice_image, (0,0))
+equip_dice = e_Dice(dice_image, (0,0))
 
-
-all_of_equips = [
-    equip_punch_d,
-    equip_punch_v,
-    equip_punch_f,
+# for sale equips
+able_equips = [
     equip_banana,
     equip_battery,
+    equip_pepper,
+    equip_ice,
+    equip_dice,
 ]
