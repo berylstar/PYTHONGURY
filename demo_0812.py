@@ -505,6 +505,7 @@ class Player(Character):
 
     def space_bar(self):
         image = self.punch
+        punch_sound.play()
 
         if self.direction == "LEFT":
             position = (self.rect.centerx-60, self.rect.centery)
