@@ -63,7 +63,7 @@ def display_game_ui():
 
     coin_image_rect = item_images[1].get_rect(center=(215, 290))
     screen.blit(item_images[1], coin_image_rect)
-    screen_message(f"       X{player.coin}", WHITE, (220,290))      #COIN MESSAGE
+    screen_message(f"       x{player.coin}", WHITE, (220,290))      #COIN MESSAGE
 
     life_image_rect = player_image.get_rect(center=(210, 390))
     screen.blit(player_image, life_image_rect)
