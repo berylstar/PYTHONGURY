@@ -9,10 +9,11 @@ file_path = os.path.dirname(__file__)
 ##### PLAYER
 # player_image = pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()
 player_image = pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha()
+player_red_image = pygame.image.load(os.path.join(file_path, "design\\c_main_red.png")).convert_alpha()
 
 ##### STAIR
 stair_images = [
-    pygame.image.load(os.path.join(file_path, "images\\stair.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\stair.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "images\\stair_2.png")).convert_alpha()
 ]
 
@@ -30,7 +31,7 @@ monster_group = pygame.sprite.Group()
 
 ##### NPC
 father_slime_image = pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()
-skeleton_image = pygame.image.load(os.path.join(file_path, "images\\skeleton.png")).convert_alpha()
+skeleton_image = pygame.image.load(os.path.join(file_path, "design\\gwan1.png")).convert_alpha()
 
 ##### ITEM
 item_images = [

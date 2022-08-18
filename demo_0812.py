@@ -67,7 +67,7 @@ def display_game_ui():
 
     life_image_rect = player_image.get_rect(center=(210, 390))
     screen.blit(player_image, life_image_rect)
-    screen_message(f"       X{player.life}", WHITE, (220,390))      #LIFE MESSAGE
+    screen_message(f"      x{player.life}", WHITE, (220,390))      #LIFE MESSAGE
 
     for i in range(MAX_COL+2):                                                      #INVENTORY
         pygame.draw.line(screen, GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
@@ -450,6 +450,7 @@ def equip_effect():
     if equip_pepper in equip_group:
         if not equip_pepper.is_effected:
             player.ap += 3
+            # player.image = player_red_image
             equip_pepper.is_effected = True
 
     if equip_ice in equip_group:
@@ -475,6 +476,7 @@ def remove_from_equip_group(equip):
 
         if equip == equip_pepper:
             player.ap -= 3
+            # player.image = player_image
 
         if equip == equip_ice:
             player.speed -= 0.1
