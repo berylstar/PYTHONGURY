@@ -34,12 +34,14 @@ def scene_title_game():
                 if event.key == pygame.K_SPACE:
                     if cursor == start_cursor:
                         ready = False
+                        test_sound.stop()
                     elif cursor == exit_cursor:
                         ready = False
                         running = False
                         pygame.quit()
 
         screen.fill((125,125,125))
+        test_sound.play(-1)
         pygame.draw.polygon(screen, GREEN, cursor)
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200))
         screen_message("START", BLACK, (screen_width//2,500))
@@ -569,6 +571,9 @@ game_font = pygame.font.Font(None, 30)
 start_ticks = pygame.time.get_ticks()
 second_counter = 0
 
+#SOUND TRACK
+test_sound = pygame.mixer.Sound('./Sound/Main_THEME.wav')
+
 #### GAME SYSTEM
 WHITE = (255,255,255)
 GRAY = (64,64,64)
@@ -612,6 +617,7 @@ while running:
     fps = clock.tick(60)
 
     scene_title_game()
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
