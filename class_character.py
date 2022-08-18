@@ -1,5 +1,5 @@
 import pygame
-import os
+from project_image import *
 ##############################################################################################
 ##### CHARACTER CLASS
 class Character(pygame.sprite.Sprite):
@@ -57,20 +57,6 @@ class Monster(Character):
         monster_group.remove(self)
 
 ##############################################################################################
-screen_width = 1280
-screen_height = 720
-screen = pygame.display.set_mode((screen_width, screen_height))
-file_path = os.path.dirname(__file__)
 
-##### MONSTER
-monster_images = [
-    pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()
-]
-monster_group = pygame.sprite.Group()
 MON_0_HP = 10
 MON_1_HP = 25
-
-##### NPC
-father_slime_image = pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()
-skeleton_image = pygame.image.load(os.path.join(file_path, "images\\skeleton.png")).convert_alpha()

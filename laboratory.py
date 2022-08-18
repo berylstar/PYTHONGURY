@@ -1,6 +1,6 @@
-list = [1,2,3,4,5,6,7,8,9,10]
+import pygame
+import os
 
-for i in list:
-    if i % 2 == 0:
-        break
-    print(i)
+file_path = os.path.dirname(__file__)
+
+game_font = pygame.font.Font(os.path.join(file_path, "fonts\\DungGeunMo.ttf"), 30)

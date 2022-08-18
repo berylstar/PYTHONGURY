@@ -1,5 +1,5 @@
 import pygame
-import os
+from project_image import *
 ##############################################################################################
 def is_inven_overlapped(equip_group):
     flag = False
@@ -134,28 +134,6 @@ class e_Banana(Equip):
 
         self.price = 6
 ##############################################################################################
-screen_width = 1280
-screen_height = 720
-screen = pygame.display.set_mode((screen_width, screen_height))
-file_path = os.path.dirname(__file__)
-
-# Punch Image
-punch_d_image = pygame.image.load(os.path.join(file_path, "images\\punch.png")).convert_alpha()
-punch_v_image = pygame.image.load(os.path.join(file_path, "images\\punch_v.png")).convert_alpha()
-punch_f_image = pygame.image.load(os.path.join(file_path, "images\\punch_f.png")).convert_alpha()
-
-# Equip Image
-battery_image = pygame.image.load(os.path.join(file_path, "images\\e_battery.png")).convert_alpha()
-banana_image = pygame.image.load(os.path.join(file_path, "images\\e_banana.png")).convert_alpha()
-
-# Others
-sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()
-cursor_image = [
-    pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\cursor_is_picking.png")).convert_alpha()
-]
-skill_c_image = pygame.image.load(os.path.join(file_path, "images\\skill_c.png")).convert_alpha()
-skill_v_image = pygame.image.load(os.path.join(file_path, "images\\skill_v.png")).convert_alpha()
 
 # Inventory
 MAX_ROW = 5

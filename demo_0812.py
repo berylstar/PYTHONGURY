@@ -1,5 +1,4 @@
 import pygame
-import os
 import random
 
 from class_equip import *
@@ -565,7 +564,6 @@ screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("No More Slime")
-file_path = os.path.dirname(__file__)
 clock = pygame.time.Clock()
 game_font = pygame.font.Font(None, 30)
 start_ticks = pygame.time.get_ticks()
@@ -581,17 +579,12 @@ BLUE = (0,0,127)
 floor = 0
 
 ##### PLAYER
-player_image = pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()
 player_first_position = (700, 360)
 player = Player(player_image, player_first_position)
 
 punch_group = pygame.sprite.Group()
 
 ##### STAIR
-stair_images = [
-    pygame.image.load(os.path.join(file_path, "images\\stair.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\stair_2.png")).convert_alpha()
-]
 stair_zero_floor = (640, 90)
 stair = Stair(stair_images[0], stair_zero_floor)
 
@@ -607,14 +600,10 @@ item_group = pygame.sprite.Group()
 
 ##### INVENTORY
 equip_group = [equip_punch_d] # index 0 : punch
-len_1 = 0
-len_2 = 0
 shop_is_buy = [False, False, False]
 
 ##### ETC
-tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
 tuto_rect = tuto_image.get_rect(center=(640, 300))
-shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
 shop_rect = shop_image.get_rect(center=(640, 200))
 ##############################################################################################
 ready = True
@@ -698,11 +687,6 @@ while running:
         if pygame.sprite.collide_mask(item, player):
             item_effect(item)
             item_group.remove(item)
-
-    # len_1 = len(equip_group)
-    # if len_1 != len_2:
-    #     check_equip()
-    # len_2 = len(equip_group)
 
     player.draw(screen)                                                             #PLAYER
 
