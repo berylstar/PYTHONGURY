@@ -36,14 +36,14 @@ def scene_title_game():
                 if event.key == pygame.K_SPACE:
                     if cursor == start_cursor:
                         ready = False
-                        test_sound.stop()
+                        # test_sound.stop()
                     elif cursor == exit_cursor:
                         ready = False
                         running = False
                         pygame.quit()
 
         screen.fill((125,125,125))
-        test_sound.play(-1)
+        # test_sound.play(-1)
         pygame.draw.polygon(screen, GREEN, cursor)
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200))
         screen_message("START", BLACK, (screen_width//2,500))
@@ -56,6 +56,7 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)              #MAIN GAME
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)              #INFO
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)              #INVEN
+    screen.blit(background_zero, (340,60))
               
     screen_message(f"{floor} F", WHITE, (240,90))                           #FLOOR MESSAGE
 
@@ -240,7 +241,7 @@ def screen_message(writing, color, position):
     screen.blit(msg, msg_rect)
 
 def game_restart():
-    global player, saved_flor, shop_is_buy, equip_group
+    global player, saved_floor, shop_is_buy, equip_group
 
     player = Player(player_image, player_first_position)
     make_floor_zero()

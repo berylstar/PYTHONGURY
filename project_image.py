@@ -8,6 +8,7 @@ file_path = os.path.dirname(__file__)
 
 ##### PLAYER
 player_image = pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()
+# player_image = pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha()
 
 ##### STAIR
 stair_images = [
@@ -16,6 +17,7 @@ stair_images = [
 ]
 
 ##### ETC
+background_zero = pygame.image.load(os.path.join(file_path, "design\\0F.png"))
 tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
 shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
 
