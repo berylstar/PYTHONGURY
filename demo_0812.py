@@ -238,10 +238,11 @@ def screen_message(writing, color, position):
     screen.blit(msg, msg_rect)
 
 def game_restart():
-    global player, shop_is_buy, equip_group
+    global player, saved_flor, shop_is_buy, equip_group
 
     player = Player(player_image, player_first_position)
     make_floor_zero()
+    saved_floor = None
     shop_is_buy = [False, False, False]
     equip_group = [equip_punch_d]
 
@@ -582,6 +583,7 @@ RED = (127,0,0)
 GREEN = (0,127,0)
 BLUE = (0,0,127)
 floor = 0
+saved_floor = None
 
 ##### PLAYER
 player_first_position = (700, 360)
@@ -656,6 +658,7 @@ while running:
         if player.hp <= 0:
             player.life -= 1
             player.stop()
+            saved_floor = floor
             if player.life <= 0:
                 scene_game_over(True)
             else:
@@ -665,6 +668,8 @@ while running:
         stair.draw(screen)                                                          #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
+            if saved_floor and floor == 0:
+                floor = saved_floor - 1
             next_floor(player.position) 
 
     for monster in monster_group:
