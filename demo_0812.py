@@ -4,6 +4,8 @@ import random
 from class_equip import *
 from class_character import *
 from class_item import *
+
+from project_sound import *
 ##############################################################################################
 def scene_title_game():
     global running, ready
@@ -571,9 +573,6 @@ clock = pygame.time.Clock()
 game_font = pygame.font.Font(None, 30)
 start_ticks = pygame.time.get_ticks()
 second_counter = 0
-
-#SOUND TRACK
-test_sound = pygame.mixer.Sound('./Sound/Main_THEME.wav')
 
 #### GAME SYSTEM
 WHITE = (255,255,255)
