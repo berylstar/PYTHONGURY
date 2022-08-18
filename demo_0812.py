@@ -36,14 +36,13 @@ def scene_title_game():
                 if event.key == pygame.K_SPACE:
                     if cursor == start_cursor:
                         ready = False
-                        # test_sound.stop()
                     elif cursor == exit_cursor:
                         ready = False
                         running = False
                         pygame.quit()
 
         screen.fill((125,125,125))
-        # test_sound.play(-1)
+        test_sound.play(-1)
         pygame.draw.polygon(screen, GREEN, cursor)
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200))
         screen_message("START", BLACK, (screen_width//2,500))
@@ -571,7 +570,7 @@ screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("No More Slime")
 clock = pygame.time.Clock()
-game_font = pygame.font.Font(None, 30)
+game_font = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
 start_ticks = pygame.time.get_ticks()
 second_counter = 0
 
@@ -612,6 +611,7 @@ shop_is_buy = [False, False, False]
 ##### ETC
 tuto_rect = tuto_image.get_rect(center=(640, 300))
 shop_rect = shop_image.get_rect(center=(640, 200))
+
 ##############################################################################################
 ready = True
 running = True
@@ -643,6 +643,7 @@ while running:
     display_game_ui()                                                         #UI
 
     if floor == 0:
+        test_sound.stop()
         floor_zero()      
 
     elif floor > 0:
