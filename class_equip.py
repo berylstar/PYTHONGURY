@@ -18,7 +18,7 @@ class Cursor(pygame.sprite.Sprite):
         self.poisiton = position
 
         self.rect = image.get_rect(center=position)
-        self.is_picking = False
+        self.clicking = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -111,6 +111,8 @@ class e_Punch(Equip):
         # self.max_row = 5
         # self.max_col = 2
 
+        self.price = None
+
     def get_index(self):
         return (self.row, self.col)
 
@@ -170,5 +172,20 @@ inven_position = [
 
 
 # EQUIPS
-equip_battery = e_Battery(battery_image, (0,0))
+equip_punch_d = e_Punch(punch_d_image, (0,0))
+equip_punch_v = e_Punch(punch_v_image, (0,0))
+equip_punch_v.price = 3
+equip_punch_f = e_Punch(punch_f_image, (0,0))
+equip_punch_f.price = 5
+
 equip_banana = e_Banana(banana_image, (0,0))
+equip_battery = e_Battery(battery_image, (0,0))
+
+
+all_of_equips = [
+    equip_punch_d,
+    equip_punch_v,
+    equip_punch_f,
+    equip_banana,
+    equip_battery,
+]

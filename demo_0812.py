@@ -108,10 +108,8 @@ def scene_skeleton_shop(doing):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    if not shop_is_buy[0] and player.coin >= 3:
-                        equip_group[0] = e_Punch(punch_v_image, equip_group[0].get_index())
-                        player.coin -= 3
-                        shop_is_buy[0] = True
+                    random_for_sale()
+                    punch_for_sale(0, equip_punch_v)
 
                 if event.key == pygame.K_2:
                     equip_for_sale(1, equip_banana)
@@ -126,41 +124,13 @@ def scene_skeleton_shop(doing):
 
         display_game_ui()
 
-        equip_showcase(0, punch_v_image, 3)
-        equip_showcase(1, banana_image, 6)
-        equip_showcase(2, battery_image, 4)
+        equip_showcase(0, equip_punch_v)
+        equip_showcase(1, equip_banana)
+        equip_showcase(2, equip_battery)
 
         screen.blit(shop_image, shop_rect)
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
         pygame.display.update()
-
-def equip_for_sale(index, equip):
-    global shop_is_buy, equip_group
-
-    if not shop_is_buy[index] and player.coin >= equip.price:
-        equip_group.append(equip)
-        player.coin -= equip.price
-        shop_is_buy[index] = True
-
-def random_for_sale():
-    pass
-
-def equip_showcase(index, image, price):
-    pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
-
-    if not shop_is_buy[index]:
-        equip_image = pygame.transform.scale(image, (60,60))
-        equip_rect = equip_image.get_rect(center=(490+ 150*index, 390))
-        screen.blit(equip_image, equip_rect)
-
-        coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
-        coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
-        screen.blit(coin_image, coin_rect)
-
-        screen_message(f"  x {price}", WHITE, (500+ 150*index, 440))
-    else:
-        case_rect = sold_out_image.get_rect(center=(490+ 150*index,410))
-        screen.blit(sold_out_image, case_rect)
 
 def scene_player_dead(doing):
     global running
@@ -216,7 +186,7 @@ def scene_equip_setting(doing):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 cursor.move(event)
-                if cursor.is_picking:
+                if cursor.clicking:
                     picked_equip.inven_move(event)
 
                 if event.key == pygame.K_i:
@@ -225,33 +195,33 @@ def scene_equip_setting(doing):
 
                 if event.key == pygame.K_r:
                     remove_from_equip_group(picked_equip)
-                    cursor.is_picking = False
+                    cursor.clicking = False
                     cursor.image = cursor_image[0]
                     picked_equip = None
 
                 if event.key == pygame.K_SPACE:
-                    if cursor.is_picking:
-                        cursor.is_picking = False
+                    if cursor.clicking:
+                        cursor.clicking = False
                         cursor.image = cursor_image[0]
                         picked_equip = None
 
                     else:
                         for equip in equip_group:
                             if pygame.sprite.collide_mask(equip, cursor):
-                                cursor.is_picking = True
+                                cursor.clicking = True
                                 cursor.image = cursor_image[1]
                                 picked_equip = equip
 
                 if event.key == pygame.K_c:
-                    if cursor.is_picking:
-                        cursor.is_picking = False
+                    if cursor.clicking:
+                        cursor.clicking = False
                         cursor.image = cursor_image[0]
                         setting_active_skill("c", picked_equip)
                         picked_equip = None
                 
                 if event.key == pygame.K_v:
-                    if cursor.is_picking:
-                        cursor.is_picking = False
+                    if cursor.clicking:
+                        cursor.clicking = False
                         cursor.image = cursor_image[0]
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
@@ -272,7 +242,7 @@ def game_restart():
     player = Player(player_image, player_first_position)
     make_floor_zero()
     shop_is_buy = [False, False, False]
-    equip_group = [e_Punch(punch_d_image, (0,0))]
+    equip_group = [equip_punch_d]
 
 def make_floor_zero():
     global floor 
@@ -318,6 +288,44 @@ def next_floor(pos):
         monster = prob_spawn_monster(90 - floor)
         random_away_position(pos, monster)
         monster_group.add(monster)
+
+def punch_for_sale(index, equip):
+    global shop_is_buy, equip_group
+
+    if not shop_is_buy[index] and player.coin >= equip.price:
+        new_image = equip.image
+        new_index = equip_group[0].get_index()
+        equip_group[0] = e_Punch(new_image, new_index)
+        player.coin -= equip.price
+        shop_is_buy[index] = True
+    
+def equip_for_sale(index, equip):
+    global shop_is_buy
+
+    if not shop_is_buy[index] and player.coin >= equip.price:
+        equip_group.append(equip)
+        player.coin -= equip.price
+        shop_is_buy[index] = True
+
+def random_for_sale():
+    pass
+
+def equip_showcase(index, equip):
+    pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
+
+    if not shop_is_buy[index]:
+        equip_image = pygame.transform.scale(equip.image, (60,60))
+        equip_rect = equip_image.get_rect(center=(490+ 150*index, 390))
+        screen.blit(equip_image, equip_rect)
+
+        coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
+        coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
+        screen.blit(coin_image, coin_rect)
+
+        screen_message(f"  x {equip.price}", WHITE, (500+ 150*index, 440))
+    else:
+        case_rect = sold_out_image.get_rect(center=(490+ 150*index,410))
+        screen.blit(sold_out_image, case_rect)
 
 def player_move_key():
     if event.type == pygame.KEYDOWN:
@@ -462,12 +470,18 @@ def setting_active_skill(key, picked_equip):
             equip.is_active_c = False
         picked_equip.is_active_c = True
         picked_equip.is_active_v = False
+        player.equip_c = picked_equip
+        if player.equip_v == player.equip_c:
+            player.equip_v = None
 
     if key == "v":
         for equip in equip_group:
             equip.is_active_v = False
         picked_equip.is_active_c = False
         picked_equip.is_active_v = True
+        player.equip_v = picked_equip
+        if player.equip_c == player.equip_v:
+            player.equip_c = None
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -592,7 +606,7 @@ npc_group.add(father_slime, skeleton)
 item_group = pygame.sprite.Group()
 
 ##### INVENTORY
-equip_group = [e_Punch(punch_d_image, (0,0))] # index 0 : punch
+equip_group = [equip_punch_d] # index 0 : punch
 len_1 = 0
 len_2 = 0
 shop_is_buy = [False, False, False]
