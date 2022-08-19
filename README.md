@@ -3,7 +3,9 @@
 
 # CODE DEVELOPER
 Kim Minsang
+
 Bae Sunghyun
+
 Shin Junha
 
 # GRAPHIC DESIGNER
