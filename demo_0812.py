@@ -6,7 +6,9 @@ from class_character import *
 from class_item import *
 from class_field import *
 
-from project_sound import *
+from file_sound import *
+
+from project_floor import *
 ##############################################################################################
 def scene_title_game():
     global running, ready
@@ -253,6 +255,7 @@ def make_floor_zero():
     floor = 0
     monster_group.empty()
     item_group.empty()
+    npc_group.add(father_slime, skeleton)
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
     random_for_sale()
@@ -282,15 +285,11 @@ def next_floor(pos):
         player.hp += 10
 
     item_group.empty()
+    npc_group.empty()
 
     stair.image = stair_images[1]
 
-    number_enemies = floor//5 + 1
-
-    for i in range(number_enemies):
-        monster = prob_spawn_monster(90 - floor)
-        random_away_position(pos, monster)
-        monster_group.add(monster)
+    floor_setting(pos, floor)
     
 def equip_for_sale(index, equip):
     global shop_can_buy
@@ -364,50 +363,6 @@ def player_move_key():
         if event.key == pygame.K_DOWN:
             player.to[3] = 0
 
-def random_away_position(center, object):
-    while True:
-        rand_x = random.randint(370, 910)
-        rand_y = random.randint(150, 570)
-
-        if rand_x < center[0] - 60 or center[0] + 60 < rand_x:
-            if rand_y < center[1] - 60 or center[1] + 60 < rand_y:
-                object.position = (rand_x, rand_y)
-                object.rect = object.image.get_rect(center=object.position)
-                break 
-
-def prob_spawn_monster(percent):
-    randprob = random.randrange(0,101)  # 0 ~ 100
-
-    if randprob <= percent:
-        return Monster(monster_1_image, (0,0), MON_0_HP)
-    else:
-        return Monster(monster_1_image, (0,0), MON_1_HP)
-
-def random_monster_direction():
-    if monster_group:
-        for monster in monster_group:
-            rand = random.randrange(0,11)
-            if rand <= 1:
-                monster.direction = "LEFT"
-            elif 1 < rand and rand <= 3:
-                monster.direction = "RIGHT"
-            elif 3 < rand and rand <= 5:
-                monster.direction = "UP"
-            elif 5 < rand and rand <= 7:
-                monster.direction = "DOWN"
-            else:
-                monster.direction = "NONE"
-
-            if monster.rect.centerx < 410:
-                monster.direction = "RIGHT"
-            elif monster.rect.centerx > 870:
-                monster.direction = "LEFT"
-
-            if monster.rect.centery < 130:
-                monster.direction = "DOWN"
-            elif monster.rect.centery > 590:
-                monster.direction = "UP"
-
 def random_monster_move():
     if monster_group:
         for monster in monster_group:
@@ -435,7 +390,6 @@ def item_effect(item):
         player.coin += 1
 
 def equip_effect():
-
     if equip_battery in equip_group:
         if not equip_battery.is_effected:
             player.damaged_enemy -= 0.2
@@ -449,7 +403,7 @@ def equip_effect():
 
     if equip_pepper in equip_group:
         if not equip_pepper.is_effected:
-            player.ap += 3
+            player.ap += 3            
             equip_pepper.is_effected = True
 
     if equip_ice in equip_group:
@@ -461,6 +415,9 @@ def equip_effect():
         if not equip_dice.is_effected:
             i_c.prob_coin += 5
             equip_dice.is_effected = True
+
+            # big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
+            # player.punch = big_punch_image
             
 def remove_from_equip_group(equip):
     if equip == None:
@@ -481,6 +438,8 @@ def remove_from_equip_group(equip):
 
         if equip == equip_dice:
             i_c.prob_coin -= 5
+
+            # player.punch = punch_d_image
 
     equip_group.remove(equip)
     able_equips.append(equip)
@@ -504,17 +463,39 @@ def setting_active_skill(key, picked_equip):
         if player.equip_c == player.equip_v:
             player.equip_c = None
 
-def field_effect(field):
-    if not field.activated:
-        if field == field_web:
-            player.stop()
-            player.speed -= 0.4
-            field.activated = True
+# def field_effect(field):
+#     if not field.is_collision:
+#         if field == field_web:
+#             player.stop()
+#             player.speed -= 0.4
+#             field.is_collision = True
 
-def field_uneffect(field):
-    if field == field_web:
-        player.speed += 0.4
-        field.activated = False
+# def field_uneffect(field):
+#     if field == field_web:
+#         player.speed += 0.4
+#         field.is_collision = False
+
+# def check_player_collision():
+#     for field in field_group:
+#         if pygame.sprite.collide_mask(field, player):
+#             player.stop()
+#             field.is_collision = True
+#         if field.is_collision and not pygame.sprite.collide_mask(field, player):
+#             field.is_collision = False
+
+#     for monster in monster_group:
+#         if pygame.sprite.collide_mask(monster, player):
+#             player.stop()
+#             monster.is_collision = True
+#         if monster.is_collision and not pygame.sprite.collide_mask(monster, player):
+#             monster.is_collision = False
+
+#     for npc in npc_group:
+#         if pygame.sprite.collide_mask(npc, player):
+#             player.stop()
+#             npc.is_collision = True
+#         if npc.is_collision and not pygame.sprite.collide_mask(npc, player):
+#             npc.is_collision = False
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -554,10 +535,12 @@ class Player(Character):
         punch_group.add(Punch(image, position, self.direction))
     
     def skill_c(self):
-        print(self.equip_c)
+        if self.equip_c:
+            self.equip_c.active_skill()
     
     def skill_v(self):
-        print(self.equip_v)
+        if self.equip_v:
+            self.equip_v.active_skill()
 
 #### PUNCH CLASS
 class Punch(pygame.sprite.Sprite):
@@ -612,30 +595,7 @@ player = Player(player_image, player_first_position)
 
 punch_group = pygame.sprite.Group()
 
-##### MONSTER
-monster_group = pygame.sprite.Group()
-
-##### FIELD
-stair_zero_floor = (640, 90)
-stair = Stair(stair_images[0], stair_zero_floor)
-
-field_group = pygame.sprite.Group()
-field_group.add(field_web)
-
-###### NPC
-father_slime = Character(father_slime_image, (540, 360))
-skeleton = Character(skeleton_image, (840, 600))
-
-npc_group = pygame.sprite.Group()
-npc_group.add(father_slime, skeleton)
-
-##### ITEM
-item_group = pygame.sprite.Group()
-
 ##### INVENTORY
-equip_group = []
-shop_for_sale = [None, None, None]
-shop_can_buy = [True, True, True]
 random_for_sale()
 
 ##### ETC
@@ -671,9 +631,9 @@ while running:
 
     display_game_ui()                                                                  #UI
 
-    milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
+    milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
-        #for 0.5 second
+        #for 0.4 second
         player.image_update()
     a_counter = milli_time
 
@@ -686,13 +646,14 @@ while running:
         if b_counter != second_time:
             #for 1 second
             player.hp -= player.damaged_time
-            # player.image_update()
             random_monster_direction()
         b_counter = second_time
 
-        random_monster_move()
+        if not e_c.active_sandclock[0]:
+            random_monster_move()
 
         if player.hp <= 0:
+            player.hp = 0
             player.life -= 1
             player.stop()
             saved_floor = floor
@@ -736,14 +697,16 @@ while running:
             item_effect(item)
             item_group.remove(item)
 
-    for field in field_group:
-        field.draw(screen)
-        if pygame.sprite.collide_mask(field, player):
-            field_effect(field)
-        if field.activated and not pygame.sprite.collide_mask(field, player):
-            field_uneffect(field)
+    # for field in field_group:
+    #     field.draw(screen)
+    #     if pygame.sprite.collide_mask(field, player):
+    #         field_effect(field)
+    #     if field.is_collision and not pygame.sprite.collide_mask(field, player):
+    #         field_uneffect(field)
 
     player.draw(screen)                                                                 #PLAYER
+    # check_player_collision()
+    e_c.active_time()
 
     pygame.display.update()
 

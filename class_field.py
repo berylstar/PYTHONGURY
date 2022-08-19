@@ -1,5 +1,5 @@
 import pygame
-from project_image import *
+from file_image import *
 ##############################################################################################
 
 ##############################################################################################
@@ -23,10 +23,17 @@ class f_Web(pygame.sprite.Sprite):
         self.position = position
 
         self.rect = image.get_rect(center=position)
-        self.activated = False
+        self.is_collision = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 ##############################################################################################
 
-field_web = f_Web(web_image, (540,550))
+##### FIELD
+stair_zero_floor = (640, 90)
+stair = Stair(stair_images[0], stair_zero_floor)
+
+# field_web = f_Web(web_image, (540,550))
+
+# field_group = pygame.sprite.Group()
+# field_group.add(field_web)

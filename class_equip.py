@@ -1,5 +1,6 @@
 import pygame
-from project_image import *
+from file_image import *
+from class_character import monster_group
 ##############################################################################################
 def is_inven_overlapped(equip_group):
     flag = False
@@ -54,10 +55,8 @@ class Equip(pygame.sprite.Sprite):
         
         self.row = index[0]
         self.col = index[1]
-
         self.max_row = MAX_ROW
         self.max_col = MAX_COL
-
         self.rect_left = inven_position[self.row][self.col][0]
         self.rect_top = inven_position[self.row][self.col][1]
         self.rect = (self.rect_left,self.rect_top)
@@ -65,6 +64,7 @@ class Equip(pygame.sprite.Sprite):
         self.is_effected = False
         self.is_active_c = False
         self.is_active_v = False
+        self.cool_time = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -102,6 +102,9 @@ class Equip(pygame.sprite.Sprite):
 
     def get_index(self):
         return (self.row, self.col)
+
+    def active_skill(self):
+        pass
 
 ##### battery class
 class e_Battery(Equip):
@@ -147,8 +150,38 @@ class e_Dice(Equip):
         # self.max_col = 2
 
         self.price = 3
-##############################################################################################
 
+##### sandclock class
+class e_Sandclock(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 4
+
+    def active_skill(self):
+        if self.cool_time == False:
+            e_c.active_sandclock[0] = True
+            e_c.active_sandclock[1] = pygame.time.get_ticks()
+            self.cool_time = True
+##############################################################################################
+##### equip controller
+class EquipController():
+    def __init__(self):
+        self.active_sandclock = [False, 0]
+
+    def active_time(self):
+        now_time = pygame.time.get_ticks()
+
+        # sand clock
+        if self.active_sandclock[0] or equip_sandclock.cool_time:
+            if now_time - self.active_sandclock[1] > 3000:
+                self.active_sandclock[0] = False
+            if now_time - self.active_sandclock[1] > 30000:
+                equip_sandclock.cool_time = False
+            
+##############################################################################################
 # Inventory
 MAX_ROW = 5
 MAX_COL = 2
@@ -162,13 +195,19 @@ inven_position = [
     [(950,480),(1010,480),(1070,480)]
     ]
 
-
 # EQUIPS
 equip_banana = e_Banana(banana_image, (0,0))
 equip_battery = e_Battery(battery_image, (0,0))
 equip_pepper = e_Pepper(pepper_image, (0,0))
 equip_ice = e_Ice(ice_image, (0,0))
 equip_dice = e_Dice(dice_image, (0,0))
+equip_sandclock = e_Sandclock(sandclock_image, (0,0))
+
+equip_group = []
+
+# shop
+shop_for_sale = [None, None, None]
+shop_can_buy = [True, True, True]
 
 # for sale equips
 able_equips = [
@@ -177,4 +216,7 @@ able_equips = [
     equip_pepper,
     equip_ice,
     equip_dice,
+    equip_sandclock,
 ]
+
+e_c = EquipController()

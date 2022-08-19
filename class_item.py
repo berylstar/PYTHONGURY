@@ -1,5 +1,5 @@
 import pygame
-from project_image import *
+from file_image import *
 ##############################################################################################
 ##### ITEM CLASS
 class Item(pygame.sprite.Sprite):
@@ -21,3 +21,6 @@ class ItemController():
 ##############################################################################################
 
 i_c = ItemController()
+
+##### ITEM
+item_group = pygame.sprite.Group()

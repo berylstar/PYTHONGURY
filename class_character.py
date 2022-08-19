@@ -1,5 +1,5 @@
 import pygame
-from project_image import *
+from file_image import *
 ##############################################################################################
 ##### CHARACTER CLASS
 class Character(pygame.sprite.Sprite):
@@ -15,6 +15,8 @@ class Character(pygame.sprite.Sprite):
         self.direction = "LEFT"
         self.to = [0, 0, 0, 0]  #LEFT, RIGHT, UP, DOWN
         self.flip = False
+
+        self.is_collision = False
 
     def image_update(self):
         g_len = len(self.image_group)
@@ -71,5 +73,14 @@ class Monster(Character):
 ##############################################################################################
 
 ##### about monster
+monster_group = pygame.sprite.Group()
+
 MON_0_HP = 10
 MON_1_HP = 25
+
+###### about npc
+father_slime = Character(father_slime_image, (540, 360))
+skeleton = Character(skeleton_image, (840, 600))
+
+npc_group = pygame.sprite.Group()
+npc_group.add(father_slime, skeleton)

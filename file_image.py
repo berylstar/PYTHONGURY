@@ -12,7 +12,8 @@ player_icon = pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).
 player_image =[
     pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha()
+    pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
 ]
 
 
@@ -57,6 +58,7 @@ banana_image = pygame.image.load(os.path.join(file_path, "images\\e_banana.png")
 pepper_image = pygame.image.load(os.path.join(file_path, "images\\e_pepper.png")).convert_alpha()
 ice_image = pygame.image.load(os.path.join(file_path, "images\\e_ice.png")).convert_alpha()
 dice_image = pygame.image.load(os.path.join(file_path, "images\\e_dice.png")).convert_alpha()
+sandclock_image = pygame.image.load(os.path.join(file_path, "images\\e_sandclock.png")).convert_alpha()
 
 
 # Others
