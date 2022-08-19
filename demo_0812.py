@@ -242,12 +242,32 @@ def screen_message(writing, color, position):
     screen.blit(msg, msg_rect)
 
 def game_restart():
-    global player, saved_floor, equip_group
+    global player, saved_floor
 
     player = Player(player_image, player_first_position)
+    initial_equip_setting()
     make_floor_zero()
     saved_floor = None
+
+def initial_equip_setting():
+    global equip_group, shop_for_sale, shop_can_buy, able_equips
+
     equip_group = []
+
+    # shop
+    shop_for_sale = [None, None, None]
+    shop_can_buy = [True, True, True]
+
+    # for sale equips
+    able_equips = [
+        equip_banana,
+        equip_battery,
+        equip_pepper,
+        equip_ice,
+        equip_dice,
+        equip_sandclock,
+        equip_apple,
+    ]
 
 def make_floor_zero():
     global floor
@@ -392,7 +412,7 @@ def item_effect(item):
 def equip_effect():
     if equip_battery in equip_group:
         if not equip_battery.is_effected:
-            player.damaged_enemy -= 0.2
+            player.damaged_enemy -= 0.3
             equip_battery.is_effected = True
 
     if equip_banana in equip_group:
@@ -416,8 +436,11 @@ def equip_effect():
             i_c.prob_coin += 5
             equip_dice.is_effected = True
 
-            # big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
-            # player.punch = big_punch_image
+    if equip_apple in equip_group:
+        if not equip_apple.is_effected:
+            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
+            player.punch = big_punch_image
+            equip_apple.is_effected = True
             
 def remove_from_equip_group(equip):
     if equip == None:
@@ -439,7 +462,8 @@ def remove_from_equip_group(equip):
         if equip == equip_dice:
             i_c.prob_coin -= 5
 
-            # player.punch = punch_d_image
+        if equip == equip_apple:
+            player.punch = punch_d_image
 
     equip_group.remove(equip)
     able_equips.append(equip)
@@ -513,7 +537,7 @@ class Player(Character):
         self.max_hp = 100
         self.speed = 0.5
         self.punch = punch_d_image
-        self.damaged_enemy = 0.7
+        self.damaged_enemy = 0.6
         self.damaged_time = 1
 
     def space_bar(self):

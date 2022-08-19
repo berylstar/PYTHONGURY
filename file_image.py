@@ -59,6 +59,7 @@ pepper_image = pygame.image.load(os.path.join(file_path, "images\\e_pepper.png")
 ice_image = pygame.image.load(os.path.join(file_path, "images\\e_ice.png")).convert_alpha()
 dice_image = pygame.image.load(os.path.join(file_path, "images\\e_dice.png")).convert_alpha()
 sandclock_image = pygame.image.load(os.path.join(file_path, "images\\e_sandclock.png")).convert_alpha()
+apple_iamge = pygame.image.load(os.path.join(file_path, "images\\e_apple.png")).convert_alpha()
 
 
 # Others

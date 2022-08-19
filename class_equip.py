@@ -165,6 +165,15 @@ class e_Sandclock(Equip):
             e_c.active_sandclock[0] = True
             e_c.active_sandclock[1] = pygame.time.get_ticks()
             self.cool_time = True
+
+##### apple class
+class e_Apple(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 2
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -202,6 +211,7 @@ equip_pepper = e_Pepper(pepper_image, (0,0))
 equip_ice = e_Ice(ice_image, (0,0))
 equip_dice = e_Dice(dice_image, (0,0))
 equip_sandclock = e_Sandclock(sandclock_image, (0,0))
+equip_apple = e_Apple(apple_iamge, (0,0))
 
 equip_group = []
 
@@ -217,6 +227,7 @@ able_equips = [
     equip_ice,
     equip_dice,
     equip_sandclock,
+    equip_apple,
 ]
 
 e_c = EquipController()
