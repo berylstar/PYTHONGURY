@@ -4,6 +4,7 @@ import random
 from class_equip import *
 from class_character import *
 from class_item import *
+from class_field import *
 
 from project_sound import *
 ##############################################################################################
@@ -42,7 +43,7 @@ def scene_title_game():
                         pygame.quit()
 
         screen.fill((125,125,125))
-        test_sound.play(-1)
+        bgm_sound.play(-1)
         pygame.draw.polygon(screen, GREEN, cursor)
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200))
         screen_message("START", BLACK, (screen_width//2,500))
@@ -65,8 +66,8 @@ def display_game_ui():
     screen.blit(item_images[1], coin_image_rect)
     screen_message(f"       x{player.coin}", WHITE, (220,290))      #COIN MESSAGE
 
-    life_image_rect = player_image.get_rect(center=(210, 390))
-    screen.blit(player_image, life_image_rect)
+    life_image_rect = player_icon.get_rect(center=(210, 390))
+    screen.blit(player_icon, life_image_rect)
     screen_message(f"      x{player.life}", WHITE, (220,390))      #LIFE MESSAGE
 
     for i in range(MAX_COL+2):                                                      #INVENTORY
@@ -378,9 +379,9 @@ def prob_spawn_monster(percent):
     randprob = random.randrange(0,101)  # 0 ~ 100
 
     if randprob <= percent:
-        return Monster(monster_images[0], (0,0), MON_0_HP)
+        return Monster(monster_1_image, (0,0), MON_0_HP)
     else:
-        return Monster(monster_images[1], (0,0), MON_1_HP)
+        return Monster(monster_1_image, (0,0), MON_1_HP)
 
 def random_monster_direction():
     if monster_group:
@@ -432,7 +433,6 @@ def item_effect(item):
         player.hp = min(player.hp + 5, player.max_hp)
     if item.info == "coin":
         player.coin += 1
-        print(i_c.prob_coin)
 
 def equip_effect():
 
@@ -450,7 +450,6 @@ def equip_effect():
     if equip_pepper in equip_group:
         if not equip_pepper.is_effected:
             player.ap += 3
-            # player.image = player_red_image
             equip_pepper.is_effected = True
 
     if equip_ice in equip_group:
@@ -476,7 +475,6 @@ def remove_from_equip_group(equip):
 
         if equip == equip_pepper:
             player.ap -= 3
-            # player.image = player_image
 
         if equip == equip_ice:
             player.speed -= 0.1
@@ -505,11 +503,23 @@ def setting_active_skill(key, picked_equip):
         player.equip_v = picked_equip
         if player.equip_c == player.equip_v:
             player.equip_c = None
+
+def field_effect(field):
+    if not field.activated:
+        if field == field_web:
+            player.stop()
+            player.speed -= 0.4
+            field.activated = True
+
+def field_uneffect(field):
+    if field == field_web:
+        player.speed += 0.4
+        field.activated = False
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
-    def __init__(self, image, position):
-        Character.__init__(self, image, position)
+    def __init__(self, image_group, position):
+        Character.__init__(self, image_group, position)
 
         self.life = 3
         self.hp = 100
@@ -524,7 +534,6 @@ class Player(Character):
         self.punch = punch_d_image
         self.damaged_enemy = 0.7
         self.damaged_time = 1
-
 
     def space_bar(self):
         image = self.punch
@@ -575,18 +584,6 @@ class Punch(pygame.sprite.Sprite):
         #     self.rect = (player.rect.x, player.rect.y+60)
 
         screen.blit(self.image, self.rect)
-
-##### STIAR CLASS
-class Stair(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        super().__init__()
-        self.image = image
-        self.position = position
-
-        self.rect = image.get_rect(center=position)
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
 ##############################################################################################
 pygame.init()
 screen_width = 1280
@@ -596,7 +593,8 @@ pygame.display.set_caption("No More Slime")
 clock = pygame.time.Clock()
 game_font = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
 start_ticks = pygame.time.get_ticks()
-second_counter = 0
+a_counter = 0
+b_counter = 0
 
 #### GAME SYSTEM
 WHITE = (255,255,255)
@@ -614,9 +612,15 @@ player = Player(player_image, player_first_position)
 
 punch_group = pygame.sprite.Group()
 
-##### STAIR
+##### MONSTER
+monster_group = pygame.sprite.Group()
+
+##### FIELD
 stair_zero_floor = (640, 90)
 stair = Stair(stair_images[0], stair_zero_floor)
+
+field_group = pygame.sprite.Group()
+field_group.add(field_web)
 
 ###### NPC
 father_slime = Character(father_slime_image, (540, 360))
@@ -665,19 +669,26 @@ while running:
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
 
-    display_game_ui()                                                         #UI
+    display_game_ui()                                                                  #UI
+
+    milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
+    if a_counter != milli_time:
+        #for 0.5 second
+        player.image_update()
+    a_counter = milli_time
 
     if floor == 0:
-        test_sound.stop()
+        bgm_sound.stop()
         floor_zero()      
 
     elif floor > 0:
-        elapsed_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
-        if second_counter != elapsed_time:
+        second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
+        if b_counter != second_time:
             #for 1 second
             player.hp -= player.damaged_time
+            # player.image_update()
             random_monster_direction()
-        second_counter = elapsed_time
+        b_counter = second_time
 
         random_monster_move()
 
@@ -691,7 +702,7 @@ while running:
                 scene_player_dead(True)
 
     if not monster_group:
-        stair.draw(screen)                                                          #STAIR
+        stair.draw(screen)                                                            #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
             if saved_floor and floor == 0:
@@ -714,18 +725,25 @@ while running:
                     random_away_position(player.position, stair)
 
     for punch in punch_group:
-        punch.draw(screen)                                                          #PUNCH
+        punch.draw(screen)                                                              #PUNCH
 
-        if punch.get_time() > 2*fps:
+        if punch.get_time() > 2 * fps:
             punch_group.remove(punch)   
 
     for item in item_group:
-        item.draw(screen)                                                           #ITEM
+        item.draw(screen)                                                               #ITEM
         if pygame.sprite.collide_mask(item, player):
             item_effect(item)
             item_group.remove(item)
 
-    player.draw(screen)                                                             #PLAYER
+    for field in field_group:
+        field.draw(screen)
+        if pygame.sprite.collide_mask(field, player):
+            field_effect(field)
+        if field.activated and not pygame.sprite.collide_mask(field, player):
+            field_uneffect(field)
+
+    player.draw(screen)                                                                 #PLAYER
 
     pygame.display.update()
 

@@ -3,15 +3,27 @@ from project_image import *
 ##############################################################################################
 ##### CHARACTER CLASS
 class Character(pygame.sprite.Sprite):
-    def __init__(self, image, position):
+    def __init__(self, image_group, position):
         super().__init__()
-        self.image = image
+        self.image_group = image_group
         self.position = position
 
-        self.rect = image.get_rect(center=position)
+        self.i_i = 0
+        self.image = image_group[self.i_i]
+        self.rect = self.image.get_rect(center=position)
+
         self.direction = "LEFT"
         self.to = [0, 0, 0, 0]  #LEFT, RIGHT, UP, DOWN
         self.flip = False
+
+    def image_update(self):
+        g_len = len(self.image_group)
+        self.i_i += 1
+
+        if self.i_i == g_len:
+            self.i_i = 0
+
+        self.image = self.image_group[self.i_i]
 
     def draw(self, screen):
         if self.direction == "LEFT":
@@ -46,8 +58,8 @@ class Character(pygame.sprite.Sprite):
 
 ##### MONSTER CLASS
 class Monster(Character):
-    def __init__(self, image, position, hp):
-        Character.__init__(self, image, position)
+    def __init__(self, image_group, position, hp):
+        Character.__init__(self, image_group, position)
         self.is_died = False
         self.hp = hp
 

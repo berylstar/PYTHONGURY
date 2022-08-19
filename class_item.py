@@ -21,4 +21,3 @@ class ItemController():
 ##############################################################################################
 
 i_c = ItemController()
-##### item drop probability
