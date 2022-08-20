@@ -45,7 +45,7 @@ shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).conv
 ##### ITEM
 item_images = [
     pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "design\\coin.png")).convert_alpha()
+    pygame.image.load(os.path.join(file_path, "images\\coin_2.png")).convert_alpha()
 ]
 
 

@@ -1,3 +1,4 @@
+from turtle import right, up
 import pygame
 import random
 
@@ -73,9 +74,9 @@ def display_game_ui():
     screen_message(f"      x{player.life}", WHITE, (220,390))      #LIFE MESSAGE
 
     for i in range(MAX_COL+2):                                                      #INVENTORY
-        pygame.draw.line(screen, GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
+        pygame.draw.line(screen, D_GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
     for i in range(MAX_ROW+2):
-        pygame.draw.line(screen, GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
+        pygame.draw.line(screen, D_GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
 
     for equip in equip_con.equipped_group:
         equip.draw(screen)
@@ -324,20 +325,29 @@ def random_for_sale():
         equip_con.can_buy = [True, True, True]
 
 def equip_showcase(index, equip):
-    pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
+    sero = 350
+    pygame.draw.rect(screen, WHITE, ((420 + 150*index,sero),(140,240)), 1)
 
     if equip_con.can_buy[index]:
-        equip_image = pygame.transform.scale(equip.image, (60,60))
-        equip_rect = equip_image.get_rect(center=(490+ 150*index, 390))
+        pygame.draw.line(screen, GRAY, (430+ 150*index, sero+10), (550 + 150*index, sero+10))
+        pygame.draw.line(screen, GRAY, (430+ 150*index, sero+70), (550 + 150*index, sero+70))
+        pygame.draw.line(screen, GRAY, (430+ 150*index, sero+130), (550 + 150*index, sero+130))
+        pygame.draw.line(screen, GRAY, (430+ 150*index, sero+10), (430 + 150*index, sero+130))
+        pygame.draw.line(screen, GRAY, (490+ 150*index, sero+10), (490 + 150*index, sero+130))
+        pygame.draw.line(screen, GRAY, (550+ 150*index, sero+10), (550 + 150*index, sero+130))
+        equip_image = pygame.transform.smoothscale(equip.image, (60,60))
+        equip_rect = equip.image.get_rect(left=430+ 150*index, top=sero+10)
         screen.blit(equip_image, equip_rect)
 
+        screen_message(equip.name, WHITE, (490+ 150*index,sero+160))
+
         coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
-        coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
+        coin_rect = coin_image.get_rect(center=(470+ 150*index,sero+200))
         screen.blit(coin_image, coin_rect)
 
-        screen_message(f"x{equip.price}", WHITE, (500+ 150*index, 440))
+        screen_message(f"x{equip.price}", WHITE, (500+ 150*index, sero+200))
     else:
-        case_rect = sold_out_image.get_rect(center=(490+ 150*index,410))
+        case_rect = sold_out_image.get_rect(center=(490+ 150*index,sero+90))
         screen.blit(sold_out_image, case_rect)
 
 def player_move_key():
@@ -553,7 +563,8 @@ b_counter = 0
 
 #### GAME SYSTEM
 WHITE = (255,255,255)
-GRAY = (64,64,64)
+D_GRAY = (64,64,64)
+GRAY = (127,127,127)
 BLACK = (0,0,0)
 RED = (127,0,0)
 GREEN = (0,127,0)

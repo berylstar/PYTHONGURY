@@ -52,6 +52,7 @@ class Equip(pygame.sprite.Sprite):
     def __init__(self, image, index):
         super().__init__()
         self.image = image
+        self.name = None
         
         self.row = index[0]
         self.col = index[1]
@@ -110,6 +111,7 @@ class Equip(pygame.sprite.Sprite):
 class e_Battery(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Battery"
         self.max_row = 4
         # self.max_col = 2
 
@@ -119,6 +121,7 @@ class e_Battery(Equip):
 class e_Banana(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Banana"
         self.max_row = 4
         self.max_col = 1
 
@@ -128,6 +131,7 @@ class e_Banana(Equip):
 class e_Pepper(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Chili Pepper"
         # self.max_row = 5
         self.max_col = 1
 
@@ -137,6 +141,7 @@ class e_Pepper(Equip):
 class e_Ice(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Ice"
         # self.max_row = 5
         # self.max_col = 2
 
@@ -146,6 +151,7 @@ class e_Ice(Equip):
 class e_Dice(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Dice"
         # self.max_row = 5
         # self.max_col = 2
 
@@ -155,6 +161,7 @@ class e_Dice(Equip):
 class e_Sandclock(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Sand Clock"
         self.max_row = 4
         # self.max_col = 2
 
@@ -170,6 +177,7 @@ class e_Sandclock(Equip):
 class e_Apple(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Green Apple"
         self.max_row = 4
         self.max_col = 1
 
@@ -199,12 +207,14 @@ class SkillController():
     def active_time(self):
         now_time = pygame.time.get_ticks()
 
-        # sand clock
+        # sand clock - monster stop
         if self.active_sandclock[0] or equip_sandclock.cool_time:
             if now_time - self.active_sandclock[1] > 3000:
                 self.active_sandclock[0] = False
+                equip_sandclock.image.set_alpha(60)
             if now_time - self.active_sandclock[1] > 30000:
                 equip_sandclock.cool_time = False
+                equip_sandclock.image.set_alpha(255)
             
 ##############################################################################################
 # Inventory
