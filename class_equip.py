@@ -156,14 +156,14 @@ class e_Sandclock(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
         self.max_row = 4
-        self.max_col = 1
+        # self.max_col = 2
 
         self.price = 4
 
     def active_skill(self):
         if self.cool_time == False:
-            e_c.active_sandclock[0] = True
-            e_c.active_sandclock[1] = pygame.time.get_ticks()
+            skill_con.active_sandclock[0] = True
+            skill_con.active_sandclock[1] = pygame.time.get_ticks()
             self.cool_time = True
 
 ##### apple class
@@ -171,12 +171,28 @@ class e_Apple(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
         self.max_row = 4
-        # self.max_col = 2
+        self.max_col = 1
 
         self.price = 2
 ##############################################################################################
 ##### equip controller
 class EquipController():
+    def __init__(self):
+        self.equipped_group = []
+        self.for_sale = [None, None, None]
+        self.can_buy = [True, True, True]
+        self.able_equip_group = [
+            equip_banana,
+            equip_battery,
+            equip_pepper,
+            equip_ice,
+            equip_dice,
+            equip_sandclock,
+            equip_apple,
+        ]
+
+##### active controller
+class SkillController():
     def __init__(self):
         self.active_sandclock = [False, 0]
 
@@ -213,21 +229,5 @@ equip_dice = e_Dice(dice_image, (0,0))
 equip_sandclock = e_Sandclock(sandclock_image, (0,0))
 equip_apple = e_Apple(apple_iamge, (0,0))
 
-equip_group = []
-
-# shop
-shop_for_sale = [None, None, None]
-shop_can_buy = [True, True, True]
-
-# for sale equips
-able_equips = [
-    equip_banana,
-    equip_battery,
-    equip_pepper,
-    equip_ice,
-    equip_dice,
-    equip_sandclock,
-    equip_apple,
-]
-
-e_c = EquipController()
+skill_con = SkillController()
+equip_con = EquipController()

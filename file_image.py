@@ -20,6 +20,7 @@ player_image =[
 ##### MONSTER
 monster_1_image = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha()]
 monster_2_image = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()]
+monster_boss_image = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png")).convert_alpha()]
 
 
 ##### NPC

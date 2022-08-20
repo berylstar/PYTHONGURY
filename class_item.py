@@ -20,7 +20,7 @@ class ItemController():
         self.prob_coin = 10
 ##############################################################################################
 
-i_c = ItemController()
+item_con = ItemController()
 
 ##### ITEM
 item_group = pygame.sprite.Group()
