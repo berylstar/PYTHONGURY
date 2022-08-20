@@ -648,20 +648,28 @@ while running:
             if pygame.sprite.collide_mask(player, monster):
                 player.hp -= player.damaged_enemy
 
-        for punch in punch_group:
-            if pygame.sprite.collide_mask(monster, punch):
-                punch.draw(screen)
-                punch_group.remove(punch)
-                monster.hp -= player.ap
-                if monster.hp <= 0:
-                    monster.die(drop_item, monster_group)
-                    random_away_position(player.position, stair)
+        # for punch in punch_group:
+        #     if pygame.sprite.collide_mask(monster, punch):
+        #         # punch.draw(screen)
+        #         punch_group.remove(punch)
+        #         monster.hp -= player.ap
+        #         if monster.hp <= 0:
+        #             monster.die(drop_item, monster_group)
+        #             random_away_position(player.position, stair)
 
     for punch in punch_group:
         punch.draw(screen)                                                              #PUNCH
 
         if punch.get_time() > 2 * fps:
-            punch_group.remove(punch)   
+            punch_group.remove(punch)
+
+        for monster in monster_group:
+            if pygame.sprite.collide_mask(monster, punch):
+                punch_group.remove(punch)
+                monster.hp -= player.ap
+                if monster.hp <= 0:
+                    monster.die(drop_item, monster_group)
+                    random_away_position(player.position, stair)
 
     for item in item_group:
         item.draw(screen)                                                               #ITEM
