@@ -1,3 +1,4 @@
+from turtle import right, up
 import pygame
 import random
 
@@ -47,9 +48,9 @@ def scene_title_game():
         screen.fill((125,125,125))
         bgm_sound.play(-1)
         pygame.draw.polygon(screen, GREEN, cursor)
-        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200))
-        screen_message("START", BLACK, (screen_width//2,500))
-        screen_message("EXIT", BLACK, (screen_width//2,550))
+        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_b)
+        screen_message("START", BLACK, (screen_width//2,500), game_font_m)
+        screen_message("EXIT", BLACK, (screen_width//2,550), game_font_m)
 
         pygame.display.update()
 
@@ -58,30 +59,30 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)              #MAIN GAME
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)              #INFO
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)              #INVEN
-    screen.blit(background_zero, (340,60))
+    # screen.blit(background_zero, (340,60))
               
-    screen_message(f"{floor} F", WHITE, (240,90))                           #FLOOR MESSAGE
+    screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                           #FLOOR MESSAGE
 
-    screen_message(f"HP: {int(player.hp)}", WHITE, (240,190))                   #HP MESSAGE
+    screen_message(f"HP: {int(player.hp)}", WHITE, (240,190), game_font_m)                   #HP MESSAGE
 
     coin_image_rect = item_images[1].get_rect(center=(215, 290))
     screen.blit(item_images[1], coin_image_rect)
-    screen_message(f"       x{player.coin}", WHITE, (220,290))      #COIN MESSAGE
+    screen_message(f"       x{player.coin}", WHITE, (220,290), game_font_m)      #COIN MESSAGE
 
     life_image_rect = player_icon.get_rect(center=(210, 390))
     screen.blit(player_icon, life_image_rect)
-    screen_message(f"      x{player.life}", WHITE, (220,390))      #LIFE MESSAGE
+    screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)      #LIFE MESSAGE
 
     for i in range(MAX_COL+2):                                                      #INVENTORY
-        pygame.draw.line(screen, GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
+        pygame.draw.line(screen, D_GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
     for i in range(MAX_ROW+2):
-        pygame.draw.line(screen, GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
+        pygame.draw.line(screen, D_GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
 
-    for equip in equip_group:
+    for equip in equip_con.equipped_group:
         equip.draw(screen)
 
-    if is_inven_overlapped(equip_group):
-        screen_message("CHECK EQUIPS !", RED, (1040,150))
+    if is_inven_overlapped(equip_con.equipped_group):
+        screen_message("CHECK EQUIPS !", RED, (1040,150), game_font_s)
 
 def scene_tutorial(doing):
     global running
@@ -98,8 +99,9 @@ def scene_tutorial(doing):
 
         display_game_ui()
 
+        tuto_rect = tuto_image.get_rect(center=(640, 300))
         screen.blit(tuto_image, tuto_rect)
-        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
+        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
 
         pygame.display.update()
 
@@ -114,27 +116,28 @@ def scene_skeleton_shop(doing):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    equip_for_sale(0, shop_for_sale[0])
+                    equip_for_sale(0, equip_con.for_sale[0])
 
                 if event.key == pygame.K_2:
-                    equip_for_sale(1, shop_for_sale[1])
+                    equip_for_sale(1, equip_con.for_sale[1])
 
                 if event.key == pygame.K_3:
-                    equip_for_sale(2, shop_for_sale[2])
+                    equip_for_sale(2, equip_con.for_sale[2])
 
                 if event.key == pygame.K_SPACE:
                     doing = False
-                    if not is_inven_overlapped(equip_group):
+                    if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
 
         display_game_ui()
 
-        equip_showcase(0, shop_for_sale[0])
-        equip_showcase(1, shop_for_sale[1])
-        equip_showcase(2, shop_for_sale[2])
+        equip_showcase(0, equip_con.for_sale[0])
+        equip_showcase(1, equip_con.for_sale[1])
+        equip_showcase(2, equip_con.for_sale[2])
 
+        shop_rect = shop_image.get_rect(center=(640, 200))
         screen.blit(shop_image, shop_rect)
-        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640))
+        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
 def scene_player_dead(doing):
@@ -152,8 +155,8 @@ def scene_player_dead(doing):
                     floor_zero()
 
         display_game_ui()
-        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2))
-        screen_message("PRESS 'R' TO GO 1F", WHITE, (640,640))
+        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_b)
+        screen_message("PRESS 'R' TO GO 1F", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
 def scene_game_over(doing):
@@ -172,8 +175,9 @@ def scene_game_over(doing):
                     ready = True
 
         screen.fill(BLACK)
-        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2))
-        screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640))
+        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_b)
+        screen_message(f"RECORD : {floor}", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
+        screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
 def scene_equip_setting(doing):
@@ -199,7 +203,7 @@ def scene_equip_setting(doing):
                     equip_effect()
 
                 if event.key == pygame.K_r:
-                    remove_from_equip_group(picked_equip)
+                    remove_from_equipped_group(picked_equip)
                     cursor.clicking = False
                     cursor.image = cursor_image[0]
                     picked_equip = None
@@ -211,7 +215,7 @@ def scene_equip_setting(doing):
                         picked_equip = None
 
                     else:
-                        for equip in equip_group:
+                        for equip in equip_con.equipped_group:
                             if pygame.sprite.collide_mask(equip, cursor):
                                 cursor.clicking = True
                                 cursor.image = cursor_image[1]
@@ -235,39 +239,67 @@ def scene_equip_setting(doing):
         cursor.draw(screen)
         pygame.display.update()
 
+def scene_treasure_box(doing):
+    global running
+
+    player.stop()
+
+    choice = True
+    if len(equip_con.able_equip_group) >= 2:
+        choice_equip = [equip_con.able_equip_group[-1], equip_con.able_equip_group[-2]]
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if choice:
+                    if event.key == pygame.K_1:
+                        equip_con.equipped_group.append(choice_equip[0])
+                        equip_con.able_equip_group.remove(choice_equip[0])
+                        choice = False
+
+                    if event.key == pygame.K_2:
+                        equip_con.equipped_group.append(choice_equip[1])
+                        equip_con.able_equip_group.remove(choice_equip[1])
+                        choice = False
+
+                if event.key == pygame.K_SPACE:
+                    doing = False
+                    if not is_inven_overlapped(equip_con.equipped_group):
+                        equip_effect()
+
+        display_game_ui()
+
+        zero_rect = choice_equip[0].image.get_rect(center=(490,400))
+        one_rect = choice_equip[1].image.get_rect(center=(790,400))
+
+        if choice:
+            screen.blit(choice_equip[0].image, zero_rect)
+            screen.blit(choice_equip[1].image, one_rect)
+
+        shop_rect = shop_image.get_rect(center=(640, 200))
+        screen.blit(shop_image, shop_rect)
+        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
+        pygame.display.update()
 ##############################################################################################
-def screen_message(writing, color, position):
-    msg = game_font.render(writing, True, color)
+def screen_message(writing, color, position, font):
+    msg = font.render(writing, True, color)
     msg_rect = msg.get_rect(center=position)
     screen.blit(msg, msg_rect)
 
 def game_restart():
     global player, saved_floor
+    global item_con, equip_con, skill_con
 
     player = Player(player_image, player_first_position)
-    initial_equip_setting()
     make_floor_zero()
     saved_floor = None
-
-def initial_equip_setting():
-    global equip_group, shop_for_sale, shop_can_buy, able_equips
-
-    equip_group = []
-
-    # shop
-    shop_for_sale = [None, None, None]
-    shop_can_buy = [True, True, True]
-
-    # for sale equips
-    able_equips = [
-        equip_banana,
-        equip_battery,
-        equip_pepper,
-        equip_ice,
-        equip_dice,
-        equip_sandclock,
-        equip_apple,
-    ]
+    item_con = ItemController()
+    equip_con = EquipController()
+    skill_con = SkillController()
 
 def make_floor_zero():
     global floor
@@ -312,50 +344,58 @@ def next_floor(pos):
     floor_setting(pos, floor)
     
 def equip_for_sale(index, equip):
-    global shop_can_buy
 
-    if shop_can_buy[index] and player.coin >= equip.price:
-        equip_group.append(equip)
+    if equip_con.can_buy[index] and player.coin >= equip.price:
+        equip_con.equipped_group.append(equip)
         player.coin -= equip.price
-        shop_can_buy[index] = False
-        able_equips.remove(equip)
+        equip_con.can_buy[index] = False
+        equip_con.able_equip_group.remove(equip)
 
 def random_for_sale():
-    global shop_for_sale, shop_can_buy
 
-    random.shuffle(able_equips)
+    random.shuffle(equip_con.able_equip_group)
 
-    if len(able_equips) == 0:
-        shop_for_sale = [None, None, None]
-        shop_can_buy = [False, False, False] 
+    if len(equip_con.able_equip_group) == 0:
+        equip_con.for_sale = [None, None, None]
+        equip_con.can_buy = [False, False, False] 
 
-    elif len(able_equips) == 1:
-        shop_for_sale = [able_equips[0], None, None]
-        shop_can_buy = [True, False, False]
+    elif len(equip_con.able_equip_group) == 1:
+        equip_con.for_sale = [equip_con.able_equip_group[0], None, None]
+        equip_con.can_buy = [True, False, False]
 
-    elif len(able_equips) == 2:
-        shop_for_sale = [able_equips[0], able_equips[1], None]
-        shop_can_buy = [True, True, False]
+    elif len(equip_con.able_equip_group) == 2:
+        equip_con.for_sale = [equip_con.able_equip_group[0], equip_con.able_equip_group[1], None]
+        equip_con.can_buy = [True, True, False]
 
     else:
-        shop_for_sale = [able_equips[0], able_equips[1], able_equips[2]]
-        shop_can_buy = [True, True, True]
+        equip_con.for_sale = [equip_con.able_equip_group[0], equip_con.able_equip_group[1], equip_con.able_equip_group[2]]
+        equip_con.can_buy = [True, True, True]
 
 def equip_showcase(index, equip):
-    pygame.draw.rect(screen, WHITE, ((450 + 150*index,350),(80,120)), 1)
+    sero = 350
+    pygame.draw.rect(screen, WHITE, ((420 + 150*index,sero),(140,260)), 2)
+    screen_message(str(index+1), WHITE, (490 + 150*index,sero+20), game_font_m)
 
-    if shop_can_buy[index]:
-        equip_image = pygame.transform.scale(equip.image, (60,60))
-        equip_rect = equip_image.get_rect(center=(490+ 150*index, 390))
-        screen.blit(equip_image, equip_rect)
+    if equip_con.can_buy[index]:
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (550 + 150*index, sero+40))
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+100), (550 + 150*index, sero+100))
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+160), (550 + 150*index, sero+160))
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (430 + 150*index, sero+160))
+        pygame.draw.line(screen, GRAY, (490 + 150*index, sero+40), (490 + 150*index, sero+160))
+        pygame.draw.line(screen, GRAY, (550 + 150*index, sero+40), (550 + 150*index, sero+160))
+        # equip_image = pygame.transform.rotozoom(equip.image, 0, 1/6)
+        equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
+        screen.blit(equip.image, equip_rect)
+
+        screen_message(equip.name, WHITE, (490 + 150*index, sero+185), game_font_s)
 
         coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
-        coin_rect = coin_image.get_rect(center=(470+ 150*index,440))
+        coin_rect = coin_image.get_rect(center=(470 + 150*index,sero+230))
         screen.blit(coin_image, coin_rect)
 
-        screen_message(f"x{equip.price}", WHITE, (500+ 150*index, 440))
+        screen_message(f"x{equip.price}", WHITE, (500 + 150*index, sero+230), game_font_m)
     else:
-        case_rect = sold_out_image.get_rect(center=(490+ 150*index,410))
+        case_rect = sold_out_image.get_rect(center=(490 + 150*index,sero+130))
         screen.blit(sold_out_image, case_rect)
 
 def player_move_key():
@@ -395,54 +435,82 @@ def random_monster_move():
             elif monster.direction == "DOWN":
                 monster.move(0,0.1, fps)
 
-def drop_item(position):
+def drop_item(position, type):
     randprob = random.randrange(0,101)
 
-    if randprob <= i_c.prob_portion:
-        item_group.add(Item(item_images[0], position, "portion"))
-    elif i_c.prob_portion < randprob <= i_c.prob_portion + i_c.prob_coin:
-        item_group.add(Item(item_images[1], position, "coin"))
+    if randprob <= item_con.prob_portion:
+        item_portion.position = position
+        item_group.add(item_portion)
+    elif item_con.prob_portion < randprob <= item_con.prob_portion + item_con.prob_coin:
+        item_coin.position = position
+        item_group.add(item_coin)
+
+    if type == "boss":
+        item_box.position = position
+        item_group.add(item_box)
 
 def item_effect(item):
     if item.info == "portion":
-        player.hp = min(player.hp + 5, player.max_hp)
+        player.hp = min(player.hp + item_con.portion_eff, player.max_hp)
     if item.info == "coin":
         player.coin += 1
+    if item.info == "box":
+        scene_treasure_box(True)
 
 def equip_effect():
-    if equip_battery in equip_group:
+    if equip_battery in equip_con.equipped_group:
         if not equip_battery.is_effected:
-            player.damaged_enemy -= 0.3
+            player.damaged_enemy -= 0.2
             equip_battery.is_effected = True
 
-    if equip_banana in equip_group:
+    if equip_banana in equip_con.equipped_group:
         if not equip_banana.is_effected:
             player.max_hp += 20
             player.hp += 20
             equip_banana.is_effected = True
 
-    if equip_pepper in equip_group:
+    if equip_pepper in equip_con.equipped_group:
         if not equip_pepper.is_effected:
             player.ap += 3            
             equip_pepper.is_effected = True
 
-    if equip_ice in equip_group:
+    if equip_ice in equip_con.equipped_group:
         if not equip_ice.is_effected:
             player.speed += 0.1
             equip_ice.is_effected = True
 
-    if equip_dice in equip_group:
+    if equip_dice in equip_con.equipped_group:
         if not equip_dice.is_effected:
-            i_c.prob_coin += 5
+            item_con.prob_coin += 5
             equip_dice.is_effected = True
 
-    if equip_apple in equip_group:
+    if equip_apple in equip_con.equipped_group:
         if not equip_apple.is_effected:
             big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
             player.punch = big_punch_image
             equip_apple.is_effected = True
+
+    if equip_greentea in equip_con.equipped_group:
+        if not equip_greentea.is_effected:
+            item_con.portion_eff += 5
+            equip_greentea.is_effected = True
+
+    if equip_mandoo in equip_con.equipped_group:
+        if not equip_mandoo.is_effected:
+            player.life += 1
+            equip_mandoo.is_effected = True
+
+    if equip_ancientbook in equip_con.equipped_group:
+        if not equip_ancientbook.is_effected:
+            player.damaged_time -= 0.5
+            equip_ancientbook.is_effected = True
+
+    if equip_bone in equip_con.equipped_group:
+        if not equip_bone.is_effected:
+            player.ap += 0.1
+            equip_bone.is_effected = True
             
-def remove_from_equip_group(equip):
+def remove_from_equipped_group(equip):
     if equip == None:
         return
     else:
@@ -460,17 +528,26 @@ def remove_from_equip_group(equip):
             player.speed -= 0.1
 
         if equip == equip_dice:
-            i_c.prob_coin -= 5
+            item_con.prob_coin -= 5
 
         if equip == equip_apple:
             player.punch = punch_d_image
 
-    equip_group.remove(equip)
-    able_equips.append(equip)
+        if equip == equip_greentea:
+            item_con.portion_eff -= 5
+
+        if equip == equip_ancientbook:
+            player.damaged_time += 0.5
+
+        if equip == equip_bone:
+            player.ap += 0.1
+
+    equip_con.equipped_group.remove(equip)
+    equip_con.able_equip_group.append(equip)
 
 def setting_active_skill(key, picked_equip):
     if key == "c":
-        for equip in equip_group:
+        for equip in equip_con.equipped_group:
             equip.is_active_c = False
         picked_equip.is_active_c = True
         picked_equip.is_active_v = False
@@ -479,47 +556,13 @@ def setting_active_skill(key, picked_equip):
             player.equip_v = None
 
     if key == "v":
-        for equip in equip_group:
+        for equip in equip_con.equipped_group:
             equip.is_active_v = False
         picked_equip.is_active_c = False
         picked_equip.is_active_v = True
         player.equip_v = picked_equip
         if player.equip_c == player.equip_v:
             player.equip_c = None
-
-# def field_effect(field):
-#     if not field.is_collision:
-#         if field == field_web:
-#             player.stop()
-#             player.speed -= 0.4
-#             field.is_collision = True
-
-# def field_uneffect(field):
-#     if field == field_web:
-#         player.speed += 0.4
-#         field.is_collision = False
-
-# def check_player_collision():
-#     for field in field_group:
-#         if pygame.sprite.collide_mask(field, player):
-#             player.stop()
-#             field.is_collision = True
-#         if field.is_collision and not pygame.sprite.collide_mask(field, player):
-#             field.is_collision = False
-
-#     for monster in monster_group:
-#         if pygame.sprite.collide_mask(monster, player):
-#             player.stop()
-#             monster.is_collision = True
-#         if monster.is_collision and not pygame.sprite.collide_mask(monster, player):
-#             monster.is_collision = False
-
-#     for npc in npc_group:
-#         if pygame.sprite.collide_mask(npc, player):
-#             player.stop()
-#             npc.is_collision = True
-#         if npc.is_collision and not pygame.sprite.collide_mask(npc, player):
-#             npc.is_collision = False
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -537,7 +580,7 @@ class Player(Character):
         self.max_hp = 100
         self.speed = 0.5
         self.punch = punch_d_image
-        self.damaged_enemy = 0.6
+        self.damaged_enemy = 0.7
         self.damaged_time = 1
 
     def space_bar(self):
@@ -598,14 +641,17 @@ screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("No More Slime")
 clock = pygame.time.Clock()
-game_font = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
+game_font_s = pygame.font.Font("fonts\\DungGeunMo.ttf", 20)
+game_font_m = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
+game_font_b = pygame.font.Font("fonts\\DungGeunMo.ttf", 50)
 start_ticks = pygame.time.get_ticks()
 a_counter = 0
 b_counter = 0
 
 #### GAME SYSTEM
 WHITE = (255,255,255)
-GRAY = (64,64,64)
+D_GRAY = (64,64,64)
+GRAY = (127,127,127)
 BLACK = (0,0,0)
 RED = (127,0,0)
 GREEN = (0,127,0)
@@ -619,16 +665,10 @@ player = Player(player_image, player_first_position)
 
 punch_group = pygame.sprite.Group()
 
-##### INVENTORY
-random_for_sale()
-
-##### ETC
-tuto_rect = tuto_image.get_rect(center=(640, 300))
-shop_rect = shop_image.get_rect(center=(640, 200))
-
 ##############################################################################################
 ready = True
 running = True
+random_for_sale()
 while running:
     fps = clock.tick(60)
 
@@ -648,12 +688,13 @@ while running:
             if event.key == pygame.K_i:
                 scene_equip_setting(True)
 
-        if not is_inven_overlapped(equip_group):
+        if not is_inven_overlapped(equip_con.equipped_group):
             player_move_key()
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
 
     display_game_ui()                                                                  #UI
+    screen.blit(background_zero, (340,60))
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
@@ -673,7 +714,7 @@ while running:
             random_monster_direction()
         b_counter = second_time
 
-        if not e_c.active_sandclock[0]:
+        if not skill_con.active_sandclock[0]:
             random_monster_move()
 
         if player.hp <= 0:
@@ -700,20 +741,19 @@ while running:
             if pygame.sprite.collide_mask(player, monster):
                 player.hp -= player.damaged_enemy
 
-        for punch in punch_group:
+    for punch in punch_group:
+        punch.draw(screen)                                                              #PUNCH
+
+        if punch.get_time() > 2 * fps:
+            punch_group.remove(punch)
+
+        for monster in monster_group:
             if pygame.sprite.collide_mask(monster, punch):
-                punch.draw(screen)
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 if monster.hp <= 0:
                     monster.die(drop_item, monster_group)
                     random_away_position(player.position, stair)
-
-    for punch in punch_group:
-        punch.draw(screen)                                                              #PUNCH
-
-        if punch.get_time() > 2 * fps:
-            punch_group.remove(punch)   
 
     for item in item_group:
         item.draw(screen)                                                               #ITEM
@@ -730,7 +770,7 @@ while running:
 
     player.draw(screen)                                                                 #PLAYER
     # check_player_collision()
-    e_c.active_time()
+    skill_con.active_time()
 
     pygame.display.update()
 

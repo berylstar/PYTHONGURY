@@ -20,6 +20,7 @@ player_image =[
 ##### MONSTER
 monster_1_image = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha()]
 monster_2_image = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()]
+monster_boss_image = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png")).convert_alpha()]
 
 
 ##### NPC
@@ -44,8 +45,9 @@ shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).conv
 ##### ITEM
 item_images = [
     pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "design\\coin.png")).convert_alpha()
+    pygame.image.load(os.path.join(file_path, "images\\coin_2.png")).convert_alpha()
 ]
+box_image = pygame.image.load(os.path.join(file_path, "images\\box.png")).convert_alpha()
 
 
 # Punch Image
@@ -59,7 +61,11 @@ pepper_image = pygame.image.load(os.path.join(file_path, "images\\e_pepper.png")
 ice_image = pygame.image.load(os.path.join(file_path, "images\\e_ice.png")).convert_alpha()
 dice_image = pygame.image.load(os.path.join(file_path, "images\\e_dice.png")).convert_alpha()
 sandclock_image = pygame.image.load(os.path.join(file_path, "images\\e_sandclock.png")).convert_alpha()
-apple_iamge = pygame.image.load(os.path.join(file_path, "images\\e_apple.png")).convert_alpha()
+apple_image = pygame.image.load(os.path.join(file_path, "images\\e_apple.png")).convert_alpha()
+greentea_image = pygame.image.load(os.path.join(file_path, "images\\e_greentea.png")).convert_alpha()
+mandoo_image = pygame.image.load(os.path.join(file_path, "images\\e_mandoo.png")).convert_alpha()
+a_book_image = pygame.image.load(os.path.join(file_path, "images\\e_a_book.png")).convert_alpha()
+bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png")).convert_alpha()
 
 
 # Others

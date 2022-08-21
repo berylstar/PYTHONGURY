@@ -12,6 +12,11 @@ def floor_setting(pos, floor):
         random_away_position(pos, monster)
         monster_group.add(monster)
 
+    if floor % 10 == 0:
+        boss_monster = Monster(monster_boss_image, (0,0), "boss", 100)
+        random_away_position(pos, boss_monster)
+        monster_group.add(boss_monster)
+
 def random_away_position(center, object):
     while True:
         rand_x = random.randint(370, 910)
@@ -27,9 +32,9 @@ def prob_spawn_monster(percent):
     randprob = random.randrange(0,101)  # 0 ~ 100
 
     if randprob <= percent:
-        return Monster(monster_1_image, (0,0), MON_0_HP)
+        return Monster(monster_1_image, (0,0), "normal", MON_0_HP)
     else:
-        return Monster(monster_2_image, (0,0), MON_1_HP)
+        return Monster(monster_2_image, (0,0), "normal", MON_1_HP)
 
 def random_monster_direction():
     if monster_group:
@@ -46,12 +51,12 @@ def random_monster_direction():
             else:
                 monster.direction = "NONE"
 
-            if monster.rect.centerx < 410:
+            if monster.rect.centerx <= 340 + (monster.rect.width // 2):
                 monster.direction = "RIGHT"
-            elif monster.rect.centerx > 870:
+            elif monster.rect.centerx >= 940 - (monster.rect.width // 2):
                 monster.direction = "LEFT"
 
-            if monster.rect.centery < 130:
+            if monster.rect.centery <= 60 + (monster.rect.height // 2):
                 monster.direction = "DOWN"
-            elif monster.rect.centery > 590:
+            elif monster.rect.centery >= 660 - (monster.rect.height // 2):
                 monster.direction = "UP"

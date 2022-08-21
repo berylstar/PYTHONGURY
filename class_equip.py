@@ -52,6 +52,7 @@ class Equip(pygame.sprite.Sprite):
     def __init__(self, image, index):
         super().__init__()
         self.image = image
+        self.name = None
         
         self.row = index[0]
         self.col = index[1]
@@ -110,6 +111,7 @@ class Equip(pygame.sprite.Sprite):
 class e_Battery(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Battery"
         self.max_row = 4
         # self.max_col = 2
 
@@ -119,6 +121,7 @@ class e_Battery(Equip):
 class e_Banana(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Banana"
         self.max_row = 4
         self.max_col = 1
 
@@ -128,6 +131,7 @@ class e_Banana(Equip):
 class e_Pepper(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Chili Pepper"
         # self.max_row = 5
         self.max_col = 1
 
@@ -137,6 +141,7 @@ class e_Pepper(Equip):
 class e_Ice(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Ice"
         # self.max_row = 5
         # self.max_col = 2
 
@@ -146,6 +151,7 @@ class e_Ice(Equip):
 class e_Dice(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Dice"
         # self.max_row = 5
         # self.max_col = 2
 
@@ -155,40 +161,97 @@ class e_Dice(Equip):
 class e_Sandclock(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Sand Clock"
         self.max_row = 4
-        self.max_col = 1
+        # self.max_col = 2
 
         self.price = 4
 
     def active_skill(self):
         if self.cool_time == False:
-            e_c.active_sandclock[0] = True
-            e_c.active_sandclock[1] = pygame.time.get_ticks()
+            skill_con.active_sandclock[0] = True
+            skill_con.active_sandclock[1] = pygame.time.get_ticks()
             self.cool_time = True
 
 ##### apple class
 class e_Apple(Equip):
     def __init__(self, image, index):
         Equip.__init__(self, image, index)
+        self.name = "Green Apple"
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 2
+
+##### greentea class
+class e_Greentea(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Green Tea"
         self.max_row = 4
         # self.max_col = 2
 
-        self.price = 2
+        self.price = 4
+
+##### mandoo class
+class e_Mandoo(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Mandoo"
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 5
+
+##### ancient book class
+class e_AncientBook(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Ancient Book"
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 4
+
+##### bone class
+class e_Bone(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Bone"
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 0
 ##############################################################################################
 ##### equip controller
 class EquipController():
+    def __init__(self):
+        self.equipped_group = []
+        self.for_sale = [None, None, None]
+        self.can_buy = [True, True, True]
+        self.able_equip_group = [
+            equip_banana,       equip_battery,          equip_pepper,
+            equip_ice,          equip_dice,             equip_sandclock,
+            equip_apple,        equip_greentea,         equip_mandoo,
+            equip_ancientbook,  equip_bone
+        ]
+
+##### active controller
+class SkillController():
     def __init__(self):
         self.active_sandclock = [False, 0]
 
     def active_time(self):
         now_time = pygame.time.get_ticks()
 
-        # sand clock
+        # sand clock - monster stop
         if self.active_sandclock[0] or equip_sandclock.cool_time:
             if now_time - self.active_sandclock[1] > 3000:
                 self.active_sandclock[0] = False
+                equip_sandclock.image.set_alpha(60)
             if now_time - self.active_sandclock[1] > 30000:
                 equip_sandclock.cool_time = False
+                equip_sandclock.image.set_alpha(255)
             
 ##############################################################################################
 # Inventory
@@ -211,23 +274,11 @@ equip_pepper = e_Pepper(pepper_image, (0,0))
 equip_ice = e_Ice(ice_image, (0,0))
 equip_dice = e_Dice(dice_image, (0,0))
 equip_sandclock = e_Sandclock(sandclock_image, (0,0))
-equip_apple = e_Apple(apple_iamge, (0,0))
+equip_apple = e_Apple(apple_image, (0,0))
+equip_greentea = e_Greentea(greentea_image, (0,0))
+equip_mandoo = e_Mandoo(mandoo_image, (0,0))
+equip_ancientbook = e_AncientBook(a_book_image, (0,0))
+equip_bone = e_Bone(bone_image, (0,0))
 
-equip_group = []
-
-# shop
-shop_for_sale = [None, None, None]
-shop_can_buy = [True, True, True]
-
-# for sale equips
-able_equips = [
-    equip_banana,
-    equip_battery,
-    equip_pepper,
-    equip_ice,
-    equip_dice,
-    equip_sandclock,
-    equip_apple,
-]
-
-e_c = EquipController()
+skill_con = SkillController()
+equip_con = EquipController()

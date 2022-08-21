@@ -16,7 +16,7 @@ class Character(pygame.sprite.Sprite):
         self.to = [0, 0, 0, 0]  #LEFT, RIGHT, UP, DOWN
         self.flip = False
 
-        self.is_collision = False
+        # self.is_collision = False
 
     def image_update(self):
         g_len = len(self.image_group)
@@ -43,15 +43,15 @@ class Character(pygame.sprite.Sprite):
         self.rect.x += to_x * fps
         self.rect.y += to_y * fps
 
-        if self.rect.centerx < 370:
-            self.rect.centerx = 370
-        elif self.rect.centerx > 910:
-            self.rect.centerx = 910
+        if self.rect.centerx < 340 + (self.rect.width // 2):
+            self.rect.centerx = 340 + (self.rect.width // 2)
+        elif self.rect.centerx > 940 - (self.rect.width // 2):
+            self.rect.centerx = 940 - (self.rect.width // 2)
 
-        if self.rect.centery < 90:
-            self.rect.centery = 90
-        elif self.rect.centery > 630:
-            self.rect.centery = 630
+        if self.rect.centery < 60 + (self.rect.height // 2):
+            self.rect.centery = 60 + (self.rect.height // 2)
+        elif self.rect.centery > 660 - (self.rect.height // 2):
+            self.rect.centery = 660 - (self.rect.height // 2)
 
         self.position = (self.rect.centerx, self.rect.centery)
 
@@ -60,14 +60,15 @@ class Character(pygame.sprite.Sprite):
 
 ##### MONSTER CLASS
 class Monster(Character):
-    def __init__(self, image_group, position, hp):
+    def __init__(self, image_group, position, type, hp):
         Character.__init__(self, image_group, position)
         self.is_died = False
+        self.type = type    # normal, boss
         self.hp = hp
 
     def die(self, drop_item, monster_group):
         self.is_died = True
-        drop_item(self.position)
+        drop_item(self.position, self.type)
         monster_group.remove(self)
 
 ##############################################################################################
