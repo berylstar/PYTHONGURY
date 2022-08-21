@@ -16,8 +16,6 @@ def floor_setting(pos, floor):
         boss_monster = Monster(monster_boss_image, (0,0), "boss", 100)
         random_away_position(pos, boss_monster)
         monster_group.add(boss_monster)
-        print(boss_monster.rect)
-        print(boss_monster.rect.width)
 
 def random_away_position(center, object):
     while True:

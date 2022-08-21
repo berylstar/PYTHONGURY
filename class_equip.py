@@ -182,6 +182,46 @@ class e_Apple(Equip):
         self.max_col = 1
 
         self.price = 2
+
+##### greentea class
+class e_Greentea(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Green Tea"
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 4
+
+##### mandoo class
+class e_Mandoo(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Mandoo"
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 5
+
+##### ancient book class
+class e_AncientBook(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Ancient Book"
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 4
+
+##### bone class
+class e_Bone(Equip):
+    def __init__(self, image, index):
+        Equip.__init__(self, image, index)
+        self.name = "Bone"
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 0
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -190,13 +230,10 @@ class EquipController():
         self.for_sale = [None, None, None]
         self.can_buy = [True, True, True]
         self.able_equip_group = [
-            equip_banana,
-            equip_battery,
-            equip_pepper,
-            equip_ice,
-            equip_dice,
-            equip_sandclock,
-            equip_apple,
+            equip_banana,       equip_battery,          equip_pepper,
+            equip_ice,          equip_dice,             equip_sandclock,
+            equip_apple,        equip_greentea,         equip_mandoo,
+            equip_ancientbook,  equip_bone
         ]
 
 ##### active controller
@@ -237,7 +274,11 @@ equip_pepper = e_Pepper(pepper_image, (0,0))
 equip_ice = e_Ice(ice_image, (0,0))
 equip_dice = e_Dice(dice_image, (0,0))
 equip_sandclock = e_Sandclock(sandclock_image, (0,0))
-equip_apple = e_Apple(apple_iamge, (0,0))
+equip_apple = e_Apple(apple_image, (0,0))
+equip_greentea = e_Greentea(greentea_image, (0,0))
+equip_mandoo = e_Mandoo(mandoo_image, (0,0))
+equip_ancientbook = e_AncientBook(a_book_image, (0,0))
+equip_bone = e_Bone(bone_image, (0,0))
 
 skill_con = SkillController()
 equip_con = EquipController()

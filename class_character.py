@@ -68,7 +68,7 @@ class Monster(Character):
 
     def die(self, drop_item, monster_group):
         self.is_died = True
-        drop_item(self.position)
+        drop_item(self.position, self.type)
         monster_group.remove(self)
 
 ##############################################################################################
