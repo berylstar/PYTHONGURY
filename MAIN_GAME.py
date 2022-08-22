@@ -1,4 +1,3 @@
-from turtle import right, up
 import pygame
 import random
 
@@ -458,7 +457,7 @@ def drop_item(position, type):
     # position = put_on_pixel(position)
 
     if type == "boss":
-        item_group.add(item_box = Item(box_image, position, "box"))
+        item_group.add(Item(box_image, position, "box"))
     else:
         if randprob <= item_con.prob_portion:
             item_group.add(Item(item_images[0], position, "portion"))
