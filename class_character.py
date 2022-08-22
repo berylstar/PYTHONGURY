@@ -16,8 +16,6 @@ class Character(pygame.sprite.Sprite):
         self.to = [0, 0, 0, 0]  #LEFT, RIGHT, UP, DOWN
         self.flip = False
 
-        # self.is_collision = False
-
     def image_update(self):
         g_len = len(self.image_group)
         self.i_i += 1

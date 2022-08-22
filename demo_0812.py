@@ -31,7 +31,7 @@ def scene_title_game():
             if event.type == pygame.QUIT:
                 running = False
                 ready = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     cursor = start_cursor
@@ -43,7 +43,7 @@ def scene_title_game():
                     elif cursor == exit_cursor:
                         ready = False
                         running = False
-                        pygame.quit()
+                        # pygame.quit()
 
         screen.fill((125,125,125))
         bgm_sound.play(-1)
@@ -92,7 +92,7 @@ def scene_tutorial(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     doing = False
@@ -113,7 +113,7 @@ def scene_skeleton_shop(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     equip_for_sale(0, equip_con.for_sale[0])
@@ -148,7 +148,7 @@ def scene_player_dead(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     doing = False
@@ -167,7 +167,7 @@ def scene_game_over(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     doing = False
@@ -176,7 +176,7 @@ def scene_game_over(doing):
 
         screen.fill(BLACK)
         screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_b)
-        screen_message(f"RECORD : {floor}", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
+        screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
         screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
@@ -192,7 +192,7 @@ def scene_equip_setting(doing):
             if event.type == pygame.QUIT:
                 doing = False
                 running = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 cursor.move(event)
                 if cursor.clicking:
@@ -253,7 +253,7 @@ def scene_treasure_box(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                pygame.quit()
+                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if choice:
                     if event.key == pygame.K_1:
@@ -266,23 +266,34 @@ def scene_treasure_box(doing):
                         equip_con.able_equip_group.remove(choice_equip[1])
                         choice = False
 
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and not choice:
                     doing = False
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
 
         display_game_ui()
 
-        zero_rect = choice_equip[0].image.get_rect(center=(490,400))
-        one_rect = choice_equip[1].image.get_rect(center=(790,400))
-
+        zero_rect = choice_equip[0].image.get_rect(center=(490,450))
+        one_rect = choice_equip[1].image.get_rect(center=(790,450))
+        
         if choice:
+            screen_message("<1>", WHITE, (490, 350), game_font_m)
             screen.blit(choice_equip[0].image, zero_rect)
+            screen_message(choice_equip[0].name, WHITE, (490,550), game_font_m)
+
+            screen_message("OR", WHITE, (640,450), game_font_m)
+
+            screen_message("<2>", WHITE, (790, 350), game_font_m)
             screen.blit(choice_equip[1].image, one_rect)
+            screen_message(choice_equip[1].name, WHITE, (790,550), game_font_m)
+
+            screen_message("CHOICE ONE EQUIP !", WHITE, (640,640), game_font_m)
+        else:
+            screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
 
         shop_rect = shop_image.get_rect(center=(640, 200))
         screen.blit(shop_image, shop_rect)
-        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
+        
         pygame.display.update()
 ##############################################################################################
 def screen_message(writing, color, position, font):
@@ -327,7 +338,13 @@ def floor_zero():
 
         if pygame.sprite.collide_mask(punch, skeleton):
             player.stop()
-            scene_skeleton_shop(True)  
+            scene_skeleton_shop(True)
+
+    # if pygame.sprite.collide_mask(player, father_slime) or pygame.sprite.collide_mask(player, skeleton):
+    #     player.cant_move.add(player.direction)
+    #     player.stop()
+    # else:
+    #     player.cant_move = {"None"}
 
 def next_floor(pos):
     global floor
@@ -536,6 +553,8 @@ def remove_from_equipped_group(equip):
         if equip == equip_greentea:
             item_con.portion_eff -= 5
 
+        # not effect mandoo
+
         if equip == equip_ancientbook:
             player.damaged_time += 0.5
 
@@ -572,6 +591,7 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.coin = 99
+        self.cant_move = {"None"}
 
         self.equip_c = None
         self.equip_v = None
@@ -690,8 +710,28 @@ while running:
 
         if not is_inven_overlapped(equip_con.equipped_group):
             player_move_key()
+    
+    # if "LEFT" in player.cant_move:
+    #     player.move(player.to[1], player.to[2] + player.to[3], fps)
+    # elif "RIGHT" in player.cant_move:
+    #     player.move(player.to[0], player.to[2] + player.to[3], fps)
+    # elif "UP" in player.cant_move:
+    #     player.move(player.to[0] + player.to[1], player.to[3], fps)
+    # elif "DOWN" in player.cant_move:
+    #     player.move(player.to[0] + player.to[1], player.to[2], fps)
+    # else:
+    #     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
+    # if "LEFT" in player.cant_move:
+    #     player.to[0] = 0
+    # if "RIGHT" in player.cant_move:
+    #     player.to[1] = 0
+    # if "UP" in player.cant_move:
+    #     player.to[2] = 0
+    # if "DOWN" in player.cant_move:
+    #     player.to[3] = 0
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
+    
 
     display_game_ui()                                                                  #UI
     screen.blit(background_zero, (340,60))
@@ -717,7 +757,7 @@ while running:
         if not skill_con.active_sandclock[0]:
             random_monster_move()
 
-        if player.hp <= 0:
+        if player.hp < 1:
             player.hp = 0
             player.life -= 1
             player.stop()
@@ -761,18 +801,18 @@ while running:
             item_effect(item)
             item_group.remove(item)
 
-    # for field in field_group:
-    #     field.draw(screen)
-    #     if pygame.sprite.collide_mask(field, player):
-    #         field_effect(field)
-    #     if field.is_collision and not pygame.sprite.collide_mask(field, player):
-    #         field_uneffect(field)
+    for field in field_group:
+        field.draw(screen)
+        # if pygame.sprite.collide_mask(field, player):
+        #     field_effect(field)
+        # if field.is_collision and not pygame.sprite.collide_mask(field, player):
+        #     field_uneffect(field)
 
     player.draw(screen)                                                                 #PLAYER
-    # check_player_collision()
     skill_con.active_time()
 
-    pygame.display.update()
+    if running: 
+        pygame.display.update()
 
-pygame.time.delay(1000)
+# pygame.time.delay(1000)
 pygame.quit()

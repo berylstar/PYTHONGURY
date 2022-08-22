@@ -30,17 +30,14 @@ skeleton_image = [pygame.image.load(os.path.join(file_path, "design\\gwan1.png")
 
 ##### FIELD
 stair_images = [
-    pygame.image.load(os.path.join(file_path, "design\\stair.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\stair_2.png")).convert_alpha()
+    pygame.image.load(os.path.join(file_path, "design\\stair_0.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\stair_1.png")).convert_alpha()
 ]
 web_image = pygame.image.load(os.path.join(file_path, "design\\web.png")).convert_alpha()
 
 
 ##### ETC
 background_zero = pygame.image.load(os.path.join(file_path, "design\\0F.png"))
-tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
-shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
-
 
 ##### ITEM
 item_images = [
@@ -55,11 +52,11 @@ punch_d_image = pygame.image.load(os.path.join(file_path, "design\\punch.png")).
 
 
 # Equip Image
-battery_image = pygame.image.load(os.path.join(file_path, "images\\e_battery.png")).convert_alpha()
+battery_image = pygame.image.load(os.path.join(file_path, "design\\equips\\battery.png")).convert_alpha()
 banana_image = pygame.image.load(os.path.join(file_path, "images\\e_banana.png")).convert_alpha()
-pepper_image = pygame.image.load(os.path.join(file_path, "images\\e_pepper.png")).convert_alpha()
-ice_image = pygame.image.load(os.path.join(file_path, "images\\e_ice.png")).convert_alpha()
-dice_image = pygame.image.load(os.path.join(file_path, "images\\e_dice.png")).convert_alpha()
+pepper_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pepper.png")).convert_alpha()
+ice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\ice_m.png")).convert_alpha()
+dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png")).convert_alpha()
 sandclock_image = pygame.image.load(os.path.join(file_path, "images\\e_sandclock.png")).convert_alpha()
 apple_image = pygame.image.load(os.path.join(file_path, "images\\e_apple.png")).convert_alpha()
 greentea_image = pygame.image.load(os.path.join(file_path, "images\\e_greentea.png")).convert_alpha()
@@ -69,6 +66,9 @@ bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png")).co
 
 
 # Others
+tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
+shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
+
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()
 cursor_image = [
     pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha(),

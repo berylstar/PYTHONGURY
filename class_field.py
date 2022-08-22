@@ -33,7 +33,7 @@ class f_Web(pygame.sprite.Sprite):
 stair_zero_floor = (640, 90)
 stair = Stair(stair_images[0], stair_zero_floor)
 
-# field_web = f_Web(web_image, (540,550))
+field_web = f_Web(web_image, (540,550))
 
-# field_group = pygame.sprite.Group()
-# field_group.add(field_web)
+field_group = pygame.sprite.Group()
+field_group.add(field_web)
