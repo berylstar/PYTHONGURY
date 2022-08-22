@@ -453,18 +453,36 @@ def random_monster_move():
                 monster.move(0,0.1, fps)
 
 def drop_item(position, type):
-    randprob = random.randrange(0,101)
-
-    if randprob <= item_con.prob_portion:
-        item_portion.position = position
-        item_group.add(item_portion)
-    elif item_con.prob_portion < randprob <= item_con.prob_portion + item_con.prob_coin:
-        item_coin.position = position
-        item_group.add(item_coin)
+    # randprob = random.randrange(0,101)
+    randprob = 5
+    # position = put_on_pixel(position)
 
     if type == "boss":
-        item_box.position = position
-        item_group.add(item_box)
+        item_group.add(item_box = Item(box_image, position, "box"))
+    else:
+        if randprob <= item_con.prob_portion:
+            item_group.add(Item(item_images[0], position, "portion"))
+        elif item_con.prob_portion < randprob <= item_con.prob_portion + item_con.prob_coin:
+            item_group.add(Item(item_images[1], position, "coin"))
+
+
+def put_on_pixel(position):
+    x = position[0]
+    y = position[1]
+
+    x_ahrt = x // 60
+    x_skajwl = round((x % 60) / 60)
+
+    y_ahrt = y // 60
+    y_skajwl = round((y % 60) / 60)
+
+    fin_x = (x_ahrt + x_skajwl) * 60 + 10
+    fin_y = (y_ahrt + y_skajwl) * 60 + 30
+
+    pixel_position = (fin_x,fin_y)
+    print(pixel_position)
+
+    return pixel_position
 
 def item_effect(item):
     if item.info == "portion":
@@ -801,12 +819,12 @@ while running:
             item_effect(item)
             item_group.remove(item)
 
-    for field in field_group:
-        field.draw(screen)
-        # if pygame.sprite.collide_mask(field, player):
-        #     field_effect(field)
-        # if field.is_collision and not pygame.sprite.collide_mask(field, player):
-        #     field_uneffect(field)
+    # for field in field_group:
+    #     field.draw(screen)
+    #     if pygame.sprite.collide_mask(field, player):
+    #         field_effect(field)
+    #     if field.is_collision and not pygame.sprite.collide_mask(field, player):
+    #         field_uneffect(field)
 
     player.draw(screen)                                                                 #PLAYER
     skill_con.active_time()

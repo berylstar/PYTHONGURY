@@ -16,7 +16,7 @@ def is_inven_overlapped(equip_group):
 class Cursor(pygame.sprite.Sprite):
     def __init__(self, image, position):
         self.image = image
-        self.poisiton = position
+        self.position = position
 
         self.rect = image.get_rect(center=position)
         self.clicking = False

@@ -24,8 +24,8 @@ def random_away_position(center, object):
         rand_x = random.randint(0,9) * 60 + 370
         rand_y = random.randint(0,9) * 60 + 90
 
-        if rand_x < center[0] - 10 or center[0] + 10 < rand_x:
-            if rand_y < center[1] - 10 or center[1] + 10 < rand_y:
+        if rand_x < center[0] - 30 or center[0] + 30 < rand_x:
+            if rand_y < center[1] - 30 or center[1] + 30 < rand_y:
                 object.position = (rand_x, rand_y)
                 object.rect = object.image.get_rect(center=object.position)
                 break 

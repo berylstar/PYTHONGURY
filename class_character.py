@@ -41,15 +41,20 @@ class Character(pygame.sprite.Sprite):
         self.rect.x += to_x * fps
         self.rect.y += to_y * fps
 
-        if self.rect.centerx < 340 + (self.rect.width // 2):
-            self.rect.centerx = 340 + (self.rect.width // 2)
-        elif self.rect.centerx > 940 - (self.rect.width // 2):
-            self.rect.centerx = 940 - (self.rect.width // 2)
+        # if self.rect.centerx < 340 + (self.rect.width // 2):
+        #     self.rect.centerx = 340 + (self.rect.width // 2)
+        # elif self.rect.centerx > 940 - (self.rect.width // 2):
+        #     self.rect.centerx = 940 - (self.rect.width // 2)
 
-        if self.rect.centery < 60 + (self.rect.height // 2):
-            self.rect.centery = 60 + (self.rect.height // 2)
-        elif self.rect.centery > 660 - (self.rect.height // 2):
-            self.rect.centery = 660 - (self.rect.height // 2)
+        self.rect.centerx = max(self.rect.centerx, 340 + (self.rect.width // 2))
+        self.rect.centerx = min(self.rect.centerx, 940 - (self.rect.width // 2))
+
+        # if self.rect.centery < 60 + (self.rect.height // 2):
+        #     self.rect.centery = 60 + (self.rect.height // 2)
+        # elif self.rect.centery > 660 - (self.rect.height // 2):
+        #     self.rect.centery = 660 - (self.rect.height // 2)
+        self.rect.centery = max(self.rect.centery, 60 + (self.rect.height // 2))
+        self.rect.centery = min(self.rect.centery, 660 - (self.rect.height // 2))
 
         self.position = (self.rect.centerx, self.rect.centery)
 
