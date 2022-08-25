@@ -30,7 +30,6 @@ def scene_title_game():
             if event.type == pygame.QUIT:
                 running = False
                 ready = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     cursor = start_cursor
@@ -42,15 +41,14 @@ def scene_title_game():
                     elif cursor == exit_cursor:
                         ready = False
                         running = False
-                        # pygame.quit()
+
+        bgm_sound.play(-1)
 
         screen.fill((125,125,125))
-        bgm_sound.play(-1)
         pygame.draw.polygon(screen, GREEN, cursor)
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_b)
         screen_message("START", BLACK, (screen_width//2,500), game_font_m)
         screen_message("EXIT", BLACK, (screen_width//2,550), game_font_m)
-
         pygame.display.update()
 
 def display_game_ui():
@@ -59,7 +57,7 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)              #INFO
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)              #INVEN
     # screen.blit(background_zero, (340,60))
-              
+    
     screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                           #FLOOR MESSAGE
 
     screen_message(f"HP: {int(player.hp)}", WHITE, (240,190), game_font_m)                   #HP MESSAGE
@@ -86,22 +84,30 @@ def display_game_ui():
 def scene_tutorial(doing):
     global running
 
+    idx = 0
+    fin = len(tuto_images) - 1
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    doing = False
+                    if idx >= fin:
+                        doing = False
+                    else:
+                        idx += 1
 
         display_game_ui()
 
-        tuto_rect = tuto_image.get_rect(center=(640, 300))
-        screen.blit(tuto_image, tuto_rect)
-        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
+        tuto_rect = tuto_images[idx].get_rect(center=(640, 300))
+        msg = "NEXT"
+        if idx >= fin:
+            msg = "PRESS 'SPACE BAR' TO BACK"
 
+        screen.blit(tuto_images[idx], tuto_rect)
+        screen_message(msg, WHITE, (640,640), game_font_m)
         pygame.display.update()
 
 def scene_skeleton_shop(doing):
@@ -112,7 +118,6 @@ def scene_skeleton_shop(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     equip_for_sale(0, equip_con.for_sale[0])
@@ -135,6 +140,7 @@ def scene_skeleton_shop(doing):
         equip_showcase(2, equip_con.for_sale[2])
 
         shop_rect = shop_image.get_rect(center=(640, 200))
+
         screen.blit(shop_image, shop_rect)
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         pygame.display.update()
@@ -147,7 +153,6 @@ def scene_player_dead(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     doing = False
@@ -159,14 +164,13 @@ def scene_player_dead(doing):
         pygame.display.update()
 
 def scene_game_over(doing):
-    global running, ready, floor
+    global running, ready
 
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     doing = False
@@ -191,7 +195,6 @@ def scene_equip_setting(doing):
             if event.type == pygame.QUIT:
                 doing = False
                 running = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 cursor.move(event)
                 if cursor.clicking:
@@ -199,7 +202,8 @@ def scene_equip_setting(doing):
 
                 if event.key == pygame.K_i:
                     doing = False
-                    equip_effect()
+                    if not is_inven_overlapped(equip_con.equipped_group):
+                        equip_effect()
 
                 if event.key == pygame.K_r:
                     remove_from_equipped_group(picked_equip)
@@ -242,7 +246,6 @@ def scene_treasure_box(doing):
     global running
 
     player.stop()
-
     choice = True
     if len(equip_con.able_equip_group) >= 2:
         choice_equip = [equip_con.able_equip_group[-1], equip_con.able_equip_group[-2]]
@@ -252,7 +255,6 @@ def scene_treasure_box(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
-                # pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if choice:
                     if event.key == pygame.K_1:
@@ -353,14 +355,14 @@ def next_floor(pos):
         player.hp += 10
 
     item_group.empty()
-    npc_group.empty()
 
-    stair.image = stair_images[1]
+    if npc_group:
+        npc_group.empty()
+        stair.image = stair_images[1]
 
     floor_setting(pos, floor)
     
 def equip_for_sale(index, equip):
-
     if equip_con.can_buy[index] and player.coin >= equip.price:
         equip_con.equipped_group.append(equip)
         player.coin -= equip.price
@@ -368,24 +370,13 @@ def equip_for_sale(index, equip):
         equip_con.able_equip_group.remove(equip)
 
 def random_for_sale():
-
     random.shuffle(equip_con.able_equip_group)
 
-    if len(equip_con.able_equip_group) == 0:
-        equip_con.for_sale = [None, None, None]
-        equip_con.can_buy = [False, False, False] 
+    total_number = min(len(equip_con.able_equip_group), len(equip_con.for_sale))
 
-    elif len(equip_con.able_equip_group) == 1:
-        equip_con.for_sale = [equip_con.able_equip_group[0], None, None]
-        equip_con.can_buy = [True, False, False]
-
-    elif len(equip_con.able_equip_group) == 2:
-        equip_con.for_sale = [equip_con.able_equip_group[0], equip_con.able_equip_group[1], None]
-        equip_con.can_buy = [True, True, False]
-
-    else:
-        equip_con.for_sale = [equip_con.able_equip_group[0], equip_con.able_equip_group[1], equip_con.able_equip_group[2]]
-        equip_con.can_buy = [True, True, True]
+    for i in range(total_number):
+        equip_con.for_sale[i] = equip_con.able_equip_group[i]
+        equip_con.can_buy[i] = True
 
 def equip_showcase(index, equip):
     sero = 350
@@ -399,7 +390,7 @@ def equip_showcase(index, equip):
         pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (430 + 150*index, sero+160))
         pygame.draw.line(screen, GRAY, (490 + 150*index, sero+40), (490 + 150*index, sero+160))
         pygame.draw.line(screen, GRAY, (550 + 150*index, sero+40), (550 + 150*index, sero+160))
-        # equip_image = pygame.transform.rotozoom(equip.image, 0, 1/6)
+        # equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
         equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
         screen.blit(equip.image, equip_rect)
 
@@ -451,19 +442,17 @@ def random_monster_move():
             elif monster.direction == "DOWN":
                 monster.move(0,0.1, fps)
 
-def drop_item(position, type):
-    # randprob = random.randrange(0,101)
-    randprob = 5
+def drop_item(monster):
+    randprob = random.randrange(0,101)
     # position = put_on_pixel(position)
 
-    if type == "boss":
-        item_group.add(Item(box_image, position, "box"))
+    if monster.type == "boss":
+        item_group.add(Item(box_image, monster.position, "box"))
     else:
         if randprob <= item_con.prob_portion:
-            item_group.add(Item(item_images[0], position, "portion"))
+            item_group.add(Item(item_images[0], monster.position, "portion"))
         elif item_con.prob_portion < randprob <= item_con.prob_portion + item_con.prob_coin:
-            item_group.add(Item(item_images[1], position, "coin"))
-
+            item_group.add(Item(item_images[1], monster.position, "coin"))
 
 def put_on_pixel(position):
     x = position[0]
@@ -608,7 +597,7 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.coin = 99
-        self.cant_move = {"None"}
+        # self.cant_move = {"None"}
 
         self.equip_c = None
         self.equip_v = None
@@ -621,8 +610,8 @@ class Player(Character):
         self.damaged_time = 1
 
     def space_bar(self):
-        image = self.punch
         punch_sound.play()
+        image = self.punch
 
         if self.direction == "LEFT":
             position = (self.rect.centerx-40, self.rect.centery)
@@ -749,9 +738,8 @@ while running:
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
-
     display_game_ui()                                                                  #UI
-    screen.blit(background_zero, (340,60))
+    screen.blit(background_zero, (340,60))                                             #BACKGROUND
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
@@ -778,6 +766,7 @@ while running:
             player.hp = 0
             player.life -= 1
             player.stop()
+            pygame.time.delay(1500)
             saved_floor = floor
             if player.life <= 0:
                 scene_game_over(True)
@@ -790,7 +779,7 @@ while running:
         if pygame.sprite.collide_mask(player, stair):
             if saved_floor and floor == 0:
                 floor = saved_floor - 1
-            next_floor(player.position) 
+            next_floor(player.position)
 
     for monster in monster_group:
         if not monster.is_died:        
@@ -809,12 +798,16 @@ while running:
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 if monster.hp <= 0:
-                    monster.die(drop_item, monster_group)
-                    random_away_position(player.position, stair)
+                    monster.die(drop_item)
+                    if len(monster_group) == 0:
+                        random_away_position(player.position, stair)
 
     for item in item_group:
         item.draw(screen)                                                               #ITEM
         if pygame.sprite.collide_mask(item, player):
+            if item.info == "box":
+                if len(monster_group):
+                    continue
             item_effect(item)
             item_group.remove(item)
 
@@ -831,5 +824,4 @@ while running:
     if running: 
         pygame.display.update()
 
-# pygame.time.delay(1000)
 pygame.quit()

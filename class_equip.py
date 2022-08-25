@@ -228,7 +228,7 @@ class EquipController():
     def __init__(self):
         self.equipped_group = []
         self.for_sale = [None, None, None]
-        self.can_buy = [True, True, True]
+        self.can_buy = [False, False, False]
         self.able_equip_group = [
             equip_banana,       equip_battery,          equip_pepper,
             equip_ice,          equip_dice,             equip_sandclock,

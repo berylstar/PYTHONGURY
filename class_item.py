@@ -18,7 +18,6 @@ class ItemController():
         self.prob_portion = 10
         self.portion_eff = 5
 
-
         self.prob_coin = 10
 ##############################################################################################
 

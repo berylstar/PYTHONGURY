@@ -69,9 +69,9 @@ class Monster(Character):
         self.type = type    # normal, boss
         self.hp = hp
 
-    def die(self, drop_item, monster_group):
+    def die(self, drop_item):
         self.is_died = True
-        drop_item(self.position, self.type)
+        drop_item(self)
         monster_group.remove(self)
 
 ##############################################################################################

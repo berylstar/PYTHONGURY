@@ -39,6 +39,7 @@ web_image = pygame.image.load(os.path.join(file_path, "design\\web.png")).conver
 ##### ETC
 background_zero = pygame.image.load(os.path.join(file_path, "design\\0F.png"))
 
+
 ##### ITEM
 item_images = [
     pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha(),
@@ -66,7 +67,11 @@ bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png")).co
 
 
 # Others
-tuto_image = pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
+tuto_images = [
+    pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
+]
+
 shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
 
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()

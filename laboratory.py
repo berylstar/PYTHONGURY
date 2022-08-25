@@ -1,8 +1,12 @@
-a = 10 // 3
-b = 10 % 3
-c = 10 / 3
+list = [1,2,3,4,5,6,7,8,9,10]
 
-print(a, b, c)
+for i in list:
+    idx = i -1
 
-print(round(0.5))
-print(round(1.5))
+    if list[idx] == 4:
+        print("this is 4")
+        continue
+    if list[idx] % 2 == 0:
+        print(list[idx])
+    else:
+        print(f"not {list[idx]}")
