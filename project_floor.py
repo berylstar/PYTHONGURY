@@ -2,6 +2,7 @@ import pygame
 import random
 
 from class_character import *
+from class_field import *
 
 ##############################################################################################
 def floor_setting(pos, floor):
@@ -16,6 +17,8 @@ def floor_setting(pos, floor):
         boss_monster = Monster(monster_boss_image, (0,0), "boss", 100)
         random_away_position(pos, boss_monster)
         monster_group.add(boss_monster)
+
+    random_field_setting()
 
 def random_away_position(center, object):
     while True:
@@ -62,3 +65,19 @@ def random_monster_direction():
                 monster.direction = "DOWN"
             elif monster.rect.centery >= 660 - (monster.rect.height // 2):
                 monster.direction = "UP"
+
+def random_field_setting():
+    randprob = random.randrange(0,101)
+
+    field_group.empty()
+
+    if randprob % 2 == 0:
+        web = Field(web_image, (0,0))
+        random_away_position((0,0), web)
+        field_group.add(web)
+
+    if randprob <= 50:
+        i = randprob % 3
+        water = Field(water_images[i], (0,0))
+        random_away_position((0,0), water)
+        field_group.add(water)

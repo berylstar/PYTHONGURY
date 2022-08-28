@@ -13,7 +13,7 @@ player_image =[
     pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
+    # pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
 ]
 
 
@@ -26,6 +26,12 @@ monster_boss_image = [pygame.image.load(os.path.join(file_path, "images\\monster
 ##### NPC
 father_slime_image = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
 skeleton_image = [pygame.image.load(os.path.join(file_path, "design\\gwan1.png")).convert_alpha()]
+ghost_images = [
+    pygame.image.load(os.path.join(file_path, "design\\ghost_0.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\ghost_2.png")).convert_alpha(),
+    # pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha()
+]
 
 
 ##### FIELD
@@ -34,6 +40,11 @@ stair_images = [
     pygame.image.load(os.path.join(file_path, "design\\stair_1.png")).convert_alpha()
 ]
 web_image = pygame.image.load(os.path.join(file_path, "design\\web.png")).convert_alpha()
+water_images = [
+    pygame.image.load(os.path.join(file_path, "design\\water_0.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\water_1.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\water_2.png")).convert_alpha()
+]
 
 
 ##### ETC
@@ -68,7 +79,7 @@ bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png")).co
 
 # Others
 tuto_images = [
-    pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "images\\xx.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
 ]
 

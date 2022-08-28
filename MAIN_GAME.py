@@ -128,6 +128,11 @@ def scene_skeleton_shop(doing):
                 if event.key == pygame.K_3:
                     equip_for_sale(2, equip_con.for_sale[2])
 
+                if event.key == pygame.K_0:
+                    if player.coin >= 4:
+                        player.coin -= 4
+                        random_for_sale()
+
                 if event.key == pygame.K_SPACE:
                     doing = False
                     if not is_inven_overlapped(equip_con.equipped_group):
@@ -740,11 +745,13 @@ while running:
     
     display_game_ui()                                                                  #UI
     screen.blit(background_zero, (340,60))                                             #BACKGROUND
+    field_group.draw(screen)
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
         #for 0.4 second
         player.image_update()
+        # ghost.image_update()
     a_counter = milli_time
 
     if floor == 0:
@@ -762,7 +769,7 @@ while running:
         if not skill_con.active_sandclock[0]:
             random_monster_move()
 
-        if player.hp < 1:
+        if player.hp <= 0:
             player.hp = 0
             player.life -= 1
             player.stop()
