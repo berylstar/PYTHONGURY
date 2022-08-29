@@ -75,10 +75,13 @@ greentea_image = pygame.image.load(os.path.join(file_path, "images\\e_greentea.p
 mandoo_image = pygame.image.load(os.path.join(file_path, "images\\e_mandoo.png")).convert_alpha()
 a_book_image = pygame.image.load(os.path.join(file_path, "images\\e_a_book.png")).convert_alpha()
 bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png")).convert_alpha()
-zxcv_image = pygame.image.load(os.path.join(file_path, "images\\zxcv.png")).convert_alpha()
 
 
 # Others
+story_images = [
+    
+]
+
 tuto_images = [
     pygame.image.load(os.path.join(file_path, "images\\xx.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()

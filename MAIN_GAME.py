@@ -38,6 +38,7 @@ def scene_title_game():
                 if event.key == pygame.K_SPACE:
                     if cursor == start_cursor:
                         ready = False
+                        # scene_story(True)
                     elif cursor == exit_cursor:
                         ready = False
                         running = False
@@ -46,7 +47,7 @@ def scene_title_game():
 
         screen.fill((125,125,125))
         pygame.draw.polygon(screen, GREEN, cursor)
-        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_b)
+        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)
         screen_message("START", BLACK, (screen_width//2,500), game_font_m)
         screen_message("EXIT", BLACK, (screen_width//2,550), game_font_m)
         pygame.display.update()
@@ -81,10 +82,33 @@ def display_game_ui():
     if is_inven_overlapped(equip_con.equipped_group):
         screen_message("CHECK EQUIPS !", RED, (1040,150), game_font_s)
 
+def scene_story(doing):
+    global running
+
+    index = 0
+    fin = len(story_images)
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    index += 1
+                    if index == fin-1:
+                        doing = False
+
+        image_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
+
+        screen.fill(GREEN)
+        screen.blit(story_images[index], image_rect)
+        pygame.display.update()
+
 def scene_tutorial(doing):
     global running
 
-    idx = 0
+    index = 0
     fin = len(tuto_images) - 1
 
     while doing:
@@ -94,19 +118,19 @@ def scene_tutorial(doing):
                 doing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    if idx >= fin:
+                    if index >= fin:
                         doing = False
                     else:
-                        idx += 1
+                        index += 1
 
         display_game_ui()
 
-        tuto_rect = tuto_images[idx].get_rect(center=(640, 300))
+        tuto_rect = tuto_images[index].get_rect(center=(640, 300))
         msg = "NEXT"
-        if idx >= fin:
+        if index >= fin:
             msg = "PRESS 'SPACE BAR' TO BACK"
 
-        screen.blit(tuto_images[idx], tuto_rect)
+        screen.blit(tuto_images[index], tuto_rect)
         screen_message(msg, WHITE, (640,640), game_font_m)
         pygame.display.update()
 
@@ -164,7 +188,7 @@ def scene_player_dead(doing):
                     floor_zero()
 
         display_game_ui()
-        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_b)
+        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message("PRESS 'R' TO GO 1F", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
@@ -183,7 +207,7 @@ def scene_game_over(doing):
                     ready = True
 
         screen.fill(BLACK)
-        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_b)
+        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
         screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
         pygame.display.update()
@@ -326,7 +350,6 @@ def make_floor_zero():
     shooting_group.empty()
     item_group.empty()
     field_group.empty()
-    npc_group.add(father_slime, skeleton, ghost)
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
     random_for_sale()
@@ -357,9 +380,7 @@ def next_floor(pos):
 
     item_group.empty()
 
-    if npc_group:
-        npc_group.empty()
-        stair.image = stair_images[1]
+    stair.image = stair_images[1]
 
     floor_setting(pos, floor)
     
@@ -596,7 +617,7 @@ def random_monster_shooting():
     for monster in monster_group:
         if monster.type == "boss":
             if 0 <= randprob <= 70:
-                shooting_group.add(Punch(cursor_image[0], monster.position, monster.direction))
+                shooting_group.add(Punch(skill_v_image, monster.position, monster.direction))
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -636,14 +657,23 @@ class Player(Character):
         punch_group.add(Punch(image, position, self.direction))
     
     def skill_c(self):
-        # if self.equip_c == equip_zxcv:
-        #     shooting_group.add(Punch(skill_c_image, self.position, self.direction))
         if self.equip_c:
             self.equip_c.active_skill()
     
     def skill_v(self):
         if self.equip_v:
             self.equip_v.active_skill()
+
+    def die_motion(self):
+        self.image = pygame.transform.rotozoom(player_damaged_image, 0, 0.8)
+        self.draw(screen)
+        pygame.display.update(self.rect)
+        pygame.time.delay(1000)
+
+        self.image = water_images[0]
+        self.draw(screen)
+        pygame.display.update(self.rect)
+        pygame.time.delay(1000)
 
 #### PUNCH CLASS
 class Punch(pygame.sprite.Sprite):
@@ -683,7 +713,7 @@ pygame.display.set_caption("No More Slime")
 clock = pygame.time.Clock()
 game_font_s = pygame.font.Font("fonts\\DungGeunMo.ttf", 20)
 game_font_m = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
-game_font_b = pygame.font.Font("fonts\\DungGeunMo.ttf", 50)
+game_font_l = pygame.font.Font("fonts\\DungGeunMo.ttf", 50)
 start_ticks = pygame.time.get_ticks()
 a_counter = 0
 b_counter = 0
@@ -758,15 +788,15 @@ while running:
             random_monster_shooting()
         b_counter = second_time
 
-        if not skill_con.active_sandclock[0]:
+        if not skill_con.active_sandclock[0] and player.hp > 0:
             random_monster_move()
 
         if player.hp <= 0:
             player.hp = 0
             player.life -= 1
             player.stop()
-            pygame.time.delay(1500)
-            saved_floor = floor
+            # pygame.time.delay(1500)
+            player.die_motion()
             if player.life <= 0:
                 scene_game_over(True)
             else:
@@ -807,6 +837,7 @@ while running:
         shoot.draw(screen)
         if pygame.sprite.collide_mask(shoot, player):
             player.hp -= 10
+            player.image = player_damaged_image
             shooting_group.remove(shoot)
 
     for item in item_group:
