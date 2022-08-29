@@ -323,6 +323,7 @@ def make_floor_zero():
 
     floor = 0
     monster_group.empty()
+    shooting_group.empty()
     item_group.empty()
     field_group.empty()
     npc_group.add(father_slime, skeleton, ghost)
@@ -588,6 +589,14 @@ def setting_active_skill(key, picked_equip):
         player.equip_v = picked_equip
         if player.equip_c == player.equip_v:
             player.equip_c = None
+
+def random_monster_shooting():
+    randprob = random.randrange(0,101)
+
+    for monster in monster_group:
+        if monster.type == "boss":
+            if 0 <= randprob <= 70:
+                shooting_group.add(Punch(cursor_image[0], monster.position, monster.direction))
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -627,9 +636,9 @@ class Player(Character):
         punch_group.add(Punch(image, position, self.direction))
     
     def skill_c(self):
-        if self.equip_c == equip_zxcv:
-            shooting_group.add(Punch(skill_c_image, self.position, self.direction))
-        elif self.equip_c:
+        # if self.equip_c == equip_zxcv:
+        #     shooting_group.add(Punch(skill_c_image, self.position, self.direction))
+        if self.equip_c:
             self.equip_c.active_skill()
     
     def skill_v(self):
@@ -651,15 +660,6 @@ class Punch(pygame.sprite.Sprite):
         return pygame.time.get_ticks() - self.time
 
     def draw(self, screen):
-        # if player.direction == "LEFT":
-        #     self.rect = (player.rect.x-60, player.rect.y)
-        # elif player.direction == "RIGHT":
-        #     self.rect = (player.rect.x+60, player.rect.y)
-        # elif player.direction == "UP":
-        #     self.rect = (player.rect.x, player.rect.y-60)
-        # elif player.direction == "DOWN":
-        #     self.rect = (player.rect.x, player.rect.y+60)
-
         screen.blit(self.image, self.rect)
 
     def shoot(self):
@@ -755,6 +755,7 @@ while running:
             #for 1 second
             player.hp -= player.damaged_time
             random_monster_direction()
+            random_monster_shooting()
         b_counter = second_time
 
         if not skill_con.active_sandclock[0]:
@@ -779,7 +780,8 @@ while running:
                 floor = saved_floor - 1
             next_floor(player.position)
 
-    monster_group.draw(screen)                                                          #MONSTER
+    for monster in monster_group:
+        monster.draw(screen)                                                           #MONSTER
     if pygame.sprite.spritecollide(player, monster_group, False):
         player.hp -= player.damaged_enemy
         player.image = player_damaged_image
@@ -792,7 +794,6 @@ while running:
 
         for monster in monster_group:
             if pygame.sprite.collide_mask(monster, punch):
-                print(1)
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 if monster.hp <= 0:
@@ -804,8 +805,8 @@ while running:
     for shoot in shooting_group:
         shoot.shoot()
         shoot.draw(screen)
-        if pygame.sprite.spritecollide(shoot, monster_group, False):
-            print("HIT")
+        if pygame.sprite.collide_mask(shoot, player):
+            player.hp -= 10
             shooting_group.remove(shoot)
 
     for item in item_group:

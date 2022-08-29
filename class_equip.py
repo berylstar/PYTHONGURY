@@ -224,18 +224,18 @@ class e_Bone(Equip):
         self.price = 0
 
 ##### zxcv class
-class e_Zxcv(Equip):
-    def __init__(self, image, index):
-        Equip.__init__(self, image, index)
-        self.name = "zxcv"
-        self.max_row = 3
-        self.max_col = 0
+# class e_Zxcv(Equip):
+#     def __init__(self, image, index):
+#         Equip.__init__(self, image, index)
+#         self.name = "zxcv"
+#         self.max_row = 3
+#         self.max_col = 0
 
-        self.price = 20
+#         self.price = 20
 
-    def active_skill(self):
-        print("SHOOT")
-        # shoot_group.add(shoot)
+#     def active_skill(self):
+#         print("SHOOT")
+#         # shoot_group.add(shoot)
 
 ##############################################################################################
 ##### equip controller
@@ -248,7 +248,7 @@ class EquipController():
             equip_banana,       equip_battery,          equip_pepper,
             equip_ice,          equip_dice,             equip_sandclock,
             equip_apple,        equip_greentea,         equip_mandoo,
-            equip_ancientbook,  equip_bone,             equip_zxcv
+            equip_ancientbook,  equip_bone,             # equip_zxcv
         ]
 
 ##### active controller
@@ -294,7 +294,7 @@ equip_greentea = e_Greentea(greentea_image, (0,0))
 equip_mandoo = e_Mandoo(mandoo_image, (0,0))
 equip_ancientbook = e_AncientBook(a_book_image, (0,0))
 equip_bone = e_Bone(bone_image, (0,0))
-equip_zxcv = e_Zxcv(zxcv_image, (0,0))
+# equip_zxcv = e_Zxcv(zxcv_image, (0,0))
 
 skill_con = SkillController()
 equip_con = EquipController()
