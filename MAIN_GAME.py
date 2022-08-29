@@ -324,7 +324,8 @@ def make_floor_zero():
     floor = 0
     monster_group.empty()
     item_group.empty()
-    npc_group.add(father_slime, skeleton)
+    field_group.empty()
+    npc_group.add(father_slime, skeleton, ghost)
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
     random_for_sale()
@@ -345,12 +346,6 @@ def floor_zero():
         if pygame.sprite.collide_mask(punch, skeleton):
             player.stop()
             scene_skeleton_shop(True)
-
-    # if pygame.sprite.collide_mask(player, father_slime) or pygame.sprite.collide_mask(player, skeleton):
-    #     player.cant_move.add(player.direction)
-    #     player.stop()
-    # else:
-    #     player.cant_move = {"None"}
 
 def next_floor(pos):
     global floor
@@ -602,7 +597,6 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.coin = 99
-        # self.cant_move = {"None"}
 
         self.equip_c = None
         self.equip_v = None
@@ -633,7 +627,9 @@ class Player(Character):
         punch_group.add(Punch(image, position, self.direction))
     
     def skill_c(self):
-        if self.equip_c:
+        if self.equip_c == equip_zxcv:
+            shooting_group.add(Punch(skill_c_image, self.position, self.direction))
+        elif self.equip_c:
             self.equip_c.active_skill()
     
     def skill_v(self):
@@ -665,6 +661,19 @@ class Punch(pygame.sprite.Sprite):
         #     self.rect = (player.rect.x, player.rect.y+60)
 
         screen.blit(self.image, self.rect)
+
+    def shoot(self):
+        if self.direction == "LEFT":
+            self.rect.x -= 10
+        elif self.direction == "RIGHT":
+            self.rect.x += 10
+        elif self.direction == "UP":
+            self.rect.y -= 10
+        elif self.direction == "DOWN":
+            self.rect.y += 10
+
+        if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
+            shooting_group.remove(self)
 ##############################################################################################
 pygame.init()
 screen_width = 1280
@@ -695,6 +704,7 @@ player_first_position = (700, 360)
 player = Player(player_image, player_first_position)
 
 punch_group = pygame.sprite.Group()
+shooting_group = pygame.sprite.Group()
 
 ##############################################################################################
 ready = True
@@ -721,37 +731,18 @@ while running:
 
         if not is_inven_overlapped(equip_con.equipped_group):
             player_move_key()
-    
-    # if "LEFT" in player.cant_move:
-    #     player.move(player.to[1], player.to[2] + player.to[3], fps)
-    # elif "RIGHT" in player.cant_move:
-    #     player.move(player.to[0], player.to[2] + player.to[3], fps)
-    # elif "UP" in player.cant_move:
-    #     player.move(player.to[0] + player.to[1], player.to[3], fps)
-    # elif "DOWN" in player.cant_move:
-    #     player.move(player.to[0] + player.to[1], player.to[2], fps)
-    # else:
-    #     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
-    # if "LEFT" in player.cant_move:
-    #     player.to[0] = 0
-    # if "RIGHT" in player.cant_move:
-    #     player.to[1] = 0
-    # if "UP" in player.cant_move:
-    #     player.to[2] = 0
-    # if "DOWN" in player.cant_move:
-    #     player.to[3] = 0
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
     display_game_ui()                                                                  #UI
     screen.blit(background_zero, (340,60))                                             #BACKGROUND
-    field_group.draw(screen)
+    field_group.draw(screen)                                                           #FIELD
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
         #for 0.4 second
         player.image_update()
-        # ghost.image_update()
+        ghost.image_update()
     a_counter = milli_time
 
     if floor == 0:
@@ -781,18 +772,17 @@ while running:
                 scene_player_dead(True)
 
     if not monster_group:
-        stair.draw(screen)                                                            #STAIR
+        stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
             if saved_floor and floor == 0:
                 floor = saved_floor - 1
             next_floor(player.position)
 
-    for monster in monster_group:
-        if not monster.is_died:        
-            monster.draw(screen)                                                      #MONSTER
-            if pygame.sprite.collide_mask(player, monster):
-                player.hp -= player.damaged_enemy
+    monster_group.draw(screen)                                                          #MONSTER
+    if pygame.sprite.spritecollide(player, monster_group, False):
+        player.hp -= player.damaged_enemy
+        player.image = player_damaged_image
 
     for punch in punch_group:
         punch.draw(screen)                                                              #PUNCH
@@ -802,12 +792,21 @@ while running:
 
         for monster in monster_group:
             if pygame.sprite.collide_mask(monster, punch):
+                print(1)
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 if monster.hp <= 0:
-                    monster.die(drop_item)
+                    monster_group.remove(monster)
+                    drop_item(monster)
                     if len(monster_group) == 0:
                         random_away_position(player.position, stair)
+
+    for shoot in shooting_group:
+        shoot.shoot()
+        shoot.draw(screen)
+        if pygame.sprite.spritecollide(shoot, monster_group, False):
+            print("HIT")
+            shooting_group.remove(shoot)
 
     for item in item_group:
         item.draw(screen)                                                               #ITEM
@@ -817,13 +816,6 @@ while running:
                     continue
             item_effect(item)
             item_group.remove(item)
-
-    # for field in field_group:
-    #     field.draw(screen)
-    #     if pygame.sprite.collide_mask(field, player):
-    #         field_effect(field)
-    #     if field.is_collision and not pygame.sprite.collide_mask(field, player):
-    #         field_uneffect(field)
 
     player.draw(screen)                                                                 #PLAYER
     skill_con.active_time()

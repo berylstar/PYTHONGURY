@@ -7,7 +7,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 file_path = os.path.dirname(__file__)
 
 ##### PLAYER
-player_icon = pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha()
+player_icon = pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha()
 
 player_image =[
     pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha(),
@@ -15,7 +15,7 @@ player_image =[
     pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha(),
     # pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
 ]
-
+player_damaged_image = pygame.image.load(os.path.join(file_path, "design\\c_main_red.png")).convert_alpha()
 
 ##### MONSTER
 monster_1_image = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha()]
@@ -75,6 +75,7 @@ greentea_image = pygame.image.load(os.path.join(file_path, "images\\e_greentea.p
 mandoo_image = pygame.image.load(os.path.join(file_path, "images\\e_mandoo.png")).convert_alpha()
 a_book_image = pygame.image.load(os.path.join(file_path, "images\\e_a_book.png")).convert_alpha()
 bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png")).convert_alpha()
+zxcv_image = pygame.image.load(os.path.join(file_path, "images\\zxcv.png")).convert_alpha()
 
 
 # Others

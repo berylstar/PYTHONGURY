@@ -77,7 +77,8 @@ def random_field_setting():
         field_group.add(web)
 
     if randprob <= 50:
-        i = randprob % 3
-        water = Field(water_images[i], (0,0))
+        # i = randprob % 3
+        # water = Field(water_images[i], (0,0))
+        water = Field(water_images[0], (0,0))
         random_away_position((0,0), water)
         field_group.add(water)

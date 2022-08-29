@@ -17,27 +17,14 @@ class Character(pygame.sprite.Sprite):
         self.flip = False
 
     def image_update(self):
-        g_len = len(self.image_group) - 1
-
-        self.i_i += 1
-
-        if self.i_i == g_len:
-            self.i_i = 0
+        g_len = len(self.image_group)
 
         self.image = self.image_group[self.i_i]
-            
-        # if self.i_i == g_len:
-        #     flag = True
-        # elif self.i_i == 0:
-        #     flag = False
 
-        # print(self.i_i)
-        # self.image = self.image_group[self.i_i]
-
-        # if not flag:
-        #     self.i_i += 1
-        # else:
-        #     self.i_i -= 1
+        self.i_i += 1
+        if self.i_i == g_len:
+            self.i_i = 1
+            self.image_group.reverse()
 
     def draw(self, screen):
         if self.direction == "LEFT":
@@ -79,14 +66,8 @@ class Character(pygame.sprite.Sprite):
 class Monster(Character):
     def __init__(self, image_group, position, type, hp):
         Character.__init__(self, image_group, position)
-        self.is_died = False
         self.type = type    # normal, boss
         self.hp = hp
-
-    def die(self, drop_item):
-        self.is_died = True
-        drop_item(self)
-        monster_group.remove(self)
 
 ##############################################################################################
 
