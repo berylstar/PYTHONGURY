@@ -669,7 +669,7 @@ class Punch(pygame.sprite.Sprite):
             self.rect.x += 10
         elif self.direction == "UP":
             self.rect.y -= 10
-        elif self.direction == "DOWN":
+        elif self.direction == "DOWN" or "NONE":
             self.rect.y += 10
 
         if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
@@ -782,9 +782,9 @@ while running:
 
     for monster in monster_group:
         monster.draw(screen)                                                           #MONSTER
-    if pygame.sprite.spritecollide(player, monster_group, False):
-        player.hp -= player.damaged_enemy
-        player.image = player_damaged_image
+        if pygame.sprite.collide_mask(player, monster):
+            player.hp -= player.damaged_enemy
+            player.image = player_damaged_image
 
     for punch in punch_group:
         punch.draw(screen)                                                              #PUNCH

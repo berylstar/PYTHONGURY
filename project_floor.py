@@ -13,7 +13,7 @@ def floor_setting(pos, floor):
         random_away_position(pos, monster)
         monster_group.add(monster)
 
-    if floor % 10 == 1:
+    if floor % 10 == 0:
         boss_monster = Monster(monster_boss_image, (0,0), "boss", 100)
         random_away_position(pos, boss_monster)
         monster_group.add(boss_monster)
@@ -22,8 +22,6 @@ def floor_setting(pos, floor):
 
 def random_away_position(center, object):
     while True:
-        # rand_x = random.randint(370, 910)
-        # rand_y = random.randint(150, 570)
         rand_x = random.randint(0,9) * 60 + 370
         rand_y = random.randint(0,9) * 60 + 90
 
