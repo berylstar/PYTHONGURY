@@ -63,12 +63,54 @@ class Character(pygame.sprite.Sprite):
         self.to = [0,0,0,0]
 
 ##### MONSTER CLASS
-class Monster(Character):
-    def __init__(self, image_group, position, type, hp):
+class Mon_1(Character):
+    def __init__(self):
+        image_group = monster_1_image
+        position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = type    # normal, boss
+        self.type = "normal"
 
-        self.hp = hp
+        self.hp = MON_0_HP
+        self.speed = 0.1
+
+class Mon_2(Character):
+    def __init__(self):
+        image_group = monster_2_image
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "normal"
+
+        self.hp = MON_1_HP
+        self.speed = 0.1
+
+class Mon_ghost(Character):
+    def __init__(self):
+        image_group = ghost_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "ghost"
+
+        self.hp = MON_0_HP
+        self.speed = 0.2
+
+class Mon_shooter(Character):
+    def __init__(self):
+        image_group = slime_image
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "shooter"
+
+        self.hp = MON_0_HP
+        self.speed = 0.05
+
+class Mon_boss(Character):
+    def __init__(self):
+        image_group = monster_boss_image
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "boss"
+
+        self.hp = BOSS_HP
         self.speed = 0.1
 
 ##############################################################################################

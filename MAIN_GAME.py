@@ -615,7 +615,7 @@ def random_monster_shooting():
     randprob = random.randrange(0,101)
 
     for monster in monster_group:
-        if monster.type == "boss":
+        if monster.type == "boss" or monster.type == "shooter":
             if 0 <= randprob <= 70:
                 shooting_group.add(Punch(skill_v_image, monster.position, monster.direction))
 ##############################################################################################
@@ -694,13 +694,13 @@ class Punch(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.direction == "LEFT":
-            self.rect.x -= 10
+            self.rect.x -= 5
         elif self.direction == "RIGHT":
-            self.rect.x += 10
+            self.rect.x += 5
         elif self.direction == "UP":
-            self.rect.y -= 10
+            self.rect.y -= 5
         elif self.direction == "DOWN" or "NONE":
-            self.rect.y += 10
+            self.rect.y += 5
 
         if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
             shooting_group.remove(self)
@@ -795,7 +795,7 @@ while running:
             player.hp = 0
             player.life -= 1
             player.stop()
-            # pygame.time.delay(1500)
+            saved_floor = floor
             player.die_motion()
             if player.life <= 0:
                 scene_game_over(True)

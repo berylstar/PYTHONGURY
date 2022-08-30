@@ -96,3 +96,5 @@ cursor_image = [
 ]
 skill_c_image = pygame.image.load(os.path.join(file_path, "images\\skill_c.png")).convert_alpha()
 skill_v_image = pygame.image.load(os.path.join(file_path, "images\\skill_v.png")).convert_alpha()
+
+slime_image = [pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()]
