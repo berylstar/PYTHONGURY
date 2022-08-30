@@ -42,18 +42,9 @@ class Character(pygame.sprite.Sprite):
         self.rect.x += to_x * fps
         self.rect.y += to_y * fps
 
-        # if self.rect.centerx < 340 + (self.rect.width // 2):
-        #     self.rect.centerx = 340 + (self.rect.width // 2)
-        # elif self.rect.centerx > 940 - (self.rect.width // 2):
-        #     self.rect.centerx = 940 - (self.rect.width // 2)
-
         self.rect.centerx = max(self.rect.centerx, 340 + (self.rect.width // 2))
         self.rect.centerx = min(self.rect.centerx, 940 - (self.rect.width // 2))
 
-        # if self.rect.centery < 60 + (self.rect.height // 2):
-        #     self.rect.centery = 60 + (self.rect.height // 2)
-        # elif self.rect.centery > 660 - (self.rect.height // 2):
-        #     self.rect.centery = 660 - (self.rect.height // 2)
         self.rect.centery = max(self.rect.centery, 60 + (self.rect.height // 2))
         self.rect.centery = min(self.rect.centery, 660 - (self.rect.height // 2))
 
@@ -65,22 +56,22 @@ class Character(pygame.sprite.Sprite):
 ##### MONSTER CLASS
 class Mon_1(Character):
     def __init__(self):
-        image_group = monster_1_image
+        image_group = monster_1_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "normal"
 
-        self.hp = MON_0_HP
+        self.hp = 10
         self.speed = 0.1
 
 class Mon_2(Character):
     def __init__(self):
-        image_group = monster_2_image
+        image_group = monster_2_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "normal"
 
-        self.hp = MON_1_HP
+        self.hp = 25
         self.speed = 0.1
 
 class Mon_ghost(Character):
@@ -90,27 +81,27 @@ class Mon_ghost(Character):
         Character.__init__(self, image_group, position)
         self.type = "ghost"
 
-        self.hp = MON_0_HP
+        self.hp = 10
         self.speed = 0.2
 
 class Mon_shooter(Character):
     def __init__(self):
-        image_group = slime_image
+        image_group = shooter_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "shooter"
 
-        self.hp = MON_0_HP
+        self.hp = 10
         self.speed = 0.05
 
 class Mon_boss(Character):
     def __init__(self):
-        image_group = monster_boss_image
+        image_group = monster_boss_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "boss"
 
-        self.hp = BOSS_HP
+        self.hp = 100
         self.speed = 0.1
 
 ##############################################################################################
@@ -118,13 +109,9 @@ class Mon_boss(Character):
 ##### about monster
 monster_group = pygame.sprite.Group()
 
-MON_0_HP = 10
-MON_1_HP = 25
-BOSS_HP = 100
-
 ###### about npc
-father_slime = Character(father_slime_image, (540, 360))
-skeleton = Character(skeleton_image, (840, 600))
+father_slime = Character(father_slime_images, (540, 360))
+skeleton = Character(skeleton_images, (840, 600))
 ghost = Character(ghost_images, (800, 150))
 
 npc_group = pygame.sprite.Group()

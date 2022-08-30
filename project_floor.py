@@ -6,9 +6,9 @@ from class_field import *
 
 ##############################################################################################
 def floor_setting(pos, floor):
-    number_enemies = floor//3 + 1
+    number_enemies = floor//5 + 1
 
-    if not floor % 10 == 0:
+    if not floor % 20 == 0:
         for i in range(number_enemies):
             monster = prob_spawn_monster(80 - floor)
             random_away_position(pos, monster)
@@ -25,8 +25,8 @@ def random_away_position(center, object):
         rand_x = random.randint(0,9) * 60 + 370
         rand_y = random.randint(0,9) * 60 + 90
 
-        if rand_x < center[0] - 30 or center[0] + 30 < rand_x:
-            if rand_y < center[1] - 30 or center[1] + 30 < rand_y:
+        if rand_x < center[0] - 40 or center[0] + 40 < rand_x:
+            if rand_y < center[1] - 40 or center[1] + 40 < rand_y:
                 object.position = (rand_x, rand_y)
                 object.rect = object.image.get_rect(center=object.position)
                 break 
@@ -46,7 +46,7 @@ def prob_spawn_monster(percent):
 def random_monster_direction():
     if monster_group:
         for monster in monster_group:
-            rand = random.randrange(0,11)
+            rand = random.randrange(0,10)
             if rand <= 1:
                 monster.direction = "LEFT"
             elif 1 < rand and rand <= 3:
@@ -73,7 +73,7 @@ def random_field_setting():
 
     field_group.empty()
 
-    for i in range(randprob % 3):
+    for i in range(randprob % 4):
         if randprob % 2 == 0:
             web = Field(web_image, (0,0))
             random_away_position((0,0), web)

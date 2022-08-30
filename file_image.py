@@ -9,7 +9,7 @@ file_path = os.path.dirname(__file__)
 ##### PLAYER
 player_icon = pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha()
 
-player_image =[
+player_images =[
     pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha(),
@@ -17,21 +17,23 @@ player_image =[
 ]
 player_damaged_image = pygame.image.load(os.path.join(file_path, "design\\c_main_red.png")).convert_alpha()
 
+
 ##### MONSTER
-monster_1_image = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha()]
-monster_2_image = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()]
-monster_boss_image = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png")).convert_alpha()]
+monster_1_images = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png")).convert_alpha()]
+monster_2_images = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()]
+monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png")).convert_alpha()]
 
 
 ##### NPC
-father_slime_image = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
-skeleton_image = [pygame.image.load(os.path.join(file_path, "design\\gwan1.png")).convert_alpha()]
+father_slime_images = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
+skeleton_images = [pygame.image.load(os.path.join(file_path, "design\\gwan1.png")).convert_alpha()]
 ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\ghost_0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\ghost_2.png")).convert_alpha(),
     # pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha()
 ]
+shooter_images = [pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()]
 
 
 ##### FIELD
@@ -52,10 +54,8 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\0F.png"))
 
 
 ##### ITEM
-item_images = [
-    pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\coin_2.png")).convert_alpha()
-]
+portion_image = pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha()
+coin_image = pygame.image.load(os.path.join(file_path, "images\\coin_2.png")).convert_alpha()
 box_image = pygame.image.load(os.path.join(file_path, "images\\box.png")).convert_alpha()
 
 
@@ -90,11 +90,9 @@ tuto_images = [
 shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
 
 sold_out_image = pygame.image.load(os.path.join(file_path, "images\\sold_out.png")).convert_alpha()
-cursor_image = [
+cursor_images = [
     pygame.image.load(os.path.join(file_path, "images\\cursor.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "images\\cursor_is_picking.png")).convert_alpha()
 ]
 skill_c_image = pygame.image.load(os.path.join(file_path, "images\\skill_c.png")).convert_alpha()
 skill_v_image = pygame.image.load(os.path.join(file_path, "images\\skill_v.png")).convert_alpha()
-
-slime_image = [pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()]

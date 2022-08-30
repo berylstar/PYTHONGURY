@@ -63,11 +63,11 @@ def display_game_ui():
 
     screen_message(f"HP: {int(player.hp)}", WHITE, (240,190), game_font_m)                   #HP MESSAGE
 
-    coin_image_rect = item_images[1].get_rect(center=(215, 290))
-    screen.blit(item_images[1], coin_image_rect)
+    coin_image_rect = coin_image.get_rect(center=(215, 290))
+    screen.blit(coin_image, coin_image_rect)
     screen_message(f"       x{player.coin}", WHITE, (220,290), game_font_m)      #COIN MESSAGE
 
-    life_image_rect = player_icon.get_rect(center=(210, 390))
+    life_image_rect = player_icon.get_rect(center=(220, 390))
     screen.blit(player_icon, life_image_rect)
     screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)      #LIFE MESSAGE
 
@@ -216,7 +216,7 @@ def scene_equip_setting(doing):
     global running
 
     player.stop()
-    cursor = Cursor(cursor_image[0], (980,210))
+    cursor = Cursor(cursor_images[0], (980,210))
     picked_equip = None
 
     while doing:
@@ -237,33 +237,33 @@ def scene_equip_setting(doing):
                 if event.key == pygame.K_r:
                     remove_from_equipped_group(picked_equip)
                     cursor.clicking = False
-                    cursor.image = cursor_image[0]
+                    cursor.image = cursor_images[0]
                     picked_equip = None
 
                 if event.key == pygame.K_SPACE:
                     if cursor.clicking:
                         cursor.clicking = False
-                        cursor.image = cursor_image[0]
+                        cursor.image = cursor_images[0]
                         picked_equip = None
 
                     else:
                         for equip in equip_con.equipped_group:
                             if pygame.sprite.collide_mask(equip, cursor):
                                 cursor.clicking = True
-                                cursor.image = cursor_image[1]
+                                cursor.image = cursor_images[1]
                                 picked_equip = equip
 
                 if event.key == pygame.K_c:
                     if cursor.clicking:
                         cursor.clicking = False
-                        cursor.image = cursor_image[0]
+                        cursor.image = cursor_images[0]
                         setting_active_skill("c", picked_equip)
                         picked_equip = None
                 
                 if event.key == pygame.K_v:
                     if cursor.clicking:
                         cursor.clicking = False
-                        cursor.image = cursor_image[0]
+                        cursor.image = cursor_images[0]
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
 
@@ -335,9 +335,9 @@ def game_restart():
     global player, saved_floor
     global item_con, equip_con, skill_con
 
-    player = Player(player_image, player_first_position)
+    player = Player(player_images, player_first_position)
     make_floor_zero()
-    saved_floor = None
+    saved_floor = 1
     item_con = ItemController()
     equip_con = EquipController()
     skill_con = SkillController()
@@ -418,9 +418,9 @@ def equip_showcase(index, equip):
 
         screen_message(equip.name, WHITE, (490 + 150*index, sero+185), game_font_s)
 
-        coin_image = pygame.transform.rotozoom(item_images[1], 0, 0.5)
-        coin_rect = coin_image.get_rect(center=(470 + 150*index,sero+230))
-        screen.blit(coin_image, coin_rect)
+        coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
+        coin_rect = coin_image_r.get_rect(center=(470 + 150*index,sero+230))
+        screen.blit(coin_image_r, coin_rect)
 
         screen_message(f"x{equip.price}", WHITE, (500 + 150*index, sero+230), game_font_m)
     else:
@@ -472,9 +472,9 @@ def drop_item(monster):
         item_group.add(Item(box_image, monster.position, "box"))
     else:
         if randprob <= item_con.prob_portion:
-            item_group.add(Item(item_images[0], monster.position, "portion"))
+            item_group.add(Item(portion_image, monster.position, "portion"))
         elif item_con.prob_portion < randprob <= item_con.prob_portion + item_con.prob_coin:
-            item_group.add(Item(item_images[1], monster.position, "coin"))
+            item_group.add(Item(coin_image, monster.position, "coin"))
 
 def put_on_pixel(position):
     x = position[0]
@@ -665,7 +665,7 @@ class Player(Character):
             self.equip_v.active_skill()
 
     def die_motion(self):
-        self.image = pygame.transform.rotozoom(player_damaged_image, 0, 0.8)
+        self.image = pygame.transform.rotozoom(player_damaged_image, 180, 1)
         self.draw(screen)
         pygame.display.update(self.rect)
         pygame.time.delay(1000)
@@ -690,7 +690,10 @@ class Punch(pygame.sprite.Sprite):
         return pygame.time.get_ticks() - self.time
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        if self.rect.right < 340 or 940 < self.rect.left or self.rect.bottom < 60 or 660 < self.rect.top:
+            pass
+        else:
+            screen.blit(self.image, self.rect)
 
     def shoot(self):
         if self.direction == "LEFT":
@@ -727,11 +730,11 @@ RED = (127,0,0)
 GREEN = (0,127,0)
 BLUE = (0,0,127)
 floor = 0
-saved_floor = None
+saved_floor = 1
 
 ##### PLAYER
 player_first_position = (700, 360)
-player = Player(player_image, player_first_position)
+player = Player(player_images, player_first_position)
 
 punch_group = pygame.sprite.Group()
 shooting_group = pygame.sprite.Group()
@@ -806,8 +809,10 @@ while running:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
-            if saved_floor and floor == 0:
+            # if saved_floor and floor == 0:
+            if floor == 0:
                 floor = saved_floor - 1
+                scene_treasure_box(True)
             next_floor(player.position)
 
     for monster in monster_group:

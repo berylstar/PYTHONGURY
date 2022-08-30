@@ -109,7 +109,9 @@ class Equip(pygame.sprite.Sprite):
 
 ##### battery class
 class e_Battery(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = battery_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Battery"
         self.max_row = 4
@@ -119,7 +121,9 @@ class e_Battery(Equip):
 
 ##### banana class
 class e_Banana(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = banana_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Banana"
         self.max_row = 4
@@ -129,7 +133,9 @@ class e_Banana(Equip):
 
 ##### pepper class
 class e_Pepper(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = pepper_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Chili Pepper"
         # self.max_row = 5
@@ -139,7 +145,9 @@ class e_Pepper(Equip):
 
 ##### ice class
 class e_Ice(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = ice_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Ice"
         # self.max_row = 5
@@ -149,7 +157,9 @@ class e_Ice(Equip):
 
 ##### dice class
 class e_Dice(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = dice_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Dice"
         # self.max_row = 5
@@ -159,7 +169,9 @@ class e_Dice(Equip):
 
 ##### sandclock class
 class e_Sandclock(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = sandclock_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Sand Clock"
         self.max_row = 4
@@ -175,7 +187,9 @@ class e_Sandclock(Equip):
 
 ##### apple class
 class e_Apple(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = apple_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Green Apple"
         self.max_row = 4
@@ -185,7 +199,9 @@ class e_Apple(Equip):
 
 ##### greentea class
 class e_Greentea(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = greentea_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Green Tea"
         self.max_row = 4
@@ -195,7 +211,9 @@ class e_Greentea(Equip):
 
 ##### mandoo class
 class e_Mandoo(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = mandoo_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Mandoo"
         # self.max_row = 5
@@ -205,7 +223,9 @@ class e_Mandoo(Equip):
 
 ##### ancient book class
 class e_AncientBook(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = a_book_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Ancient Book"
         self.max_row = 4
@@ -215,7 +235,9 @@ class e_AncientBook(Equip):
 
 ##### bone class
 class e_Bone(Equip):
-    def __init__(self, image, index):
+    def __init__(self):
+        image = bone_image
+        index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Bone"
         self.max_row = 4
@@ -231,10 +253,10 @@ class EquipController():
         self.for_sale = [None, None, None]
         self.can_buy = [False, False, False]
         self.able_equip_group = [
-            equip_banana,       equip_battery,          equip_pepper,
-            equip_ice,          equip_dice,             equip_sandclock,
-            equip_apple,        equip_greentea,         equip_mandoo,
-            equip_ancientbook,  equip_bone,
+            equip_banana,           equip_battery,          equip_pepper,
+            equip_ice,              equip_dice,             equip_sandclock,
+            equip_apple,            equip_greentea,         equip_mandoo,
+            equip_ancientbook,      equip_bone,
         ]
 
 ##### active controller
@@ -269,17 +291,17 @@ inven_position = [
     ]
 
 # EQUIPS
-equip_banana = e_Banana(banana_image, (0,0))
-equip_battery = e_Battery(battery_image, (0,0))
-equip_pepper = e_Pepper(pepper_image, (0,0))
-equip_ice = e_Ice(ice_image, (0,0))
-equip_dice = e_Dice(dice_image, (0,0))
-equip_sandclock = e_Sandclock(sandclock_image, (0,0))
-equip_apple = e_Apple(apple_image, (0,0))
-equip_greentea = e_Greentea(greentea_image, (0,0))
-equip_mandoo = e_Mandoo(mandoo_image, (0,0))
-equip_ancientbook = e_AncientBook(a_book_image, (0,0))
-equip_bone = e_Bone(bone_image, (0,0))
+equip_banana = e_Banana()
+equip_battery = e_Battery()
+equip_pepper = e_Pepper()
+equip_ice = e_Ice()
+equip_dice = e_Dice()
+equip_sandclock = e_Sandclock()
+equip_apple = e_Apple()
+equip_greentea = e_Greentea()
+equip_mandoo = e_Mandoo()
+equip_ancientbook = e_AncientBook()
+equip_bone = e_Bone()
 
 skill_con = SkillController()
 equip_con = EquipController()
