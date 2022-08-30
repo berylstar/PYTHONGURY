@@ -67,7 +67,9 @@ class Monster(Character):
     def __init__(self, image_group, position, type, hp):
         Character.__init__(self, image_group, position)
         self.type = type    # normal, boss
+
         self.hp = hp
+        self.speed = 0.1
 
 ##############################################################################################
 
@@ -76,6 +78,7 @@ monster_group = pygame.sprite.Group()
 
 MON_0_HP = 10
 MON_1_HP = 25
+BOSS_HP = 100
 
 ###### about npc
 father_slime = Character(father_slime_image, (540, 360))
@@ -84,3 +87,5 @@ ghost = Character(ghost_images, (800, 150))
 
 npc_group = pygame.sprite.Group()
 npc_group.add(father_slime, skeleton, ghost)
+
+##### about monster

@@ -456,13 +456,13 @@ def random_monster_move():
     if monster_group:
         for monster in monster_group:
             if monster.direction == "LEFT":
-                monster.move(-0.1, 0, fps)
+                monster.move(-monster.speed, 0, fps)
             elif monster.direction == "RIGHT":
-                monster.move(0.1, 0, fps)
+                monster.move(monster.speed, 0, fps)
             elif monster.direction == "UP":
-                monster.move(0,-0.1, fps)
+                monster.move(0,-monster.speed, fps)
             elif monster.direction == "DOWN":
-                monster.move(0,0.1, fps)
+                monster.move(0,monster.speed, fps)
 
 def drop_item(monster):
     randprob = random.randrange(0,101)
@@ -581,7 +581,7 @@ def remove_from_equipped_group(equip):
         if equip == equip_greentea:
             item_con.portion_eff -= 5
 
-        # not effect mandoo
+        # not remove effect mandoo
 
         if equip == equip_ancientbook:
             player.damaged_time += 0.5

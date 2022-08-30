@@ -6,15 +6,16 @@ from class_field import *
 
 ##############################################################################################
 def floor_setting(pos, floor):
-    number_enemies = floor//5 + 1
+    number_enemies = floor//3 + 1
 
-    for i in range(number_enemies):
-        monster = prob_spawn_monster(90 - floor)
-        random_away_position(pos, monster)
-        monster_group.add(monster)
-
-    if floor % 10 == 0:
-        boss_monster = Monster(monster_boss_image, (0,0), "boss", 100)
+    if not floor % 10 == 0:
+        for i in range(number_enemies):
+            monster = prob_spawn_monster(90 - floor)
+            random_away_position(pos, monster)
+            monster_group.add(monster)
+    else:
+        boss_monster = Monster(monster_boss_image, (0,0), "boss", BOSS_HP)
+        # boss_monster.spped = 0.15
         random_away_position(pos, boss_monster)
         monster_group.add(boss_monster)
 
@@ -37,7 +38,12 @@ def prob_spawn_monster(percent):
     if randprob <= percent:
         return Monster(monster_1_image, (0,0), "normal", MON_0_HP)
     else:
-        return Monster(monster_2_image, (0,0), "normal", MON_1_HP)
+        # return Monster(monster_2_image, (0,0), "normal", MON_1_HP)
+        mon_ghost = Monster(ghost_images, (0,0), "ghost", MON_0_HP)
+        mon_ghost.speed = 0.2
+        return mon_ghost
+
+
 
 def random_monster_direction():
     if monster_group:
@@ -69,10 +75,11 @@ def random_field_setting():
 
     field_group.empty()
 
-    if randprob % 2 == 0:
-        web = Field(web_image, (0,0))
-        random_away_position((0,0), web)
-        field_group.add(web)
+    for i in range(randprob % 3):
+        if randprob % 2 == 0:
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)
 
     if randprob <= 50:
         # i = randprob % 3
