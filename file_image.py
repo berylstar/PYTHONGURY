@@ -34,6 +34,7 @@ ghost_images = [
     # pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha()
 ]
 shooter_images = [pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()]
+runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png")).convert_alpha()]
 
 
 ##### FIELD

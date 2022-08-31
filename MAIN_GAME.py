@@ -57,7 +57,8 @@ def display_game_ui():
     pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)              #MAIN GAME
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)              #INFO
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)              #INVEN
-    # screen.blit(background_zero, (340,60))
+    screen.blit(background_zero, (340,60))
+    background_zero.set_alpha(255)
     
     screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                           #FLOOR MESSAGE
 
@@ -124,6 +125,7 @@ def scene_tutorial(doing):
                         index += 1
 
         display_game_ui()
+        background_zero.set_alpha(60)
 
         tuto_rect = tuto_images[index].get_rect(center=(640, 300))
         msg = "NEXT"
@@ -163,6 +165,7 @@ def scene_skeleton_shop(doing):
                         equip_effect()
 
         display_game_ui()
+        background_zero.set_alpha(60)
 
         equip_showcase(0, equip_con.for_sale[0])
         equip_showcase(1, equip_con.for_sale[1])
@@ -213,9 +216,15 @@ def scene_game_over(doing):
         pygame.display.update()
 
 def scene_equip_setting(doing):
-    global running
+    global running, dontmove
 
     player.stop()
+
+    for monster in monster_group:
+        monster.direction = "NONE"
+        monster.move(0,0,fps)
+
+
     cursor = Cursor(cursor_images[0], (980,210))
     picked_equip = None
 
@@ -231,6 +240,7 @@ def scene_equip_setting(doing):
 
                 if event.key == pygame.K_i:
                     doing = False
+                    dontmove = False
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
 
@@ -268,8 +278,12 @@ def scene_equip_setting(doing):
                         picked_equip = None
 
         display_game_ui()
+        # background_zero.set_alpha(60)
+
+        rect = pygame.Rect(((940,60), (200, 600)))        
+
         cursor.draw(screen)
-        pygame.display.update()
+        pygame.display.update(rect)
 
 def scene_treasure_box(doing):
     global running
@@ -302,6 +316,7 @@ def scene_treasure_box(doing):
                         equip_effect()
 
         display_game_ui()
+        background_zero.set_alpha(60)
 
         zero_rect = choice_equip[0].image.get_rect(center=(490,450))
         one_rect = choice_equip[1].image.get_rect(center=(790,450))
@@ -452,7 +467,7 @@ def player_move_key():
         if event.key == pygame.K_DOWN:
             player.to[3] = 0
 
-def random_monster_move():
+def monster_move():
     if monster_group:
         for monster in monster_group:
             if monster.direction == "LEFT":
@@ -611,13 +626,23 @@ def setting_active_skill(key, picked_equip):
         if player.equip_c == player.equip_v:
             player.equip_c = None
 
-def random_monster_shooting():
+def monster_shooting():
     randprob = random.randrange(0,101)
 
     for monster in monster_group:
         if monster.type == "boss" or monster.type == "shooter":
             if 0 <= randprob <= 70:
                 shooting_group.add(Punch(skill_v_image, monster.position, monster.direction))
+
+def monster_clocking():
+    randprob = random.randrange(0,101)
+
+    for monster in monster_group:
+        if monster.type == "ghost":
+            if 0 <= randprob <= 50:
+                monster.image.set_alpha(60)
+            elif 80 < randprob:
+                monster.image.set_alpha(255)
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -760,7 +785,11 @@ while running:
             if event.key == pygame.K_v:
                 player.skill_v()
             if event.key == pygame.K_i:
+                print(2)
+                dontmove = True
                 scene_equip_setting(True)
+            if event.key == pygame.K_ESCAPE:
+                print("ESC")
 
         if not is_inven_overlapped(equip_con.equipped_group):
             player_move_key()
@@ -768,7 +797,7 @@ while running:
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
     display_game_ui()                                                                  #UI
-    screen.blit(background_zero, (340,60))                                             #BACKGROUND
+    # screen.blit(background_zero, (340,60))                                             #BACKGROUND
     field_group.draw(screen)                                                           #FIELD
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
@@ -788,11 +817,13 @@ while running:
             #for 1 second
             player.hp -= player.damaged_time
             random_monster_direction()
-            random_monster_shooting()
+            monster_shooting()
+            monster_clocking()
         b_counter = second_time
 
-        if not skill_con.active_sandclock[0] and player.hp > 0:
-            random_monster_move()
+        if not skill_con.active_sandclock[0] and player.hp > 0 and not dontmove:
+            print(1)
+            monster_move()
 
         if player.hp <= 0:
             player.hp = 0

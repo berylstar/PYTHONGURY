@@ -81,8 +81,8 @@ class Mon_ghost(Character):
         Character.__init__(self, image_group, position)
         self.type = "ghost"
 
-        self.hp = 10
-        self.speed = 0.2
+        self.hp = 15
+        self.speed = 0.1
 
 class Mon_shooter(Character):
     def __init__(self):
@@ -93,6 +93,16 @@ class Mon_shooter(Character):
 
         self.hp = 10
         self.speed = 0.05
+
+class Mon_runner(Character):
+    def __init__(self):
+        image_group = runner_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "runner"
+
+        self.hp = 10
+        self.speed = 0.2
 
 class Mon_boss(Character):
     def __init__(self):
@@ -108,7 +118,7 @@ class Mon_boss(Character):
 
 ##### about monster
 monster_group = pygame.sprite.Group()
-
+dontmove = False
 ###### about npc
 father_slime = Character(father_slime_images, (540, 360))
 skeleton = Character(skeleton_images, (840, 600))
