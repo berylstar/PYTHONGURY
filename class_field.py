@@ -38,4 +38,3 @@ light_pos = (440, 150)
 torch = Torch(light_pos)
 
 field_group = pygame.sprite.Group()
-field_group.add(torch)

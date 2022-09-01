@@ -448,7 +448,6 @@ def make_floor_zero():
     field_group.empty()
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
-    field_group.add(torch)
     random_for_sale()
     player.rect = player.image.get_rect(center=player_first_position)
     player.hp = player.max_hp
@@ -457,6 +456,7 @@ def floor_zero():
     if floor != 0:
         make_floor_zero()
 
+    torch.draw(screen)
     npc_group.draw(screen)
 
     for punch in punch_group:
@@ -888,8 +888,9 @@ while running:
     
     display_game_ui()                                                                  #UI
     # screen.blit(background_zero, (340,60))                                             #BACKGROUND
-    for field in field_group:
-        field.draw(screen)                                                           #FIELD
+    # for field in field_group:
+    #     field.draw(screen)                                                           #FIELD
+    field_group.draw(screen)
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
