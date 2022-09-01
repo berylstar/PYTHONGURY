@@ -17,7 +17,7 @@ def floor_setting(pos, floor):
     if not floor % 20 == 0:
         for i in range(number_enemies):
             spawn_monster(pos, floor)
-        # floor_monster_setting(pos, floor)
+        floor_monster_setting(pos, floor)
     else:
         boss_monster = Mon_boss()
         random_away_position(pos, boss_monster)
@@ -36,12 +36,13 @@ def random_away_position(center, object):
                 object.rect = object.image.get_rect(center=object.position)
                 break 
 
-def prob_spawn_monster(percent):
+def prob_spawn_monster(floor):
     randprob = random.randrange(0,101)  # 0 ~ 100
+    percent = 70 - floor
 
     if randprob < percent:
         return Mon_1()
-    elif percent <= randprob < percent + 20:
+    elif percent <= randprob < percent + 30:
         return Mon_2()
     elif randprob % 3 == 0:
         return Mon_ghost()
@@ -52,7 +53,7 @@ def prob_spawn_monster(percent):
 
 def spawn_monster(pos, floor, monster_kind=None):
     if not monster_kind:
-        monster = prob_spawn_monster(80 - floor)
+        monster = prob_spawn_monster(floor)
         random_away_position(pos, monster)
         monster_group.add(monster)
     else:
@@ -61,7 +62,7 @@ def spawn_monster(pos, floor, monster_kind=None):
         monster_group.add(monster)
 
 def random_monster_direction():
-    if monster_group:
+    if monster_group and not monster_con.dontmove:
         for monster in monster_group:
             rand = random.randrange(0,10)
             if rand <= 1:
@@ -104,30 +105,9 @@ def random_field_setting():
         field_group.add(water)
 
 def floor_monster_setting(pos, floor):
-    if floor == 1:
+    if 1 <= floor < 7:
         spawn_monster(pos, floor, Mon_1())
-    elif floor == 2 or floor == 3:
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_1())
-    elif floor == 4 or floor == 5:
-        spawn_monster(pos, floor, Mon_1())
+    elif 7 <= floor < 12:
         spawn_monster(pos, floor, Mon_2())
-    elif floor == 6:
-        spawn_monster(pos, floor, Mon_2())
-        spawn_monster(pos, floor, Mon_2())
-    elif floor == 7:
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_1())
-    elif floor == 8:
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_2())
+    elif 12 <= floor < 15:
         spawn_monster(pos, floor, Mon_ghost())
-    elif floor == 9:
-        spawn_monster(pos, floor, Mon_ghost())
-        spawn_monster(pos, floor, Mon_ghost())
-    else:
-        spawn_monster(pos, floor, Mon_runner())

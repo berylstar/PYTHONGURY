@@ -114,10 +114,14 @@ class Mon_boss(Character):
         self.hp = 100
         self.speed = 0.1
 
+class MonsterController():
+    def __init__(self):
+        self.dontmove = False
 ##############################################################################################
 
 ##### about monster
 monster_group = pygame.sprite.Group()
+monster_con = MonsterController()
 
 ###### about npc
 father_slime = Character(father_slime_images, (540, 360))

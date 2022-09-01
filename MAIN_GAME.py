@@ -99,6 +99,8 @@ def scene_story(doing):
                     index += 1
                     if index == fin-1:
                         doing = False
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
 
         image_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
 
@@ -123,6 +125,8 @@ def scene_tutorial(doing):
                         doing = False
                     else:
                         index += 1
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
 
         display_game_ui()
         background_zero.set_alpha(60)
@@ -164,6 +168,9 @@ def scene_skeleton_shop(doing):
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
 
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
+
         display_game_ui()
         background_zero.set_alpha(60)
 
@@ -189,8 +196,12 @@ def scene_player_dead(doing):
                 if event.key == pygame.K_r:
                     doing = False
                     floor_zero()
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
 
         display_game_ui()
+        background_zero.set_alpha(60)
+
         screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message("PRESS 'R' TO GO 1F", WHITE, (640,640), game_font_m)
         pygame.display.update()
@@ -208,6 +219,8 @@ def scene_game_over(doing):
                     doing = False
                     game_restart()
                     ready = True
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
 
         screen.fill(BLACK)
         screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
@@ -215,15 +228,14 @@ def scene_game_over(doing):
         screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
-def scene_equip_setting(doing):
+def scene_inventory(doing):
     global running
 
     player.stop()
 
+    monster_con.dontmove = True
     for monster in monster_group:
         monster.direction = "NONE"
-        monster.move(0,0,fps)
-
 
     cursor = Cursor(cursor_images[0], (980,210))
     picked_equip = None
@@ -276,13 +288,18 @@ def scene_equip_setting(doing):
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
 
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
+
         display_game_ui()
         # background_zero.set_alpha(60)
 
-        rect = pygame.Rect(((940,60), (200, 600)))        
+        inven_rect = pygame.Rect(((940,60), (200, 600)))
+        main_rect = pygame.Rect(((140,60), (200, 600)))
+        
 
         cursor.draw(screen)
-        pygame.display.update(rect)
+        pygame.display.update(inven_rect)
 
 def scene_treasure_box(doing):
     global running
@@ -314,6 +331,9 @@ def scene_treasure_box(doing):
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
 
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
+
         display_game_ui()
         background_zero.set_alpha(60)
 
@@ -339,6 +359,64 @@ def scene_treasure_box(doing):
         screen.blit(shop_image, shop_rect)
         
         pygame.display.update()
+
+def scene_esc(doing):
+    global running
+
+    option = ["RESUME", "SCREEN SETTING", "SOUND SETTING", "EXIT"]
+    color = [GRAY, GRAY, GRAY, GRAY]
+    index = 0
+    
+    monster_con.dontmove = True
+    for monster in monster_group:
+        monster.direction = "NONE"
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    index -= 1
+                    if index < 0 :
+                        index = 3
+                if event.key == pygame.K_DOWN:
+                    index += 1
+                    if index > 3:
+                        index = 0
+                if event.key == pygame.K_SPACE:
+                    if index == 0:
+                        doing = False
+                    elif index == 1:
+                        pass
+                    elif index == 2:
+                        pass
+                    elif index == 3:
+                        doing = False
+                        running = False
+                if event.key == pygame.K_ESCAPE:
+                    doing = False
+                print(index)
+
+        # pygame.display.toggle_fullscreen()
+
+        main_rect = pygame.Rect(((340,60), (600, 600)))
+
+        for i in range(len(color)):
+            color[i] = GRAY
+        color[index] = BLACK
+
+        screen.fill((60,60,60))
+
+        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)
+        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
+        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
+        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
+        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
+
+        pygame.display.update(main_rect)
+
 ##############################################################################################
 def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
@@ -347,14 +425,16 @@ def screen_message(writing, color, position, font):
 
 def game_restart():
     global player, saved_floor
-    global item_con, equip_con, skill_con
+    global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
     make_floor_zero()
     saved_floor = 1
+
     item_con = ItemController()
     equip_con = EquipController()
     skill_con = SkillController()
+    monster_con = MonsterController()
 
 def make_floor_zero():
     global floor
@@ -763,6 +843,7 @@ player = Player(player_images, player_first_position)
 punch_group = pygame.sprite.Group()
 shooting_group = pygame.sprite.Group()
 
+
 ##############################################################################################
 ready = True
 running = True
@@ -784,9 +865,9 @@ while running:
             if event.key == pygame.K_v:
                 player.skill_v()
             if event.key == pygame.K_i:
-                scene_equip_setting(True)
+                scene_inventory(True)
             if event.key == pygame.K_ESCAPE:
-                print("ESC")
+                scene_esc(True)
 
         if not is_inven_overlapped(equip_con.equipped_group):
             player_move_key()
@@ -818,8 +899,10 @@ while running:
             monster_clocking()
         b_counter = second_time
 
-        if not skill_con.active_sandclock[0] and player.hp > 0:
-            print(1)
+        if monster_con.dontmove:
+            monster_con.dontmove = False
+
+        if not skill_con.active_sandclock[0]:
             monster_move()
 
         if player.hp <= 0:

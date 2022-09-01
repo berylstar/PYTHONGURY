@@ -48,9 +48,15 @@ water_images = [
     pygame.image.load(os.path.join(file_path, "design\\water_1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\water_2.png")).convert_alpha()
 ]
+torch_images = [
+    pygame.image.load(os.path.join(file_path, "design\\fire.png")).convert_alpha(),
+]
+light_image = pygame.image.load(os.path.join(file_path, "images\\light.png")).convert_alpha()
+light_image = pygame.transform.rotozoom(light_image, 0, 2.5)
+light_image.set_alpha(80)
 
 
-##### ETC
+##### BACKGROUND
 background_zero = pygame.image.load(os.path.join(file_path, "design\\0F.png"))
 
 
