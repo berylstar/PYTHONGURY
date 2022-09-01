@@ -47,7 +47,7 @@ def prob_spawn_monster(floor):
     elif randprob % 3 == 0:
         return Mon_ghost()
     elif randprob % 3 == 1:
-        return Mon_shooter()
+        return Mon_ember()
     else:
         return Mon_runner()
 
@@ -106,7 +106,11 @@ def random_field_setting():
 
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
-        spawn_monster(pos, floor, Mon_1())
+        # spawn_monster(pos, floor, Mon_1())
+        spawn_monster(pos, floor, Mon_ember())
+        spawn_monster(pos, floor, Mon_ember())
+        spawn_monster(pos, floor, Mon_ember())
+        spawn_monster(pos, floor, Mon_ember())
     elif 7 <= floor < 12:
         spawn_monster(pos, floor, Mon_2())
     elif 12 <= floor < 15:

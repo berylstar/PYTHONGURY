@@ -84,9 +84,9 @@ class Mon_ghost(Character):
         self.hp = 15
         self.speed = 0.1
 
-class Mon_shooter(Character):
+class Mon_ember(Character):
     def __init__(self):
-        image_group = shooter_images
+        image_group = mon_ember_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "shooter"

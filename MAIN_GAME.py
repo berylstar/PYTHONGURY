@@ -12,18 +12,10 @@ from project_floor import *
 ##############################################################################################
 def scene_title_game():
     global running, ready
-        
-    # msg_start = game_font.render("START", True, BLACK)
-    # start_rect = msg_start.get_rect(center=(screen_width//2,500))
-    # start_cursor = ((start_rect.left - 30, start_rect.top),(start_rect.left - 30,start_rect.bottom),(start_rect.left - 10,500))
-    start_cursor = ((578,490), (578,510), (598,500))
-
-    # msg_exit = game_font.render("EXIT", True, BLACK)
-    # exit_rect = msg_exit.get_rect(center=(screen_width//2,550))
-    # exit_cursor = ((exit_rect.left - 30, exit_rect.top),(exit_rect.left - 30,exit_rect.bottom),(exit_rect.left - 10,550))
-    exit_cursor = ((587,540), (587,560), (607,550))
-
-    cursor = start_cursor
+    
+    option = ["START", "OPTION", "EXIT"]
+    color = [GRAY, GRAY, GRAY]
+    index = 0
 
     while ready:
         for event in pygame.event.get():
@@ -32,24 +24,34 @@ def scene_title_game():
                 ready = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    cursor = start_cursor
+                    index -= 1
+                    if index < 0 :
+                        index = 2
                 if event.key == pygame.K_DOWN:
-                    cursor = exit_cursor
+                    index += 1
+                    if index > 2:
+                        index = 0
                 if event.key == pygame.K_SPACE:
-                    if cursor == start_cursor:
+                    if index == 0:
                         ready = False
-                        # scene_story(True)
-                    elif cursor == exit_cursor:
+                    elif index == 1:
+                        ready = False
+                        scene_esc(True)
+                    elif index == 2:
                         ready = False
                         running = False
 
         bgm_sound.play(-1)
 
-        screen.fill((125,125,125))
-        pygame.draw.polygon(screen, GREEN, cursor)
+        for i in range(len(color)):
+            color[i] = GRAY
+        color[index] = BLACK
+
+        screen.fill((60,60,60))
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)
-        screen_message("START", BLACK, (screen_width//2,500), game_font_m)
-        screen_message("EXIT", BLACK, (screen_width//2,550), game_font_m)
+        screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
+        screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
+        screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
         pygame.display.update()
 
 def display_game_ui():
@@ -203,7 +205,7 @@ def scene_player_dead(doing):
         background_zero.set_alpha(60)
 
         screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
-        screen_message("PRESS 'R' TO GO 1F", WHITE, (640,640), game_font_m)
+        screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
 def scene_game_over(doing):
@@ -280,7 +282,7 @@ def scene_inventory(doing):
                         cursor.image = cursor_images[0]
                         setting_active_skill("c", picked_equip)
                         picked_equip = None
-                
+
                 if event.key == pygame.K_v:
                     if cursor.clicking:
                         cursor.clicking = False
@@ -290,6 +292,7 @@ def scene_inventory(doing):
 
                 if event.key == pygame.K_ESCAPE:
                     scene_esc(True)
+                    doing = False
 
         display_game_ui()
         # background_zero.set_alpha(60)
@@ -297,7 +300,6 @@ def scene_inventory(doing):
         inven_rect = pygame.Rect(((940,60), (200, 600)))
         main_rect = pygame.Rect(((140,60), (200, 600)))
         
-
         cursor.draw(screen)
         pygame.display.update(inven_rect)
 
@@ -366,6 +368,8 @@ def scene_esc(doing):
     option = ["RESUME", "SCREEN SETTING", "SOUND SETTING", "EXIT"]
     color = [GRAY, GRAY, GRAY, GRAY]
     index = 0
+
+    player.stop()
     
     monster_con.dontmove = True
     for monster in monster_group:
@@ -446,6 +450,7 @@ def make_floor_zero():
     field_group.empty()
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
+    field_group.add(light,torch)
     random_for_sale()
     player.rect = player.image.get_rect(center=player_first_position)
     player.hp = player.max_hp
@@ -615,7 +620,7 @@ def equip_effect():
 
     if equip_ice in equip_con.equipped_group:
         if not equip_ice.is_effected:
-            player.speed += 0.1
+            player.speed += 0.2
             equip_ice.is_effected = True
 
     if equip_dice in equip_con.equipped_group:
@@ -711,7 +716,17 @@ def monster_shooting():
     for monster in monster_group:
         if monster.type == "boss" or monster.type == "shooter":
             if 0 <= randprob <= 70:
-                shooting_group.add(Punch(skill_v_image, monster.position, monster.direction))
+                if monster.direction == "LEFT":
+                    image = ember_attack_image
+                elif monster.direction == "RIGHT":
+                    image = pygame.transform.rotozoom(ember_attack_image, 180, 1)
+                elif monster.direction == "UP":
+                    image = pygame.transform.rotozoom(ember_attack_image, 270, 1)
+                elif monster.direction == "DOWN":
+                    image = pygame.transform.rotozoom(ember_attack_image, 90, 1)
+                else:
+                    break
+                shooting_group.add(Punch(image, monster.position, monster.direction))
 
 def monster_clocking():
     randprob = random.randrange(0,101)
@@ -737,7 +752,7 @@ class Player(Character):
 
         self.ap = 10
         self.max_hp = 100
-        self.speed = 0.5
+        self.speed = 0.4
         self.punch = punch_d_image
         self.damaged_enemy = 0.7
         self.damaged_time = 1
@@ -897,6 +912,7 @@ while running:
             random_monster_direction()
             monster_shooting()
             monster_clocking()
+            skill_con.active_time()
         b_counter = second_time
 
         if monster_con.dontmove:
@@ -922,8 +938,8 @@ while running:
         if pygame.sprite.collide_mask(player, stair):
             # if saved_floor and floor == 0:
             if floor == 0:
-                floor = saved_floor - 1
                 scene_treasure_box(True)
+                floor = saved_floor - 1
             next_floor(player.position)
 
     for monster in monster_group:
@@ -966,7 +982,6 @@ while running:
             item_group.remove(item)
 
     player.draw(screen)                                                                 #PLAYER
-    skill_con.active_time()
 
     if running: 
         pygame.display.update()

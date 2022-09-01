@@ -4,6 +4,8 @@ import os
 screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("No More Slime")
+
 file_path = os.path.dirname(__file__)
 
 ##### PLAYER
@@ -13,7 +15,6 @@ player_images =[
     pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha(),
-    # pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
 ]
 player_damaged_image = pygame.image.load(os.path.join(file_path, "design\\c_main_red.png")).convert_alpha()
 
@@ -23,18 +24,19 @@ monster_1_images = [pygame.image.load(os.path.join(file_path, "images\\monster_1
 monster_2_images = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()]
 monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png")).convert_alpha()]
 
+mon_skeleton_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\skeleton.png")).convert_alpha(),]
+mon_ember_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\ember.png")).convert_alpha(),]
+ember_attack_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_attack.png")).convert_alpha()
+runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png")).convert_alpha()]
 
 ##### NPC
 father_slime_images = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
 skeleton_images = [pygame.image.load(os.path.join(file_path, "design\\gwan1.png")).convert_alpha()]
 ghost_images = [
-    pygame.image.load(os.path.join(file_path, "design\\ghost_0.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "design\\ghost_2.png")).convert_alpha(),
-    # pygame.image.load(os.path.join(file_path, "design\\ghost_1.png")).convert_alpha()
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_0.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_2.png")).convert_alpha(),
 ]
-shooter_images = [pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha()]
-runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png")).convert_alpha()]
 
 
 ##### FIELD
