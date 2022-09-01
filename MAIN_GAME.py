@@ -216,7 +216,7 @@ def scene_game_over(doing):
         pygame.display.update()
 
 def scene_equip_setting(doing):
-    global running, dontmove
+    global running
 
     player.stop()
 
@@ -240,7 +240,6 @@ def scene_equip_setting(doing):
 
                 if event.key == pygame.K_i:
                     doing = False
-                    dontmove = False
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
 
@@ -785,8 +784,6 @@ while running:
             if event.key == pygame.K_v:
                 player.skill_v()
             if event.key == pygame.K_i:
-                print(2)
-                dontmove = True
                 scene_equip_setting(True)
             if event.key == pygame.K_ESCAPE:
                 print("ESC")
@@ -821,7 +818,7 @@ while running:
             monster_clocking()
         b_counter = second_time
 
-        if not skill_con.active_sandclock[0] and player.hp > 0 and not dontmove:
+        if not skill_con.active_sandclock[0] and player.hp > 0:
             print(1)
             monster_move()
 

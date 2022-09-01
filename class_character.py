@@ -118,7 +118,7 @@ class Mon_boss(Character):
 
 ##### about monster
 monster_group = pygame.sprite.Group()
-dontmove = False
+
 ###### about npc
 father_slime = Character(father_slime_images, (540, 360))
 skeleton = Character(skeleton_images, (840, 600))
