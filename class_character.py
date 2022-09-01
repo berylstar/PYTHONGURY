@@ -54,6 +54,7 @@ class Character(pygame.sprite.Sprite):
         self.to = [0,0,0,0]
 
 ##### MONSTER CLASS
+# "normal" / "shooter" / "alpha" / "runner" / "boss"
 class Mon_1(Character):
     def __init__(self):
         image_group = monster_1_images
@@ -79,7 +80,7 @@ class Mon_ghost(Character):
         image_group = ghost_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "ghost"
+        self.type = "alpha"
 
         self.hp = 15
         self.speed = 0.1
@@ -94,9 +95,9 @@ class Mon_ember(Character):
         self.hp = 10
         self.speed = 0.05
 
-class Mon_runner(Character):
+class Mon_skel(Character):
     def __init__(self):
-        image_group = runner_images
+        image_group = mon_skel_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "runner"
@@ -124,11 +125,11 @@ monster_group = pygame.sprite.Group()
 monster_con = MonsterController()
 
 ###### about npc
-father_slime = Character(father_slime_images, (540, 360))
-skeleton = Character(skeleton_images, (840, 600))
-ghost = Character(ghost_images, (800, 150))
+npc_faslime = Character(father_slime_images, (540, 360))
+npc_coffin = Character(coffin_images, (840, 600))
+npc_ghost = Character(ghost_images, (800, 150))
 
 npc_group = pygame.sprite.Group()
-npc_group.add(father_slime, skeleton, ghost)
+npc_group.add(npc_faslime, npc_coffin, npc_ghost)
 
 ##### about monster

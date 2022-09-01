@@ -35,7 +35,6 @@ def scene_title_game():
                     if index == 0:
                         ready = False
                     elif index == 1:
-                        ready = False
                         scene_esc(True)
                     elif index == 2:
                         ready = False
@@ -401,7 +400,6 @@ def scene_esc(doing):
                         running = False
                 if event.key == pygame.K_ESCAPE:
                     doing = False
-                print(index)
 
         # pygame.display.toggle_fullscreen()
 
@@ -450,7 +448,7 @@ def make_floor_zero():
     field_group.empty()
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
-    field_group.add(light,torch)
+    field_group.add(torch)
     random_for_sale()
     player.rect = player.image.get_rect(center=player_first_position)
     player.hp = player.max_hp
@@ -462,11 +460,11 @@ def floor_zero():
     npc_group.draw(screen)
 
     for punch in punch_group:
-        if pygame.sprite.collide_mask(punch, father_slime):
+        if pygame.sprite.collide_mask(punch, npc_faslime):
             player.stop()
             scene_tutorial(True)
 
-        if pygame.sprite.collide_mask(punch, skeleton):
+        if pygame.sprite.collide_mask(punch, npc_coffin):
             player.stop()
             scene_skeleton_shop(True)
 
@@ -570,9 +568,9 @@ def drop_item(monster):
     if monster.type == "boss":
         item_group.add(Item(box_image, monster.position, "box"))
     else:
-        if randprob <= item_con.prob_portion:
-            item_group.add(Item(portion_image, monster.position, "portion"))
-        elif item_con.prob_portion < randprob <= item_con.prob_portion + item_con.prob_coin:
+        if randprob <= item_con.prob_potion:
+            item_group.add(Item(potion_image, monster.position, "potion"))
+        elif item_con.prob_potion < randprob <= item_con.prob_potion + item_con.prob_coin:
             item_group.add(Item(coin_image, monster.position, "coin"))
 
 def put_on_pixel(position):
@@ -589,13 +587,12 @@ def put_on_pixel(position):
     fin_y = (y_ahrt + y_skajwl) * 60 + 30
 
     pixel_position = (fin_x,fin_y)
-    print(pixel_position)
 
     return pixel_position
 
 def item_effect(item):
-    if item.info == "portion":
-        player.hp = min(player.hp + item_con.portion_eff, player.max_hp)
+    if item.info == "potion":
+        player.hp = min(player.hp + item_con.potion_eff, player.max_hp)
     if item.info == "coin":
         player.coin += 1
     if item.info == "box":
@@ -620,7 +617,7 @@ def equip_effect():
 
     if equip_ice in equip_con.equipped_group:
         if not equip_ice.is_effected:
-            player.speed += 0.2
+            player.speed += 0.1
             equip_ice.is_effected = True
 
     if equip_dice in equip_con.equipped_group:
@@ -636,7 +633,7 @@ def equip_effect():
 
     if equip_greentea in equip_con.equipped_group:
         if not equip_greentea.is_effected:
-            item_con.portion_eff += 5
+            item_con.potion_eff += 5
             equip_greentea.is_effected = True
 
     if equip_mandoo in equip_con.equipped_group:
@@ -678,7 +675,7 @@ def remove_from_equipped_group(equip):
             player.punch = punch_d_image
 
         if equip == equip_greentea:
-            item_con.portion_eff -= 5
+            item_con.potion_eff -= 5
 
         # not remove effect mandoo
 
@@ -719,7 +716,7 @@ def monster_shooting():
                 if monster.direction == "LEFT":
                     image = ember_attack_image
                 elif monster.direction == "RIGHT":
-                    image = pygame.transform.rotozoom(ember_attack_image, 180, 1)
+                    image = pygame.transform.flip(ember_attack_image, True, False)
                 elif monster.direction == "UP":
                     image = pygame.transform.rotozoom(ember_attack_image, 270, 1)
                 elif monster.direction == "DOWN":
@@ -732,7 +729,7 @@ def monster_clocking():
     randprob = random.randrange(0,101)
 
     for monster in monster_group:
-        if monster.type == "ghost":
+        if monster.type == "alpha":
             if 0 <= randprob <= 50:
                 monster.image.set_alpha(60)
             elif 80 < randprob:
@@ -764,7 +761,7 @@ class Player(Character):
         if self.direction == "LEFT":
             position = (self.rect.centerx-40, self.rect.centery)
         elif self.direction == "RIGHT":
-            image = pygame.transform.rotozoom(image, 180, 1)
+            image = pygame.transform.flip(image, True, False)
             position = (self.rect.centerx+40, self.rect.centery)
         elif self.direction == "UP":
             image = pygame.transform.rotozoom(image, 270, 1)
@@ -891,13 +888,14 @@ while running:
     
     display_game_ui()                                                                  #UI
     # screen.blit(background_zero, (340,60))                                             #BACKGROUND
-    field_group.draw(screen)                                                           #FIELD
+    for field in field_group:
+        field.draw(screen)                                                           #FIELD
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
         #for 0.4 second
         player.image_update()
-        ghost.image_update()
+        npc_ghost.image_update()
     a_counter = milli_time
 
     if floor == 0:
@@ -966,9 +964,9 @@ while running:
 
     for shoot in shooting_group:
         shoot.shoot()
-        shoot.draw(screen)
+        shoot.draw(screen)                                                              # MONSTER SHOOING
         if pygame.sprite.collide_mask(shoot, player):
-            player.hp -= 10
+            player.hp -= 5
             player.image = player_damaged_image
             shooting_group.remove(shoot)
 

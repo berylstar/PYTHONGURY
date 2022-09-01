@@ -24,14 +24,17 @@ monster_1_images = [pygame.image.load(os.path.join(file_path, "images\\monster_1
 monster_2_images = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png")).convert_alpha()]
 monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png")).convert_alpha()]
 
-mon_skeleton_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\skeleton.png")).convert_alpha(),]
+mon_skel_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\skel.png")).convert_alpha(),]
 mon_ember_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\ember.png")).convert_alpha(),]
 ember_attack_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_attack.png")).convert_alpha()
 runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png")).convert_alpha()]
 
 ##### NPC
 father_slime_images = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
-skeleton_images = [pygame.image.load(os.path.join(file_path, "design\\gwan1.png")).convert_alpha()]
+coffin_images = [
+    pygame.image.load(os.path.join(file_path, "design\\coffin_0.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\coffin_1.png")).convert_alpha()
+]
 ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
@@ -63,8 +66,9 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\0F.png"))
 
 
 ##### ITEM
-portion_image = pygame.image.load(os.path.join(file_path, "images\\portion.png")).convert_alpha()
-coin_image = pygame.image.load(os.path.join(file_path, "images\\coin_2.png")).convert_alpha()
+potion_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_potion.png")).convert_alpha()
+coin_image = pygame.image.load(os.path.join(file_path, "design\\item\\coin.png")).convert_alpha()
+# coin_image = pygame.transform.rotozoom(coin_image, 0, 0.7)
 box_image = pygame.image.load(os.path.join(file_path, "images\\box.png")).convert_alpha()
 
 

@@ -1,4 +1,3 @@
-from distutils.spawn import spawn
 import pygame
 import random
 
@@ -49,7 +48,7 @@ def prob_spawn_monster(floor):
     elif randprob % 3 == 1:
         return Mon_ember()
     else:
-        return Mon_runner()
+        return Mon_skel()
 
 def spawn_monster(pos, floor, monster_kind=None):
     if not monster_kind:
@@ -107,8 +106,8 @@ def random_field_setting():
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
         # spawn_monster(pos, floor, Mon_1())
-        spawn_monster(pos, floor, Mon_ember())
-        spawn_monster(pos, floor, Mon_ember())
+        spawn_monster(pos, floor, Mon_skel())
+        spawn_monster(pos, floor, Mon_skel())
         spawn_monster(pos, floor, Mon_ember())
         spawn_monster(pos, floor, Mon_ember())
     elif 7 <= floor < 12:
