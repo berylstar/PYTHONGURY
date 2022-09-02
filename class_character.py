@@ -77,7 +77,7 @@ class Mon_2(Character):
 
 class Mon_ghost(Character):
     def __init__(self):
-        image_group = ghost_images
+        image_group = mon_ghost_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "alpha"

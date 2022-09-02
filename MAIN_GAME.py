@@ -34,6 +34,7 @@ def scene_title_game():
                 if event.key == pygame.K_SPACE:
                     if index == 0:
                         ready = False
+                        scene_story(True)
                     elif index == 1:
                         scene_esc(True)
                     elif index == 2:
@@ -46,41 +47,52 @@ def scene_title_game():
             color[i] = GRAY
         color[index] = BLACK
 
-        screen.fill((60,60,60))
-        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)
+        screen.fill((60,60,60))     # 타이틀 배경 이미지로 대체
+        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
         screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
         screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
         screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
         pygame.display.update()
 
-def display_game_ui():
-    screen.fill(BLACK)
-    pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)              #MAIN GAME
-    pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)              #INFO
-    pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1)              #INVEN
-    screen.blit(background_zero, (340,60))
-    background_zero.set_alpha(255)
+# def display_game_ui():
+#     screen.fill(BLACK)
+#     # pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)              #MAIN GAME
     
-    screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                           #FLOOR MESSAGE
+#     # screen.blit(background_zero, (340,60))
+#     background_zero.set_alpha(255)
 
-    screen_message(f"HP: {int(player.hp)}", WHITE, (240,190), game_font_m)                   #HP MESSAGE
+#     ui_info()
+#     ui_inventory()
+    
+def ui_info():
+    pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)  # 일단 쓰고
+
+
+    pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
+    pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)
+    screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                              #FLOOR
+
+    screen_message(f"HP: {int(player.hp)}", WHITE, (240,190), game_font_m)                  #HP
 
     coin_image_rect = coin_image.get_rect(center=(215, 290))
     screen.blit(coin_image, coin_image_rect)
-    screen_message(f"       x{player.coin}", WHITE, (220,290), game_font_m)      #COIN MESSAGE
+    screen_message(f"       x{player.coin}", WHITE, (220,290), game_font_m)                 #COIN
 
     life_image_rect = player_icon.get_rect(center=(220, 390))
     screen.blit(player_icon, life_image_rect)
-    screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)      #LIFE MESSAGE
+    screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)                  #LIFE
 
-    for i in range(MAX_COL+2):                                                      #INVENTORY
+def ui_inventory():
+    pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))     # 인벤 이미지로 대체
+    pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1) 
+    for i in range(MAX_COL+2):
         pygame.draw.line(screen, D_GRAY, (950 + 60*i, 240), (950 + 60*i, 600))
     for i in range(MAX_ROW+2):
         pygame.draw.line(screen, D_GRAY, (950, 240 + 60*i), (1130, 240 + 60*i))
     pygame.draw.rect(screen, D_GRAY, ((950, 70), (180, 160)), 1)
 
     for equip in equip_con.equipped_group:
-        equip.draw(screen)
+        equip.draw(screen)                                                                  #EQUIP
 
     if is_inven_overlapped(equip_con.equipped_group):
         screen_message("CHECK EQUIPS !", RED, (1040,150), game_font_s)
@@ -89,32 +101,7 @@ def scene_story(doing):
     global running
 
     index = 0
-    fin = len(story_images)
-
-    while doing:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                doing = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    index += 1
-                    if index == fin-1:
-                        doing = False
-                if event.key == pygame.K_ESCAPE:
-                    scene_esc(True)
-
-        image_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
-
-        screen.fill(GREEN)
-        screen.blit(story_images[index], image_rect)
-        pygame.display.update()
-
-def scene_tutorial(doing):
-    global running
-
-    index = 0
-    fin = len(tuto_images) - 1
+    fin = len(story_images)-1
 
     while doing:
         for event in pygame.event.get():
@@ -130,19 +117,42 @@ def scene_tutorial(doing):
                 if event.key == pygame.K_ESCAPE:
                     scene_esc(True)
 
-        display_game_ui()
-        background_zero.set_alpha(60)
+        story_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
 
-        tuto_rect = tuto_images[index].get_rect(center=(640, 300))
+        screen.fill(BLACK)          # 스토리 배경 이미지로 대체 - 타이틀 배경 이미지도 가능
+        screen.blit(story_images[index], story_rect)                                        #STORY IMAGE
+        pygame.display.update()
+
+def scene_tutorial(doing):
+    global running
+
+    index = 0
+    fin = len(tuto_images)-1
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if index >= fin:
+                        doing = False
+                    else:
+                        index += 1
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
+
+        tuto_rect = tuto_images[index].get_rect(center=(640, 360))
         msg = "NEXT"
         if index >= fin:
             msg = "PRESS 'SPACE BAR' TO BACK"
 
-        screen.blit(tuto_images[index], tuto_rect)
+        screen.blit(tuto_images[index], tuto_rect)                                          # TUTORIAL
         screen_message(msg, WHITE, (640,640), game_font_m)
-        pygame.display.update()
+        pygame.display.update(main_rect)
 
-def scene_skeleton_shop(doing):
+def scene_shop(doing):
     global running
 
     while doing:
@@ -173,18 +183,44 @@ def scene_skeleton_shop(doing):
                 if event.key == pygame.K_ESCAPE:
                     scene_esc(True)
 
-        display_game_ui()
-        background_zero.set_alpha(60)
+        screen.blit(test_image, (340,60))      # 상점 이미지로 대체
+        # ui_info()
+        ui_inventory()
 
-        equip_showcase(0, equip_con.for_sale[0])
-        equip_showcase(1, equip_con.for_sale[1])
-        equip_showcase(2, equip_con.for_sale[2])
+        shop_showcase(0, equip_con.for_sale[0])
+        shop_showcase(1, equip_con.for_sale[1])
+        shop_showcase(2, equip_con.for_sale[2])
 
-        shop_rect = shop_image.get_rect(center=(640, 200))
-
-        screen.blit(shop_image, shop_rect)
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
-        pygame.display.update()
+        pygame.display.update(main_rect)
+        pygame.display.update(inven_rect)
+
+def shop_showcase(index, equip):           # 상점 가판대 이미지로 대체
+    sero = 350
+    pygame.draw.rect(screen, WHITE, ((420 + 150*index,sero),(140,260)), 2)
+    screen_message(str(index+1), WHITE, (490 + 150*index,sero+20), game_font_m)
+
+    if equip_con.can_buy[index]:
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (550 + 150*index, sero+40))
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+100), (550 + 150*index, sero+100))
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+160), (550 + 150*index, sero+160))
+        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (430 + 150*index, sero+160))
+        pygame.draw.line(screen, GRAY, (490 + 150*index, sero+40), (490 + 150*index, sero+160))
+        pygame.draw.line(screen, GRAY, (550 + 150*index, sero+40), (550 + 150*index, sero+160))
+        # equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
+        equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
+        screen.blit(equip.image, equip_rect)
+
+        screen_message(equip.name, WHITE, (490 + 150*index, sero+185), game_font_s)
+
+        coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
+        coin_rect = coin_image_r.get_rect(center=(470 + 150*index,sero+230))
+        screen.blit(coin_image_r, coin_rect)
+
+        screen_message(f"x{equip.price}", WHITE, (500 + 150*index, sero+230), game_font_m)
+    else:
+        case_rect = sold_out_image.get_rect(center=(490 + 150*index,sero+130))
+        screen.blit(sold_out_image, case_rect)
 
 def scene_player_dead(doing):
     global running
@@ -201,12 +237,10 @@ def scene_player_dead(doing):
                 if event.key == pygame.K_ESCAPE:
                     scene_esc(True)
 
-        display_game_ui()
-        background_zero.set_alpha(60)
-
+        screen.blit(test_image, (340,60))      # 죽을 때 배경 이미지로 대체
         screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
-        pygame.display.update()
+        pygame.display.update(main_rect)
 
 def scene_game_over(doing):
     global running, ready
@@ -224,7 +258,7 @@ def scene_game_over(doing):
                 if event.key == pygame.K_ESCAPE:
                     scene_esc(True)
 
-        screen.fill(BLACK)
+        screen.fill(BLACK)      # 게임 오버 이미지로 대체 해도되고 그냥 검은 화면으로 해도 되고
         screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
         screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
@@ -294,16 +328,13 @@ def scene_inventory(doing):
                     scene_esc(True)
                     doing = False
 
-        inven_rect = pygame.Rect(((940,60), (200, 600)))
-
-        display_game_ui()
+        ui_inventory()
 
         if picked_equip and not is_inven_overlapped(equip_con.equipped_group):
             screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
             screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_s)
             screen_message(picked_equip.msg_eff, WHITE, (1040,180), game_font_s)
     
-        
         cursor.draw(screen)
         pygame.display.update(inven_rect)
 
@@ -340,13 +371,13 @@ def scene_treasure_box(doing):
                 if event.key == pygame.K_ESCAPE:
                     scene_esc(True)
 
-        display_game_ui()
-        background_zero.set_alpha(60)
+        screen.blit(test_image, (340,60))
+        ui_inventory()
 
         zero_rect = choice_equip[0].image.get_rect(center=(490,450))
         one_rect = choice_equip[1].image.get_rect(center=(790,450))
         
-        if choice:
+        if choice:          # 보물 상자 이미지 대체
             screen_message("<1>", WHITE, (490, 350), game_font_m)
             screen.blit(choice_equip[0].image, zero_rect)
             screen_message(choice_equip[0].name, WHITE, (490,550), game_font_m)
@@ -364,7 +395,8 @@ def scene_treasure_box(doing):
         shop_rect = shop_image.get_rect(center=(640, 200))
         screen.blit(shop_image, shop_rect)
         
-        pygame.display.update()
+        pygame.display.update(main_rect)
+        pygame.display.update(inven_rect)
 
 def scene_esc(doing):
     global running
@@ -408,13 +440,11 @@ def scene_esc(doing):
 
         # pygame.display.toggle_fullscreen()
 
-        main_rect = pygame.Rect(((340,60), (600, 600)))
-
         for i in range(len(color)):
             color[i] = GRAY
         color[index] = BLACK
 
-        screen.fill((60,60,60))
+        screen.blit(test_image, (340,60))
 
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)
         screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
@@ -471,7 +501,7 @@ def floor_zero():
 
         if pygame.sprite.collide_mask(punch, npc_coffin):
             player.stop()
-            scene_skeleton_shop(True)
+            scene_shop(True)
 
 def next_floor(pos):
     global floor
@@ -485,13 +515,6 @@ def next_floor(pos):
     stair.image = stair_images[1]
 
     floor_setting(pos, floor)
-    
-def equip_for_sale(index, equip):
-    if equip_con.can_buy[index] and player.coin >= equip.price:
-        equip_con.equipped_group.append(equip)
-        player.coin -= equip.price
-        equip_con.can_buy[index] = False
-        equip_con.able_equip_group.remove(equip)
 
 def random_for_sale():
     random.shuffle(equip_con.able_equip_group)
@@ -502,32 +525,12 @@ def random_for_sale():
         equip_con.for_sale[i] = equip_con.able_equip_group[i]
         equip_con.can_buy[i] = True
 
-def equip_showcase(index, equip):
-    sero = 350
-    pygame.draw.rect(screen, WHITE, ((420 + 150*index,sero),(140,260)), 2)
-    screen_message(str(index+1), WHITE, (490 + 150*index,sero+20), game_font_m)
-
-    if equip_con.can_buy[index]:
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (550 + 150*index, sero+40))
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+100), (550 + 150*index, sero+100))
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+160), (550 + 150*index, sero+160))
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (430 + 150*index, sero+160))
-        pygame.draw.line(screen, GRAY, (490 + 150*index, sero+40), (490 + 150*index, sero+160))
-        pygame.draw.line(screen, GRAY, (550 + 150*index, sero+40), (550 + 150*index, sero+160))
-        # equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
-        equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
-        screen.blit(equip.image, equip_rect)
-
-        screen_message(equip.name, WHITE, (490 + 150*index, sero+185), game_font_s)
-
-        coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
-        coin_rect = coin_image_r.get_rect(center=(470 + 150*index,sero+230))
-        screen.blit(coin_image_r, coin_rect)
-
-        screen_message(f"x{equip.price}", WHITE, (500 + 150*index, sero+230), game_font_m)
-    else:
-        case_rect = sold_out_image.get_rect(center=(490 + 150*index,sero+130))
-        screen.blit(sold_out_image, case_rect)
+def equip_for_sale(index, equip):
+    if equip_con.can_buy[index] and player.coin >= equip.price:
+        equip_con.equipped_group.append(equip)
+        player.coin -= equip.price
+        equip_con.can_buy[index] = False
+        equip_con.able_equip_group.remove(equip)
 
 def player_move_key():
     if event.type == pygame.KEYDOWN:
@@ -862,6 +865,10 @@ punch_group = pygame.sprite.Group()
 ##### MONSTER
 shooting_group = pygame.sprite.Group()
 
+main_rect = pygame.Rect(((340,60), (600, 600)))
+info_rect = pygame.Rect(((140,60), (200, 600)))
+inven_rect = pygame.Rect(((940,60), (200, 600)))
+full_rect = pygame.Rect((140,60), (1000,600))
 ##############################################################################################
 ready = True
 running = True
@@ -892,11 +899,9 @@ while running:
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
-    display_game_ui()                                                                  #UI
-    # screen.blit(background_zero, (340,60))                                             #BACKGROUND
-    # for field in field_group:
-    #     field.draw(screen)                                                           #FIELD
-    field_group.draw(screen)
+    screen.fill(BLACK)      # 메인 배경 이미지로 대체
+    screen.blit(background_zero, (340,60))                                              #BACKGROUND
+    field_group.draw(screen)                                                            #FIELD
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
@@ -971,7 +976,7 @@ while running:
 
     for shoot in shooting_group:
         shoot.shoot()
-        shoot.draw(screen)                                                              # MONSTER SHOOING
+        shoot.draw(screen)                                                              #MONSTER SHOOING
         if pygame.sprite.collide_mask(shoot, player):
             player.hp -= 5
             player.image = player_damaged_image
@@ -987,6 +992,10 @@ while running:
             item_group.remove(item)
 
     player.draw(screen)                                                                 #PLAYER
+
+    # 배경 껍데기 이미지 필요함 - 펀치 나가는거 안보이는 용도
+    ui_info()
+    ui_inventory()
 
     if running: 
         pygame.display.update()

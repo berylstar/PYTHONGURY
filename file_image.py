@@ -28,6 +28,11 @@ mon_skel_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\s
 mon_ember_images = [pygame.image.load(os.path.join(file_path, "design\\monster\\ember.png")).convert_alpha(),]
 ember_attack_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_attack.png")).convert_alpha()
 runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png")).convert_alpha()]
+mon_ghost_images = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_0.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_2.png")).convert_alpha(),
+]
 
 ##### NPC
 father_slime_images = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
@@ -96,8 +101,7 @@ story_images = [
 ]
 
 tuto_images = [
-    pygame.image.load(os.path.join(file_path, "images\\xx.png")).convert_alpha(),
-    pygame.image.load(os.path.join(file_path, "images\\tuto.png")).convert_alpha()
+
 ]
 
 shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png")).convert_alpha()
@@ -109,3 +113,16 @@ cursor_images = [
 ]
 skill_c_image = pygame.image.load(os.path.join(file_path, "images\\skill_c.png")).convert_alpha()
 skill_v_image = pygame.image.load(os.path.join(file_path, "images\\skill_v.png")).convert_alpha()
+
+
+# 테스트 용
+test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
+story_images = [
+    pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
+    pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
+]
+
+tuto_images = [
+    pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
+    pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
+]
