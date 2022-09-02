@@ -74,9 +74,10 @@ def display_game_ui():
     screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)      #LIFE MESSAGE
 
     for i in range(MAX_COL+2):                                                      #INVENTORY
-        pygame.draw.line(screen, D_GRAY, (950 + 60*i, 180), (950 + 60*i, 540))
+        pygame.draw.line(screen, D_GRAY, (950 + 60*i, 240), (950 + 60*i, 600))
     for i in range(MAX_ROW+2):
-        pygame.draw.line(screen, D_GRAY, (950, 180 + 60*i), (1130, 180 + 60*i))
+        pygame.draw.line(screen, D_GRAY, (950, 240 + 60*i), (1130, 240 + 60*i))
+    pygame.draw.rect(screen, D_GRAY, ((950, 70), (180, 160)), 1)
 
     for equip in equip_con.equipped_group:
         equip.draw(screen)
@@ -238,7 +239,7 @@ def scene_inventory(doing):
     for monster in monster_group:
         monster.direction = "NONE"
 
-    cursor = Cursor(cursor_images[0], (980,210))
+    cursor = Cursor(cursor_images[0], (980,270))
     picked_equip = None
 
     while doing:
@@ -293,11 +294,15 @@ def scene_inventory(doing):
                     scene_esc(True)
                     doing = False
 
-        display_game_ui()
-        # background_zero.set_alpha(60)
-
         inven_rect = pygame.Rect(((940,60), (200, 600)))
-        main_rect = pygame.Rect(((140,60), (200, 600)))
+
+        display_game_ui()
+
+        if picked_equip and not is_inven_overlapped(equip_con.equipped_group):
+            screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
+            screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_s)
+            screen_message(picked_equip.msg_eff, WHITE, (1040,180), game_font_s)
+    
         
         cursor.draw(screen)
         pygame.display.update(inven_rect)
@@ -853,8 +858,9 @@ player_first_position = (700, 360)
 player = Player(player_images, player_first_position)
 
 punch_group = pygame.sprite.Group()
-shooting_group = pygame.sprite.Group()
 
+##### MONSTER
+shooting_group = pygame.sprite.Group()
 
 ##############################################################################################
 ready = True

@@ -40,10 +40,10 @@ class Cursor(pygame.sprite.Sprite):
         elif self.rect.centerx > 1100:
             self.rect.centerx = 1100
 
-        if self.rect.centery < 210:
-            self.rect.centery = 210
-        elif self.rect.centery > 510:
-            self.rect.centery = 510
+        if self.rect.centery < 270:
+            self.rect.centery = 270
+        elif self.rect.centery > 570:
+            self.rect.centery = 570
 
         self.position = (self.rect.centerx, self.rect.centery)
 ##############################################################################################
@@ -53,6 +53,10 @@ class Equip(pygame.sprite.Sprite):
         super().__init__()
         self.image = image
         self.name = None
+
+        self.msg_name = None
+        self.msg_info = None
+        self.msg_eff = None
         
         self.row = index[0]
         self.col = index[1]
@@ -114,6 +118,10 @@ class e_Battery(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Battery"
+        self.msg_name = "battery"
+        self.msg_info = "full charged !"
+        self.msg_eff = "move speed +"
+
         self.max_row = 4
         # self.max_col = 2
 
@@ -262,6 +270,7 @@ class EquipController():
 ##### active controller
 class SkillController():
     def __init__(self):
+
         self.active_sandclock = [False, 0]
 
     def active_time(self):
@@ -282,12 +291,13 @@ MAX_ROW = 5
 MAX_COL = 2
 
 inven_position = [
-    [(950,180),(1010,180),(1070,180)],
+    # [(950,180),(1010,180),(1070,180)],
     [(950,240),(1010,240),(1070,240)],
     [(950,300),(1010,300),(1070,300)],
     [(950,360),(1010,360),(1070,360)],
     [(950,420),(1010,420),(1070,420)],
-    [(950,480),(1010,480),(1070,480)]
+    [(950,480),(1010,480),(1070,480)],
+    [(950,540),(1010,540),(1070,540)]
     ]
 
 # EQUIPS
