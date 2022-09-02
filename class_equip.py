@@ -1,6 +1,5 @@
 import pygame
 from file_image import *
-from class_character import monster_group
 ##############################################################################################
 def is_inven_overlapped(equip_group):
     flag = False
@@ -118,9 +117,6 @@ class e_Battery(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Battery"
-        self.msg_name = "battery"
-        self.msg_info = "full charged !"
-        self.msg_eff = "move speed +"
 
         self.max_row = 4
         # self.max_col = 2
@@ -252,7 +248,24 @@ class e_Bone(Equip):
         # self.max_col = 2
 
         self.price = 0
+##############################################################################################
+#real equip
 
+##### straw class
+class e_Straw(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Straw"
+        self.msg_name = "빨대"
+        self.msg_info = "포션도 빨아먹어야 제 맛"
+        self.msg_eff = "포션 회복량 + 5"
+
+        self.max_row = 3
+        # self.max_col = 2
+
+        # self.price = 
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -312,6 +325,8 @@ equip_greentea = e_Greentea()
 equip_mandoo = e_Mandoo()
 equip_ancientbook = e_AncientBook()
 equip_bone = e_Bone()
+#####
+equip_straw = e_Straw()
 
 skill_con = SkillController()
 equip_con = EquipController()

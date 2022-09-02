@@ -4,7 +4,6 @@ import os
 screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("No More Slime")
 
 file_path = os.path.dirname(__file__)
 
@@ -15,6 +14,7 @@ player_images =[
     pygame.image.load(os.path.join(file_path, "design\\c_main0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\c_main2.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\c_main1.png")).convert_alpha(),
 ]
 player_damaged_image = pygame.image.load(os.path.join(file_path, "design\\c_main_red.png")).convert_alpha()
 
@@ -32,7 +32,9 @@ mon_ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_2.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
 ]
+mon_slime_images = [pygame.image.load(os.path.join(file_path, "images\\slime.png")).convert_alpha(),]
 
 ##### NPC
 father_slime_images = [pygame.image.load(os.path.join(file_path, "images\\father_slime.png")).convert_alpha()]
@@ -44,6 +46,7 @@ ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_0.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_2.png")).convert_alpha(),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")).convert_alpha(),
 ]
 
 
@@ -62,7 +65,7 @@ torch_images = [
     pygame.image.load(os.path.join(file_path, "design\\fire.png")).convert_alpha(),
 ]
 light_image = pygame.image.load(os.path.join(file_path, "images\\light.png")).convert_alpha()
-light_image = pygame.transform.rotozoom(light_image, 0, 2.5)
+# light_image = pygame.transform.rotozoom(light_image, 0, 2.5)
 light_image.set_alpha(80)
 
 

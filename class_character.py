@@ -23,8 +23,7 @@ class Character(pygame.sprite.Sprite):
 
         self.i_i += 1
         if self.i_i == g_len:
-            self.i_i = 1
-            self.image_group.reverse()
+            self.i_i = 0
 
     def draw(self, screen):
         if self.direction == "LEFT":
@@ -104,6 +103,29 @@ class Mon_skel(Character):
 
         self.hp = 10
         self.speed = 0.2
+
+class Mon_slime(Character):
+    def __init__(self):
+        image_group = mon_slime_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "slime"
+
+        self.hp = 10
+        self.speed = 0.1
+
+    def division(self, mon, direction):
+        monster1 = mon
+        monster1.position = self.position
+        monster1.rect = self.rect
+        monster1.direction == direction
+        monster_group.add(monster1)
+
+        # monster2 = Mon_skel()
+        # monster2.position = self.position
+        # monster2.rect = self.rect
+        # monster2.direction == direction
+        # monster_group.add(monster2)
 
 class Mon_boss(Character):
     def __init__(self):

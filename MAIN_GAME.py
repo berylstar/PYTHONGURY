@@ -1,3 +1,4 @@
+from cgi import test
 import pygame
 import random
 
@@ -45,7 +46,7 @@ def scene_title_game():
 
         for i in range(len(color)):
             color[i] = GRAY
-        color[index] = BLACK
+        color[index] = GREEN
 
         screen.fill((60,60,60))     # 타이틀 배경 이미지로 대체
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
@@ -53,18 +54,8 @@ def scene_title_game():
         screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
         screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
         pygame.display.update()
-
-# def display_game_ui():
-#     screen.fill(BLACK)
-#     # pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)              #MAIN GAME
     
-#     # screen.blit(background_zero, (340,60))
-#     background_zero.set_alpha(255)
-
-#     ui_info()
-#     ui_inventory()
-    
-def ui_info():
+def display_info_ui():
     pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)  # 일단 쓰고
 
 
@@ -82,7 +73,7 @@ def ui_info():
     screen.blit(player_icon, life_image_rect)
     screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)                  #LIFE
 
-def ui_inventory():
+def display_inven_ui():
     pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))     # 인벤 이미지로 대체
     pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1) 
     for i in range(MAX_COL+2):
@@ -184,8 +175,8 @@ def scene_shop(doing):
                     scene_esc(True)
 
         screen.blit(test_image, (340,60))      # 상점 이미지로 대체
-        # ui_info()
-        ui_inventory()
+        # display_info_ui()
+        display_inven_ui()
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -292,10 +283,11 @@ def scene_inventory(doing):
                         equip_effect()
 
                 if event.key == pygame.K_r:
-                    remove_from_equipped_group(picked_equip)
-                    cursor.clicking = False
-                    cursor.image = cursor_images[0]
-                    picked_equip = None
+                    if picked_equip:
+                        remove_from_equipped_group(picked_equip)
+                        cursor.clicking = False
+                        cursor.image = cursor_images[0]
+                        picked_equip = None
 
                 if event.key == pygame.K_SPACE:
                     if cursor.clicking:
@@ -328,7 +320,7 @@ def scene_inventory(doing):
                     scene_esc(True)
                     doing = False
 
-        ui_inventory()
+        display_inven_ui()
 
         if picked_equip and not is_inven_overlapped(equip_con.equipped_group):
             screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
@@ -372,7 +364,7 @@ def scene_treasure_box(doing):
                     scene_esc(True)
 
         screen.blit(test_image, (340,60))
-        ui_inventory()
+        display_inven_ui()
 
         zero_rect = choice_equip[0].image.get_rect(center=(490,450))
         one_rect = choice_equip[1].image.get_rect(center=(790,450))
@@ -393,7 +385,7 @@ def scene_treasure_box(doing):
             screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
 
         shop_rect = shop_image.get_rect(center=(640, 200))
-        screen.blit(shop_image, shop_rect)
+        screen.blit(shop_image, shop_rect)      # 보물상자 이미지 대체
         
         pygame.display.update(main_rect)
         pygame.display.update(inven_rect)
@@ -401,7 +393,7 @@ def scene_treasure_box(doing):
 def scene_esc(doing):
     global running
 
-    option = ["RESUME", "SCREEN SETTING", "SOUND SETTING", "EXIT"]
+    option = ["RESUME", "FULL SCREEN", "SOUND SETTING", "EXIT"]
     color = [GRAY, GRAY, GRAY, GRAY]
     index = 0
 
@@ -429,7 +421,8 @@ def scene_esc(doing):
                     if index == 0:
                         doing = False
                     elif index == 1:
-                        pass
+                        pygame.display.toggle_fullscreen()
+                        pygame.display.update()
                     elif index == 2:
                         pass
                     elif index == 3:
@@ -438,15 +431,12 @@ def scene_esc(doing):
                 if event.key == pygame.K_ESCAPE:
                     doing = False
 
-        # pygame.display.toggle_fullscreen()
-
         for i in range(len(color)):
             color[i] = GRAY
-        color[index] = BLACK
+        color[index] = GREEN
 
-        screen.blit(test_image, (340,60))
+        screen.fill((60,60,60))     # ESC 이미지로 대체
 
-        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)
         screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
         screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
         screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
@@ -507,6 +497,7 @@ def next_floor(pos):
     global floor
 
     floor += 1
+
     if floor % 10 == 0:
         player.hp += 10
 
@@ -581,22 +572,22 @@ def drop_item(monster):
         elif item_con.prob_potion < randprob <= item_con.prob_potion + item_con.prob_coin:
             item_group.add(Item(coin_image, monster.position, "coin"))
 
-def put_on_pixel(position):
-    x = position[0]
-    y = position[1]
+# def put_on_pixel(position):
+#     x = position[0]
+#     y = position[1]
 
-    x_ahrt = x // 60
-    x_skajwl = round((x % 60) / 60)
+#     x_ahrt = x // 60
+#     x_skajwl = round((x % 60) / 60)
 
-    y_ahrt = y // 60
-    y_skajwl = round((y % 60) / 60)
+#     y_ahrt = y // 60
+#     y_skajwl = round((y % 60) / 60)
 
-    fin_x = (x_ahrt + x_skajwl) * 60 + 10
-    fin_y = (y_ahrt + y_skajwl) * 60 + 30
+#     fin_x = (x_ahrt + x_skajwl) * 60 + 10
+#     fin_y = (y_ahrt + y_skajwl) * 60 + 30
 
-    pixel_position = (fin_x,fin_y)
+#     pixel_position = (fin_x,fin_y)
 
-    return pixel_position
+#     return pixel_position
 
 def item_effect(item):
     if item.info == "potion":
@@ -658,40 +649,46 @@ def equip_effect():
         if not equip_bone.is_effected:
             player.ap += 0.1
             equip_bone.is_effected = True
+
+    ######
+    if equip_straw in equip_con.equipped_group:
+        item_con.potion_eff += 5
+        equip_straw.is_effected = True
             
 def remove_from_equipped_group(equip):
-    if equip == None:
-        return
-    else:
-        if equip == equip_battery:
-            player.damaged_enemy += 0.2
+    if equip == equip_battery:
+        player.damaged_enemy += 0.2
 
-        if equip == equip_banana:
-            player.max_hp -= 20
-            player.hp = min(player.max_hp, player.hp)
+    if equip == equip_banana:
+        player.max_hp -= 20
+        player.hp = min(player.max_hp, player.hp)
 
-        if equip == equip_pepper:
-            player.ap -= 3
+    if equip == equip_pepper:
+        player.ap -= 3
 
-        if equip == equip_ice:
-            player.speed -= 0.1
+    if equip == equip_ice:
+        player.speed -= 0.1
 
-        if equip == equip_dice:
-            item_con.prob_coin -= 5
+    if equip == equip_dice:
+        item_con.prob_coin -= 5
 
-        if equip == equip_apple:
-            player.punch = punch_d_image
+    if equip == equip_apple:
+        player.punch = punch_d_image
 
-        if equip == equip_greentea:
-            item_con.potion_eff -= 5
+    if equip == equip_greentea:
+        item_con.potion_eff -= 5
 
-        # not remove effect mandoo
+    # not remove effect mandoo
 
-        if equip == equip_ancientbook:
-            player.damaged_time += 0.5
+    if equip == equip_ancientbook:
+        player.damaged_time += 0.5
 
-        if equip == equip_bone:
-            player.ap += 0.1
+    if equip == equip_bone:
+        player.ap += 0.1
+
+    #####
+    if equip == equip_straw:
+        item_con.potion_eff -= 5
 
     equip_con.equipped_group.remove(equip)
     equip_con.able_equip_group.append(equip)
@@ -742,6 +739,14 @@ def monster_clocking():
                 monster.image.set_alpha(60)
             elif 80 < randprob:
                 monster.image.set_alpha(255)
+
+def monster_die(monster):
+    if monster.type == "slime":
+        monster.division(Mon_1(), "LEFT")
+        monster.division(Mon_skel(), "RIGHT")
+    else:
+        drop_item(monster)
+    monster_group.remove(monster)
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -826,8 +831,10 @@ class Punch(pygame.sprite.Sprite):
             self.rect.x += 5
         elif self.direction == "UP":
             self.rect.y -= 5
-        elif self.direction == "DOWN" or "NONE":
+        elif self.direction == "DOWN":
             self.rect.y += 5
+        elif self.direction == "NONE":
+            pass
 
         if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
             shooting_group.remove(self)
@@ -969,8 +976,9 @@ while running:
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 if monster.hp <= 0:
-                    monster_group.remove(monster)
-                    drop_item(monster)
+                    # monster_group.remove(monster)
+                    # drop_item(monster)
+                    monster_die(monster)
                     if len(monster_group) == 0:
                         random_away_position(player.position, stair)
 
@@ -994,8 +1002,8 @@ while running:
     player.draw(screen)                                                                 #PLAYER
 
     # 배경 껍데기 이미지 필요함 - 펀치 나가는거 안보이는 용도
-    ui_info()
-    ui_inventory()
+    display_info_ui()
+    display_inven_ui()
 
     if running: 
         pygame.display.update()
