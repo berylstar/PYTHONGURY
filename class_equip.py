@@ -117,6 +117,9 @@ class e_Battery(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Battery"
+        self.msg_name = "건전지"
+        self.msg_info = "충전 완료 !충전 완료 !충전 완료 !충전 완료 !충전 완료 !"
+        self.msg_eff = "이동 속도 + 0.2"
 
         self.max_row = 4
         # self.max_col = 2
