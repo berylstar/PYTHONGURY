@@ -926,7 +926,8 @@ while running:
         if b_counter != second_time:
             #for 1 second
             player.hp -= player.damaged_time
-            random_monster_direction()
+            # random_monster_direction()
+            forward_monster_direction(player)
             monster_shooting()
             monster_clocking()
             skill_con.active_time()

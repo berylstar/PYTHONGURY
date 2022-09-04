@@ -85,6 +85,28 @@ def random_monster_direction():
             elif monster.rect.centery >= 660 - (monster.rect.height // 2):
                 monster.direction = "UP"
 
+def forward_monster_direction(target):
+    if monster_group and not monster_con.dontmove:
+        for monster in monster_group:
+            x = target.position[0] - monster.position[0]
+            y = target.position[1] - monster.position[1]
+            rand = random.randrange(0,10)
+
+            if rand < 5:
+                if x < -30 :
+                    monster.direction = "LEFT"
+                elif x > 30:
+                    monster.direction = "RIGHT"
+                else:
+                    monster.direction = "NONE"
+            else:
+                if y < -30:
+                    monster.direction = "UP"
+                elif y > 30:
+                    monster.direction = "DOWN"
+                else:
+                    monster.direction = "NONE"
+
 def random_field_setting():
     randprob = random.randrange(0,101)
 
