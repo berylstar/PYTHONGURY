@@ -174,7 +174,7 @@ def scene_shop(doing):
                     scene_esc(True)
 
         screen.blit(test_image, (340,60))      # 상점 이미지로 대체
-        # display_info_ui()
+        display_info_ui()
         display_inven_ui()
 
         shop_showcase(0, equip_con.for_sale[0])
@@ -182,8 +182,7 @@ def scene_shop(doing):
         shop_showcase(2, equip_con.for_sale[2])
 
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
-        pygame.display.update(main_rect)
-        pygame.display.update(inven_rect)
+        pygame.display.update()
 
 def shop_showcase(index, equip):           # 상점 가판대 이미지로 대체
     sero = 350
@@ -506,6 +505,21 @@ def next_floor(pos):
 
     floor_setting(pos, floor)
 
+def display_background(floor):
+    if floor >= 0:
+        background = background_zero
+    else:
+        background = None
+
+    screen.blit(background, (340,60))
+
+def show_animation():
+    player.image_update()
+    for npc in npc_group:
+        npc.image_update()
+    for monster in monster_group:
+        monster.image_update()
+
 def random_for_sale():
     random.shuffle(equip_con.able_equip_group)
 
@@ -602,11 +616,11 @@ def equip_effect():
             player.damaged_enemy -= 0.2
             equip_battery.is_effected = True
 
-    if equip_banana in equip_con.equipped_group:
-        if not equip_banana.is_effected:
-            player.max_hp += 20
-            player.hp += 20
-            equip_banana.is_effected = True
+    # if equip_banana in equip_con.equipped_group:
+    #     if not equip_banana.is_effected:
+    #         player.max_hp += 20
+    #         player.hp += 20
+    #         equip_banana.is_effected = True
 
     if equip_pepper in equip_con.equipped_group:
         if not equip_pepper.is_effected:
@@ -658,9 +672,9 @@ def remove_from_equipped_group(equip):
     if equip == equip_battery:
         player.damaged_enemy += 0.2
 
-    if equip == equip_banana:
-        player.max_hp -= 20
-        player.hp = min(player.max_hp, player.hp)
+    # if equip == equip_banana:
+    #     player.max_hp -= 20
+    #     player.hp = min(player.max_hp, player.hp)
 
     if equip == equip_pepper:
         player.ap -= 3
@@ -752,6 +766,8 @@ class Player(Character):
     def __init__(self, image_group, position):
         Character.__init__(self, image_group, position)
 
+        self.is_die = False
+
         self.life = 3
         self.hp = 100
         self.coin = 99
@@ -761,7 +777,7 @@ class Player(Character):
 
         self.ap = 10
         self.max_hp = 100
-        self.speed = 0.4
+        self.speed = 0.3
         self.punch = punch_d_image
         self.damaged_enemy = 0.7
         self.damaged_time = 1
@@ -786,22 +802,36 @@ class Player(Character):
     
     def skill_c(self):
         if self.equip_c:
-            self.equip_c.active_skill()
+            self.equip_c.active_skill(player)
     
     def skill_v(self):
         if self.equip_v:
-            self.equip_v.active_skill()
+            self.equip_v.active_skill(player)
 
     def die_motion(self):
-        self.image = pygame.transform.rotozoom(player_damaged_image, 180, 1)
+        flag = True
+        # while flag:
+        self.image = player_die_images[0].convert_alpha()
         self.draw(screen)
         pygame.display.update(self.rect)
         pygame.time.delay(1000)
 
-        self.image = water_image
+        self.image = player_die_images[1].convert_alpha()
         self.draw(screen)
         pygame.display.update(self.rect)
         pygame.time.delay(1000)
+
+        self.image = player_die_images[2].convert_alpha()
+        self.draw(screen)
+        pygame.display.update(self.rect)
+        pygame.time.delay(1000)
+
+        if self.life <= 0:
+            flag = False
+            scene_game_over(True)
+        else:
+            flag = False
+            scene_player_dead(True)
 
 #### PUNCH CLASS
 class Punch(pygame.sprite.Sprite):
@@ -901,23 +931,19 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 scene_esc(True)
 
-        if not is_inven_overlapped(equip_con.equipped_group):
+        if not is_inven_overlapped(equip_con.equipped_group) and not player.is_die:
             player_move_key()
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
     screen.fill(BLACK)      # 메인 배경 이미지로 대체
-    screen.blit(background_zero, (340,60))                                              #BACKGROUND
+    display_background(floor)                                                           #BACKGROUND
     field_group.draw(screen)                                                            #FIELD
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
     if a_counter != milli_time:
         #for 0.4 second
-        player.image_update()
-        for npc in npc_group:
-            npc.image_update()
-        for monster in monster_group:
-            monster.image_update()
+        show_animation()
     a_counter = milli_time
 
     if floor == 0:
@@ -928,11 +954,14 @@ while running:
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
             #for 1 second
+            # if monster_group:
             player.hp -= player.damaged_time
-            # random_monster_direction()
-            forward_monster_direction(player)
-            monster_shooting()
-            monster_clocking()
+            
+            if not skill_con.active_sandclock[0]:
+                random_monster_direction()
+                forward_monster_direction(player)
+                monster_shooting()
+                monster_clocking()
             skill_con.active_time()
         b_counter = second_time
 
@@ -941,18 +970,6 @@ while running:
 
         if not skill_con.active_sandclock[0]:
             monster_move()
-
-        if player.hp <= 0:
-            player.hp = 0
-            player.life -= 1
-            display_info_ui()
-            player.stop()
-            saved_floor = floor
-            player.die_motion()
-            if player.life <= 0:
-                scene_game_over(True)
-            else:
-                scene_player_dead(True)
 
     if not monster_group:
         stair.draw(screen)                                                              #STAIR
@@ -968,7 +985,8 @@ while running:
         monster.draw(screen)                                                           #MONSTER
         if pygame.sprite.collide_mask(player, monster):
             player.hp -= player.damaged_enemy
-            player.image = player_damaged_image
+            if not player.is_die:
+                player.image = player_damaged_image
 
     for punch in punch_group:
         punch.draw(screen)                                                              #PUNCH
@@ -981,8 +999,6 @@ while running:
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 if monster.hp <= 0:
-                    # monster_group.remove(monster)
-                    # drop_item(monster)
                     monster_die(monster)
                     if len(monster_group) == 0:
                         random_away_position(player.position, stair)
@@ -992,7 +1008,8 @@ while running:
         shoot.draw(screen)                                                              #MONSTER SHOOING
         if pygame.sprite.collide_mask(shoot, player):
             player.hp -= 5
-            player.image = player_damaged_image
+            if not player.is_die:
+                player.image = player_damaged_image
             shooting_group.remove(shoot)
 
     for item in item_group:
@@ -1004,6 +1021,31 @@ while running:
             item_effect(item)
             item_group.remove(item)
 
+    # GAME OVER
+    if player.hp <= 0:
+        player.hp = 0
+        display_info_ui()
+        player.stop()
+        if not player.is_die:
+            player.life -= 1
+            saved_floor = floor
+            player.is_die = True
+            player.i_i = 0
+            player.image_group = player_die_images
+        else:
+            if player.image == player_die_images[3]:
+                pygame.time.delay(2000)
+                player.image_group = player_images
+                player.is_die = False
+                if player.life <= 0:
+                    scene_game_over(True)
+                else:
+                    scene_player_dead(True)
+
+        # player.die_motion()
+
+    # blind_rect = blind_image.get_rect(center=player.position)
+    # screen.blit(blind_image, blind_rect)          # 시야 제한 구현 가능
     player.draw(screen)                                                                 #PLAYER
 
     # 배경 껍데기 이미지 필요함 - 펀치 나가는거 안보이는 용도

@@ -107,7 +107,7 @@ class Equip(pygame.sprite.Sprite):
     def get_index(self):
         return (self.row, self.col)
 
-    def active_skill(self):
+    def active_skill(self, player):
         pass
 
 ##### battery class
@@ -125,18 +125,6 @@ class e_Battery(Equip):
         # self.max_col = 2
 
         self.price = 7
-
-##### banana class
-class e_Banana(Equip):
-    def __init__(self):
-        image = banana_image
-        index = (0,0)
-        Equip.__init__(self, image, index)
-        self.name = "Banana"
-        self.max_row = 4
-        self.max_col = 1
-
-        self.price = 4
 
 ##### pepper class
 class e_Pepper(Equip):
@@ -173,24 +161,6 @@ class e_Dice(Equip):
         # self.max_col = 2
 
         self.price = 3
-
-##### sandclock class
-class e_Sandclock(Equip):
-    def __init__(self):
-        image = sandclock_image
-        index = (0,0)
-        Equip.__init__(self, image, index)
-        self.name = "Sand Clock"
-        self.max_row = 4
-        # self.max_col = 2
-
-        self.price = 4
-
-    def active_skill(self):
-        if self.cool_time == False:
-            skill_con.active_sandclock[0] = True
-            skill_con.active_sandclock[1] = pygame.time.get_ticks()
-            self.cool_time = True
 
 ##### apple class
 class e_Apple(Equip):
@@ -268,7 +238,42 @@ class e_Straw(Equip):
         self.max_row = 3
         # self.max_col = 2
 
-        # self.price = 
+        self.price = 7
+
+##### banana class
+class e_Banana(Equip):
+    def __init__(self):
+        image = banana_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Banana"
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 4
+
+    def active_skill(self, player):
+        player.hp += 20
+        equip_con.equipped_group.remove(self)
+        equip_con.able_equip_group.append(self)
+
+##### sandclock class
+class e_Sandclock(Equip):
+    def __init__(self):
+        image = sandclock_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Sand Clock"
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 4
+
+    def active_skill(self, player=None):
+        if self.cool_time == False:
+            skill_con.active_sandclock[0] = True
+            skill_con.active_sandclock[1] = pygame.time.get_ticks()
+            self.cool_time = True
 ##############################################################################################
 ##### equip controller
 class EquipController():
