@@ -477,7 +477,6 @@ def make_floor_zero():
     player.hp = player.max_hp
 
 def floor_zero():
-    global no_direction
     if floor != 0:
         make_floor_zero()
 
@@ -492,13 +491,6 @@ def floor_zero():
         if pygame.sprite.collide_mask(punch, npc_coffin):
             player.stop()
             scene_shop(True)
-
-    if in_range(player, npc_faslime) or in_range(player, npc_coffin):
-        player.stop()
-        no_direction.add(player.direction)
-        print(no_direction)
-    else:
-        no_direction = set([])
 
 def next_floor(pos):
     global floor
@@ -532,16 +524,16 @@ def equip_for_sale(index, equip):
 
 def player_move_key():
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_LEFT and not "LEFT" in no_direction:
+        if event.key == pygame.K_LEFT:
             player.to[0] -= player.speed
             player.direction = "LEFT"
-        if event.key == pygame.K_RIGHT and not "RIGHT" in no_direction:
+        if event.key == pygame.K_RIGHT:
             player.to[1] += player.speed
             player.direction = "RIGHT"
-        if event.key == pygame.K_UP and not "UP" in no_direction:
+        if event.key == pygame.K_UP:
             player.to[2] -= player.speed
             player.direction = "UP"
-        if event.key == pygame.K_DOWN and not "DOWN" in no_direction:
+        if event.key == pygame.K_DOWN:
             player.to[3] += player.speed
             player.direction = "DOWN"
         
@@ -754,20 +746,6 @@ def monster_die(monster):
     else:
         drop_item(monster)
     monster_group.remove(monster)
-
-def in_range(pplayer, wall = 0):
-    flag = False
-    # if pplayer.rect.left <= wall.rect.right and ( wall.rect.bottom <= pplayer.rect.top <= wall.rect.top or wall.rect.bottom <= pplayer.rect.bottom <= wall.rect.top):
-    if pplayer.rect.left <= wall.rect.right and pygame.sprite.collide_mask(pplayer, wall):
-        flag = True
-    if pplayer.rect.right <= wall.rect.left and pygame.sprite.collide_mask(pplayer, wall):
-        flag = True
-    if pplayer.rect.top <= wall.rect.bottom and pygame.sprite.collide_mask(pplayer, wall):
-        flag = True
-    if pplayer.rect.bottom <= wall.rect.top and pygame.sprite.collide_mask(pplayer, wall):
-        flag = True
-
-    return flag
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -898,7 +876,6 @@ info_rect = pygame.Rect(((140,60), (200, 600)))
 inven_rect = pygame.Rect(((940,60), (200, 600)))
 full_rect = pygame.Rect((140,60), (1000,600))
 
-no_direction = set([])
 ##############################################################################################
 ready = True
 running = True
@@ -937,7 +914,10 @@ while running:
     if a_counter != milli_time:
         #for 0.4 second
         player.image_update()
-        npc_ghost.image_update()
+        for npc in npc_group:
+            npc.image_update()
+        for monster in monster_group:
+            monster.image_update()
     a_counter = milli_time
 
     if floor == 0:
@@ -965,6 +945,7 @@ while running:
         if player.hp <= 0:
             player.hp = 0
             player.life -= 1
+            display_info_ui()
             player.stop()
             saved_floor = floor
             player.die_motion()
