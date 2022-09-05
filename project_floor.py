@@ -121,7 +121,7 @@ def random_field_setting():
     if randprob <= 50:
         # i = randprob % 3
         # water = Field(water_images[i], (0,0))
-        water = Field(water_images[0], (0,0))
+        water = Field(water_image, (0,0))
         random_away_position((0,0), water)
         field_group.add(water)
 
@@ -134,7 +134,6 @@ def floor_monster_setting(pos, floor):
         spawn_monster(pos, floor, Mon_ember())
         spawn_monster(pos, floor, Mon_ghost())
         spawn_monster(pos, floor, Mon_ghost())
-        # spawn_monster(pos, floor, Mon_slime())
     elif 7 <= floor < 12:
         spawn_monster(pos, floor, Mon_2())
     elif 12 <= floor < 15:

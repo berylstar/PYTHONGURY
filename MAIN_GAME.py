@@ -484,7 +484,7 @@ def floor_zero():
     npc_group.draw(screen)
 
     for punch in punch_group:
-        if pygame.sprite.collide_mask(punch, npc_faslime):
+        if pygame.sprite.collide_mask(punch, npc_kingslime):
             player.stop()
             scene_tutorial(True)
 
@@ -798,7 +798,7 @@ class Player(Character):
         pygame.display.update(self.rect)
         pygame.time.delay(1000)
 
-        self.image = water_images[0]
+        self.image = water_image
         self.draw(screen)
         pygame.display.update(self.rect)
         pygame.time.delay(1000)

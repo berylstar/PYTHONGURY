@@ -104,29 +104,6 @@ class Mon_skel(Character):
         self.hp = 10
         self.speed = 0.2
 
-class Mon_slime(Character):
-    def __init__(self):
-        image_group = mon_slime_images
-        position = (0,0)
-        Character.__init__(self, image_group, position)
-        self.type = "slime"
-
-        self.hp = 10
-        self.speed = 0.1
-
-    def division(self, mon, direction):
-        monster1 = mon
-        monster1.position = self.position
-        monster1.rect = self.rect
-        monster1.direction == direction
-        monster_group.add(monster1)
-
-        # monster2 = Mon_skel()
-        # monster2.position = self.position
-        # monster2.rect = self.rect
-        # monster2.direction == direction
-        # monster_group.add(monster2)
-
 class Mon_boss(Character):
     def __init__(self):
         image_group = monster_boss_images
@@ -147,11 +124,14 @@ monster_group = pygame.sprite.Group()
 monster_con = MonsterController()
 
 ###### about npc
-npc_faslime = Character(father_slime_images, (540, 360))
+npc_kingslime = Character(father_slime_images, (540, 360))
+npc_kingslime.direction = "RIGHT"
+npc_kingslime.flip = True
+
 npc_coffin = Character(coffin_images, (840, 600))
 npc_ghost = Character(ghost_images, (800, 150))
 
 npc_group = pygame.sprite.Group()
-npc_group.add(npc_faslime, npc_coffin, npc_ghost)
+npc_group.add(npc_kingslime, npc_coffin, npc_ghost)
 
 ##### about monster
