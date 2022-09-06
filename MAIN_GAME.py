@@ -55,9 +55,6 @@ def scene_title_game():
         pygame.display.update()
     
 def display_info_ui():
-    pygame.draw.rect(screen, WHITE, ((340,60), (600, 600)), 1)  # 일단 쓰고
-
-
     pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)
     screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                              #FLOOR
@@ -142,6 +139,48 @@ def scene_tutorial(doing):
         screen_message(msg, WHITE, (640,640), game_font_m)
         pygame.display.update(main_rect)
 
+def scene_player_dead(doing):
+    global running
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    doing = False
+                    floor_zero()
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
+
+        screen.blit(test_image, (340,60))      # 죽을 때 배경 이미지로 대체
+        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
+        screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
+        pygame.display.update(main_rect)
+
+def scene_game_over(doing):
+    global running, ready
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    doing = False
+                    game_restart()
+                    ready = True
+                if event.key == pygame.K_ESCAPE:
+                    scene_esc(True)
+
+        screen.fill(BLACK)      # 게임 오버 이미지로 대체 해도되고 그냥 검은 화면으로 해도 되고
+        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
+        screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
+        screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
+        pygame.display.update()
+
 def scene_shop(doing):
     global running
 
@@ -210,48 +249,6 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
     else:
         case_rect = sold_out_image.get_rect(center=(490 + 150*index,sero+130))
         screen.blit(sold_out_image, case_rect)
-
-def scene_player_dead(doing):
-    global running
-
-    while doing:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                doing = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    doing = False
-                    floor_zero()
-                if event.key == pygame.K_ESCAPE:
-                    scene_esc(True)
-
-        screen.blit(test_image, (340,60))      # 죽을 때 배경 이미지로 대체
-        screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
-        screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
-        pygame.display.update(main_rect)
-
-def scene_game_over(doing):
-    global running, ready
-
-    while doing:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                doing = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    doing = False
-                    game_restart()
-                    ready = True
-                if event.key == pygame.K_ESCAPE:
-                    scene_esc(True)
-
-        screen.fill(BLACK)      # 게임 오버 이미지로 대체 해도되고 그냥 검은 화면으로 해도 되고
-        screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
-        screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
-        screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
-        pygame.display.update()
 
 def scene_inventory(doing):
     global running
@@ -391,7 +388,7 @@ def scene_treasure_box(doing):
 def scene_esc(doing):
     global running
 
-    option = ["RESUME", "FULL SCREEN", "SOUND SETTING", "EXIT"]
+    option = ["RESUME", "TOGGLE SCREEN", "SOUND SETTING", "EXIT"]
     color = [GRAY, GRAY, GRAY, GRAY]
     index = 0
 
@@ -550,7 +547,7 @@ def player_move_key():
         if event.key == pygame.K_DOWN:
             player.to[3] += player.speed
             player.direction = "DOWN"
-        
+
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_LEFT:
             player.to[0] = 0
@@ -622,49 +619,49 @@ def equip_effect():
     #         player.hp += 20
     #         equip_banana.is_effected = True
 
-    if equip_pepper in equip_con.equipped_group:
+    elif equip_pepper in equip_con.equipped_group:
         if not equip_pepper.is_effected:
             player.ap += 3            
             equip_pepper.is_effected = True
 
-    if equip_ice in equip_con.equipped_group:
+    elif equip_ice in equip_con.equipped_group:
         if not equip_ice.is_effected:
             player.speed += 0.1
             equip_ice.is_effected = True
 
-    if equip_dice in equip_con.equipped_group:
+    elif equip_dice in equip_con.equipped_group:
         if not equip_dice.is_effected:
             item_con.prob_coin += 5
             equip_dice.is_effected = True
 
-    if equip_apple in equip_con.equipped_group:
+    elif equip_apple in equip_con.equipped_group:
         if not equip_apple.is_effected:
             big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
             player.punch = big_punch_image
             equip_apple.is_effected = True
 
-    if equip_greentea in equip_con.equipped_group:
+    elif equip_greentea in equip_con.equipped_group:
         if not equip_greentea.is_effected:
             item_con.potion_eff += 5
             equip_greentea.is_effected = True
 
-    if equip_mandoo in equip_con.equipped_group:
+    elif equip_mandoo in equip_con.equipped_group:
         if not equip_mandoo.is_effected:
             player.life += 1
             equip_mandoo.is_effected = True
 
-    if equip_ancientbook in equip_con.equipped_group:
+    elif equip_ancientbook in equip_con.equipped_group:
         if not equip_ancientbook.is_effected:
             player.damaged_time -= 0.5
             equip_ancientbook.is_effected = True
 
-    if equip_bone in equip_con.equipped_group:
+    elif equip_bone in equip_con.equipped_group:
         if not equip_bone.is_effected:
             player.ap += 0.1
             equip_bone.is_effected = True
 
     ######
-    if equip_straw in equip_con.equipped_group:
+    elif equip_straw in equip_con.equipped_group:
         item_con.potion_eff += 5
         equip_straw.is_effected = True
             
@@ -676,31 +673,31 @@ def remove_from_equipped_group(equip):
     #     player.max_hp -= 20
     #     player.hp = min(player.max_hp, player.hp)
 
-    if equip == equip_pepper:
+    elif equip == equip_pepper:
         player.ap -= 3
 
-    if equip == equip_ice:
+    elif equip == equip_ice:
         player.speed -= 0.1
 
-    if equip == equip_dice:
+    elif equip == equip_dice:
         item_con.prob_coin -= 5
 
-    if equip == equip_apple:
+    elif equip == equip_apple:
         player.punch = punch_d_image
 
-    if equip == equip_greentea:
+    elif equip == equip_greentea:
         item_con.potion_eff -= 5
 
     # not remove effect mandoo
 
-    if equip == equip_ancientbook:
+    elif equip == equip_ancientbook:
         player.damaged_time += 0.5
 
-    if equip == equip_bone:
+    elif equip == equip_bone:
         player.ap += 0.1
 
     #####
-    if equip == equip_straw:
+    elif equip == equip_straw:
         item_con.potion_eff -= 5
 
     equip_con.equipped_group.remove(equip)
@@ -749,17 +746,51 @@ def monster_clocking():
     for monster in monster_group:
         if monster.type == "alpha":
             if 0 <= randprob <= 50:
-                monster.image.set_alpha(60)
+                for image in monster.image_group:
+                    image.set_alpha(60)
             elif 80 < randprob:
-                monster.image.set_alpha(255)
+                for image in monster.image_group:
+                    image.set_alpha(255)
+
+def monster_dash():
+    randprob = random.randrange(0,101)
+
+    for monster in monster_group:
+        if monster.type == "runner":
+            if 0 <= randprob <= 30:
+                monster.speed += 0.4
+                monster.curr_dir = monster.direction
+
+            if monster.curr_dir and not monster.curr_dir == monster.direction:
+                monster.speed -= 0.4
+                monster.curr_dir = None
 
 def monster_die(monster):
+    # monster.image_group = monster.die_images
+    # if monster.image == monster.die_images[-1]:
+    #     drop_item(monster)
     if monster.type == "slime":
-        monster.division(Mon_1(), "LEFT")
-        monster.division(Mon_skel(), "RIGHT")
+        pass
     else:
         drop_item(monster)
     monster_group.remove(monster)
+
+def effect_field(field):
+    if pygame.sprite.collide_mask(field, player):
+        if field.image == web_image and not field.is_activated:
+            player.stop()
+            player.speed /= 2
+            print("slow")
+            field.is_activated = pygame.time.get_ticks()
+            print(field.is_activated)
+
+    else:
+        if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 2000:
+            player.speed *= 2
+            print("back")
+            field.is_activated = 0
+
+
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -959,9 +990,10 @@ while running:
             
             if not skill_con.active_sandclock[0]:
                 random_monster_direction()
-                forward_monster_direction(player)
+                # forward_monster_direction(player)
                 monster_shooting()
                 monster_clocking()
+                monster_dash()
             skill_con.active_time()
         b_counter = second_time
 
@@ -989,7 +1021,8 @@ while running:
                 player.image = player_damaged_image
 
     for punch in punch_group:
-        punch.draw(screen)                                                              #PUNCH
+        if not player.is_die:
+            punch.draw(screen)                                                         #PUNCH
 
         if punch.get_time() > 2 * fps:
             punch_group.remove(punch)
@@ -1020,6 +1053,9 @@ while running:
                     continue
             item_effect(item)
             item_group.remove(item)
+
+    for field in field_group:
+        effect_field(field)
 
     # GAME OVER
     if player.hp <= 0:

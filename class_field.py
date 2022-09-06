@@ -10,6 +10,8 @@ class Field(pygame.sprite.Sprite):
         self.image = image
         self.position = position
 
+        self.is_activated = 0
+
         self.rect = image.get_rect(center=position)
 
     def draw(self, screen):

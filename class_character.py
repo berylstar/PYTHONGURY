@@ -54,6 +54,7 @@ class Character(pygame.sprite.Sprite):
 
 ##### MONSTER CLASS
 # "normal" / "shooter" / "alpha" / "runner" / "boss"
+                                                        #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경
 class Mon_1(Character):
     def __init__(self):
         image_group = monster_1_images
@@ -100,6 +101,7 @@ class Mon_skel(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "runner"
+        self.curr_dir = None
 
         self.hp = 10
         self.speed = 0.2

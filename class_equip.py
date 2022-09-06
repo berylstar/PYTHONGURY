@@ -181,8 +181,8 @@ class e_Greentea(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Green Tea"
-        self.max_row = 4
-        # self.max_col = 2
+        # self.max_row = 5
+        self.max_col = 1
 
         self.price = 4
 
