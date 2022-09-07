@@ -96,17 +96,19 @@ box_image = pygame.image.load(os.path.join(file_path, "images\\box.png"))
 
 
 # Equip Image
-battery_image = pygame.image.load(os.path.join(file_path, "design\\equips\\battery.png"))
-banana_image = pygame.image.load(os.path.join(file_path, "design\\equips\\banana.png"))
-pepper_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pepper.png"))
-ice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\ice_m.png"))
-dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png"))
 sandclock_image = pygame.image.load(os.path.join(file_path, "images\\e_sandclock.png"))
 apple_image = pygame.image.load(os.path.join(file_path, "images\\e_apple.png"))
-greentea_image = pygame.image.load(os.path.join(file_path, "images\\e_greentea.png"))
 mandoo_image = pygame.image.load(os.path.join(file_path, "images\\e_mandoo.png"))
 a_book_image = pygame.image.load(os.path.join(file_path, "images\\e_a_book.png"))
 bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png"))
+
+
+banana_image = pygame.image.load(os.path.join(file_path, "design\\equips\\banana.png"))
+straw_image = pygame.image.load(os.path.join(file_path, "images\\e_straw.png"))
+battery_image = pygame.image.load(os.path.join(file_path, "design\\equips\\battery.png"))
+pepper_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pepper.png"))
+ice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\ice_m.png"))
+dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png"))
 
 
 # Others

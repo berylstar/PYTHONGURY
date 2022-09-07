@@ -206,7 +206,9 @@ def scene_shop(doing):
 
                 if event.key == pygame.K_SPACE:
                     doing = False
-                    if not is_inven_overlapped(equip_con.equipped_group):
+                    if is_inven_overlapped(equip_con.equipped_group):
+                        scene_inventory(True)
+                    else:
                         equip_effect()
 
                 if event.key == pygame.K_ESCAPE:
@@ -273,9 +275,9 @@ def scene_inventory(doing):
                     picked_equip.inven_move(event)
 
                 if event.key == pygame.K_i:
-                    doing = False
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
+                        doing = False
 
                 if event.key == pygame.K_r:
                     if picked_equip:
@@ -352,7 +354,9 @@ def scene_treasure_box(doing):
 
                 if event.key == pygame.K_SPACE and not choice:
                     doing = False
-                    if not is_inven_overlapped(equip_con.equipped_group):
+                    if is_inven_overlapped(equip_con.equipped_group):
+                        scene_inventory(True)
+                    else:
                         equip_effect()
 
                 if event.key == pygame.K_ESCAPE:
@@ -502,6 +506,13 @@ def next_floor(pos):
 
     floor_setting(pos, floor)
 
+    # if equip_battery in equip_con.equipped_group:
+    #     if floor - equip_battery.floor == 2:
+    #         print("충전")
+    #         player.speed += 0.1
+    #         equip_battery.floor = floor
+
+
 def display_background(floor):
     if floor >= 0:
         background = background_zero
@@ -608,72 +619,57 @@ def item_effect(item):
         scene_treasure_box(True)
 
 def equip_effect():
-    if equip_battery in equip_con.equipped_group:
-        if not equip_battery.is_effected:
-            player.damaged_enemy -= 0.2
-            equip_battery.is_effected = True
-
-    # if equip_banana in equip_con.equipped_group:
-    #     if not equip_banana.is_effected:
-    #         player.max_hp += 20
-    #         player.hp += 20
-    #         equip_banana.is_effected = True
-
-    elif equip_pepper in equip_con.equipped_group:
+    if equip_pepper in equip_con.equipped_group:
         if not equip_pepper.is_effected:
             player.ap += 3            
             equip_pepper.is_effected = True
 
-    elif equip_ice in equip_con.equipped_group:
+    if equip_ice in equip_con.equipped_group:
         if not equip_ice.is_effected:
             player.speed += 0.1
             equip_ice.is_effected = True
 
-    elif equip_dice in equip_con.equipped_group:
+    if equip_dice in equip_con.equipped_group:
         if not equip_dice.is_effected:
             item_con.prob_coin += 5
             equip_dice.is_effected = True
 
-    elif equip_apple in equip_con.equipped_group:
+    if equip_apple in equip_con.equipped_group:
         if not equip_apple.is_effected:
             big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
             player.punch = big_punch_image
             equip_apple.is_effected = True
 
-    elif equip_greentea in equip_con.equipped_group:
-        if not equip_greentea.is_effected:
-            item_con.potion_eff += 5
-            equip_greentea.is_effected = True
-
-    elif equip_mandoo in equip_con.equipped_group:
+    if equip_mandoo in equip_con.equipped_group:
         if not equip_mandoo.is_effected:
             player.life += 1
             equip_mandoo.is_effected = True
 
-    elif equip_ancientbook in equip_con.equipped_group:
+    if equip_ancientbook in equip_con.equipped_group:
         if not equip_ancientbook.is_effected:
             player.damaged_time -= 0.5
             equip_ancientbook.is_effected = True
 
-    elif equip_bone in equip_con.equipped_group:
+    if equip_bone in equip_con.equipped_group:
         if not equip_bone.is_effected:
             player.ap += 0.1
             equip_bone.is_effected = True
 
     ######
-    elif equip_straw in equip_con.equipped_group:
-        item_con.potion_eff += 5
-        equip_straw.is_effected = True
-            
+    if equip_straw in equip_con.equipped_group:
+        if not equip_straw.is_effected:
+            item_con.potion_eff += 5
+            equip_straw.is_effected = True
+
+    if equip_battery in equip_con.equipped_group:
+        if not equip_battery.is_effected:
+            player.speed += 0.1
+            equip_battery.floor = floor
+            print(floor)
+            equip_battery.is_effected = True
+
 def remove_from_equipped_group(equip):
-    if equip == equip_battery:
-        player.damaged_enemy += 0.2
-
-    # if equip == equip_banana:
-    #     player.max_hp -= 20
-    #     player.hp = min(player.max_hp, player.hp)
-
-    elif equip == equip_pepper:
+    if equip == equip_pepper:
         player.ap -= 3
 
     elif equip == equip_ice:
@@ -685,9 +681,6 @@ def remove_from_equipped_group(equip):
     elif equip == equip_apple:
         player.punch = punch_d_image
 
-    elif equip == equip_greentea:
-        item_con.potion_eff -= 5
-
     # not remove effect mandoo
 
     elif equip == equip_ancientbook:
@@ -697,8 +690,13 @@ def remove_from_equipped_group(equip):
         player.ap += 0.1
 
     #####
-    elif equip == equip_straw:
+    if equip == equip_straw:
         item_con.potion_eff -= 5
+        equip_straw.is_effected = False
+
+    elif equip == equip_battery:
+        player.speed -= 0.1
+        equip_battery.is_effected = False
 
     equip_con.equipped_group.remove(equip)
     equip_con.able_equip_group.append(equip)
@@ -780,14 +778,11 @@ def effect_field(field):
         if field.image == web_image and not field.is_activated:
             player.stop()
             player.speed /= 2
-            print("slow")
             field.is_activated = pygame.time.get_ticks()
-            print(field.is_activated)
 
     else:
-        if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 2000:
+        if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 3000:
             player.speed *= 2
-            print("back")
             field.is_activated = 0
 
 
@@ -962,7 +957,7 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 scene_esc(True)
 
-        if not is_inven_overlapped(equip_con.equipped_group) and not player.is_die:
+        if not player.is_die:
             player_move_key()
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
@@ -971,10 +966,11 @@ while running:
     display_background(floor)                                                           #BACKGROUND
     field_group.draw(screen)                                                            #FIELD
 
-    milli_time = int((pygame.time.get_ticks() - start_ticks) / 400)
+    milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
     if a_counter != milli_time:
         #for 0.4 second
         show_animation()
+        skill_con.active_time()
     a_counter = milli_time
 
     if floor == 0:
@@ -994,7 +990,8 @@ while running:
                 monster_shooting()
                 monster_clocking()
                 monster_dash()
-            skill_con.active_time()
+
+            # skill_con.active_time()
         b_counter = second_time
 
         if monster_con.dontmove:
