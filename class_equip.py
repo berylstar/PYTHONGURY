@@ -70,6 +70,7 @@ class Equip(pygame.sprite.Sprite):
         self.is_active_c = False
         self.is_active_v = False
         self.cool_time = False
+        self.active_tool = None
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -220,6 +221,7 @@ class e_Banana(Equip):
         self.max_col = 1
 
         self.price = 4
+        # self.active_tool = player
 
     def active_skill(self, player):
         player.hp = min(player.hp+20, player.max_hp)
@@ -229,7 +231,7 @@ class e_Banana(Equip):
 ##### sandclock class
 class e_Sandclock(Equip):
     def __init__(self):
-        image = sandclock_image
+        image = trafficlight_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Sand Clock"
@@ -237,7 +239,7 @@ class e_Sandclock(Equip):
         self.msg_info = "뒤집기만 했더니 시간이 멈춰버림"
         self.msg_eff = "스킬 : 3초간 적 정지"
 
-        self.max_row = 4
+        self.max_row = 3
         # self.max_col = 2
 
         self.price = 4
@@ -258,7 +260,11 @@ class e_Battery(Equip):
         self.msg_name = "건전지"
         self.msg_info = "충전 완료 !"
         self.msg_eff = "이동 속도 + 0.1"
+
+        # self.i = 0
+        # image = battery_images[self.i]
         # self.floor = 0
+        # self.full_charged = False
 
         self.max_row = 4
         # self.max_col = 2
@@ -300,13 +306,11 @@ class EquipController():
         self.for_sale = [None, None, None]
         self.can_buy = [False, False, False]
         self.able_equip_group = [
-            equip_battery,          equip_pepper,
-            equip_ice,              
-            equip_apple,            equip_mandoo,
+            equip_pepper,           equip_ice,              equip_apple,            equip_mandoo,
             equip_ancientbook,      equip_bone,
 
             equip_straw,            equip_banana,           equip_sandclock,
-            equip_dice,
+            equip_dice,             equip_battery,
         ]
 
 ##### active controller
@@ -354,10 +358,8 @@ inven_position = [
     ]
 
 # EQUIPS
-equip_battery = e_Battery()
 equip_pepper = e_Pepper()
 equip_ice = e_Ice()
-equip_dice = e_Dice()
 equip_apple = e_Apple()
 equip_mandoo = e_Mandoo()
 equip_ancientbook = e_AncientBook()
@@ -366,6 +368,8 @@ equip_bone = e_Bone()
 equip_straw = e_Straw()
 equip_banana = e_Banana()
 equip_sandclock = e_Sandclock()
+equip_battery = e_Battery()
+equip_dice = e_Dice()
 
 skill_con = SkillController()
 equip_con = EquipController()

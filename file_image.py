@@ -101,6 +101,7 @@ apple_image = pygame.image.load(os.path.join(file_path, "images\\e_apple.png"))
 mandoo_image = pygame.image.load(os.path.join(file_path, "images\\e_mandoo.png"))
 a_book_image = pygame.image.load(os.path.join(file_path, "images\\e_a_book.png"))
 bone_image = pygame.image.load(os.path.join(file_path, "images\\e_bone.png"))
+trafficlight_image = pygame.image.load(os.path.join(file_path, "images\\e_trafficlight.png"))
 
 
 banana_image = pygame.image.load(os.path.join(file_path, "design\\equips\\banana.png"))

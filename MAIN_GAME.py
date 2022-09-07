@@ -506,11 +506,14 @@ def next_floor(pos):
 
     floor_setting(pos, floor)
 
-    # if equip_battery in equip_con.equipped_group:
+    # if equip_battery in equip_con.equipped_group and not equip_battery.full_charged:
     #     if floor - equip_battery.floor == 2:
-    #         print("충전")
     #         player.speed += 0.1
     #         equip_battery.floor = floor
+    #         equip_bettery.image = battery_images[self.i + 1]
+    #         if equip_battery.image == battery_images[2]:   #마지막 인덱스
+    #             equip_battery.full_charged = True
+
 
 
 def display_background(floor):
@@ -629,11 +632,6 @@ def equip_effect():
             player.speed += 0.1
             equip_ice.is_effected = True
 
-    if equip_dice in equip_con.equipped_group:
-        if not equip_dice.is_effected:
-            item_con.prob_coin += 5
-            equip_dice.is_effected = True
-
     if equip_apple in equip_con.equipped_group:
         if not equip_apple.is_effected:
             big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
@@ -674,9 +672,6 @@ def remove_from_equipped_group(equip):
 
     elif equip == equip_ice:
         player.speed -= 0.1
-
-    elif equip == equip_dice:
-        item_con.prob_coin -= 5
 
     elif equip == equip_apple:
         player.punch = punch_d_image
@@ -765,7 +760,7 @@ def monster_dash():
 
 def monster_die(monster):
     # monster.image_group = monster.die_images
-    # if monster.image == monster.die_images[-1]:
+    # if monster.image == monster.die_images[2]:    #마지막 인덱스
     #     drop_item(monster)
     if monster.type == "slime":
         pass
@@ -779,7 +774,6 @@ def effect_field(field):
             player.stop()
             player.speed /= 2
             field.is_activated = pygame.time.get_ticks()
-
     else:
         if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 3000:
             player.speed *= 2
@@ -829,6 +823,7 @@ class Player(Character):
     def skill_c(self):
         if self.equip_c:
             self.equip_c.active_skill(player)
+            self.equip_c.active_skill(self.equip_c.active_tool)
     
     def skill_v(self):
         if self.equip_v:
