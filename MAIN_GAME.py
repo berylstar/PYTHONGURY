@@ -506,14 +506,14 @@ def next_floor(pos):
 
     floor_setting(pos, floor)
 
-    # if equip_battery in equip_con.equipped_group and not equip_battery.full_charged:
-    #     if floor - equip_battery.floor == 2:
-    #         player.speed += 0.1
-    #         equip_battery.floor = floor
+    if equip_battery in equip_con.equipped_group and equip_battery.charge_times < 3:
+        if floor - equip_battery.floor == 1:
+            print("충전중" + str(equip_battery.charge_times))
+            player.speed += 0.05
+            equip_battery.floor = floor
+            equip_battery.charge_times += 1
     #         equip_bettery.image = battery_images[self.i + 1]
     #         if equip_battery.image == battery_images[2]:   #마지막 인덱스
-    #             equip_battery.full_charged = True
-
 
 
 def display_background(floor):
@@ -661,10 +661,39 @@ def equip_effect():
 
     if equip_battery in equip_con.equipped_group:
         if not equip_battery.is_effected:
-            player.speed += 0.1
             equip_battery.floor = floor
-            print(floor)
             equip_battery.is_effected = True
+
+    if equip_gloves in equip_con.equipped_group:
+        if not equip_gloves.is_effected:
+            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
+            player.punch = big_punch_image
+            equip_gloves.is_effected = True
+
+    if equip_wax in equip_con.equipped_group:
+        if not equip_wax.is_effected:
+            player.ap += 2
+            equip_wax.is_effected = True
+    
+    if equip_turtleshell in equip_con.equipped_group:
+        if not equip_turtleshell.is_effected:
+            player.damaged_time -= 0.3
+            equip_turtleshell.is_effected = True
+
+    if equip_helmet in equip_con.equipped_group:
+        if not equip_helmet.is_effected:
+            player.damaged_enemy -= 0.2
+            equip_helmet.is_effected = True
+
+    if equip_heartstone in equip_con.equipped_group:
+        if not equip_heartstone.is_effected:
+            player.max_hp += 20
+            equip_heartstone.is_effected = True
+
+    if equip_brokenstone in equip_con.equipped_group:
+        if not equip_brokenstone.is_effected:
+            player.max_hp += 10
+            equip_brokenstone.is_effected = True
 
 def remove_from_equipped_group(equip):
     if equip == equip_pepper:
@@ -690,14 +719,35 @@ def remove_from_equipped_group(equip):
         equip_straw.is_effected = False
 
     elif equip == equip_battery:
-        player.speed -= 0.1
+        player.speed -= 0.1 * equip_battery.charge_times
+        equip_battery.charge_times = 0
         equip_battery.is_effected = False
+
+    elif equip == equip_apple:
+        player.punch = punch_d_image
+
+    elif equip == equip_wax:
+        player.ap -= 2
+
+    elif equip == equip_turtleshell:
+        player.damaged_time += 0.3
+
+    elif equip == equip_helmet:
+        player.damaged_enemy += 0.2
+
+    elif equip == equip_heartstone:
+        player.max_hp -= 20
+        player.hp = min(player.hp, player.max_hp)
+
+    elif equip == equip_brokenstone:
+        player.max_hp -= 10
+        player.hp = min(player.hp, player.max_hp)
 
     equip_con.equipped_group.remove(equip)
     equip_con.able_equip_group.append(equip)
 
 def setting_active_skill(key, picked_equip):
-    if key == "c":
+    if key == "c" and picked_equip.active_target:
         for equip in equip_con.equipped_group:
             equip.is_active_c = False
         picked_equip.is_active_c = True
@@ -706,7 +756,7 @@ def setting_active_skill(key, picked_equip):
         if player.equip_v == player.equip_c:
             player.equip_v = None
 
-    if key == "v":
+    if key == "v" and picked_equip.active_target:
         for equip in equip_con.equipped_group:
             equip.is_active_v = False
         picked_equip.is_active_c = False
@@ -779,14 +829,11 @@ def effect_field(field):
             player.speed *= 2
             field.is_activated = 0
 
-
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
     def __init__(self, image_group, position):
         Character.__init__(self, image_group, position)
-
-        self.is_die = False
 
         self.life = 3
         self.hp = 100
@@ -803,7 +850,7 @@ class Player(Character):
         self.damaged_time = 1
 
     def space_bar(self):
-        punch_sound.play()
+        # punch_sound.play()
         image = self.punch
 
         if self.direction == "LEFT":
@@ -822,37 +869,11 @@ class Player(Character):
     
     def skill_c(self):
         if self.equip_c:
-            self.equip_c.active_skill(player)
-            self.equip_c.active_skill(self.equip_c.active_tool)
+            self.equip_c.active_skill()
     
     def skill_v(self):
         if self.equip_v:
-            self.equip_v.active_skill(player)
-
-    def die_motion(self):
-        flag = True
-        # while flag:
-        self.image = player_die_images[0].convert_alpha()
-        self.draw(screen)
-        pygame.display.update(self.rect)
-        pygame.time.delay(1000)
-
-        self.image = player_die_images[1].convert_alpha()
-        self.draw(screen)
-        pygame.display.update(self.rect)
-        pygame.time.delay(1000)
-
-        self.image = player_die_images[2].convert_alpha()
-        self.draw(screen)
-        pygame.display.update(self.rect)
-        pygame.time.delay(1000)
-
-        if self.life <= 0:
-            flag = False
-            scene_game_over(True)
-        else:
-            flag = False
-            scene_player_dead(True)
+            self.equip_v.active_skill()
 
 #### PUNCH CLASS
 class Punch(pygame.sprite.Sprite):
@@ -927,6 +948,9 @@ info_rect = pygame.Rect(((140,60), (200, 600)))
 inven_rect = pygame.Rect(((940,60), (200, 600)))
 full_rect = pygame.Rect((140,60), (1000,600))
 
+equip_banana.active_target = player
+equip_dice.active_target = player
+equip_thunder.active_target = monster_group
 ##############################################################################################
 ready = True
 running = True
@@ -963,7 +987,7 @@ while running:
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
     if a_counter != milli_time:
-        #for 0.4 second
+        #for 0.5 second
         show_animation()
         skill_con.active_time()
     a_counter = milli_time
@@ -1011,6 +1035,10 @@ while running:
             player.hp -= player.damaged_enemy
             if not player.is_die:
                 player.image = player_damaged_image
+        if monster.hp <= 0:
+            monster_die(monster)
+            if len(monster_group) == 0:
+                random_away_position(player.position, stair)
 
     for punch in punch_group:
         if not player.is_die:
@@ -1023,10 +1051,6 @@ while running:
             if pygame.sprite.collide_mask(monster, punch):
                 punch_group.remove(punch)
                 monster.hp -= player.ap
-                if monster.hp <= 0:
-                    monster_die(monster)
-                    if len(monster_group) == 0:
-                        random_away_position(player.position, stair)
 
     for shoot in shooting_group:
         shoot.shoot()

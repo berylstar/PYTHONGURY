@@ -17,6 +17,7 @@ class Field(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+# 데코용
 class Torch(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__()

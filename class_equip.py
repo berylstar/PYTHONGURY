@@ -70,7 +70,7 @@ class Equip(pygame.sprite.Sprite):
         self.is_active_c = False
         self.is_active_v = False
         self.cool_time = False
-        self.active_tool = None
+        self.active_target = None
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -221,10 +221,9 @@ class e_Banana(Equip):
         self.max_col = 1
 
         self.price = 4
-        # self.active_tool = player
 
-    def active_skill(self, player):
-        player.hp = min(player.hp+20, player.max_hp)
+    def active_skill(self):
+        self.active_target.hp = min(self.active_target.hp+20, self.active_target.max_hp)
         equip_con.equipped_group.remove(self)
         equip_con.able_equip_group.append(self)
 
@@ -238,13 +237,14 @@ class e_Sandclock(Equip):
         self.msg_name = "모래시계"
         self.msg_info = "뒤집기만 했더니 시간이 멈춰버림"
         self.msg_eff = "스킬 : 3초간 적 정지"
+        self.active_target = 1
 
         self.max_row = 3
         # self.max_col = 2
 
         self.price = 4
 
-    def active_skill(self, player):
+    def active_skill(self):
         if self.cool_time == False:
             skill_con.active_sandclock[0] = True
             skill_con.active_sandclock[1] = pygame.time.get_ticks()
@@ -253,7 +253,7 @@ class e_Sandclock(Equip):
 ##### battery class
 class e_Battery(Equip):
     def __init__(self):
-        image = battery_image
+        image = battery_image       # image = battery_images[self.charge_times]
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Battery"
@@ -261,10 +261,8 @@ class e_Battery(Equip):
         self.msg_info = "충전 완료 !"
         self.msg_eff = "이동 속도 + 0.1"
 
-        # self.i = 0
-        # image = battery_images[self.i]
-        # self.floor = 0
-        # self.full_charged = False
+        self.floor = 0
+        self.charge_times = 0
 
         self.max_row = 4
         # self.max_col = 2
@@ -287,7 +285,7 @@ class e_Dice(Equip):
 
         self.price = 3
 
-    def active_skill(self, player):
+    def active_skill(self):
         if self.cool_time == False:
             skill_con.active_dice[0] = True
             skill_con.active_dice[1] = pygame.time.get_ticks()
@@ -295,9 +293,131 @@ class e_Dice(Equip):
             
             randprob = random.randrange(0,11)
             if randprob <= 5:
-                player.hp = min(player.hp+10, player.max_hp)
+                self.active_target.hp = min(self.active_target.hp+10, self.active_target.max_hp)
             else:
-                player.hp -= 5
+                self.active_target.hp -= 5
+
+##### thunder class
+class e_Thunder(Equip):
+    def __init__(self):
+        image = apple_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Thunder"
+        self.msg_name = "천둥번개"
+        self.msg_info = "마른 하늘에 날벼락"
+        self.msg_eff = "액티브 : 전체 적에게 데미지 5"
+
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 7
+
+    def active_skill(self):
+        if self.cool_time == False:
+            skill_con.active_thunder[0] = True
+            skill_con.active_thunder[1] = pygame.time.get_ticks()
+            self.cool_time = True
+            
+            for monster in self.active_target:
+                monster.hp -= 30
+                print("damage")
+
+##### gloves class
+class e_Gloves(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = " Boxer Glove"
+        self.msg_name = "복싱 글러브"
+        self.msg_info = "싸울 준비 완료 !"
+        self.msg_eff = "주먹이 커짐"
+        
+        self.max_row = 3
+        self.max_col = 1
+
+        self.price = 10
+
+##### wax class
+class e_Wax(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "wax"
+        self.msg_name = "왁스"
+        self.msg_info = "슬라임도 왁스 바를 줄 압니다"
+        self.msg_eff = "공격력 + 2"
+
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 3
+
+##### turtle shell class
+class e_Turtleshell(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "turtle shell"
+        self.msg_name = "거북이 등껍질"
+        self.msg_info = "시간이 느리게.."
+        self.msg_eff = "시간 데미지 감소"
+
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 6
+
+##### helmet class
+class e_Helmet(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "helemt"
+        self.msg_name = "헬멧"
+        self.msg_info = "머리를 안전하게 !"
+        self.msg_eff = "적 충돌 데미지 감소"
+
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 6
+
+##### heartstone class
+class e_Heartstone(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "heart stone"
+        self.msg_name = "하트 보석"
+        self.msg_info = "하트스톤"
+        self.msg_eff = "최대 체력 + 20"
+
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 6
+
+##### brokenstone class
+class e_Brokenstone(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "broken stone"
+        self.msg_name = "부서진 보석"
+        self.msg_info = "하트스톤이 반 갈라짐"
+        self.msg_eff = "최대 체력 + 10"
+
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 6
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -310,7 +430,7 @@ class EquipController():
             equip_ancientbook,      equip_bone,
 
             equip_straw,            equip_banana,           equip_sandclock,
-            equip_dice,             equip_battery,
+            equip_dice,             equip_battery,          #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone
         ]
 
 ##### active controller
@@ -319,8 +439,9 @@ class SkillController():
 
         self.active_sandclock = [False, 0]
         self.active_dice = [False, 0]
+        self.active_thunder = [False, 0]
 
-    def active_time(self):
+    def active_time(self):                          # 쿨타임 밸런스 조절 필요
         now_time = pygame.time.get_ticks()
 
         # sand clock - monster stop
@@ -332,15 +453,23 @@ class SkillController():
                 equip_sandclock.cool_time = False
                 equip_sandclock.image.set_alpha(255)
 
-        # sand clock - monster stop
+        # dice - random effect
         if self.active_dice[0] or equip_dice.cool_time:
             if now_time - self.active_dice[1] > 100:
                 self.active_dice[0] = False
                 equip_dice.image.set_alpha(60)
-                print("set alpha")
             if now_time - self.active_dice[1] > 600:
                 equip_dice.cool_time = False
                 equip_dice.image.set_alpha(255)
+
+        # thunder - monster damage
+        if self.active_thunder[0] or equip_thunder.cool_time:
+            if now_time - self.active_thunder[1] > 100:
+                self.active_thunder[0] = False
+                equip_thunder.image.set_alpha(60)
+            if now_time - self.active_thunder[1] > 600:
+                equip_thunder.cool_time = False
+                equip_thunder.image.set_alpha(255)
             
 ##############################################################################################
 # Inventory
@@ -370,6 +499,13 @@ equip_banana = e_Banana()
 equip_sandclock = e_Sandclock()
 equip_battery = e_Battery()
 equip_dice = e_Dice()
+equip_thunder = e_Thunder()
+equip_gloves = e_Gloves()
+equip_wax = e_Wax()
+equip_turtleshell = e_Turtleshell()
+equip_helmet = e_Helmet()
+equip_heartstone = e_Heartstone()
+equip_brokenstone = e_Brokenstone()
 
 skill_con = SkillController()
 equip_con = EquipController()
