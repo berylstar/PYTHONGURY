@@ -128,18 +128,6 @@ class e_Pepper(Equip):
 
         self.price = 3
 
-##### ice class
-class e_Ice(Equip):
-    def __init__(self):
-        image = ice_image
-        index = (0,0)
-        Equip.__init__(self, image, index)
-        self.name = "Ice"
-        # self.max_row = 5
-        # self.max_col = 2
-
-        self.price = 2
-
 ##### apple class
 class e_Apple(Equip):
     def __init__(self):
@@ -189,6 +177,22 @@ class e_Bone(Equip):
         self.price = 0
 ##############################################################################################
 #real equip
+
+##### ice class
+class e_Ice(Equip):
+    def __init__(self):
+        image = ice_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Ice"
+        self.msg_name = "얼음"
+        self.msg_info = "차갑고 미끌미끌"
+        self.msg_eff = "이동속도 + 0.1"
+
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 2
 
 ##### straw class
 class e_Straw(Equip):
@@ -291,7 +295,7 @@ class e_Dice(Equip):
             skill_con.active_dice[1] = pygame.time.get_ticks()
             self.cool_time = True
             
-            randprob = random.randrange(0,11)
+            randprob = random.randrange(1,11)
             if randprob <= 5:
                 self.active_target.hp = min(self.active_target.hp+10, self.active_target.max_hp)
             else:
@@ -363,7 +367,7 @@ class e_Turtleshell(Equip):
         Equip.__init__(self, image, index)
         self.name = "turtle shell"
         self.msg_name = "거북이 등껍질"
-        self.msg_info = "시간이 느리게.."
+        self.msg_info = "시간이.. 느리게.."
         self.msg_eff = "시간 데미지 감소"
 
         self.max_row = 4
@@ -418,6 +422,48 @@ class e_Brokenstone(Equip):
         # self.max_col = 2
 
         self.price = 6
+
+##### crescentmoon class
+class e_Crescentmoon(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "crescent moon"
+        self.msg_name = "초승달"
+        self.msg_info = "초승달에 소원을 빌어보자"
+        self.msg_eff = "낮은 확률로 부활"
+
+        self.revival = False
+
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 6
+
+    def prob_revival(self):
+        randprob = random.randrange(1,101)
+        if randprob <= 3:
+            self.revival = True
+        else:
+            self.revival = False
+
+##### brokenstone class
+class e_Mushroom(Equip):
+    def __init__(self):
+        image = mandoo_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "bonus mushroom"
+        self.msg_name = "보너스 버섯"
+        self.msg_info = "어디서 본 듯 한 버섯"
+        self.msg_eff = "목숨이 0 되면 +1"
+
+        self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 6
+
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -426,11 +472,11 @@ class EquipController():
         self.for_sale = [None, None, None]
         self.can_buy = [False, False, False]
         self.able_equip_group = [
-            equip_pepper,           equip_ice,              equip_apple,            equip_mandoo,
+            equip_pepper,           equip_apple,            equip_mushroom,
             equip_ancientbook,      equip_bone,
 
-            equip_straw,            equip_banana,           equip_sandclock,
-            equip_dice,             equip_battery,          #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone
+            equip_straw,            equip_banana,           equip_sandclock,            equip_ice,
+            equip_dice,             equip_battery,          #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom
         ]
 
 ##### active controller
@@ -477,7 +523,6 @@ MAX_ROW = 5
 MAX_COL = 2
 
 inven_position = [
-    # [(950,180),(1010,180),(1070,180)],
     [(950,240),(1010,240),(1070,240)],
     [(950,300),(1010,300),(1070,300)],
     [(950,360),(1010,360),(1070,360)],
@@ -488,12 +533,14 @@ inven_position = [
 
 # EQUIPS
 equip_pepper = e_Pepper()
-equip_ice = e_Ice()
+
 equip_apple = e_Apple()
 equip_mandoo = e_Mandoo()
 equip_ancientbook = e_AncientBook()
 equip_bone = e_Bone()
+
 #####
+equip_ice = e_Ice()
 equip_straw = e_Straw()
 equip_banana = e_Banana()
 equip_sandclock = e_Sandclock()
@@ -506,6 +553,8 @@ equip_turtleshell = e_Turtleshell()
 equip_helmet = e_Helmet()
 equip_heartstone = e_Heartstone()
 equip_brokenstone = e_Brokenstone()
+equip_crescentmoon = e_Crescentmoon()
+equip_mushroom = e_Mushroom()
 
 skill_con = SkillController()
 equip_con = EquipController()

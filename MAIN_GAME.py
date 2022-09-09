@@ -157,7 +157,9 @@ def scene_player_dead(doing):
         screen.blit(test_image, (340,60))      # 죽을 때 배경 이미지로 대체
         screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
-        pygame.display.update(main_rect)
+        display_info_ui()
+        display_inven_ui()
+        pygame.display.update(full_rect)
 
 def scene_game_over(doing):
     global running, ready
@@ -512,8 +514,9 @@ def next_floor(pos):
             player.speed += 0.05
             equip_battery.floor = floor
             equip_battery.charge_times += 1
-    #         equip_bettery.image = battery_images[self.i + 1]
-    #         if equip_battery.image == battery_images[2]:   #마지막 인덱스
+
+    if equip_crescentmoon in equip_con.equipped_group:
+        equip_crescentmoon.prob_revival()
 
 
 def display_background(floor):
@@ -585,7 +588,7 @@ def monster_move():
                 monster.move(0,monster.speed, fps)
 
 def drop_item(monster):
-    randprob = random.randrange(0,101)
+    randprob = random.randrange(1,101)
     # position = put_on_pixel(position)
 
     if monster.type == "boss":
@@ -716,12 +719,10 @@ def remove_from_equipped_group(equip):
     #####
     if equip == equip_straw:
         item_con.potion_eff -= 5
-        equip_straw.is_effected = False
 
     elif equip == equip_battery:
         player.speed -= 0.1 * equip_battery.charge_times
         equip_battery.charge_times = 0
-        equip_battery.is_effected = False
 
     elif equip == equip_apple:
         player.punch = punch_d_image
@@ -744,6 +745,7 @@ def remove_from_equipped_group(equip):
         player.hp = min(player.hp, player.max_hp)
 
     equip_con.equipped_group.remove(equip)
+    equip.is_effected = False
     equip_con.able_equip_group.append(equip)
 
 def setting_active_skill(key, picked_equip):
@@ -766,7 +768,7 @@ def setting_active_skill(key, picked_equip):
             player.equip_c = None
 
 def monster_shooting():
-    randprob = random.randrange(0,101)
+    randprob = random.randrange(1,101)
 
     for monster in monster_group:
         if monster.type == "boss" or monster.type == "shooter":
@@ -784,7 +786,7 @@ def monster_shooting():
                 shooting_group.add(Punch(image, monster.position, monster.direction))
 
 def monster_clocking():
-    randprob = random.randrange(0,101)
+    randprob = random.randrange(1,101)
 
     for monster in monster_group:
         if monster.type == "alpha":
@@ -796,7 +798,7 @@ def monster_clocking():
                     image.set_alpha(255)
 
 def monster_dash():
-    randprob = random.randrange(0,101)
+    randprob = random.randrange(1,101)
 
     for monster in monster_group:
         if monster.type == "runner":
@@ -934,6 +936,12 @@ BLUE = (0,0,127)
 floor = 0
 saved_floor = 1
 
+main_rect = pygame.Rect(((340,60), (600, 600)))
+info_rect = pygame.Rect(((140,60), (200, 600)))
+inven_rect = pygame.Rect(((940,60), (200, 600)))
+full_rect = pygame.Rect((140,60), (1000,600))
+
+
 ##### PLAYER
 player_first_position = (700, 360)
 player = Player(player_images, player_first_position)
@@ -943,11 +951,7 @@ punch_group = pygame.sprite.Group()
 ##### MONSTER
 shooting_group = pygame.sprite.Group()
 
-main_rect = pygame.Rect(((340,60), (600, 600)))
-info_rect = pygame.Rect(((140,60), (200, 600)))
-inven_rect = pygame.Rect(((940,60), (200, 600)))
-full_rect = pygame.Rect((140,60), (1000,600))
-
+##### EQUIP
 equip_banana.active_target = player
 equip_dice.active_target = player
 equip_thunder.active_target = monster_group
@@ -965,16 +969,18 @@ while running:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                player.space_bar()
-            if event.key == pygame.K_c:
-                player.skill_c()
-            if event.key == pygame.K_v:
-                player.skill_v()
-            if event.key == pygame.K_i:
-                scene_inventory(True)
             if event.key == pygame.K_ESCAPE:
                 scene_esc(True)
+
+            if not player.is_die:
+                if event.key == pygame.K_SPACE:
+                    player.space_bar()
+                if event.key == pygame.K_c:
+                    player.skill_c()
+                if event.key == pygame.K_v:
+                    player.skill_v()
+                if event.key == pygame.K_i:
+                    scene_inventory(True)
 
         if not player.is_die:
             player_move_key()
@@ -1000,7 +1006,7 @@ while running:
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
             #for 1 second
-            # if monster_group:
+            # if monster_group:     #몬스터 없을 때는 체력 안달게 ?
             player.hp -= player.damaged_time
             
             if not skill_con.active_sandclock[0]:
@@ -1010,7 +1016,6 @@ while running:
                 monster_clocking()
                 monster_dash()
 
-            # skill_con.active_time()
         b_counter = second_time
 
         if monster_con.dontmove:
@@ -1023,7 +1028,6 @@ while running:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
-            # if saved_floor and floor == 0:
             if floor == 0:
                 scene_treasure_box(True)
                 floor = saved_floor - 1
@@ -1075,26 +1079,32 @@ while running:
 
     # GAME OVER
     if player.hp <= 0:
-        player.hp = 0
-        display_info_ui()
-        player.stop()
-        if not player.is_die:
-            player.life -= 1
-            saved_floor = floor
-            player.is_die = True
-            player.i_i = 0
-            player.image_group = player_die_images
+        if equip_crescentmoon.revival:
+            player.hp = player.max_hp
+            equip_crescentmoon.prob_revival()
         else:
-            if player.image == player_die_images[3]:
-                pygame.time.delay(2000)
-                player.image_group = player_images
-                player.is_die = False
-                if player.life <= 0:
-                    scene_game_over(True)
-                else:
-                    scene_player_dead(True)
-
-        # player.die_motion()
+            player.hp = 0
+            player.stop()
+            if not player.is_die:
+                saved_floor = floor
+                player.is_die = True
+                player.i_i = 0
+                player.image_group = player_die_images
+        
+    if player.image == player_die_images[3]:
+        pygame.time.delay(2000)
+        player.image_group = player_images
+        player.is_die = False
+        player.life -= 1
+        
+        if player.life <= 0 and equip_mushroom in equip_con.equipped_group:
+            player.life += 1
+            remove_from_equipped_group(equip_mushroom)
+            scene_player_dead(True)
+        elif player.life <= 0:
+            scene_game_over(True)
+        else:
+            scene_player_dead(True)
 
     # blind_rect = blind_image.get_rect(center=player.position)
     # screen.blit(blind_image, blind_rect)          # 시야 제한 구현 가능

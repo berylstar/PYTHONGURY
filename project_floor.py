@@ -36,7 +36,7 @@ def random_away_position(center, object):
                 break 
 
 def prob_spawn_monster(floor):
-    randprob = random.randrange(0,101)  # 0 ~ 100
+    randprob = random.randrange(1,101)  # 1 ~ 100
     percent = 70 - floor
 
     if randprob < percent:
@@ -90,9 +90,9 @@ def forward_monster_direction(target):
         for monster in monster_group:
             x = target.position[0] - monster.position[0]
             y = target.position[1] - monster.position[1]
-            rand = random.randrange(0,10)
+            rand = random.randrange(1,10)
 
-            if rand < 5:
+            if rand <= 5:
                 if x < -30 :
                     monster.direction = "LEFT"
                 elif x > 30:
@@ -108,7 +108,7 @@ def forward_monster_direction(target):
                     monster.direction = "NONE"
 
 def random_field_setting():
-    randprob = random.randrange(0,101)
+    randprob = random.randrange(1,101)
 
     field_group.empty()
 
