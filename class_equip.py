@@ -325,7 +325,6 @@ class e_Thunder(Equip):
             
             for monster in self.active_target:
                 monster.hp -= 30
-                print("damage")
 
 ##### gloves class
 class e_Gloves(Equip):
@@ -451,7 +450,7 @@ class e_Crescentmoon(Equip):
 ##### brokenstone class
 class e_Mushroom(Equip):
     def __init__(self):
-        image = mandoo_image
+        image = None
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "bonus mushroom"
@@ -464,6 +463,66 @@ class e_Mushroom(Equip):
 
         self.price = 6
 
+##### binoculars class
+class e_Binoculars(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "binoculars"
+        self.msg_name = "쌍안경"
+        self.msg_info = "두 눈 크게 뜨고"
+        self.msg_eff = "아이템 드롭률 + 3%"
+
+        # self.max_row = 5
+        self.max_col = 0
+
+        self.price = 6
+
+##### pizza class
+class e_Pizza(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Hot Pizza"
+        self.msg_name = "뜨거운 피자"
+        self.msg_info = "치즈가 끈적거려요"
+        self.msg_eff = "투사체 속도 감소"
+
+        # self.max_row = 5
+        self.max_col = 1
+
+        self.price = 3
+
+##### smokebomb class
+class e_Smokebomb(Equip):
+    def __init__(self):
+        image = None
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Smoke Bomb"
+        self.msg_name = "연막탄"
+        self.msg_info = "연기 속에 가려진"
+        self.msg_eff = "액티브 : 일정시간 무적"
+
+        self.save = [0, 0]
+
+        # self.max_row = 5
+        self.max_col = 1
+
+        self.price = 3
+
+    def active_skill(self):
+        if self.cool_time == False:
+            skill_con.active_smokebomb[0] = True
+            skill_con.active_smokebomb[1] = pygame.time.get_ticks()
+            self.cool_time = True
+            
+            self.save = [self.active_target.damaged_enemy, self.active_target.damaged_time]
+            self.active_target.damaged_enemy = 0
+            self.active_target.damaged_time = 0
+            print("0으로 변경")
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -472,11 +531,12 @@ class EquipController():
         self.for_sale = [None, None, None]
         self.can_buy = [False, False, False]
         self.able_equip_group = [
-            equip_pepper,           equip_apple,            equip_mushroom,
-            equip_ancientbook,      equip_bone,
+            equip_pepper,           equip_apple,            
+            equip_ancientbook,      equip_bone,             equip_mandoo,
 
             equip_straw,            equip_banana,           equip_sandclock,            equip_ice,
-            equip_dice,             equip_battery,          #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom
+            equip_dice,             equip_battery,          
+            #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom, binoculars, pizza, smokebomb
         ]
 
 ##### active controller
@@ -486,8 +546,9 @@ class SkillController():
         self.active_sandclock = [False, 0]
         self.active_dice = [False, 0]
         self.active_thunder = [False, 0]
+        self.active_smokebomb = [False, 0]
 
-    def active_time(self):                          # 쿨타임 밸런스 조절 필요
+    def active_time(self):                          # 시연시간, 쿨타임 밸런스 조절 필요
         now_time = pygame.time.get_ticks()
 
         # sand clock - monster stop
@@ -504,7 +565,7 @@ class SkillController():
             if now_time - self.active_dice[1] > 100:
                 self.active_dice[0] = False
                 equip_dice.image.set_alpha(60)
-            if now_time - self.active_dice[1] > 600:
+            if now_time - self.active_dice[1] > 1000:
                 equip_dice.cool_time = False
                 equip_dice.image.set_alpha(255)
 
@@ -516,6 +577,21 @@ class SkillController():
             if now_time - self.active_thunder[1] > 600:
                 equip_thunder.cool_time = False
                 equip_thunder.image.set_alpha(255)
+
+        # smokebomb - player no damage
+        if self.active_smokebomb[0] or equip_smokebomb.cool_time:
+            if now_time - self.active_smokebomb[1] > 3000:
+                if self.active_smokebomb[0]:
+                    equip_smokebomb.active_target.damaged_enemy = equip_smokebomb.save[0]
+                    equip_smokebomb.active_target.damaged_time = equip_smokebomb.save[1]
+                    print("원래대로")
+                self.active_smokebomb[0] = False
+                equip_smokebomb.image.set_alpha(60)
+                
+            if now_time - self.active_smokebomb[1] > 30000:
+                equip_smokebomb.cool_time = False
+                equip_smokebomb.image.set_alpha(255)
+                
             
 ##############################################################################################
 # Inventory
@@ -541,20 +617,26 @@ equip_bone = e_Bone()
 
 #####
 equip_ice = e_Ice()
-equip_straw = e_Straw()
-equip_banana = e_Banana()
-equip_sandclock = e_Sandclock()
-equip_battery = e_Battery()
 equip_dice = e_Dice()
-equip_thunder = e_Thunder()
+# pepper
+equip_battery = e_Battery()
+equip_straw = e_Straw()
 equip_gloves = e_Gloves()
+equip_sandclock = e_Sandclock()
+equip_banana = e_Banana()
 equip_wax = e_Wax()
 equip_turtleshell = e_Turtleshell()
 equip_helmet = e_Helmet()
 equip_heartstone = e_Heartstone()
 equip_brokenstone = e_Brokenstone()
-equip_crescentmoon = e_Crescentmoon()
+equip_binoculars = e_Binoculars()
+equip_pizza = e_Pizza()
 equip_mushroom = e_Mushroom()
+equip_thunder = e_Thunder()
+# poison apple
+equip_crescentmoon = e_Crescentmoon()
+equip_smokebomb = e_Smokebomb()
+
 
 skill_con = SkillController()
 equip_con = EquipController()

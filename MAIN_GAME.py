@@ -588,15 +588,15 @@ def monster_move():
                 monster.move(0,monster.speed, fps)
 
 def drop_item(monster):
-    randprob = random.randrange(1,101)
+    randprob = random.randrange(1,101) # 1~100
     # position = put_on_pixel(position)
 
     if monster.type == "boss":
         item_group.add(Item(box_image, monster.position, "box"))
     else:
-        if randprob <= item_con.prob_potion:
+        if randprob <= item_con.prob_potion: # 확률 <= 포션드롭률
             item_group.add(Item(potion_image, monster.position, "potion"))
-        elif item_con.prob_potion < randprob <= item_con.prob_potion + item_con.prob_coin:
+        elif (100 - item_con.prob_coin) < randprob: # 100-코인드롭률 <= 확률
             item_group.add(Item(coin_image, monster.position, "coin"))
 
 # def put_on_pixel(position):
@@ -698,6 +698,17 @@ def equip_effect():
             player.max_hp += 10
             equip_brokenstone.is_effected = True
 
+    if equip_binoculars in equip_con.equipped_group:
+        if not equip_binoculars.is_effected:
+            item_con.prob_potion += 3
+            item_con.prob_coin += 3
+            equip_binoculars.is_effected = True
+
+    if equip_pizza in equip_con.equipped_group:
+        if not equip_pizza.is_effected:
+            monster_con.shooting_speed -= 2
+            equip_pizza.is_effected = True
+
 def remove_from_equipped_group(equip):
     if equip == equip_pepper:
         player.ap -= 3
@@ -743,6 +754,13 @@ def remove_from_equipped_group(equip):
     elif equip == equip_brokenstone:
         player.max_hp -= 10
         player.hp = min(player.hp, player.max_hp)
+
+    elif equip == equip_binoculars:
+        item_con.prob_potion -= 3
+        item_con.prob_coin -= 3
+
+    elif equip == equip_pizza:
+        monster_con.shooting_speed += 2
 
     equip_con.equipped_group.remove(equip)
     equip.is_effected = False
@@ -899,13 +917,13 @@ class Punch(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.direction == "LEFT":
-            self.rect.x -= 5
+            self.rect.x -= monster_con.shooting_speed
         elif self.direction == "RIGHT":
-            self.rect.x += 5
+            self.rect.x += monster_con.shooting_speed
         elif self.direction == "UP":
-            self.rect.y -= 5
+            self.rect.y -= monster_con.shooting_speed
         elif self.direction == "DOWN":
-            self.rect.y += 5
+            self.rect.y += monster_con.shooting_speed
         elif self.direction == "NONE":
             pass
 
@@ -955,6 +973,7 @@ shooting_group = pygame.sprite.Group()
 equip_banana.active_target = player
 equip_dice.active_target = player
 equip_thunder.active_target = monster_group
+equip_smokebomb.active_target = player
 ##############################################################################################
 ready = True
 running = True
@@ -1060,7 +1079,7 @@ while running:
         shoot.shoot()
         shoot.draw(screen)                                                              #MONSTER SHOOING
         if pygame.sprite.collide_mask(shoot, player):
-            player.hp -= 5
+            player.hp -= monster_con.shooting_damage
             if not player.is_die:
                 player.image = player_damaged_image
             shooting_group.remove(shoot)

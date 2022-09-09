@@ -121,6 +121,9 @@ class Mon_boss(Character):
 class MonsterController():
     def __init__(self):
         self.dontmove = False
+
+        self.shooting_speed = 5
+        self.shooting_damage = 5
 ##############################################################################################
 
 ##### about monster
