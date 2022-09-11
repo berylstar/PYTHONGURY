@@ -35,21 +35,6 @@ def random_away_position(center, object):
                 object.rect = object.image.get_rect(center=object.position)
                 break 
 
-def prob_spawn_monster(floor):
-    randprob = random.randrange(1,101)  # 1 ~ 100
-    percent = 70 - floor
-
-    if randprob < percent:
-        return Mon_1()
-    elif percent <= randprob < percent + 30:
-        return Mon_2()
-    elif randprob % 3 == 0:
-        return Mon_ghost()
-    elif randprob % 3 == 1:
-        return Mon_ember()
-    else:
-        return Mon_skel()
-
 def spawn_monster(pos, floor, monster_kind=None):
     if not monster_kind:
         monster = prob_spawn_monster(floor)
@@ -59,6 +44,57 @@ def spawn_monster(pos, floor, monster_kind=None):
         monster = monster_kind
         random_away_position(pos, monster)
         monster_group.add(monster)
+
+def prob_spawn_monster(floor):
+    randprob = random.randrange(1,101)  # 1 ~ 100
+    percent = 70 - floor
+
+    if randprob < percent:
+        return Mon_bat()
+    elif percent <= randprob < percent + 30:
+        return Mon_frog()
+    elif randprob % 3 == 0:
+        return Mon_ghost()
+    elif randprob % 3 == 1:
+        return Mon_ember()
+    else:
+        return Mon_skel()
+
+def floor_monster_setting(pos, floor):
+    if 1 <= floor < 7:
+        # spawn_monster(pos, floor, Mon_1())
+        # spawn_monster(pos, floor, Mon_skel())
+        # spawn_monster(pos, floor, Mon_skel())
+        # spawn_monster(pos, floor, Mon_ember())
+        # spawn_monster(pos, floor, Mon_ember())
+        spawn_monster(pos, floor, Mon_ghost())
+        spawn_monster(pos, floor, Mon_ghost())
+    elif 7 <= floor < 12:
+        spawn_monster(pos, floor, Mon_ember())
+    elif 12 <= floor < 15:
+        spawn_monster(pos, floor, Mon_ghost())
+
+##############################################################################################
+
+def random_field_setting():
+    randprob = random.randrange(1,101)
+
+    field_group.empty()
+
+    for i in range(randprob % 4):
+        if randprob % 2 == 0:
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)
+
+    if randprob <= 50:
+        # i = randprob % 3
+        # water = Field(water_images[i], (0,0))
+        water = Field(water_image, (0,0))
+        random_away_position((0,0), water)
+        field_group.add(water)
+
+##############################################################################################
 
 def random_monster_direction():
     if monster_group and not monster_con.dontmove:
@@ -106,35 +142,3 @@ def forward_monster_direction(target):
                     monster.direction = "DOWN"
                 else:
                     monster.direction = "NONE"
-
-def random_field_setting():
-    randprob = random.randrange(1,101)
-
-    field_group.empty()
-
-    for i in range(randprob % 4):
-        if randprob % 2 == 0:
-            web = Field(web_image, (0,0))
-            random_away_position((0,0), web)
-            field_group.add(web)
-
-    if randprob <= 50:
-        # i = randprob % 3
-        # water = Field(water_images[i], (0,0))
-        water = Field(water_image, (0,0))
-        random_away_position((0,0), water)
-        field_group.add(water)
-
-def floor_monster_setting(pos, floor):
-    if 1 <= floor < 7:
-        # spawn_monster(pos, floor, Mon_1())
-        # spawn_monster(pos, floor, Mon_skel())
-        # spawn_monster(pos, floor, Mon_skel())
-        # spawn_monster(pos, floor, Mon_ember())
-        # spawn_monster(pos, floor, Mon_ember())
-        spawn_monster(pos, floor, Mon_ghost())
-        spawn_monster(pos, floor, Mon_ghost())
-    elif 7 <= floor < 12:
-        spawn_monster(pos, floor, Mon_2())
-    elif 12 <= floor < 15:
-        spawn_monster(pos, floor, Mon_ghost())

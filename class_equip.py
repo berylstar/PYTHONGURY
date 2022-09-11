@@ -54,7 +54,7 @@ class Equip(pygame.sprite.Sprite):
         self.image = image
         self.name = None
 
-        self.msg_name = None
+        self.msg_name = None        # 12글자
         self.msg_info = None
         self.msg_eff = None
         
@@ -70,7 +70,7 @@ class Equip(pygame.sprite.Sprite):
         self.is_active_c = False
         self.is_active_v = False
         self.cool_time = False
-        self.active_target = None
+        self.target = None
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -106,27 +106,10 @@ class Equip(pygame.sprite.Sprite):
 
         self.rect = (self.rect_left,self.rect_top)
 
-    def get_index(self):
-        return (self.row, self.col)
-
     def active_skill(self, player):
         pass
 
-##### pepper class
-class e_Pepper(Equip):
-    def __init__(self):
-        image = pepper_image
-        index = (0,0)
-        Equip.__init__(self, image, index)
-        self.name = "Chili Pepper"
-        self.msg_name = "매운 고추"
-        self.msg_info = "슬라임이 매운맛이라면 ?"
-        self.msg_eff = "공격력 + 0.3"
 
-        # self.max_row = 5
-        self.max_col = 1
-
-        self.price = 3
 
 ##### apple class
 class e_Apple(Equip):
@@ -178,6 +161,22 @@ class e_Bone(Equip):
 ##############################################################################################
 #real equip
 
+##### pepper class
+class e_Pepper(Equip):
+    def __init__(self):
+        image = pepper_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Chili Pepper"
+        self.msg_name = "매운 고추"
+        self.msg_info = "슬라임이 매운맛이라면?"
+        self.msg_eff = "공격력 +3"
+
+        # self.max_row = 5
+        self.max_col = 1
+
+        self.price = 3
+
 ##### ice class
 class e_Ice(Equip):
     def __init__(self):
@@ -187,7 +186,7 @@ class e_Ice(Equip):
         self.name = "Ice"
         self.msg_name = "얼음"
         self.msg_info = "차갑고 미끌미끌"
-        self.msg_eff = "이동속도 + 0.1"
+        self.msg_eff = "이동속도 +0.1"
 
         # self.max_row = 5
         # self.max_col = 2
@@ -203,7 +202,7 @@ class e_Straw(Equip):
         self.name = "Straw"
         self.msg_name = "빨대"
         self.msg_info = "포션도 빨아먹어야 제 맛"
-        self.msg_eff = "포션 회복량 + 5"
+        self.msg_eff = "포션 회복량 +5"
 
         self.max_row = 3
         # self.max_col = 2
@@ -218,8 +217,8 @@ class e_Banana(Equip):
         Equip.__init__(self, image, index)
         self.name = "Banana"
         self.msg_name = "바나나"
-        self.msg_info = "늦잠잤다면 밥 대신 바나나"
-        self.msg_eff = "사용 : 체력 20 회복"
+        self.msg_info = "밥 대신 바나나 하나정도"
+        self.msg_eff = "사용 : 체력 +20"
 
         self.max_row = 4
         self.max_col = 1
@@ -227,7 +226,7 @@ class e_Banana(Equip):
         self.price = 4
 
     def active_skill(self):
-        self.active_target.hp = min(self.active_target.hp+20, self.active_target.max_hp)
+        self.target.hp = min(self.target.hp+20, self.target.max_hp)
         equip_con.equipped_group.remove(self)
         equip_con.able_equip_group.append(self)
 
@@ -241,7 +240,7 @@ class e_Sandclock(Equip):
         self.msg_name = "모래시계"
         self.msg_info = "뒤집기만 했더니 시간이 멈춰버림"
         self.msg_eff = "스킬 : 3초간 적 정지"
-        self.active_target = 1
+        self.target = 1
 
         self.max_row = 3
         # self.max_col = 2
@@ -263,7 +262,7 @@ class e_Battery(Equip):
         self.name = "Battery"
         self.msg_name = "건전지"
         self.msg_info = "충전 완료 !"
-        self.msg_eff = "이동 속도 + 0.1"
+        self.msg_eff = "이동 속도 +0.1"
 
         self.floor = 0
         self.charge_times = 0
@@ -282,7 +281,7 @@ class e_Dice(Equip):
         self.name = "Dice"
         self.msg_name = "주사위"
         self.msg_info = "운을 시험해보세요 !"
-        self.msg_eff = "액티브 : 50퍼센트 확률로 체력 +10 또는 -5"
+        self.msg_eff = "스킬 : 50퍼센트 확률로 체력 +10 또는 -5"
 
         # self.max_row = 5
         # self.max_col = 2
@@ -297,9 +296,9 @@ class e_Dice(Equip):
             
             randprob = random.randrange(1,11)
             if randprob <= 5:
-                self.active_target.hp = min(self.active_target.hp+10, self.active_target.max_hp)
+                self.target.hp = min(self.target.hp+10, self.target.max_hp)
             else:
-                self.active_target.hp -= 5
+                self.target.hp -= 5
 
 ##### thunder class
 class e_Thunder(Equip):
@@ -310,7 +309,7 @@ class e_Thunder(Equip):
         self.name = "Thunder"
         self.msg_name = "천둥번개"
         self.msg_info = "마른 하늘에 날벼락"
-        self.msg_eff = "액티브 : 전체 적에게 데미지 5"
+        self.msg_eff = "스킬 : 전체 적에게 5 피해"
 
         self.max_row = 4
         self.max_col = 1
@@ -323,7 +322,7 @@ class e_Thunder(Equip):
             skill_con.active_thunder[1] = pygame.time.get_ticks()
             self.cool_time = True
             
-            for monster in self.active_target:
+            for monster in self.target:
                 monster.hp -= 30
 
 ##### gloves class
@@ -335,7 +334,7 @@ class e_Gloves(Equip):
         self.name = " Boxer Glove"
         self.msg_name = "복싱 글러브"
         self.msg_info = "싸울 준비 완료 !"
-        self.msg_eff = "주먹이 커짐"
+        self.msg_eff = "펀치 크기가 커졌다"
         
         self.max_row = 3
         self.max_col = 1
@@ -351,7 +350,7 @@ class e_Wax(Equip):
         self.name = "wax"
         self.msg_name = "왁스"
         self.msg_info = "슬라임도 왁스 바를 줄 압니다"
-        self.msg_eff = "공격력 + 2"
+        self.msg_eff = "공격력 +2"
 
         # self.max_row = 5
         # self.max_col = 2
@@ -399,7 +398,7 @@ class e_Heartstone(Equip):
         self.name = "heart stone"
         self.msg_name = "하트 보석"
         self.msg_info = "하트스톤"
-        self.msg_eff = "최대 체력 + 20"
+        self.msg_eff = "최대 체력 +20"
 
         self.max_row = 4
         self.max_col = 1
@@ -415,7 +414,7 @@ class e_Brokenstone(Equip):
         self.name = "broken stone"
         self.msg_name = "부서진 보석"
         self.msg_info = "하트스톤이 반 갈라짐"
-        self.msg_eff = "최대 체력 + 10"
+        self.msg_eff = "최대 체력 +10"
 
         self.max_row = 4
         # self.max_col = 2
@@ -456,7 +455,7 @@ class e_Mushroom(Equip):
         self.name = "bonus mushroom"
         self.msg_name = "보너스 버섯"
         self.msg_info = "어디서 본 듯 한 버섯"
-        self.msg_eff = "목숨이 0 되면 +1"
+        self.msg_eff = "목숨이 0 되면 부활"
 
         self.max_row = 4
         # self.max_col = 2
@@ -472,7 +471,7 @@ class e_Binoculars(Equip):
         self.name = "binoculars"
         self.msg_name = "쌍안경"
         self.msg_info = "두 눈 크게 뜨고"
-        self.msg_eff = "아이템 드롭률 + 3%"
+        self.msg_eff = "아이템 드롭률 +3%"
 
         # self.max_row = 5
         self.max_col = 0
@@ -504,7 +503,7 @@ class e_Smokebomb(Equip):
         self.name = "Smoke Bomb"
         self.msg_name = "연막탄"
         self.msg_info = "연기 속에 가려진"
-        self.msg_eff = "액티브 : 일정시간 무적"
+        self.msg_eff = "스킬 : 일정시간 무적"
 
         self.save = [0, 0]
 
@@ -519,10 +518,9 @@ class e_Smokebomb(Equip):
             skill_con.active_smokebomb[1] = pygame.time.get_ticks()
             self.cool_time = True
             
-            self.save = [self.active_target.damaged_enemy, self.active_target.damaged_time]
-            self.active_target.damaged_enemy = 0
-            self.active_target.damaged_time = 0
-            print("0으로 변경")
+            self.save = [self.target.damaged_enemy, self.target.damaged_time]
+            self.target.damaged_enemy = 0
+            self.target.damaged_time = 0
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -582,9 +580,8 @@ class SkillController():
         if self.active_smokebomb[0] or equip_smokebomb.cool_time:
             if now_time - self.active_smokebomb[1] > 3000:
                 if self.active_smokebomb[0]:
-                    equip_smokebomb.active_target.damaged_enemy = equip_smokebomb.save[0]
-                    equip_smokebomb.active_target.damaged_time = equip_smokebomb.save[1]
-                    print("원래대로")
+                    equip_smokebomb.target.damaged_enemy = equip_smokebomb.save[0]
+                    equip_smokebomb.target.damaged_time = equip_smokebomb.save[1]
                 self.active_smokebomb[0] = False
                 equip_smokebomb.image.set_alpha(60)
                 
@@ -608,8 +605,6 @@ inven_position = [
     ]
 
 # EQUIPS
-equip_pepper = e_Pepper()
-
 equip_apple = e_Apple()
 equip_mandoo = e_Mandoo()
 equip_ancientbook = e_AncientBook()
@@ -618,7 +613,7 @@ equip_bone = e_Bone()
 #####
 equip_ice = e_Ice()
 equip_dice = e_Dice()
-# pepper
+equip_pepper = e_Pepper()
 equip_battery = e_Battery()
 equip_straw = e_Straw()
 equip_gloves = e_Gloves()
@@ -633,7 +628,7 @@ equip_binoculars = e_Binoculars()
 equip_pizza = e_Pizza()
 equip_mushroom = e_Mushroom()
 equip_thunder = e_Thunder()
-# poison apple
+# poisonapple
 equip_crescentmoon = e_Crescentmoon()
 equip_smokebomb = e_Smokebomb()
 

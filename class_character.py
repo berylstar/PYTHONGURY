@@ -57,7 +57,19 @@ class Character(pygame.sprite.Sprite):
 ##### MONSTER CLASS
 # "normal" / "shooter" / "alpha" / "runner" / "boss"
                                                         #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경
-class Mon_1(Character):
+
+# 1 ~ 20 : lower part of tower
+class Mon_skel(Character):
+    def __init__(self):
+        image_group = mon_skel_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "normal"
+
+        self.hp = 10
+        self.speed = 0.1
+
+class Mon_spider(Character):
     def __init__(self):
         image_group = monster_1_images
         position = (0,0)
@@ -67,9 +79,19 @@ class Mon_1(Character):
         self.hp = 10
         self.speed = 0.1
 
-class Mon_2(Character):
+class Mon_bat(Character):
     def __init__(self):
         image_group = monster_2_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "normal"
+
+        self.hp = 10
+        self.speed = 0.1
+
+class Mon_frog(Character):
+    def __init__(self):
+        image_group = monster_3_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "normal"
@@ -77,6 +99,11 @@ class Mon_2(Character):
         self.hp = 25
         self.speed = 0.1
 
+
+# 21 ~ 40 : grass land
+
+
+# 41 ~ 60 : graveyard
 class Mon_ghost(Character):
     def __init__(self):
         image_group = mon_ghost_images
@@ -87,6 +114,8 @@ class Mon_ghost(Character):
         self.hp = 15
         self.speed = 0.1
 
+
+# 61 ~ 80 : fire land
 class Mon_ember(Character):
     def __init__(self):
         image_group = mon_ember_images
@@ -97,16 +126,19 @@ class Mon_ember(Character):
         self.hp = 10
         self.speed = 0.05
 
-class Mon_skel(Character):
+# 81 ~ 100 : king castle
+
+
+class Mon_skell(Character):
     def __init__(self):
         image_group = mon_skel_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "runner"
-        self.curr_dir = None
+        self.curr_dir = None        # runner는 self.curr_dir=None 필요
 
         self.hp = 10
-        self.speed = 0.2
+        self.speed = 0.1
 
 class Mon_boss(Character):
     def __init__(self):
@@ -118,6 +150,7 @@ class Mon_boss(Character):
         self.hp = 100
         self.speed = 0.1
 
+##############################################################################################
 class MonsterController():
     def __init__(self):
         self.dontmove = False
@@ -132,9 +165,6 @@ monster_con = MonsterController()
 
 ###### about npc
 npc_kingslime = Character(father_slime_images, (540, 360))
-npc_kingslime.direction = "RIGHT"
-npc_kingslime.flip = True
-
 npc_coffin = Character(coffin_images, (840, 600))
 npc_ghost = Character(ghost_images, (800, 150))
 

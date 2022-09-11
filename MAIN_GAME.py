@@ -41,7 +41,7 @@ def scene_title_game():
                         ready = False
                         running = False
 
-        bgm_sound.play(-1)
+        bgm_intro.play(-1)
 
         for i in range(len(color)):
             color[i] = GRAY
@@ -323,8 +323,8 @@ def scene_inventory(doing):
 
         if picked_equip and not is_inven_overlapped(equip_con.equipped_group):
             screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
-            screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_s)
-            screen_message(picked_equip.msg_eff, WHITE, (1040,180), game_font_s)
+            screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_kor)
+            screen_message(picked_equip.msg_eff, YELLOW, (1040,180), game_font_kor)
     
         cursor.draw(screen)
         pygame.display.update(inven_rect)
@@ -767,7 +767,7 @@ def remove_from_equipped_group(equip):
     equip_con.able_equip_group.append(equip)
 
 def setting_active_skill(key, picked_equip):
-    if key == "c" and picked_equip.active_target:
+    if key == "c" and picked_equip.target:
         for equip in equip_con.equipped_group:
             equip.is_active_c = False
         picked_equip.is_active_c = True
@@ -776,7 +776,7 @@ def setting_active_skill(key, picked_equip):
         if player.equip_v == player.equip_c:
             player.equip_v = None
 
-    if key == "v" and picked_equip.active_target:
+    if key == "v" and picked_equip.target:
         for equip in equip_con.equipped_group:
             equip.is_active_v = False
         picked_equip.is_active_c = False
@@ -785,7 +785,7 @@ def setting_active_skill(key, picked_equip):
         if player.equip_c == player.equip_v:
             player.equip_c = None
 
-def monster_shooting():
+def monster_action():
     randprob = random.randrange(1,101)
 
     for monster in monster_group:
@@ -803,10 +803,6 @@ def monster_shooting():
                     break
                 shooting_group.add(Punch(image, monster.position, monster.direction))
 
-def monster_clocking():
-    randprob = random.randrange(1,101)
-
-    for monster in monster_group:
         if monster.type == "alpha":
             if 0 <= randprob <= 50:
                 for image in monster.image_group:
@@ -815,10 +811,6 @@ def monster_clocking():
                 for image in monster.image_group:
                     image.set_alpha(255)
 
-def monster_dash():
-    randprob = random.randrange(1,101)
-
-    for monster in monster_group:
         if monster.type == "runner":
             if 0 <= randprob <= 30:
                 monster.speed += 0.4
@@ -842,12 +834,12 @@ def effect_field(field):
     if pygame.sprite.collide_mask(field, player):
         if field.image == web_image and not field.is_activated:
             player.stop()
-            player.speed /= 2
-            field.is_activated = pygame.time.get_ticks()
-    else:
-        if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 3000:
-            player.speed *= 2
-            field.is_activated = 0
+    #         player.speed /= 2
+    #         field.is_activated = pygame.time.get_ticks()
+    # else:
+    #     if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 3000:
+    #         player.speed *= 2
+    #         field.is_activated = 0
 
 ##############################################################################################
 ##### PLAYER CLASS
@@ -936,6 +928,7 @@ screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("No More Slime")
 clock = pygame.time.Clock()
+game_font_kor = pygame.font.Font("fonts\\DungGeunMo.ttf", 15)
 game_font_s = pygame.font.Font("fonts\\DungGeunMo.ttf", 20)
 game_font_m = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
 game_font_l = pygame.font.Font("fonts\\DungGeunMo.ttf", 50)
@@ -951,6 +944,7 @@ BLACK = (0,0,0)
 RED = (127,0,0)
 GREEN = (0,127,0)
 BLUE = (0,0,127)
+YELLOW = (255,255,0)
 floor = 0
 saved_floor = 1
 
@@ -970,10 +964,10 @@ punch_group = pygame.sprite.Group()
 shooting_group = pygame.sprite.Group()
 
 ##### EQUIP
-equip_banana.active_target = player
-equip_dice.active_target = player
-equip_thunder.active_target = monster_group
-equip_smokebomb.active_target = player
+equip_banana.target = player
+equip_dice.target = player
+equip_thunder.target = monster_group
+equip_smokebomb.target = player
 ##############################################################################################
 ready = True
 running = True
@@ -982,6 +976,8 @@ while running:
     fps = clock.tick(60)
 
     scene_title_game()
+
+    bgm_main.play(-1)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -994,9 +990,9 @@ while running:
             if not player.is_die:
                 if event.key == pygame.K_SPACE:
                     player.space_bar()
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_c and floor > 0:
                     player.skill_c()
-                if event.key == pygame.K_v:
+                if event.key == pygame.K_v and floor > 0:
                     player.skill_v()
                 if event.key == pygame.K_i:
                     scene_inventory(True)
@@ -1018,7 +1014,7 @@ while running:
     a_counter = milli_time
 
     if floor == 0:
-        bgm_sound.stop()
+        bgm_intro.stop()
         floor_zero()      
 
     elif floor > 0:
@@ -1031,9 +1027,7 @@ while running:
             if not skill_con.active_sandclock[0]:
                 random_monster_direction()
                 # forward_monster_direction(player)
-                monster_shooting()
-                monster_clocking()
-                monster_dash()
+                monster_action()
 
         b_counter = second_time
 
@@ -1111,6 +1105,7 @@ while running:
                 player.image_group = player_die_images
         
     if player.image == player_die_images[3]:
+        bgm_main.stop()
         pygame.time.delay(2000)
         player.image_group = player_images
         player.is_die = False
