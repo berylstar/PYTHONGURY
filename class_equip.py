@@ -457,7 +457,7 @@ class e_Mushroom(Equip):
         self.msg_info = "어디서 본 듯 한 버섯"
         self.msg_eff = "목숨이 0 되면 부활"
 
-        self.max_row = 4
+        # self.max_row = 4
         # self.max_col = 2
 
         self.price = 6
@@ -490,7 +490,7 @@ class e_Pizza(Equip):
         self.msg_eff = "투사체 속도 감소"
 
         # self.max_row = 5
-        self.max_col = 1
+        # self.max_col = 1
 
         self.price = 3
 
@@ -508,7 +508,7 @@ class e_Smokebomb(Equip):
         self.save = [0, 0]
 
         # self.max_row = 5
-        self.max_col = 1
+        # self.max_col = 1
 
         self.price = 3
 
@@ -521,6 +521,52 @@ class e_Smokebomb(Equip):
             self.save = [self.target.damaged_enemy, self.target.damaged_time]
             self.target.damaged_enemy = 0
             self.target.damaged_time = 0
+
+##### keys class
+class e_Keys(Equip):
+    def __init__(self):
+        image = mandoo_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Keys"
+        self.msg_name = "열쇠 꾸러미"
+        self.msg_info = "이 중 하나는 맞겠지"
+        self.msg_eff = "사용 : 계단 열기"
+        self.target = 1
+
+        # self.max_row = 4
+        # self.max_col = 1
+
+        self.price = 4
+
+    def active_skill(self):
+        if not self.target % 20 == 0 :
+            skill_con.active_keys = True
+            equip_con.equipped_group.remove(self)
+            equip_con.able_equip_group.append(self)
+
+##### rope class
+class e_Rope(Equip):
+    def __init__(self):
+        image = mandoo_image
+        index = (0,0)
+        Equip.__init__(self, image, index)
+        self.name = "Rope"
+        self.msg_name = "비상 탈출 로프"
+        self.msg_info = "지상으로 !"
+        self.msg_eff = "사용 : 0층으로"
+        self.target = 1
+
+        # self.max_row = 4
+        # self.max_col = 1
+
+        self.price = 4
+
+    def active_skill(self):
+        
+        self.target()
+        equip_con.equipped_group.remove(self)
+        equip_con.able_equip_group.append(self)
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -530,11 +576,11 @@ class EquipController():
         self.can_buy = [False, False, False]
         self.able_equip_group = [
             equip_pepper,           equip_apple,            
-            equip_ancientbook,      equip_bone,             equip_mandoo,
+            equip_ancientbook,      equip_bone,             equip_keys,                 equip_rope,
 
             equip_straw,            equip_banana,           equip_sandclock,            equip_ice,
             equip_dice,             equip_battery,          
-            #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom, binoculars, pizza, smokebomb
+            #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom, binoculars, pizza, smokebomb, keys
         ]
 
 ##### active controller
@@ -545,6 +591,7 @@ class SkillController():
         self.active_dice = [False, 0]
         self.active_thunder = [False, 0]
         self.active_smokebomb = [False, 0]
+        self.active_keys = False
 
     def active_time(self):                          # 시연시간, 쿨타임 밸런스 조절 필요
         now_time = pygame.time.get_ticks()
@@ -631,6 +678,8 @@ equip_thunder = e_Thunder()
 # poisonapple
 equip_crescentmoon = e_Crescentmoon()
 equip_smokebomb = e_Smokebomb()
+equip_keys = e_Keys()
+equip_rope = e_Rope()
 
 
 skill_con = SkillController()

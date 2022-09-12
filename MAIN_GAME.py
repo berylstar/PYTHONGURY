@@ -517,6 +517,9 @@ def next_floor(pos):
 
     if equip_crescentmoon in equip_con.equipped_group:
         equip_crescentmoon.prob_revival()
+    
+    equip_keys.target = floor
+    skill_con.active_keys = False
 
 
 def display_background(floor):
@@ -968,6 +971,7 @@ equip_banana.target = player
 equip_dice.target = player
 equip_thunder.target = monster_group
 equip_smokebomb.target = player
+equip_rope.target = floor_zero()
 ##############################################################################################
 ready = True
 running = True
@@ -1037,7 +1041,7 @@ while running:
         if not skill_con.active_sandclock[0]:
             monster_move()
 
-    if not monster_group:
+    if not monster_group or skill_con.active_keys:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
