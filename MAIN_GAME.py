@@ -476,7 +476,10 @@ def make_floor_zero():
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
     random_for_sale()
     player.rect = player.image.get_rect(center=player_first_position)
-    player.hp = player.max_hp
+    if not skill_con.active_rope:
+        player.hp = player.max_hp
+    else:
+        skill_con.active_rope = False
 
 def floor_zero():
     if floor != 0:
@@ -517,10 +520,8 @@ def next_floor(pos):
 
     if equip_crescentmoon in equip_con.equipped_group:
         equip_crescentmoon.prob_revival()
-    
-    equip_keys.target = floor
-    skill_con.active_keys = False
 
+    equip_keys.target = floor
 
 def display_background(floor):
     if floor >= 0:
@@ -581,14 +582,15 @@ def player_move_key():
 def monster_move():
     if monster_group:
         for monster in monster_group:
-            if monster.direction == "LEFT":
-                monster.move(-monster.speed, 0, fps)
-            elif monster.direction == "RIGHT":
-                monster.move(monster.speed, 0, fps)
-            elif monster.direction == "UP":
-                monster.move(0,-monster.speed, fps)
-            elif monster.direction == "DOWN":
-                monster.move(0,monster.speed, fps)
+            if not monster.is_die:
+                if monster.direction == "LEFT":
+                    monster.move(-monster.speed, 0, fps)
+                elif monster.direction == "RIGHT":
+                    monster.move(monster.speed, 0, fps)
+                elif monster.direction == "UP":
+                    monster.move(0,-monster.speed, fps)
+                elif monster.direction == "DOWN":
+                    monster.move(0,monster.speed, fps)
 
 def drop_item(monster):
     randprob = random.randrange(1,101) # 1~100
@@ -767,6 +769,12 @@ def remove_from_equipped_group(equip):
 
     equip_con.equipped_group.remove(equip)
     equip.is_effected = False
+    if equip.is_active_c:
+        equip.is_active_c = False
+        player.equip_c = None
+    elif equip.is_active_v:
+        equip.is_active_v = False
+        player.equip_v = None
     equip_con.able_equip_group.append(equip)
 
 def setting_active_skill(key, picked_equip):
@@ -792,48 +800,55 @@ def monster_action():
     randprob = random.randrange(1,101)
 
     for monster in monster_group:
-        if monster.type == "boss" or monster.type == "shooter":
-            if 0 <= randprob <= 70:
-                if monster.direction == "LEFT":
-                    image = ember_attack_image
-                elif monster.direction == "RIGHT":
-                    image = pygame.transform.flip(ember_attack_image, True, False)
-                elif monster.direction == "UP":
-                    image = pygame.transform.rotozoom(ember_attack_image, 270, 1)
-                elif monster.direction == "DOWN":
-                    image = pygame.transform.rotozoom(ember_attack_image, 90, 1)
-                else:
-                    break
-                shooting_group.add(Punch(image, monster.position, monster.direction))
+        if not monster.is_die:
+            if monster.type == "boss" or monster.type == "shooter":
+                if 0 <= randprob <= 70:
+                    if monster.direction == "LEFT":
+                        image = ember_attack_image
+                    elif monster.direction == "RIGHT":
+                        image = pygame.transform.flip(ember_attack_image, True, False)
+                    elif monster.direction == "UP":
+                        image = pygame.transform.rotozoom(ember_attack_image, 270, 1)
+                    elif monster.direction == "DOWN":
+                        image = pygame.transform.rotozoom(ember_attack_image, 90, 1)
+                    else:
+                        break
+                    shooting_group.add(Punch(image, monster.position, monster.direction))
 
-        if monster.type == "alpha":
-            if 0 <= randprob <= 50:
-                for image in monster.image_group:
-                    image.set_alpha(60)
-            elif 80 < randprob:
-                for image in monster.image_group:
-                    image.set_alpha(255)
+            if monster.type == "alpha":
+                if 0 <= randprob <= 50:
+                    for image in monster.image_group:
+                        image.set_alpha(60)
+                elif 80 < randprob:
+                    for image in monster.image_group:
+                        image.set_alpha(255)
 
-        if monster.type == "runner":
-            if 0 <= randprob <= 30:
-                monster.speed += 0.4
-                monster.curr_dir = monster.direction
+            if monster.type == "runner":
+                if 0 <= randprob <= 30:
+                    monster.speed += 0.4
+                    monster.curr_dir = monster.direction
 
-            if monster.curr_dir and not monster.curr_dir == monster.direction:
-                monster.speed -= 0.4
-                monster.curr_dir = None
+                if monster.curr_dir and not monster.curr_dir == monster.direction:
+                    monster.speed -= 0.4
+                    monster.curr_dir = None
 
 def monster_die(monster):
-    # monster.image_group = monster.die_images
-    # if monster.image == monster.die_images[2]:    #마지막 인덱스
-    #     drop_item(monster)
-    if monster.type == "slime":
-        pass
-    else:
+    if not monster.is_die:
+        monster.is_die = True
+        monster.change_image_group(monster_die_images)
+    if monster.i_i == 2:    #마지막 인덱스
         drop_item(monster)
-    monster_group.remove(monster)
+        monster_group.remove(monster)
 
-def effect_field(field):
+    # if monster.type == "slime":
+    #     pass
+    # else:
+    #     drop_item(monster)
+    # monster_group.remove(monster)
+
+def field_effect(field):
+    global saved_floor
+
     if pygame.sprite.collide_mask(field, player):
         if field.image == web_image and not field.is_activated:
             player.stop()
@@ -843,6 +858,19 @@ def effect_field(field):
     #     if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 3000:
     #         player.speed *= 2
     #         field.is_activated = 0
+
+        # if field.image == mandoo_image:   #rope image
+        #     player.stop()
+        #     saved_floor = floor
+        #     floor_zero()
+
+        if field.image == mandoo_image:
+            player.stop()
+            monster_group.empty()
+            shooting_group.empty()
+            item_group.empty()
+            field_group.empty()
+            next_floor(player.position)
 
 ##############################################################################################
 ##### PLAYER CLASS
@@ -971,7 +999,6 @@ equip_banana.target = player
 equip_dice.target = player
 equip_thunder.target = monster_group
 equip_smokebomb.target = player
-equip_rope.target = floor_zero()
 ##############################################################################################
 ready = True
 running = True
@@ -1008,7 +1035,6 @@ while running:
     
     screen.fill(BLACK)      # 메인 배경 이미지로 대체
     display_background(floor)                                                           #BACKGROUND
-    field_group.draw(screen)                                                            #FIELD
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
     if a_counter != milli_time:
@@ -1041,7 +1067,11 @@ while running:
         if not skill_con.active_sandclock[0]:
             monster_move()
 
-    if not monster_group or skill_con.active_keys:
+    for field in field_group:
+        field.draw(screen)                                                              #FIELD
+        field_effect(field)
+
+    if not monster_group:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
@@ -1052,7 +1082,7 @@ while running:
 
     for monster in monster_group:
         monster.draw(screen)                                                           #MONSTER
-        if pygame.sprite.collide_mask(player, monster):
+        if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
             player.hp -= player.damaged_enemy
             if not player.is_die:
                 player.image = player_damaged_image
@@ -1091,9 +1121,6 @@ while running:
             item_effect(item)
             item_group.remove(item)
 
-    for field in field_group:
-        effect_field(field)
-
     # GAME OVER
     if player.hp <= 0:
         if equip_crescentmoon.revival:
@@ -1105,8 +1132,7 @@ while running:
             if not player.is_die:
                 saved_floor = floor
                 player.is_die = True
-                player.i_i = 0
-                player.image_group = player_die_images
+                player.change_image_group(player_die_images)
         
     if player.image == player_die_images[3]:
         bgm_main.stop()

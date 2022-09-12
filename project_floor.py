@@ -67,8 +67,9 @@ def floor_monster_setting(pos, floor):
         # spawn_monster(pos, floor, Mon_skel())
         # spawn_monster(pos, floor, Mon_ember())
         # spawn_monster(pos, floor, Mon_ember())
-        spawn_monster(pos, floor, Mon_ghost())
-        spawn_monster(pos, floor, Mon_ghost())
+        # spawn_monster(pos, floor, Mon_ghost())
+        # spawn_monster(pos, floor, Mon_ghost())
+        pass
     elif 7 <= floor < 12:
         spawn_monster(pos, floor, Mon_ember())
     elif 12 <= floor < 15:
@@ -99,46 +100,49 @@ def random_field_setting():
 def random_monster_direction():
     if monster_group and not monster_con.dontmove:
         for monster in monster_group:
-            rand = random.randrange(0,10)
-            if rand <= 1:
-                monster.direction = "LEFT"
-            elif 1 < rand and rand <= 3:
-                monster.direction = "RIGHT"
-            elif 3 < rand and rand <= 5:
-                monster.direction = "UP"
-            elif 5 < rand and rand <= 7:
-                monster.direction = "DOWN"
-            else:
-                monster.direction = "NONE"
+            if not monster.is_die:
+                rand = random.randrange(0,10)
+                
+                if rand <= 1:
+                    monster.direction = "LEFT"
+                elif 1 < rand and rand <= 3:
+                    monster.direction = "RIGHT"
+                elif 3 < rand and rand <= 5:
+                    monster.direction = "UP"
+                elif 5 < rand and rand <= 7:
+                    monster.direction = "DOWN"
+                else:
+                    monster.direction = "NONE"
 
-            if monster.rect.centerx <= 340 + (monster.rect.width // 2):
-                monster.direction = "RIGHT"
-            elif monster.rect.centerx >= 940 - (monster.rect.width // 2):
-                monster.direction = "LEFT"
+                if monster.rect.centerx <= 340 + (monster.rect.width // 2):
+                    monster.direction = "RIGHT"
+                elif monster.rect.centerx >= 940 - (monster.rect.width // 2):
+                    monster.direction = "LEFT"
 
-            if monster.rect.centery <= 60 + (monster.rect.height // 2):
-                monster.direction = "DOWN"
-            elif monster.rect.centery >= 660 - (monster.rect.height // 2):
-                monster.direction = "UP"
+                if monster.rect.centery <= 60 + (monster.rect.height // 2):
+                    monster.direction = "DOWN"
+                elif monster.rect.centery >= 660 - (monster.rect.height // 2):
+                    monster.direction = "UP"
 
 def forward_monster_direction(target):
     if monster_group and not monster_con.dontmove:
         for monster in monster_group:
-            x = target.position[0] - monster.position[0]
-            y = target.position[1] - monster.position[1]
-            rand = random.randrange(1,10)
+            if not monster.is_die:
+                x = target.position[0] - monster.position[0]
+                y = target.position[1] - monster.position[1]
+                rand = random.randrange(1,10)
 
-            if rand <= 5:
-                if x < -30 :
-                    monster.direction = "LEFT"
-                elif x > 30:
-                    monster.direction = "RIGHT"
+                if rand <= 5:
+                    if x < -30 :
+                        monster.direction = "LEFT"
+                    elif x > 30:
+                        monster.direction = "RIGHT"
+                    else:
+                        monster.direction = "NONE"
                 else:
-                    monster.direction = "NONE"
-            else:
-                if y < -30:
-                    monster.direction = "UP"
-                elif y > 30:
-                    monster.direction = "DOWN"
-                else:
-                    monster.direction = "NONE"
+                    if y < -30:
+                        monster.direction = "UP"
+                    elif y > 30:
+                        monster.direction = "DOWN"
+                    else:
+                        monster.direction = "NONE"

@@ -17,6 +17,11 @@ class Character(pygame.sprite.Sprite):
         self.flip = False
 
         self.is_die = False
+        self.die_images = monster_die_images
+
+    def change_image_group(self, new_images):
+        self.i_i = 0
+        self.image_group = new_images
 
     def image_update(self):
         g_len = len(self.image_group)

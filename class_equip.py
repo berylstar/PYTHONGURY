@@ -1,6 +1,7 @@
 import pygame
 import random
 from file_image import *
+from class_field import field_group, mand
 ##############################################################################################
 def is_inven_overlapped(equip_group):
     flag = False
@@ -108,7 +109,6 @@ class Equip(pygame.sprite.Sprite):
 
     def active_skill(self, player):
         pass
-
 
 
 ##### apple class
@@ -240,7 +240,7 @@ class e_Sandclock(Equip):
         self.msg_name = "모래시계"
         self.msg_info = "뒤집기만 했더니 시간이 멈춰버림"
         self.msg_eff = "스킬 : 3초간 적 정지"
-        self.target = 1
+        self.target = True
 
         self.max_row = 3
         # self.max_col = 2
@@ -525,14 +525,14 @@ class e_Smokebomb(Equip):
 ##### keys class
 class e_Keys(Equip):
     def __init__(self):
-        image = mandoo_image
+        image = None
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Keys"
         self.msg_name = "열쇠 꾸러미"
         self.msg_info = "이 중 하나는 맞겠지"
         self.msg_eff = "사용 : 계단 열기"
-        self.target = 1
+        self.target = True
 
         # self.max_row = 4
         # self.max_col = 1
@@ -541,21 +541,21 @@ class e_Keys(Equip):
 
     def active_skill(self):
         if not self.target % 20 == 0 :
-            skill_con.active_keys = True
+            field_group.add(mand)   #keys field
             equip_con.equipped_group.remove(self)
             equip_con.able_equip_group.append(self)
 
 ##### rope class
 class e_Rope(Equip):
     def __init__(self):
-        image = mandoo_image
+        image = None
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Rope"
         self.msg_name = "비상 탈출 로프"
         self.msg_info = "지상으로 !"
         self.msg_eff = "사용 : 0층으로"
-        self.target = 1
+        self.target = True
 
         # self.max_row = 4
         # self.max_col = 1
@@ -564,7 +564,8 @@ class e_Rope(Equip):
 
     def active_skill(self):
         
-        self.target()
+        field_group.add(mand)   #rope field
+        skill_con.active_rope = True
         equip_con.equipped_group.remove(self)
         equip_con.able_equip_group.append(self)
 ##############################################################################################
@@ -576,11 +577,11 @@ class EquipController():
         self.can_buy = [False, False, False]
         self.able_equip_group = [
             equip_pepper,           equip_apple,            
-            equip_ancientbook,      equip_bone,             equip_keys,                 equip_rope,
+            equip_ancientbook,      equip_bone,
 
             equip_straw,            equip_banana,           equip_sandclock,            equip_ice,
             equip_dice,             equip_battery,          
-            #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom, binoculars, pizza, smokebomb, keys
+            #thunder, gloves wax, turtleshell, helmet, heartstone, brokenstone, crescentmoon, mushroom, binoculars, pizza, smokebomb, keys, rope
         ]
 
 ##### active controller
@@ -591,7 +592,7 @@ class SkillController():
         self.active_dice = [False, 0]
         self.active_thunder = [False, 0]
         self.active_smokebomb = [False, 0]
-        self.active_keys = False
+        self.active_rope = False
 
     def active_time(self):                          # 시연시간, 쿨타임 밸런스 조절 필요
         now_time = pygame.time.get_ticks()

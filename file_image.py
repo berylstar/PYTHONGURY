@@ -151,6 +151,11 @@ monster_3_images = [pygame.image.load(os.path.join(file_path, "images\\monster_3
 monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png"))]
 runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))]
 blind_image = pygame.image.load(os.path.join(file_path, "images\\blind.png"))
+monster_die_images = [
+    pygame.image.load(os.path.join(file_path, "images\\skill_c.png")),
+    pygame.image.load(os.path.join(file_path, "images\\skill_v.png")),
+    pygame.image.load(os.path.join(file_path, "images\\skill_v.png")),
+]
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
 story_images = [
