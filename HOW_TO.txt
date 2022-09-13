@@ -62,3 +62,13 @@ I          : 인벤토리 닫기
 - 모래시계
     액티브 ) 3초간 적 정지
         쿨타임 : 30초
+
+exe 파일 생성 콘솔 코드
+
+> pyinstaller --name=no_more_slime --icon=main_0.ico --noconsole MAIN_GAME.py
+
+	--name= : 파일명
+	--icon=   : 아이콘 선택 ( .ico )
+	--noconsole : 안쓰면 실행시 콘솔창 나옴
+	--F / --onefile : 폴더내 여러 파일 x , exe 하나만 생성
+	( 하면 아마 실행 안됨 , 에러 수정 필요 )

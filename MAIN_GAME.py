@@ -47,7 +47,8 @@ def scene_title_game():
             color[i] = GRAY
         color[index] = GREEN
 
-        screen.fill((60,60,60))     # 타이틀 배경 이미지로 대체
+        # screen.fill((60,60,60))     # 타이틀 배경 이미지로 대체
+        screen.blit(intro_backimage, (0,0))
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
         screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
         screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
@@ -436,7 +437,8 @@ def scene_esc(doing):
             color[i] = GRAY
         color[index] = GREEN
 
-        screen.fill((60,60,60))     # ESC 이미지로 대체
+        # screen.fill((60,60,60))     # ESC 이미지로 대체
+        screen.blit(intro_backimage, (0,0))
 
         screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
         screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
@@ -517,6 +519,18 @@ def next_floor(pos):
             player.speed += 0.05
             equip_battery.floor = floor
             equip_battery.charge_times += 1
+            # 충전됨에 따라 배터리 이미지도 바꾸기
+
+    if equip_ice in equip_con.equipped_group and equip_ice.charge_times < 3:
+        if floor - equip_ice.floor == 1:
+            print("녹는중" + str(equip_ice.charge_times))
+            player.speed -= 0.05
+            equip_ice.floor = floor
+            equip_ice.charge_times += 1
+            if equip_ice.charge_times == 2:
+                remove_from_equipped_group(equip_ice)
+
+            # 녹음에 따라 얼음 이미지도 바꾸기
 
     if equip_crescentmoon in equip_con.equipped_group:
         equip_crescentmoon.prob_revival()
@@ -719,7 +733,10 @@ def remove_from_equipped_group(equip):
         player.ap -= 3
 
     elif equip == equip_ice:
-        player.speed -= 0.1
+        if equip_ice.charge_times == 0:
+            player.speed -= 0.1
+        elif equip_ice.charge_times == 1:
+            player.speed -= 0.05
 
     elif equip == equip_apple:
         player.punch = punch_d_image
@@ -889,7 +906,7 @@ class Player(Character):
         self.max_hp = 100
         self.speed = 0.3
         self.punch = punch_d_image
-        self.damaged_enemy = 0.7
+        self.damaged_enemy = 2
         self.damaged_time = 1
 
     def space_bar(self):
@@ -939,16 +956,17 @@ class Punch(pygame.sprite.Sprite):
             screen.blit(self.image, self.rect)
 
     def shoot(self):
-        if self.direction == "LEFT":
-            self.rect.x -= monster_con.shooting_speed
-        elif self.direction == "RIGHT":
-            self.rect.x += monster_con.shooting_speed
-        elif self.direction == "UP":
-            self.rect.y -= monster_con.shooting_speed
-        elif self.direction == "DOWN":
-            self.rect.y += monster_con.shooting_speed
-        elif self.direction == "NONE":
-            pass
+        if not skill_con.active_sandclock[0]:
+            if self.direction == "LEFT":
+                self.rect.x -= monster_con.shooting_speed
+            elif self.direction == "RIGHT":
+                self.rect.x += monster_con.shooting_speed
+            elif self.direction == "UP":
+                self.rect.y -= monster_con.shooting_speed
+            elif self.direction == "DOWN":
+                self.rect.y += monster_con.shooting_speed
+            elif self.direction == "NONE":
+                pass
 
         if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
             shooting_group.remove(self)
@@ -973,7 +991,7 @@ D_GRAY = (64,64,64)
 GRAY = (127,127,127)
 BLACK = (0,0,0)
 RED = (127,0,0)
-GREEN = (0,127,0)
+GREEN = (0,255,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
@@ -1004,9 +1022,10 @@ ready = True
 running = True
 random_for_sale()
 while running:
-    fps = clock.tick(60)
+    fps = clock.tick(30)
 
     scene_title_game()
+    screen.fill(BLACK)      # 메인 배경 이미지로 대체
 
     bgm_main.play(-1)
 
@@ -1033,7 +1052,6 @@ while running:
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
-    screen.fill(BLACK)      # 메인 배경 이미지로 대체
     display_background(floor)                                                           #BACKGROUND
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
