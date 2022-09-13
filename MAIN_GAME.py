@@ -47,13 +47,65 @@ def scene_title_game():
             color[i] = GRAY
         color[index] = GREEN
 
-        # screen.fill((60,60,60))     # 타이틀 배경 이미지로 대체
-        screen.blit(intro_backimage, (0,0))
+        screen.blit(title_image, (0,0))
         screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
         screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
         screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
         screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
         pygame.display.update()
+
+def scene_esc(doing):
+    global running
+
+    option = ["RESUME", "TOGGLE SCREEN", "SOUND SETTING", "EXIT"]
+    color = [GRAY, GRAY, GRAY, GRAY]
+    index = 0
+
+    player.stop()
+    
+    monster_con.dontmove = True
+    for monster in monster_group:
+        monster.direction = "NONE"
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    index -= 1
+                    if index < 0 :
+                        index = 3
+                if event.key == pygame.K_DOWN:
+                    index += 1
+                    if index > 3:
+                        index = 0
+                if event.key == pygame.K_SPACE:
+                    if index == 0:
+                        doing = False
+                    elif index == 1:
+                        pygame.display.toggle_fullscreen()
+                        pygame.display.update()
+                    elif index == 2:
+                        pass
+                    elif index == 3:
+                        doing = False
+                        running = False
+                if event.key == pygame.K_ESCAPE:
+                    doing = False
+
+        for i in range(len(color)):
+            color[i] = GRAY
+        color[index] = GREEN
+
+        screen.blit(title_image, (0,0))
+        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
+        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
+        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
+        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
+
+        pygame.display.update(full_rect)
     
 def display_info_ui():
     pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
@@ -107,7 +159,7 @@ def scene_story(doing):
 
         story_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
 
-        screen.fill(BLACK)          # 스토리 배경 이미지로 대체 - 타이틀 배경 이미지도 가능
+        screen.fill(BLACK)          # 스토리 배경 이미지로 대체 - 타이틀 배경 이미지나 검은화면도 가능
         screen.blit(story_images[index], story_rect)                                        #STORY IMAGE
         pygame.display.update()
 
@@ -277,7 +329,7 @@ def scene_inventory(doing):
                 if cursor.clicking:
                     picked_equip.inven_move(event)
 
-                if event.key == pygame.K_i:
+                if event.key == pygame.K_i or event.key == pygame.K_ESCAPE:
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
                         doing = False
@@ -315,10 +367,6 @@ def scene_inventory(doing):
                         cursor.image = cursor_images[0]
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
-
-                if event.key == pygame.K_ESCAPE:
-                    scene_esc(True)
-                    doing = False
 
         display_inven_ui()
 
@@ -392,61 +440,6 @@ def scene_treasure_box(doing):
         pygame.display.update(main_rect)
         pygame.display.update(inven_rect)
 
-def scene_esc(doing):
-    global running
-
-    option = ["RESUME", "TOGGLE SCREEN", "SOUND SETTING", "EXIT"]
-    color = [GRAY, GRAY, GRAY, GRAY]
-    index = 0
-
-    player.stop()
-    
-    monster_con.dontmove = True
-    for monster in monster_group:
-        monster.direction = "NONE"
-
-    while doing:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                doing = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    index -= 1
-                    if index < 0 :
-                        index = 3
-                if event.key == pygame.K_DOWN:
-                    index += 1
-                    if index > 3:
-                        index = 0
-                if event.key == pygame.K_SPACE:
-                    if index == 0:
-                        doing = False
-                    elif index == 1:
-                        pygame.display.toggle_fullscreen()
-                        pygame.display.update()
-                    elif index == 2:
-                        pass
-                    elif index == 3:
-                        doing = False
-                        running = False
-                if event.key == pygame.K_ESCAPE:
-                    doing = False
-
-        for i in range(len(color)):
-            color[i] = GRAY
-        color[index] = GREEN
-
-        # screen.fill((60,60,60))     # ESC 이미지로 대체
-        screen.blit(intro_backimage, (0,0))
-
-        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
-        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
-        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
-        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
-
-        pygame.display.update(main_rect)
-
 ##############################################################################################
 def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
@@ -508,13 +501,14 @@ def next_floor(pos):
         player.hp += 10
 
     item_group.empty()
+    shooting_group.empty()
 
     stair.image = stair_images[1]
 
     floor_setting(pos, floor)
 
     if equip_battery in equip_con.equipped_group and equip_battery.charge_times < 3:
-        if floor - equip_battery.floor == 1:
+        if floor - equip_battery.floor >= 1:
             print("충전중" + str(equip_battery.charge_times))
             player.speed += 0.05
             equip_battery.floor = floor
@@ -522,7 +516,7 @@ def next_floor(pos):
             # 충전됨에 따라 배터리 이미지도 바꾸기
 
     if equip_ice in equip_con.equipped_group and equip_ice.charge_times < 3:
-        if floor - equip_ice.floor == 1:
+        if floor - equip_ice.floor >= 1:
             print("녹는중" + str(equip_ice.charge_times))
             player.speed -= 0.05
             equip_ice.floor = floor
@@ -980,7 +974,7 @@ clock = pygame.time.Clock()
 game_font_kor = pygame.font.Font("fonts\\DungGeunMo.ttf", 15)
 game_font_s = pygame.font.Font("fonts\\DungGeunMo.ttf", 20)
 game_font_m = pygame.font.Font("fonts\\DungGeunMo.ttf", 30)
-game_font_l = pygame.font.Font("fonts\\DungGeunMo.ttf", 50)
+game_font_l = pygame.font.Font("fonts\\DungGeunMo.ttf", 60)
 start_ticks = pygame.time.get_ticks()
 a_counter = 0
 b_counter = 0

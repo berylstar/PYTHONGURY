@@ -22,8 +22,6 @@ player_die_images = [
     pygame.image.load(os.path.join(file_path, "design\\player\\die_2.png")),
 ]
 
-
-# Punch Image
 punch_d_image = pygame.image.load(os.path.join(file_path, "design\\player\\punch.png"))
 
 ##############################################################################################
@@ -127,6 +125,7 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0F.p
 
 ##############################################################################################
 # Others
+title_image = pygame.image.load(os.path.join(file_path, "images\\title.png"))
 story_images = [
     
 ]
@@ -170,5 +169,3 @@ tuto_images = [
     pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
     pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
 ]
-
-intro_backimage = pygame.image.load(os.path.join(file_path, "images\\intro_back.png"))
