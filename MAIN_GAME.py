@@ -273,15 +273,12 @@ def scene_shop(doing):
                         player.coin -= 4
                         random_for_sale()
 
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     doing = False
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
                     else:
                         equip_effect()
-
-                if event.key == pygame.K_ESCAPE:
-                    scene_esc(True)
 
         screen.blit(test_image, (340,60))      # 상점 이미지로 대체
         display_info_ui()
@@ -395,7 +392,8 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_eff, YELLOW, (1040,180), game_font_kor)
     
         cursor.draw(screen)
-        pygame.display.update(inven_rect)
+        # pygame.display.update(inven_rect)
+        pygame.display.update(full_rect)
 
 def scene_treasure_box(doing):
     global running
@@ -405,6 +403,8 @@ def scene_treasure_box(doing):
     if len(equip_con.able_equip_group) >= 2:
         choice_equip = [equip_con.able_equip_group[-1], equip_con.able_equip_group[-2]]
 
+    picked_num = 0
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -413,14 +413,22 @@ def scene_treasure_box(doing):
             if event.type == pygame.KEYDOWN:
                 if choice:
                     if event.key == pygame.K_1:
-                        equip_con.equipped_group.append(choice_equip[0])
-                        equip_con.able_equip_group.remove(choice_equip[0])
-                        choice = False
+                        if picked_num == 1:
+                            equip_con.equipped_group.append(choice_equip[0])
+                            equip_con.able_equip_group.remove(choice_equip[0])
+                            choice = False
+                            picked_num = 0
+                        else:
+                            picked_num = 1
 
                     if event.key == pygame.K_2:
-                        equip_con.equipped_group.append(choice_equip[1])
-                        equip_con.able_equip_group.remove(choice_equip[1])
-                        choice = False
+                        if picked_num == 2:
+                            equip_con.equipped_group.append(choice_equip[1])
+                            equip_con.able_equip_group.remove(choice_equip[1])
+                            choice = False  
+                            picked_num = 0
+                        else:
+                            picked_num = 2
 
                 if event.key == pygame.K_SPACE and not choice:
                     doing = False
@@ -437,6 +445,11 @@ def scene_treasure_box(doing):
 
         zero_rect = choice_equip[0].image.get_rect(center=(490,450))
         one_rect = choice_equip[1].image.get_rect(center=(790,450))
+
+        if picked_num:
+            screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
+            screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
+            screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
         
         if choice:          # 보물 상자 이미지 대체
             screen_message("<1>", WHITE, (490, 350), game_font_m)
@@ -452,9 +465,6 @@ def scene_treasure_box(doing):
             screen_message("CHOICE ONE EQUIP !", WHITE, (640,640), game_font_m)
         else:
             screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
-
-        shop_rect = shop_image.get_rect(center=(640, 200))
-        screen.blit(shop_image, shop_rect)      # 보물상자 이미지 대체
         
         pygame.display.update(main_rect)
         pygame.display.update(inven_rect)
@@ -471,6 +481,7 @@ def game_restart():
 
     player = Player(player_images, player_first_position)
     make_floor_zero()
+    equip_reset()
     saved_floor = 1
 
     item_con = ItemController()
@@ -482,14 +493,19 @@ def make_floor_zero():
     global floor
 
     floor = 0
+
     monster_group.empty()
     shooting_group.empty()
     item_group.empty()
     field_group.empty()
+
     stair.image = stair_images[0]
     stair.rect = stair.image.get_rect(center=stair_zero_floor)
+
     random_for_sale()
+
     player.rect = player.image.get_rect(center=player_first_position)
+
     if not skill_con.active_rope:
         player.hp = player.max_hp
     else:
@@ -542,7 +558,6 @@ def next_floor(pos):
             equip_ice.charge_times += 1
             if equip_ice.charge_times == 2:
                 remove_from_equipped_group(equip_ice)
-
             # 녹음에 따라 얼음 이미지도 바꾸기
 
     if equip_crescentmoon in equip_con.equipped_group:
@@ -685,7 +700,7 @@ def equip_effect():
 
     if equip_bone in equip_con.equipped_group:
         if not equip_bone.is_effected:
-            player.ap += 0.1
+            player.ap += 1
             equip_bone.is_effected = True
 
     ######
@@ -760,7 +775,7 @@ def remove_from_equipped_group(equip):
         player.damaged_time += 0.5
 
     elif equip == equip_bone:
-        player.ap += 0.1
+        player.ap -= 1
 
     #####
     if equip == equip_straw:
