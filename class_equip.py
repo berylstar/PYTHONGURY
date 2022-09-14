@@ -73,6 +73,7 @@ class Equip(pygame.sprite.Sprite):
         self.is_active_v = False
         self.cool_time = False
         self.target = None
+        self.active = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -108,9 +109,8 @@ class Equip(pygame.sprite.Sprite):
 
         self.rect = (self.rect_left,self.rect_top)
 
-    def active_skill(self, player):
+    def active_skill(self):
         pass
-
 
 ##### apple class
 class e_Apple(Equip):
@@ -254,6 +254,7 @@ class e_Banana(Equip):
         self.msg_info = "밥 대신 바나나 하나정도"
         self.msg_eff = "사용 : 체력 +20"
         self.grade = 1
+        self.active = True
 
         self.max_row = 4
         self.max_col = 1
@@ -276,7 +277,7 @@ class e_Sandclock(Equip):
         self.msg_info = "뒤집기만 했더니 시간이 멈춰버림"
         self.msg_eff = "스킬 : 3초간 적 정지"
         self.grade = 1
-        self.target = True
+        self.active = True
 
         self.max_row = 3
         # self.max_col = 2
@@ -320,6 +321,7 @@ class e_Dice(Equip):
         self.msg_info = "운을 시험해보세요 !"
         self.msg_eff = "스킬 : 50퍼센트 확률로 체력 +5 또는 -5"
         self.grade = 1
+        self.active = True
 
         # self.max_row = 5
         # self.max_col = 2
@@ -349,9 +351,9 @@ class e_Thunder(Equip):
         self.msg_info = "마른 하늘에 날벼락"
         self.msg_eff = "스킬 : 전체 적에게 5 피해"
         self.grade = 1
-        self.target = True
+        self.active = True
 
-        self.max_row = 4
+        self.max_row = 3
         self.max_col = 1
 
         self.price = 7
@@ -368,7 +370,7 @@ class e_Thunder(Equip):
 ##### gloves class
 class e_Gloves(Equip):
     def __init__(self):
-        image = None
+        image = gloves_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = " Boxer Glove"
@@ -401,7 +403,7 @@ class e_Wax(Equip):
 ##### turtle shell class
 class e_Turtleshell(Equip):
     def __init__(self):
-        image = None
+        image = turtleshell_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "turtle shell"
@@ -418,7 +420,7 @@ class e_Turtleshell(Equip):
 ##### helmet class
 class e_Helmet(Equip):
     def __init__(self):
-        image = None
+        image = helmet_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "helemt"
@@ -451,7 +453,7 @@ class e_Heartstone(Equip):
 ##### brokenstone class
 class e_Brokenstone(Equip):
     def __init__(self):
-        image = None
+        image = brokenstone_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "broken stone"
@@ -467,7 +469,7 @@ class e_Brokenstone(Equip):
 ##### crescentmoon class
 class e_Crescentmoon(Equip):
     def __init__(self):
-        image = None
+        image = crescentmoon_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "crescent moon"
@@ -492,7 +494,7 @@ class e_Crescentmoon(Equip):
 ##### brokenstone class
 class e_Mushroom(Equip):
     def __init__(self):
-        image = None
+        image = mushroom_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "bonus mushroom"
@@ -509,7 +511,7 @@ class e_Mushroom(Equip):
 ##### binoculars class
 class e_Binoculars(Equip):
     def __init__(self):
-        image = None
+        image = binoculars_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "binoculars"
@@ -525,7 +527,7 @@ class e_Binoculars(Equip):
 ##### pizza class
 class e_Pizza(Equip):
     def __init__(self):
-        image = None
+        image = pizza_image
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Hot Pizza"
@@ -534,7 +536,7 @@ class e_Pizza(Equip):
         self.msg_eff = "투사체 속도 감소"
 
         # self.max_row = 5
-        # self.max_col = 1
+        self.max_col = 1
 
         self.price = 3
 
@@ -549,6 +551,7 @@ class e_Smokebomb(Equip):
         self.msg_info = "연기 속에 가려진"
         self.msg_eff = "스킬 : 일정시간 무적"
         self.grade = 1
+        self.active = True
 
         self.save = [0, 0]
 
@@ -578,7 +581,7 @@ class e_Keys(Equip):
         self.msg_info = "이 중 하나는 맞겠지"
         self.msg_eff = "사용 : 계단 열기"
         self.grade = 1
-        self.target = True
+        self.active = True
 
         # self.max_row = 4
         # self.max_col = 1
@@ -602,7 +605,7 @@ class e_Rope(Equip):
         self.msg_info = "지상으로 !"
         self.msg_eff = "사용 : 0층으로"
         self.grade = 1
-        self.target = True
+        self.active = True
 
         # self.max_row = 4
         # self.max_col = 1
@@ -628,8 +631,10 @@ class EquipController():
 
             equip_straw,            equip_banana,           equip_sandclock,            equip_ice,
             equip_dice,             equip_battery,          equip_thunder,              equip_wax,
-            equip_heartstone
-            #gloves, turtleshell, helmet, brokenstone, crescentmoon, mushroom, binoculars, pizza, smokebomb, keys, rope
+            equip_heartstone,       equip_brokenstone,      equip_crescentmoon,         equip_mushroom,
+            equip_pizza,            equip_helmet,           equip_gloves,               equip_turtleshell,
+            equip_binoculars
+            #, , , , , , , , smokebomb, keys, rope
         ]
 
 ##### active controller

@@ -738,6 +738,7 @@ def equip_effect():
     if equip_heartstone in equip_con.equipped_group:
         if not equip_heartstone.is_effected:
             player.max_hp += 20
+            player.hp += 20
             equip_heartstone.is_effected = True
 
     if equip_brokenstone in equip_con.equipped_group:
@@ -823,7 +824,7 @@ def remove_from_equipped_group(equip):
     equip_con.able_equip_group.append(equip)
 
 def setting_active_skill(key, picked_equip):
-    if key == "c" and picked_equip.target:
+    if key == "c" and picked_equip.active:
         for equip in equip_con.equipped_group:
             equip.is_active_c = False
         picked_equip.is_active_c = True
@@ -832,7 +833,7 @@ def setting_active_skill(key, picked_equip):
         if player.equip_v == player.equip_c:
             player.equip_v = None
 
-    if key == "v" and picked_equip.target:
+    if key == "v" and picked_equip.active:
         for equip in equip_con.equipped_group:
             equip.is_active_v = False
         picked_equip.is_active_c = False

@@ -120,6 +120,14 @@ dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png
 heartstone_image = pygame.image.load(os.path.join(file_path, "images\\equips\\heartstone.png"))
 thunder_image = pygame.image.load(os.path.join(file_path, "images\\equips\\thunder.png"))
 wax_image = pygame.image.load(os.path.join(file_path, "images\\equips\\wax.png"))
+brokenstone_image = pygame.image.load(os.path.join(file_path, "images\\equips\\brokenstone.png"))
+crescentmoon_image = pygame.image.load(os.path.join(file_path, "images\\equips\\crescentmoon.png"))
+helmet_image = pygame.image.load(os.path.join(file_path, "images\\equips\\helmet.png"))
+mushroom_image = pygame.image.load(os.path.join(file_path, "images\\equips\\mushroom.png"))
+pizza_image = pygame.image.load(os.path.join(file_path, "images\\equips\\pizza.png"))
+gloves_image = pygame.image.load(os.path.join(file_path, "images\\equips\\gloves.png"))
+turtleshell_image = pygame.image.load(os.path.join(file_path, "images\\equips\\turtleshell.png"))
+binoculars_image = pygame.image.load(os.path.join(file_path, "images\\equips\\binoculars.png"))
 
 ##############################################################################################
 ##### BACKGROUND
