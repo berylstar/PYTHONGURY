@@ -118,6 +118,9 @@ class e_Apple(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Green Apple"
+        self.msg_name = "초록 사과"
+        self.msg_info = "지울거임"
+
         self.max_row = 4
         self.max_col = 1
 
@@ -130,6 +133,9 @@ class e_Mandoo(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Mandoo"
+        self.msg_name = "만두"
+        self.msg_info = "지울거임"
+
         # self.max_row = 5
         # self.max_col = 2
 
@@ -142,6 +148,9 @@ class e_AncientBook(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Ancient Book"
+        self.msg_name = "고대의 책"
+        self.msg_info = "지울거임"
+
         self.max_row = 4
         self.max_col = 1
 
@@ -154,6 +163,9 @@ class e_Bone(Equip):
         index = (0,0)
         Equip.__init__(self, image, index)
         self.name = "Bone"
+        self.msg_name = "뼈다구"
+        self.msg_info = "지울거임"
+
         self.max_row = 4
         # self.max_col = 2
 

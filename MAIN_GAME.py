@@ -75,7 +75,7 @@ def scene_esc(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     index -= 1
-                    if index < 0 :
+                    if index < 0:
                         index = 3
                 if event.key == pygame.K_DOWN:
                     index += 1
@@ -239,6 +239,8 @@ def scene_game_over(doing):
 def scene_shop(doing):
     global running
 
+    picked_num = 0
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -246,13 +248,25 @@ def scene_shop(doing):
                 doing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    equip_for_sale(0, equip_con.for_sale[0])
+                    if picked_num == 1:
+                        equip_for_sale(0, equip_con.for_sale[0])
+                        picked_num = 0
+                    else:
+                        picked_num = 1
 
                 if event.key == pygame.K_2:
-                    equip_for_sale(1, equip_con.for_sale[1])
+                    if picked_num == 2:
+                        equip_for_sale(1, equip_con.for_sale[1])
+                        picked_num = 0
+                    else:
+                        picked_num = 2
 
                 if event.key == pygame.K_3:
-                    equip_for_sale(2, equip_con.for_sale[2])
+                    if picked_num == 3:
+                        equip_for_sale(2, equip_con.for_sale[2])
+                        picked_num = 0
+                    else:
+                        picked_num = 3
 
                 if event.key == pygame.K_0:
                     if player.coin >= 4:
@@ -272,6 +286,11 @@ def scene_shop(doing):
         screen.blit(test_image, (340,60))      # 상점 이미지로 대체
         display_info_ui()
         display_inven_ui()
+
+        if picked_num:
+            screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
+            screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
+            screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -1019,7 +1038,6 @@ while running:
     fps = clock.tick(30)
 
     scene_title_game()
-    screen.fill(BLACK)      # 메인 배경 이미지로 대체
 
     bgm_main.play(-1)
 
@@ -1166,10 +1184,10 @@ while running:
     # screen.blit(blind_image, blind_rect)          # 시야 제한 구현 가능
     player.draw(screen)                                                                 #PLAYER
 
-    # 배경 껍데기 이미지 필요함 - 펀치 나가는거 안보이는 용도
+    screen.blit(cover_image, (0,0))
     display_info_ui()
     display_inven_ui()
-
+    
     if running: 
         pygame.display.update()
 

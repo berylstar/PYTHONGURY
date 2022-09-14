@@ -126,6 +126,7 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0F.p
 ##############################################################################################
 # Others
 title_image = pygame.image.load(os.path.join(file_path, "images\\title.png"))
+cover_image = pygame.image.load(os.path.join(file_path, "images\\cover.png"))
 story_images = [
     
 ]
