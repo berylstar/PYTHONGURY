@@ -60,7 +60,7 @@ class Character(pygame.sprite.Sprite):
         self.to = [0,0,0,0]
 
 ##### MONSTER CLASS
-# "normal" / "shooter" / "alpha" / "runner" / "boss"
+# "normal" / "shooter" / "alpha" / "runner" / "toward" / "boss"
                                                         #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경
 
 # 1 ~ 20 : lower part of tower

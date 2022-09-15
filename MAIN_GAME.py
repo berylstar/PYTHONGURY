@@ -823,7 +823,7 @@ def monster_action():
 
     for monster in monster_group:
         if not monster.is_die:
-            if monster.type == "boss" or monster.type == "shooter":
+            if monster.type == "shooter":
                 if 0 <= randprob <= 70:
                     if monster.direction == "LEFT":
                         image = ember_attack_image
@@ -886,13 +886,13 @@ def field_effect(field):
         #     saved_floor = floor
         #     floor_zero()
 
-        if field.image == mandoo_image:
-            player.stop()
-            monster_group.empty()
-            shooting_group.empty()
-            item_group.empty()
-            field_group.empty()
-            next_floor(player.position)
+        # if field.image == keys_field_image:
+        #     player.stop()
+        #     monster_group.empty()
+        #     shooting_group.empty()
+        #     item_group.empty()
+        #     field_group.empty()
+        #     next_floor(player.position)
 
 ##############################################################################################
 ##### PLAYER CLASS
@@ -900,7 +900,7 @@ class Player(Character):
     def __init__(self, image_group, position):
         Character.__init__(self, image_group, position)
 
-        self.life = 1
+        self.life = 3
         self.hp = 100
         self.coin = 99
 
