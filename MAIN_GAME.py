@@ -402,6 +402,8 @@ def scene_treasure_box(doing):
     choice = True
     if len(equip_con.able_equip_group) >= 2:
         choice_equip = [equip_con.able_equip_group[-1], equip_con.able_equip_group[-2]]
+    else:
+        doing  = False
 
     picked_num = 0
 
@@ -488,6 +490,7 @@ def game_restart():
     equip_con = EquipController()
     skill_con = SkillController()
     monster_con = MonsterController()
+    random_for_sale()
 
 def make_floor_zero():
     global floor
@@ -586,7 +589,14 @@ def random_for_sale():
     total_number = min(len(equip_con.able_equip_group), len(equip_con.for_sale))
 
     for i in range(total_number):
+        percent = random.randrange(1,101)
+
+        # if 0 < percent <= equip_con.perc_normal
+
+
         equip_con.for_sale[i] = equip_con.able_equip_group[i]
+
+
         equip_con.can_buy[i] = True
 
 def equip_for_sale(index, equip):
@@ -680,30 +690,9 @@ def equip_effect():
     if equip_ice in equip_con.equipped_group:
         if not equip_ice.is_effected:
             player.speed += 0.1
+            equip_ice.floor = floor
             equip_ice.is_effected = True
 
-    if equip_apple in equip_con.equipped_group:
-        if not equip_apple.is_effected:
-            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
-            player.punch = big_punch_image
-            equip_apple.is_effected = True
-
-    if equip_mandoo in equip_con.equipped_group:
-        if not equip_mandoo.is_effected:
-            player.life += 1
-            equip_mandoo.is_effected = True
-
-    if equip_ancientbook in equip_con.equipped_group:
-        if not equip_ancientbook.is_effected:
-            player.damaged_time -= 0.5
-            equip_ancientbook.is_effected = True
-
-    if equip_bone in equip_con.equipped_group:
-        if not equip_bone.is_effected:
-            player.ap += 1
-            equip_bone.is_effected = True
-
-    ######
     if equip_straw in equip_con.equipped_group:
         if not equip_straw.is_effected:
             item_con.potion_eff += 5
@@ -738,7 +727,6 @@ def equip_effect():
     if equip_heartstone in equip_con.equipped_group:
         if not equip_heartstone.is_effected:
             player.max_hp += 20
-            player.hp += 20
             equip_heartstone.is_effected = True
 
     if equip_brokenstone in equip_con.equipped_group:
@@ -767,18 +755,6 @@ def remove_from_equipped_group(equip):
         elif equip_ice.charge_times == 1:
             player.speed -= 0.05
 
-    elif equip == equip_apple:
-        player.punch = punch_d_image
-
-    # not remove effect mandoo
-
-    elif equip == equip_ancientbook:
-        player.damaged_time += 0.5
-
-    elif equip == equip_bone:
-        player.ap -= 1
-
-    #####
     if equip == equip_straw:
         item_con.potion_eff -= 5
 
@@ -786,7 +762,7 @@ def remove_from_equipped_group(equip):
         player.speed -= 0.1 * equip_battery.charge_times
         equip_battery.charge_times = 0
 
-    elif equip == equip_apple:
+    elif equip == equip_gloves:
         player.punch = punch_d_image
 
     elif equip == equip_wax:
@@ -924,7 +900,7 @@ class Player(Character):
     def __init__(self, image_group, position):
         Character.__init__(self, image_group, position)
 
-        self.life = 3
+        self.life = 1
         self.hp = 100
         self.coin = 99
 
