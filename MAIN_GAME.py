@@ -18,30 +18,34 @@ def scene_title_game():
     index = 0
 
     while ready:
+        # bgm_title.play(-1)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 ready = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
+                    sound_wasd.play()
                     index -= 1
                     if index < 0 :
                         index = 2
                 if event.key == pygame.K_DOWN:
+                    sound_wasd.play()
                     index += 1
                     if index > 2:
                         index = 0
                 if event.key == pygame.K_SPACE:
+                    sound_pick.play()
                     if index == 0:
                         ready = False
+                        # bgm_title.stop()
                         scene_story(True)
                     elif index == 1:
                         scene_esc(True)
                     elif index == 2:
                         ready = False
                         running = False
-
-        bgm_intro.play(-1)
 
         for i in range(len(color)):
             color[i] = GRAY
@@ -72,16 +76,20 @@ def scene_esc(doing):
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
+                pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
+                    sound_wasd.play()
                     index -= 1
                     if index < 0:
                         index = 3
                 if event.key == pygame.K_DOWN:
+                    sound_wasd.play()
                     index += 1
                     if index > 3:
                         index = 0
                 if event.key == pygame.K_SPACE:
+                    sound_pick.play()
                     if index == 0:
                         doing = False
                     elif index == 1:
@@ -92,6 +100,7 @@ def scene_esc(doing):
                     elif index == 3:
                         doing = False
                         running = False
+                        pygame.quit()
                 if event.key == pygame.K_ESCAPE:
                     doing = False
 
@@ -144,13 +153,17 @@ def scene_story(doing):
     fin = len(story_images)-1
 
     while doing:
+        bgm_story.play(-1)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 doing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    sound_page.play()
                     if index >= fin:
+                        bgm_story.stop()
                         doing = False
                     else:
                         index += 1
@@ -249,28 +262,34 @@ def scene_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if picked_num == 1:
-                        equip_for_sale(0, equip_con.for_sale[0])
+                        equip_for_sale(0)
+                        sound_shop_buy.play()
                         picked_num = 0
                     else:
-                        picked_num = 1
+                        if equip_con.for_sale[0]:
+                            picked_num = 1
 
                 if event.key == pygame.K_2:
                     if picked_num == 2:
-                        equip_for_sale(1, equip_con.for_sale[1])
+                        equip_for_sale(1)
+                        sound_shop_buy.play()
                         picked_num = 0
                     else:
-                        picked_num = 2
+                        if equip_con.for_sale[1]:
+                            picked_num = 2
 
                 if event.key == pygame.K_3:
                     if picked_num == 3:
-                        equip_for_sale(2, equip_con.for_sale[2])
+                        equip_for_sale(2)
+                        sound_shop_buy.play()
                         picked_num = 0
                     else:
-                        picked_num = 3
+                        if equip_con.for_sale[2]:
+                            picked_num = 3
 
                 if event.key == pygame.K_0:
-                    if player.coin >= 4:
-                        player.coin -= 4
+                    if player.coin >= 0:
+                        player.coin -= 0
                         random_for_sale()
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
@@ -515,6 +534,8 @@ def make_floor_zero():
         skill_con.active_rope = False
 
 def floor_zero():
+    bgm_0f.play(-1)
+
     if floor != 0:
         make_floor_zero()
 
@@ -599,11 +620,13 @@ def random_for_sale():
 
         equip_con.can_buy[i] = True
 
-def equip_for_sale(index, equip):
+def equip_for_sale(index):
+    equip = equip_con.for_sale[index]
     if equip_con.can_buy[index] and player.coin >= equip.price:
         equip_con.equipped_group.append(equip)
         player.coin -= equip.price
         equip_con.can_buy[index] = False
+        equip_con.for_sale[index] = None
         equip_con.able_equip_group.remove(equip)
 
 def player_move_key():
@@ -902,7 +925,7 @@ class Player(Character):
 
         self.life = 3
         self.hp = 100
-        self.coin = 99
+        self.coin = 888
 
         self.equip_c = None
         self.equip_v = None
@@ -1031,8 +1054,6 @@ while running:
 
     scene_title_game()
 
-    bgm_main.play(-1)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -1066,10 +1087,11 @@ while running:
     a_counter = milli_time
 
     if floor == 0:
-        bgm_intro.stop()
         floor_zero()      
 
     elif floor > 0:
+        bgm_0f.stop()
+        bgm_first.play(-1)
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
             #for 1 second
@@ -1157,7 +1179,7 @@ while running:
                 player.change_image_group(player_die_images)
         
     if player.image == player_die_images[3]:
-        bgm_main.stop()
+        bgm_first.stop()
         pygame.time.delay(2000)
         player.image_group = player_images
         player.is_die = False
