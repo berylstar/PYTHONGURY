@@ -69,6 +69,10 @@ def floor_monster_setting(pos, floor):
         # spawn_monster(pos, floor, Mon_ember())
         # spawn_monster(pos, floor, Mon_ghost())
         # spawn_monster(pos, floor, Mon_ghost())
+        spawn_monster(pos, floor, Mon_spider())
+        spawn_monster(pos, floor, Mon_frog())
+        spawn_monster(pos, floor, Mon_bat())
+        spawn_monster(pos, floor, Mon_skel())
         pass
     elif 7 <= floor < 12:
         spawn_monster(pos, floor, Mon_ember())

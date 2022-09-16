@@ -18,5 +18,19 @@ sound_shop_buy = pygame.mixer.Sound('Soundtrack\\effect\\shop_buy.mp3')
 
 punch_sound = pygame.mixer.Sound("Sound\\Sound_Effect\\Slime\\Skill\\Skill_punch_1.wav")
 
+class SoundController():
+    def __init__(self):
+        self.volume = 1
+        self.playing = False
 
+    def play_bgm(self, bgm):
+        if not self.playing:
+            bgm.play(-1)
+            self.playing = True
+
+    def stop_bgm(self, bgm):
+        bgm.stop()
+        self.playing = False
+
+sound_con = SoundController()
 pygame.quit()

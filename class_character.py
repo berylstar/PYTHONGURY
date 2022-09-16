@@ -64,35 +64,19 @@ class Character(pygame.sprite.Sprite):
                                                         #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경
 
 # 1 ~ 20 : lower part of tower
-class Mon_skel(Character):
-    def __init__(self):
-        image_group = mon_skel_images
-        position = (0,0)
-        Character.__init__(self, image_group, position)
-        self.type = "normal"
-
-        self.hp = 10
-        self.speed = 0.1
-
 class Mon_spider(Character):
     def __init__(self):
         image_group = monster_1_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "normal"
+        self.type = "shooter"
 
-        self.hp = 10
-        self.speed = 0.1
-
-class Mon_bat(Character):
-    def __init__(self):
-        image_group = monster_2_images
-        position = (0,0)
-        Character.__init__(self, image_group, position)
-        self.type = "normal"
-
-        self.hp = 10
-        self.speed = 0.1
+        self.hp = 12
+        self.ap = 2
+        self.speed = 0.15
+        self.bullet = ember_attack_image
+        self.b_speed = 8
+        self.b_damage = 0
 
 class Mon_frog(Character):
     def __init__(self):
@@ -101,14 +85,35 @@ class Mon_frog(Character):
         Character.__init__(self, image_group, position)
         self.type = "normal"
 
-        self.hp = 25
-        self.speed = 0.1
+        self.hp = 12
+        self.ap = 2
+        self.speed = 0.2
+
+class Mon_bat(Character):
+    def __init__(self):
+        image_group = monster_2_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "runner"
+
+        self.hp = 8
+        self.ap = 1.3
+        self.speed = 0.2
+        self.curr_dir = None
+
+class Mon_skel(Character):
+    def __init__(self):
+        image_group = mon_skel_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "normal"
+
+        self.hp = 21
+        self.ap = 2
+        self.speed = 0.12
 
 
-# 21 ~ 40 : grass land
-
-
-# 41 ~ 60 : graveyard
+# 21 ~ 40 : graveyard
 class Mon_ghost(Character):
     def __init__(self):
         image_group = mon_ghost_images
@@ -117,10 +122,11 @@ class Mon_ghost(Character):
         self.type = "alpha"
 
         self.hp = 15
+        self.ap = 2
         self.speed = 0.1
 
 
-# 61 ~ 80 : fire land
+# 41 ~ 60 : lava land
 class Mon_ember(Character):
     def __init__(self):
         image_group = mon_ember_images
@@ -129,7 +135,15 @@ class Mon_ember(Character):
         self.type = "shooter"
 
         self.hp = 10
+        self.ap = 2
         self.speed = 0.05
+        self.bullet = ember_attack_image
+        self.b_speed = 10
+        self.b_damage = 10
+
+
+# 61 ~ 80 : magical library
+
 
 # 81 ~ 100 : king castle
 
@@ -143,6 +157,7 @@ class Mon_skell(Character):
         self.curr_dir = None        # runner는 self.curr_dir=None 필요
 
         self.hp = 10
+        self.ap = 2
         self.speed = 0.1
 
 class Mon_boss(Character):
@@ -153,6 +168,7 @@ class Mon_boss(Character):
         self.type = "boss"
 
         self.hp = 100
+        self.ap = 2
         self.speed = 0.1
 
 ##############################################################################################
@@ -160,8 +176,7 @@ class MonsterController():
     def __init__(self):
         self.dontmove = False
 
-        self.shooting_speed = 10
-        self.shooting_damage = 5
+        self.b_speed = 0
 ##############################################################################################
 
 ##### about monster

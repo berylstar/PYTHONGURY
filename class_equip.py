@@ -498,8 +498,8 @@ class e_Smokebomb(Equip):
             skill_con.active_smokebomb[1] = pygame.time.get_ticks()
             self.cool_time = True
             
-            self.save = [self.target.damaged_enemy, self.target.damaged_time]
-            self.target.damaged_enemy = 0
+            self.save = [self.target.dp, self.target.damaged_time]
+            self.target.dp = 100
             self.target.damaged_time = 0
 
 ##### keys class
@@ -628,7 +628,7 @@ class SkillController():
         if self.active_smokebomb[0] or equip_smokebomb.cool_time:
             if now_time - self.active_smokebomb[1] > 3000:
                 if self.active_smokebomb[0]:
-                    equip_smokebomb.target.damaged_enemy = equip_smokebomb.save[0]
+                    equip_smokebomb.target.dp = equip_smokebomb.save[0]
                     equip_smokebomb.target.damaged_time = equip_smokebomb.save[1]
                 self.active_smokebomb[0] = False
                 equip_smokebomb.image.set_alpha(60)

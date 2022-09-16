@@ -17,9 +17,9 @@ def scene_title_game():
     color = [GRAY, GRAY, GRAY]
     index = 0
 
+    if ready:
+        sound_con.play_bgm(bgm_title)
     while ready:
-        # bgm_title.play(-1)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -39,7 +39,7 @@ def scene_title_game():
                     sound_pick.play()
                     if index == 0:
                         ready = False
-                        # bgm_title.stop()
+                        sound_con.stop_bgm(bgm_title)
                         scene_story(True)
                     elif index == 1:
                         scene_esc(True)
@@ -152,9 +152,8 @@ def scene_story(doing):
     index = 0
     fin = len(story_images)-1
 
+    sound_con.play_bgm(bgm_story)
     while doing:
-        bgm_story.play(-1)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -163,7 +162,7 @@ def scene_story(doing):
                 if event.key == pygame.K_SPACE:
                     sound_page.play()
                     if index >= fin:
-                        bgm_story.stop()
+                        sound_con.stop_bgm(bgm_story)
                         doing = False
                     else:
                         index += 1
@@ -468,9 +467,9 @@ def scene_treasure_box(doing):
         one_rect = choice_equip[1].image.get_rect(center=(790,450))
 
         if picked_num:
-            screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
-            screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
-            screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
+            screen_message(choice_equip[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
+            screen_message(choice_equip[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
+            screen_message(choice_equip[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
         
         if choice:          # 보물 상자 이미지 대체
             screen_message("<1>", WHITE, (490, 350), game_font_m)
@@ -498,7 +497,7 @@ def screen_message(writing, color, position, font):
 
 def game_restart():
     global player, saved_floor
-    global item_con, equip_con, skill_con, monster_con
+    global item_con, equip_con, skill_con, monster_con, sound_con
 
     player = Player(player_images, player_first_position)
     make_floor_zero()
@@ -509,6 +508,7 @@ def game_restart():
     equip_con = EquipController()
     skill_con = SkillController()
     monster_con = MonsterController()
+    sound_con = SoundController()
     random_for_sale()
 
 def make_floor_zero():
@@ -534,7 +534,7 @@ def make_floor_zero():
         skill_con.active_rope = False
 
 def floor_zero():
-    bgm_0f.play(-1)
+    sound_con.play_bgm(bgm_0f)
 
     if floor != 0:
         make_floor_zero()
@@ -744,7 +744,7 @@ def equip_effect():
 
     if equip_helmet in equip_con.equipped_group:
         if not equip_helmet.is_effected:
-            player.damaged_enemy -= 0.2
+            player.dp += 0.2
             equip_helmet.is_effected = True
 
     if equip_heartstone in equip_con.equipped_group:
@@ -765,7 +765,7 @@ def equip_effect():
 
     if equip_pizza in equip_con.equipped_group:
         if not equip_pizza.is_effected:
-            monster_con.shooting_speed -= 2
+            monster_con.b_speed -= 2
             equip_pizza.is_effected = True
 
 def remove_from_equipped_group(equip):
@@ -795,7 +795,7 @@ def remove_from_equipped_group(equip):
         player.damaged_time += 0.3
 
     elif equip == equip_helmet:
-        player.damaged_enemy += 0.2
+        player.dp -= 0.2
 
     elif equip == equip_heartstone:
         player.max_hp -= 20
@@ -810,7 +810,7 @@ def remove_from_equipped_group(equip):
         item_con.prob_coin -= 3
 
     elif equip == equip_pizza:
-        monster_con.shooting_speed += 2
+        monster_con.b_speed += 2
 
     equip_con.equipped_group.remove(equip)
     equip.is_effected = False
@@ -849,16 +849,16 @@ def monster_action():
             if monster.type == "shooter":
                 if 0 <= randprob <= 70:
                     if monster.direction == "LEFT":
-                        image = ember_attack_image
+                        image = monster.bullet
                     elif monster.direction == "RIGHT":
-                        image = pygame.transform.flip(ember_attack_image, True, False)
+                        image = pygame.transform.flip(monster.bullet, True, False)
                     elif monster.direction == "UP":
-                        image = pygame.transform.rotozoom(ember_attack_image, 270, 1)
+                        image = pygame.transform.rotozoom(monster.bullet, 270, 1)
                     elif monster.direction == "DOWN":
-                        image = pygame.transform.rotozoom(ember_attack_image, 90, 1)
+                        image = pygame.transform.rotozoom(monster.bullet, 90, 1)
                     else:
                         break
-                    shooting_group.add(Punch(image, monster.position, monster.direction))
+                    shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage))
 
             if monster.type == "alpha":
                 if 0 <= randprob <= 50:
@@ -897,14 +897,8 @@ def field_effect(field):
     if pygame.sprite.collide_mask(field, player):
         if field.image == web_image and not field.is_activated:
             player.stop()
-    #         player.speed /= 2
-    #         field.is_activated = pygame.time.get_ticks()
-    # else:
-    #     if field.is_activated and (pygame.time.get_ticks() - field.is_activated) > 3000:
-    #         player.speed *= 2
-    #         field.is_activated = 0
 
-        # if field.image == mandoo_image:   #rope image
+        # if field.image == rope_field_image:
         #     player.stop()
         #     saved_floor = floor
         #     floor_zero()
@@ -926,16 +920,15 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.coin = 888
-
-        self.equip_c = None
-        self.equip_v = None
-
         self.ap = 10
         self.max_hp = 100
         self.speed = 0.3
         self.punch = punch_d_image
-        self.damaged_enemy = 2
+        self.dp = 0
         self.damaged_time = 1
+
+        self.equip_c = None
+        self.equip_v = None
 
     def space_bar(self):
         # punch_sound.play()
@@ -983,16 +976,24 @@ class Punch(pygame.sprite.Sprite):
         else:
             screen.blit(self.image, self.rect)
 
+#### SHOOTING CLASS
+class Bullet(Punch):
+    def __init__(self, image, position, direction, speed, damage):
+        Punch.__init__(self, image, position, direction)
+        self.speed = max((speed + monster_con.b_speed), 0)
+        print(self.speed)
+        self.damage = damage
+
     def shoot(self):
         if not skill_con.active_sandclock[0]:
             if self.direction == "LEFT":
-                self.rect.x -= monster_con.shooting_speed
+                self.rect.x -= self.speed
             elif self.direction == "RIGHT":
-                self.rect.x += monster_con.shooting_speed
+                self.rect.x += self.speed
             elif self.direction == "UP":
-                self.rect.y -= monster_con.shooting_speed
+                self.rect.y -= self.speed
             elif self.direction == "DOWN":
-                self.rect.y += monster_con.shooting_speed
+                self.rect.y += self.speed
             elif self.direction == "NONE":
                 pass
 
@@ -1090,8 +1091,8 @@ while running:
         floor_zero()      
 
     elif floor > 0:
-        bgm_0f.stop()
-        bgm_first.play(-1)
+        sound_con.stop_bgm(bgm_0f)
+        sound_con.play_bgm(bgm_first)
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
             #for 1 second
@@ -1127,7 +1128,7 @@ while running:
     for monster in monster_group:
         monster.draw(screen)                                                           #MONSTER
         if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
-            player.hp -= player.damaged_enemy
+            player.hp -= max((monster.ap - player.dp), 0)
             if not player.is_die:
                 player.image = player_damaged_image
         if monster.hp <= 0:
@@ -1147,14 +1148,14 @@ while running:
                 punch_group.remove(punch)
                 monster.hp -= player.ap
 
-    for shoot in shooting_group:
-        shoot.shoot()
-        shoot.draw(screen)                                                              #MONSTER SHOOING
-        if pygame.sprite.collide_mask(shoot, player):
-            player.hp -= monster_con.shooting_damage
+    for bullet in shooting_group:
+        bullet.shoot()
+        bullet.draw(screen)                                                              #MONSTER SHOOING
+        if pygame.sprite.collide_mask(bullet, player):
+            player.hp -= bullet.damage
             if not player.is_die:
                 player.image = player_damaged_image
-            shooting_group.remove(shoot)
+            shooting_group.remove(bullet)
 
     for item in item_group:
         item.draw(screen)                                                               #ITEM
@@ -1179,7 +1180,7 @@ while running:
                 player.change_image_group(player_die_images)
         
     if player.image == player_die_images[3]:
-        bgm_first.stop()
+        sound_con.stop_bgm(bgm_first)
         pygame.time.delay(2000)
         player.image_group = player_images
         player.is_die = False
