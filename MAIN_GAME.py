@@ -114,7 +114,7 @@ def scene_esc(doing):
         screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
         screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
 
-        pygame.display.update(full_rect)
+        pygame.display.update()
     
 def display_info_ui():
     pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
@@ -330,7 +330,7 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
         equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
         screen.blit(equip.image, equip_rect)
 
-        screen_message(equip.name, WHITE, (490 + 150*index, sero+185), game_font_s)
+        screen_message(equip.msg_name, WHITE, (490 + 150*index, sero+185), game_font_kor)
 
         coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
         coin_rect = coin_image_r.get_rect(center=(470 + 150*index,sero+230))
@@ -540,7 +540,9 @@ def floor_zero():
         make_floor_zero()
 
     torch.draw(screen)
-    npc_group.draw(screen)
+    # npc_group.draw(screen)
+    for npc in npc_group:
+        npc.draw(screen)
 
     for punch in punch_group:
         if pygame.sprite.collide_mask(punch, npc_kingslime):
@@ -566,28 +568,28 @@ def next_floor(pos):
 
     floor_setting(pos, floor)
 
-    if equip_battery in equip_con.equipped_group and equip_battery.charge_times < 3:
-        if floor - equip_battery.floor >= 1:
-            print("충전중" + str(equip_battery.charge_times))
+    if e_battery in equip_con.equipped_group and e_battery.charge_times < 3:
+        if floor - e_battery.floor >= 1:
+            print("충전중" + str(e_battery.charge_times))
             player.speed += 0.05
-            equip_battery.floor = floor
-            equip_battery.charge_times += 1
+            e_battery.floor = floor
+            e_battery.charge_times += 1
             # 충전됨에 따라 배터리 이미지도 바꾸기
 
-    if equip_ice in equip_con.equipped_group and equip_ice.charge_times < 3:
-        if floor - equip_ice.floor >= 1:
-            print("녹는중" + str(equip_ice.charge_times))
+    if e_ice in equip_con.equipped_group and e_ice.charge_times < 3:
+        if floor - e_ice.floor >= 1:
+            print("녹는중" + str(e_ice.charge_times))
             player.speed -= 0.05
-            equip_ice.floor = floor
-            equip_ice.charge_times += 1
-            if equip_ice.charge_times == 2:
-                remove_from_equipped_group(equip_ice)
+            e_ice.floor = floor
+            e_ice.charge_times += 1
+            if e_ice.charge_times == 2:
+                remove_from_equipped_group(e_ice)
             # 녹음에 따라 얼음 이미지도 바꾸기
 
-    if equip_crescentmoon in equip_con.equipped_group:
-        equip_crescentmoon.prob_revival()
+    if e_crescentmoon in equip_con.equipped_group:
+        e_crescentmoon.prob_revival()
 
-    equip_keys.target = floor
+    e_keys.target = floor
 
 def display_background(floor):
     if floor >= 0:
@@ -705,120 +707,172 @@ def item_effect(item):
         scene_treasure_box(True)
 
 def equip_effect():
-    if equip_pepper in equip_con.equipped_group:
-        if not equip_pepper.is_effected:
-            player.ap += 3            
-            equip_pepper.is_effected = True
+    # mushroom
+    # crescentmoon
+    # banana
 
-    if equip_ice in equip_con.equipped_group:
-        if not equip_ice.is_effected:
-            player.speed += 0.1
-            equip_ice.floor = floor
-            equip_ice.is_effected = True
-
-    if equip_straw in equip_con.equipped_group:
-        if not equip_straw.is_effected:
-            item_con.potion_eff += 5
-            equip_straw.is_effected = True
-
-    if equip_battery in equip_con.equipped_group:
-        if not equip_battery.is_effected:
-            equip_battery.floor = floor
-            equip_battery.is_effected = True
-
-    if equip_gloves in equip_con.equipped_group:
-        if not equip_gloves.is_effected:
-            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
-            player.punch = big_punch_image
-            equip_gloves.is_effected = True
-
-    if equip_wax in equip_con.equipped_group:
-        if not equip_wax.is_effected:
+    if e_wax in equip_con.equipped_group:
+        if not e_wax.is_effected:
             player.ap += 2
-            equip_wax.is_effected = True
-    
-    if equip_turtleshell in equip_con.equipped_group:
-        if not equip_turtleshell.is_effected:
-            player.damaged_time -= 0.3
-            equip_turtleshell.is_effected = True
+            e_wax.is_effected = True
 
-    if equip_helmet in equip_con.equipped_group:
-        if not equip_helmet.is_effected:
-            player.dp += 0.2
-            equip_helmet.is_effected = True
+    if e_pepper in equip_con.equipped_group:
+        if not e_pepper.is_effected:
+            player.ap += 3            
+            e_pepper.is_effected = True
 
-    if equip_heartstone in equip_con.equipped_group:
-        if not equip_heartstone.is_effected:
+    if e_heartstone in equip_con.equipped_group:
+        if not e_heartstone.is_effected:
             player.max_hp += 20
-            equip_heartstone.is_effected = True
+            e_heartstone.is_effected = True
 
-    if equip_brokenstone in equip_con.equipped_group:
-        if not equip_brokenstone.is_effected:
+    if e_halfstone in equip_con.equipped_group:
+        if not e_halfstone.is_effected:
             player.max_hp += 10
-            equip_brokenstone.is_effected = True
+            e_halfstone.is_effected = True
 
-    if equip_binoculars in equip_con.equipped_group:
-        if not equip_binoculars.is_effected:
+    if e_ice in equip_con.equipped_group:
+        if not e_ice.is_effected:
+            player.speed += 0.1
+            e_ice.floor = floor
+            e_ice.is_effected = True
+
+    if e_battery in equip_con.equipped_group:
+        if not e_battery.is_effected:
+            e_battery.floor = floor
+            e_battery.is_effected = True
+
+    if e_rollerskate in equip_con.equipped_group:
+        if not e_rollerskate.is_effected:
+            player.speed += 0.1
+            e_rollerskate.is_effected = True
+
+    if e_boxerglove in equip_con.equipped_group:
+        if not e_boxerglove.is_effected:
+            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))        # 펀치 이미지를 다른 이미지로 변경 ?
+            player.punch = big_punch_image
+            e_boxerglove.is_effected = True
+
+    if e_helmet in equip_con.equipped_group:
+        if not e_helmet.is_effected:
+            player.dp += 0.2
+            e_helmet.is_effected = True
+
+    if e_turtleshell in equip_con.equipped_group:
+        if not e_turtleshell.is_effected:
+            player.damaged_time -= 0.3
+            e_turtleshell.is_effected = True
+
+    if e_pizza in equip_con.equipped_group:
+        if not e_pizza.is_effected:
+            monster_con.b_speed -= 2
+            e_pizza.is_effected = True
+
+    if e_glasses in equip_con.equipped_group:
+        if not e_glasses.is_effected:
+            monster_con.dont_alpha = True
+            e_glasses.is_effected = True
+
+    if e_ticket in equip_con.equipped_group:
+        if not e_ticket.is_effected:
+            equip_con.perc_rare += 5
+            e_ticket.is_effected = True
+
+    if e_straw in equip_con.equipped_group:
+        if not e_straw.is_effected:
+            item_con.potion_eff += 5
+            e_straw.is_effected = True
+
+    if e_binoculars in equip_con.equipped_group:
+        if not e_binoculars.is_effected:
             item_con.prob_potion += 3
             item_con.prob_coin += 3
-            equip_binoculars.is_effected = True
+            e_binoculars.is_effected = True
 
-    if equip_pizza in equip_con.equipped_group:
-        if not equip_pizza.is_effected:
-            monster_con.b_speed -= 2
-            equip_pizza.is_effected = True
+    # trafficlight
+    # thunder
+    # dice
+    # smokebomb
+    # keys
+    # rope
+
+    
 
 def remove_from_equipped_group(equip):
-    if equip == equip_pepper:
-        player.ap -= 3
+    global e_wax, e_pepper, e_heartstone, e_halfstone, e_ice, e_battery, e_rollerskate, e_boxerglove, e_helmet
+    global e_turtleshell, e_pizza, e_glasses, e_ticket, e_straw, e_binoculars
 
-    elif equip == equip_ice:
-        if equip_ice.charge_times == 0:
-            player.speed -= 0.1
-        elif equip_ice.charge_times == 1:
-            player.speed -= 0.05
-
-    if equip == equip_straw:
-        item_con.potion_eff -= 5
-
-    elif equip == equip_battery:
-        player.speed -= 0.1 * equip_battery.charge_times
-        equip_battery.charge_times = 0
-
-    elif equip == equip_gloves:
-        player.punch = punch_d_image
-
-    elif equip == equip_wax:
+    if equip == e_wax:
         player.ap -= 2
+        e_wax = E_Wax()
 
-    elif equip == equip_turtleshell:
-        player.damaged_time += 0.3
+    elif equip == e_pepper:
+        player.ap -= 3
+        e_pepper = E_Pepper()
 
-    elif equip == equip_helmet:
-        player.dp -= 0.2
-
-    elif equip == equip_heartstone:
+    elif equip == e_heartstone:
         player.max_hp -= 20
         player.hp = min(player.hp, player.max_hp)
+        e_heartstone = E_HeartStone()
 
-    elif equip == equip_brokenstone:
+    elif equip == e_halfstone:
         player.max_hp -= 10
         player.hp = min(player.hp, player.max_hp)
+        e_halfstone = E_HalfStone()
 
-    elif equip == equip_binoculars:
+    elif equip == e_ice:
+        if e_ice.charge_times == 0:
+            player.speed -= 0.1
+        elif e_ice.charge_times == 1:
+            player.speed -= 0.05
+        e_ice = E_Ice()
+
+    elif equip == e_battery:
+        player.speed -= 0.1 * e_battery.charge_times
+        e_battery.charge_times = 0
+        e_battery = E_Battery()
+
+    elif equip == e_rollerskate:
+        player.speed -= 0.1
+        e_rollerskate = E_RollerSkate()
+
+    elif equip == e_boxerglove:
+        player.punch = punch_d_image
+        e_boxerglove = E_BoxerGlove()
+    
+    elif equip == e_helmet:
+        player.dp -= 0.2
+        e_helmet = E_Helmet()
+
+    elif equip == e_turtleshell:
+        player.damaged_time += 0.3
+        e_turtleshell = E_TurtleShell()
+
+    elif equip == e_pizza:
+        monster_con.b_speed += 2
+        e_pizza = E_Pizza()
+
+    elif equip == e_glasses:
+        monster_con.dont_alpha = False
+        e_glasses = E_Glasses()
+
+    elif equip == e_ticket:
+        equip_con.perc_rare -= 5
+        e_ticket = E_Ticket()
+
+    elif equip == e_straw:
+        item_con.potion_eff -= 5
+        e_straw = E_Straw()
+
+    elif equip == e_binoculars:
         item_con.prob_potion -= 3
         item_con.prob_coin -= 3
-
-    elif equip == equip_pizza:
-        monster_con.b_speed += 2
+        e_binoculars = E_Binoculars()
 
     equip_con.equipped_group.remove(equip)
-    equip.is_effected = False
     if equip.is_active_c:
-        equip.is_active_c = False
         player.equip_c = None
     elif equip.is_active_v:
-        equip.is_active_v = False
         player.equip_v = None
     equip_con.able_equip_group.append(equip)
 
@@ -981,11 +1035,10 @@ class Bullet(Punch):
     def __init__(self, image, position, direction, speed, damage):
         Punch.__init__(self, image, position, direction)
         self.speed = max((speed + monster_con.b_speed), 0)
-        print(self.speed)
         self.damage = damage
 
     def shoot(self):
-        if not skill_con.active_sandclock[0]:
+        if not skill_con.active_trafficlight[0]:
             if self.direction == "LEFT":
                 self.rect.x -= self.speed
             elif self.direction == "RIGHT":
@@ -1042,10 +1095,10 @@ punch_group = pygame.sprite.Group()
 shooting_group = pygame.sprite.Group()
 
 ##### EQUIP
-equip_banana.target = player
-equip_dice.target = player
-equip_thunder.target = monster_group
-equip_smokebomb.target = player
+e_banana.target = player
+e_dice.target = player
+e_thunder.target = monster_group
+e_smokebomb.target = player
 ##############################################################################################
 ready = True
 running = True
@@ -1099,7 +1152,7 @@ while running:
             # if monster_group:     #몬스터 없을 때는 체력 안달게 ?
             player.hp -= player.damaged_time
             
-            if not skill_con.active_sandclock[0]:
+            if not skill_con.active_trafficlight[0]:
                 random_monster_direction()
                 # forward_monster_direction(player)
                 monster_action()
@@ -1109,7 +1162,7 @@ while running:
         if monster_con.dontmove:
             monster_con.dontmove = False
 
-        if not skill_con.active_sandclock[0]:
+        if not skill_con.active_trafficlight[0]:
             monster_move()
 
     for field in field_group:
@@ -1168,9 +1221,9 @@ while running:
 
     # GAME OVER
     if player.hp <= 0:
-        if equip_crescentmoon.revival:
+        if e_crescentmoon.revival:
             player.hp = player.max_hp
-            equip_crescentmoon.prob_revival()
+            e_crescentmoon.prob_revival()
         else:
             player.hp = 0
             player.stop()
@@ -1186,9 +1239,9 @@ while running:
         player.is_die = False
         player.life -= 1
         
-        if player.life <= 0 and equip_mushroom in equip_con.equipped_group:
+        if player.life <= 0 and e_mushroom in equip_con.equipped_group:
             player.life += 1
-            remove_from_equipped_group(equip_mushroom)
+            remove_from_equipped_group(e_mushroom)
             scene_player_dead(True)
         elif player.life <= 0:
             scene_game_over(True)

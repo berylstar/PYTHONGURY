@@ -175,6 +175,8 @@ class Mon_boss(Character):
 class MonsterController():
     def __init__(self):
         self.dontmove = False
+        self.dont_alpha = False
+        self.dont_dash = False
 
         self.b_speed = 0
 ##############################################################################################
@@ -185,6 +187,7 @@ monster_con = MonsterController()
 
 ###### about npc
 npc_kingslime = Character(father_slime_images, (540, 360))
+npc_kingslime.direction = "RIGHT"
 npc_coffin = Character(coffin_images, (840, 600))
 npc_ghost = Character(ghost_images, (800, 150))
 
