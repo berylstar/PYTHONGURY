@@ -87,12 +87,14 @@ web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 
 water_image = pygame.image.load(os.path.join(file_path, "design\\field\\water_0.png"))
 
-torch_images = [
-    pygame.image.load(os.path.join(file_path, "design\\field\\torch.png")),
-]
+torch_image = pygame.image.load(os.path.join(file_path, "design\\field\\torch.png"))
 
-light_image = pygame.image.load(os.path.join(file_path, "images\\light.png"))
-light_image.set_alpha(80)
+light_images = [
+    pygame.image.load(os.path.join(file_path, "images\\light.png")),
+    pygame.image.load(os.path.join(file_path, "images\\light2.png"))
+]
+for l in light_images:
+    l.set_alpha(80)
 
 ##############################################################################################
 ##### ITEM

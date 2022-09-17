@@ -26,17 +26,17 @@ def scene_title_game():
                 ready = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    sound_wasd.play()
+                    sound_con.play_sound(sound_wasd)
                     index -= 1
                     if index < 0 :
                         index = 2
                 if event.key == pygame.K_DOWN:
-                    sound_wasd.play()
+                    sound_con.play_sound(sound_wasd)
                     index += 1
                     if index > 2:
                         index = 0
                 if event.key == pygame.K_SPACE:
-                    sound_pick.play()
+                    sound_con.play_sound(sound_pick)
                     if index == 0:
                         ready = False
                         sound_con.stop_bgm(bgm_title)
@@ -79,28 +79,88 @@ def scene_esc(doing):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    sound_wasd.play()
+                    sound_con.play_sound(sound_wasd)
                     index -= 1
                     if index < 0:
                         index = 3
                 if event.key == pygame.K_DOWN:
-                    sound_wasd.play()
+                    sound_con.play_sound(sound_wasd)
                     index += 1
                     if index > 3:
                         index = 0
                 if event.key == pygame.K_SPACE:
-                    sound_pick.play()
+                    sound_con.play_sound(sound_pick)
                     if index == 0:
                         doing = False
                     elif index == 1:
                         pygame.display.toggle_fullscreen()
                         pygame.display.update()
                     elif index == 2:
-                        pass
+                        scene_sound_setting(True)
                     elif index == 3:
                         doing = False
                         running = False
                         pygame.quit()
+                if event.key == pygame.K_ESCAPE:
+                    doing = False
+
+        for i in range(len(color)):
+            color[i] = GRAY
+        color[index] = GREEN
+
+        screen.blit(title_image, (0,0))
+        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
+        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
+        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
+        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
+
+        pygame.display.update()
+
+def scene_sound_setting(doing):
+    global running
+
+    
+    color = [GRAY, GRAY, GRAY, GRAY]
+    index = 0
+
+    while doing:
+        option = ["BGM : {0:.1f}".format(sound_con.bgm_volume), "EFFECT : {0:.1f}".format(sound_con.effect_volume), "ALL MUTE", "RETURN"]
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    sound_con.play_sound(sound_wasd)
+                    index -= 1
+                    if index < 0:
+                        index = 3
+                if event.key == pygame.K_DOWN:
+                    sound_con.play_sound(sound_wasd)
+                    index += 1
+                    if index > 3:
+                        index = 0
+
+                if event.key == pygame.K_LEFT:
+                    if index == 0:
+                        sound_con.bgm_volume = max(sound_con.bgm_volume-0.1, 0)
+                    elif index == 1:
+                        sound_con.effect_volume = max(sound_con.effect_volume-0.1, 0)
+                if event.key == pygame.K_RIGHT:
+                    if index == 0:
+                        sound_con.bgm_volume = min(sound_con.bgm_volume+0.1, 1)
+                    elif index == 1:
+                        sound_con.effect_volume = min(sound_con.effect_volume+0.1, 1)
+                    
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_pick)
+                    if index == 2:
+                        sound_con.bgm_volume = 0
+                        sound_con.effect_volume = 0
+                    elif index == 3:
+                        doing = False
                 if event.key == pygame.K_ESCAPE:
                     doing = False
 
@@ -138,13 +198,13 @@ def display_inven_ui():
         pygame.draw.line(screen, D_GRAY, (950 + 60*i, 240), (950 + 60*i, 600))
     for i in range(MAX_ROW+2):
         pygame.draw.line(screen, D_GRAY, (950, 240 + 60*i), (1130, 240 + 60*i))
-    pygame.draw.rect(screen, D_GRAY, ((950, 70), (180, 160)), 1)
+    # pygame.draw.rect(screen, D_GRAY, ((950, 70), (180, 160)), 1)
 
     for equip in equip_con.equipped_group:
         equip.draw(screen)                                                                  #EQUIP
 
     if is_inven_overlapped(equip_con.equipped_group):
-        screen_message("CHECK EQUIPS !", RED, (1040,150), game_font_s)
+        screen_message("장비 확인 !", RED, (1040,150), game_font_s)
 
 def scene_story(doing):
     global running
@@ -160,7 +220,7 @@ def scene_story(doing):
                 doing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    sound_page.play()
+                    sound_con.play_sound(sound_page)
                     if index >= fin:
                         sound_con.stop_bgm(bgm_story)
                         doing = False
@@ -262,7 +322,7 @@ def scene_shop(doing):
                 if event.key == pygame.K_1:
                     if picked_num == 1:
                         equip_for_sale(0)
-                        sound_shop_buy.play()
+                        sound_con.play_sound(sound_shop_buy)
                         picked_num = 0
                     else:
                         if equip_con.for_sale[0]:
@@ -271,7 +331,7 @@ def scene_shop(doing):
                 if event.key == pygame.K_2:
                     if picked_num == 2:
                         equip_for_sale(1)
-                        sound_shop_buy.play()
+                        sound_con.play_sound(sound_shop_buy)
                         picked_num = 0
                     else:
                         if equip_con.for_sale[1]:
@@ -280,7 +340,7 @@ def scene_shop(doing):
                 if event.key == pygame.K_3:
                     if picked_num == 3:
                         equip_for_sale(2)
-                        sound_shop_buy.play()
+                        sound_con.play_sound(sound_shop_buy)
                         picked_num = 0
                     else:
                         if equip_con.for_sale[2]:
@@ -329,8 +389,6 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
         # equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
         equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
         screen.blit(equip.image, equip_rect)
-
-        screen_message(equip.msg_name, WHITE, (490 + 150*index, sero+185), game_font_kor)
 
         coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
         coin_rect = coin_image_r.get_rect(center=(470 + 150*index,sero+230))
@@ -408,10 +466,11 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
             screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_kor)
             screen_message(picked_equip.msg_eff, YELLOW, (1040,180), game_font_kor)
+            screen_message(picked_equip.msg_eff_2, YELLOW, (1040,200), game_font_kor)
     
         cursor.draw(screen)
         # pygame.display.update(inven_rect)
-        pygame.display.update(full_rect)
+        pygame.display.update(inven_rect)
 
 def scene_treasure_box(doing):
     global running
@@ -497,7 +556,7 @@ def screen_message(writing, color, position, font):
 
 def game_restart():
     global player, saved_floor
-    global item_con, equip_con, skill_con, monster_con, sound_con
+    global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
     make_floor_zero()
@@ -508,7 +567,7 @@ def game_restart():
     equip_con = EquipController()
     skill_con = SkillController()
     monster_con = MonsterController()
-    sound_con = SoundController()
+    # sound_con = SoundController()
     random_for_sale()
 
 def make_floor_zero():
@@ -540,7 +599,6 @@ def floor_zero():
         make_floor_zero()
 
     torch.draw(screen)
-    # npc_group.draw(screen)
     for npc in npc_group:
         npc.draw(screen)
 
@@ -601,6 +659,7 @@ def display_background(floor):
 
 def show_animation():
     player.image_update()
+    torch.image_update()
     for npc in npc_group:
         npc.image_update()
     for monster in monster_group:
@@ -796,8 +855,6 @@ def equip_effect():
     # keys
     # rope
 
-    
-
 def remove_from_equipped_group(equip):
     global e_wax, e_pepper, e_heartstone, e_halfstone, e_ice, e_battery, e_rollerskate, e_boxerglove, e_helmet
     global e_turtleshell, e_pizza, e_glasses, e_ticket, e_straw, e_binoculars
@@ -985,7 +1042,6 @@ class Player(Character):
         self.equip_v = None
 
     def space_bar(self):
-        # punch_sound.play()
         image = self.punch
 
         if self.direction == "LEFT":

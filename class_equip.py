@@ -58,6 +58,7 @@ class Equip(pygame.sprite.Sprite):
         self.msg_name = None        # 12글자
         self.msg_info = None
         self.msg_eff = None
+        self.msg_eff_2 = None
         self.grade = 0              # 0:normal / 1:rare / 2: unique
 
         self.row = 0
@@ -236,7 +237,8 @@ class E_Ice(Equip):
         Equip.__init__(self, image)
         self.msg_name = "얼음"
         self.msg_info = "녹기 전에 빨리 움직이세요"
-        self.msg_eff = "이동속도 +0.1, 녹으면서 점점 감소"
+        self.msg_eff = "이동속도 +0.1"
+        self.msg_eff_2 = "녹으면서 점점 감소"
 
         self.floor = 0
         self.charge_times = 0
@@ -264,7 +266,8 @@ class E_Battery(Equip):
         Equip.__init__(self, image)
         self.msg_name = "건전지"
         self.msg_info = "충전 중-!"
-        self.msg_eff = "충전마다 이동속도 +0.05 (/0.15)"
+        self.msg_eff = "충전마다 이동속도 +0.05"
+        self.msg_eff_2 = "최대 3번"
         self.grade = 1
 
         self.floor = 0
@@ -471,7 +474,8 @@ class E_Dice(Equip):
         Equip.__init__(self, image)
         self.msg_name = "행운의 주사위"
         self.msg_info = "운을 시험해보세요 !"
-        self.msg_eff = "스킬 : 50퍼센트 확률로 HP +10 또는 -10"
+        self.msg_eff = "스킬 : 50퍼센트 확률로"
+        self.msg_eff_2 = "HP +10 또는 -10"
         self.grade = 1
         self.active = True
 

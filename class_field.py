@@ -19,8 +19,8 @@ class Field(pygame.sprite.Sprite):
 class Torch(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__()
-        self.torch_image = torch_images[0]
-        self.light_image = light_image
+        self.torch_image = torch_image
+        self.light_image = light_images[0]
         self.position = position
 
         self.torch_rect = self.torch_image.get_rect(center=position)
@@ -29,6 +29,12 @@ class Torch(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.light_image, self.light_rect)
         screen.blit(self.torch_image, self.torch_rect)
+
+    def image_update(self):
+        if self.light_image == light_images[0]:
+            self.light_image = light_images[1]
+        else:
+            self.light_image = light_images[0]
 ##############################################################################################
 
 ##### FIELD
