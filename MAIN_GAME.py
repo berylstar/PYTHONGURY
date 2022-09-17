@@ -477,6 +477,7 @@ def scene_treasure_box(doing):
 
     player.stop()
     choice = True
+
     if len(equip_con.able_equip_group) >= 2:
         choice_equip = [equip_con.able_equip_group[-1], equip_con.able_equip_group[-2]]
     else:
@@ -593,6 +594,8 @@ def make_floor_zero():
         skill_con.active_rope = False
 
 def floor_zero():
+    global floor
+
     sound_con.play_bgm(bgm_0f)
 
     if floor != 0:
@@ -611,6 +614,10 @@ def floor_zero():
             player.stop()
             scene_shop(True)
 
+    if pygame.sprite.collide_mask(player, stair):
+        scene_treasure_box(True)
+        floor = saved_floor - 1
+
 def next_floor(pos):
     global floor
 
@@ -624,7 +631,8 @@ def next_floor(pos):
 
     stair.image = stair_images[1]
 
-    floor_setting(pos, floor)
+    monster_setting(pos, floor)
+    random_field_setting()
 
     if e_battery in equip_con.equipped_group and e_battery.charge_times < 3:
         if floor - e_battery.floor >= 1:
@@ -714,19 +722,6 @@ def player_move_key():
             player.to[2] = 0
         if event.key == pygame.K_DOWN:
             player.to[3] = 0
-
-def monster_move():
-    if monster_group:
-        for monster in monster_group:
-            if not monster.is_die:
-                if monster.direction == "LEFT":
-                    monster.move(-monster.speed, 0, fps)
-                elif monster.direction == "RIGHT":
-                    monster.move(monster.speed, 0, fps)
-                elif monster.direction == "UP":
-                    monster.move(0,-monster.speed, fps)
-                elif monster.direction == "DOWN":
-                    monster.move(0,monster.speed, fps)
 
 def drop_item(monster):
     randprob = random.randrange(1,101) # 1~100
@@ -952,6 +947,19 @@ def setting_active_skill(key, picked_equip):
         if player.equip_c == player.equip_v:
             player.equip_c = None
 
+def monster_move():
+    if monster_group:
+        for monster in monster_group:
+            if not monster.is_die:
+                if monster.direction == "LEFT":
+                    monster.move(-monster.speed, 0, fps)
+                elif monster.direction == "RIGHT":
+                    monster.move(monster.speed, 0, fps)
+                elif monster.direction == "UP":
+                    monster.move(0,-monster.speed, fps)
+                elif monster.direction == "DOWN":
+                    monster.move(0,monster.speed, fps)
+
 def monster_action():
     randprob = random.randrange(1,101)
 
@@ -984,7 +992,7 @@ def monster_action():
                     monster.speed += 0.4
                     monster.curr_dir = monster.direction
 
-                if monster.curr_dir and not monster.curr_dir == monster.direction:
+                if monster.curr_dir and (not monster.curr_dir == monster.direction):
                     monster.speed -= 0.4
                     monster.curr_dir = None
 
@@ -1202,17 +1210,16 @@ while running:
     elif floor > 0:
         sound_con.stop_bgm(bgm_0f)
         sound_con.play_bgm(bgm_first)
+
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
             #for 1 second
-            # if monster_group:     #몬스터 없을 때는 체력 안달게 ?
             player.hp -= player.damaged_time
             
             if not skill_con.active_trafficlight[0]:
                 random_monster_direction()
                 # forward_monster_direction(player)
                 monster_action()
-
         b_counter = second_time
 
         if monster_con.dontmove:
@@ -1229,9 +1236,6 @@ while running:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
-            if floor == 0:
-                scene_treasure_box(True)
-                floor = saved_floor - 1
             next_floor(player.position)
 
     for monster in monster_group:

@@ -101,7 +101,7 @@ for l in light_images:
 potion_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_potion.png"))
 coin_image = pygame.image.load(os.path.join(file_path, "design\\item\\coin.png"))
 # coin_image = pygame.transform.rotozoom(coin_image, 0, 0.7)
-box_image = pygame.image.load(os.path.join(file_path, "images\\box.png"))
+box_image = pygame.image.load(os.path.join(file_path, "design\\item\\box.png"))
 
 ##############################################################################################
 # Equip Image
