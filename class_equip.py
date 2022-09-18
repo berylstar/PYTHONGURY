@@ -171,7 +171,7 @@ class E_Banana(Equip):
     def active_skill(self):
         self.target.hp = min(self.target.hp+20, self.target.max_hp)
         equip_con.equipped_group.remove(self)
-        equip_con.able_equip_group.append(self)
+        equip_con.rare_equips.append(self)
 
 #                                                                           #### wax
 class E_Wax(Equip):
@@ -585,7 +585,7 @@ class E_GoldenKey(Equip):
         if not self.target % 20 == 0 :
             # field_group.add(mand)   #keys field
             equip_con.equipped_group.remove(self)
-            equip_con.able_equip_group.append(self)
+            equip_con.rare_equips.append(self)
 
 #                                                                           #### rope
 class E_EscapeRope(Equip):
@@ -608,7 +608,7 @@ class E_EscapeRope(Equip):
         # field_group.add(mand)   #rope field
         skill_con.active_escaperope = True
         equip_con.equipped_group.remove(self)
-        equip_con.able_equip_group.append(self)
+        equip_con.rare_equips.append(self)
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -616,13 +616,7 @@ class EquipController():
         self.equipped_group = []
         self.for_sale = [None, None, None]
         self.can_buy = [False, False, False]
-        self.able_equip_group = [
-            e_mushroom,         e_crescentmoon,         e_banana,               e_wax,              e_pepper,
-            e_heartstone,       e_halfstone,            e_ice,                  e_battery,          
-            e_boxerglove,       e_helmet,               e_turtleshell,          e_pizza,            
-                                e_straw,                e_binoculars,           e_trafficlight,     e_thunder,
-            e_dice,             
-        ]
+        
         self.normal_equips = [
             e_crescentmoon, e_wax, e_pepper, e_halfstone, e_ice, e_rollerskate, e_helmet, e_turtleshell,
             e_pizza, e_3dglasses, e_talisman, e_machine, e_metaldetector, e_binoculars,

@@ -703,7 +703,7 @@ def random_for_sale():
     for i in range(total_number):
         percent = random.randrange(1,101)
 
-        # 예외 수정 할까말까
+        # 예외 수정 할까말까 리스트 크기 충분해서 수정 안해도 될거같긴함
         if percent <= equip_con.perc_rare:
             equip_con.for_sale[i] = equip_con.rare_equips[i]
         elif (100 - equip_con.perc_unique) <= percent:
