@@ -43,7 +43,13 @@ stair = Field(stair_images[0], stair_zero_floor)
 
 mand = Field(mushroom_image, stair_zero_floor)  #keys, rope field 만들어줘야함
 
-torch_zero_pos = (440, 150)
-torch = Torch(torch_zero_pos)
-
 field_group = pygame.sprite.Group()
+
+##### DECO
+torch_lpos = (430, 150)
+torch_rpos = (850, 150)
+torch_l = Torch(torch_lpos)
+torch_r = Torch(torch_rpos)
+
+deco_group = pygame.sprite.Group()
+deco_group.add(torch_l, torch_r)

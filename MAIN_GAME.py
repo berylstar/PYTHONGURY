@@ -179,9 +179,9 @@ def scene_sound_setting(doing):
 def display_info_ui():
     pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)
-    screen_message(f"{floor} F", WHITE, (240,90), game_font_m)                              #FLOOR
+    screen_message(f"{floor}F", WHITE, (240,90), game_font_l)                              #FLOOR
 
-    screen_message(f"HP: {int(player.hp)}", WHITE, (240,190), game_font_m)                  #HP
+    screen_message(f"HP: {int(player.hp)}/{player.max_hp}", WHITE, (240,190), game_font_m)                  #HP
 
     coin_image_rect = coin_image.get_rect(center=(215, 290))
     screen.blit(coin_image, coin_image_rect)
@@ -321,7 +321,7 @@ def scene_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if picked_num == 1:
-                        equip_for_sale(0)
+                        purchase_equip(0)
                         sound_con.play_sound(sound_shop_buy)
                         picked_num = 0
                     else:
@@ -330,7 +330,7 @@ def scene_shop(doing):
 
                 if event.key == pygame.K_2:
                     if picked_num == 2:
-                        equip_for_sale(1)
+                        purchase_equip(1)
                         sound_con.play_sound(sound_shop_buy)
                         picked_num = 0
                     else:
@@ -339,7 +339,7 @@ def scene_shop(doing):
 
                 if event.key == pygame.K_3:
                     if picked_num == 3:
-                        equip_for_sale(2)
+                        purchase_equip(2)
                         sound_con.play_sound(sound_shop_buy)
                         picked_num = 0
                     else:
@@ -411,6 +411,9 @@ def scene_inventory(doing):
     cursor = Cursor(cursor_images[0], (980,270))
     picked_equip = None
 
+    inven_img.set_alpha(180)
+    screen.blit(inven_img, (340,60))
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -462,15 +465,30 @@ def scene_inventory(doing):
 
         display_inven_ui()
 
+        screen_message(f"AP : {player.ap}", WHITE, (640,100), game_font_s)
+        screen_message(f"DP : {player.dp}", WHITE, (640,130), game_font_s)
+        screen_message(f"SPEED : {player.speed}", WHITE, (640,160), game_font_s)
+        screen_message(f"TIME DAMAGE : {player.damaged_time}", WHITE, (640,190), game_font_s)
+
+        screen_message(f"POTION EFF : {item_con.potion_eff}", WHITE, (640,270), game_font_s)
+        screen_message(f"POTION PROB : {item_con.prob_potion}%", WHITE, (640,300), game_font_s)
+        screen_message(f"COIN PROB : {item_con.prob_coin}%", WHITE, (640,330), game_font_s)
+
+        screen_message(f"SHOP RARE : {equip_con.perc_rare}%", WHITE, (640,390), game_font_s)
+        screen_message(f"SHOP UNIQUE : {equip_con.perc_unique}%", WHITE, (640,420), game_font_s)
+        
+        
+
         if picked_equip and not is_inven_overlapped(equip_con.equipped_group):
             screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
             screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_kor)
             screen_message(picked_equip.msg_eff, YELLOW, (1040,180), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (1040,200), game_font_kor)
+
+        screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
         cursor.draw(screen)
-        # pygame.display.update(inven_rect)
-        pygame.display.update(inven_rect)
+        pygame.display.update(full_rect)
 
 def scene_treasure_box(doing):
     global running
@@ -588,10 +606,10 @@ def make_floor_zero():
 
     player.rect = player.image.get_rect(center=player_first_position)
 
-    if not skill_con.active_rope:
+    if not skill_con.active_escaperope:
         player.hp = player.max_hp
     else:
-        skill_con.active_rope = False
+        skill_con.active_escaperope = False
 
 def floor_zero():
     global floor
@@ -601,7 +619,8 @@ def floor_zero():
     if floor != 0:
         make_floor_zero()
 
-    torch.draw(screen)
+    for deco in deco_group:
+        deco.draw(screen)
     for npc in npc_group:
         npc.draw(screen)
 
@@ -655,7 +674,7 @@ def next_floor(pos):
     if e_crescentmoon in equip_con.equipped_group:
         e_crescentmoon.prob_revival()
 
-    e_keys.target = floor
+    e_goldenkey.target = floor
 
 def display_background(floor):
     if floor >= 0:
@@ -667,36 +686,47 @@ def display_background(floor):
 
 def show_animation():
     player.image_update()
-    torch.image_update()
+    for deco in deco_group:
+        deco.image_update()
     for npc in npc_group:
         npc.image_update()
     for monster in monster_group:
         monster.image_update()
 
 def random_for_sale():
-    random.shuffle(equip_con.able_equip_group)
+    random.shuffle(equip_con.normal_equips)
+    random.shuffle(equip_con.rare_equips)
+    random.shuffle(equip_con.unique_equips)
 
-    total_number = min(len(equip_con.able_equip_group), len(equip_con.for_sale))
+    total_number = 3
 
     for i in range(total_number):
         percent = random.randrange(1,101)
 
-        # if 0 < percent <= equip_con.perc_normal
-
-
-        equip_con.for_sale[i] = equip_con.able_equip_group[i]
-
+        # 예외 수정 할까말까
+        if percent <= equip_con.perc_rare:
+            equip_con.for_sale[i] = equip_con.rare_equips[i]
+        elif (100 - equip_con.perc_unique) <= percent:
+            equip_con.for_sale[i] = equip_con.unique_equips[i]
+        else:
+            equip_con.for_sale[i] = equip_con.normal_equips[i]
 
         equip_con.can_buy[i] = True
 
-def equip_for_sale(index):
+def purchase_equip(index):
     equip = equip_con.for_sale[index]
     if equip_con.can_buy[index] and player.coin >= equip.price:
         equip_con.equipped_group.append(equip)
         player.coin -= equip.price
         equip_con.can_buy[index] = False
         equip_con.for_sale[index] = None
-        equip_con.able_equip_group.remove(equip)
+
+        if equip.grade == 0:
+            equip_con.normal_equips.remove(equip)
+        elif equip.grade == 1:
+            equip_con.rare_equips.remove(equip)
+        elif equip.grade == 2:
+            equip_con.unique_equips.remove(equip)
 
 def player_move_key():
     if event.type == pygame.KEYDOWN:
@@ -733,7 +763,10 @@ def drop_item(monster):
         if randprob <= item_con.prob_potion: # 확률 <= 포션드롭률
             item_group.add(Item(potion_image, monster.position, "potion"))
         elif (100 - item_con.prob_coin) < randprob: # 100-코인드롭률 <= 확률
-            item_group.add(Item(coin_image, monster.position, "coin"))
+            if item_con.red_coin and 98 < randprob:
+                pass    # 레드 코인 드롭
+            else:
+                item_group.add(Item(coin_image, monster.position, "coin"))
 
 # def put_on_pixel(position):
 #     x = position[0]
@@ -822,10 +855,15 @@ def equip_effect():
             monster_con.b_speed -= 2
             e_pizza.is_effected = True
 
-    if e_glasses in equip_con.equipped_group:
-        if not e_glasses.is_effected:
+    if e_3dglasses in equip_con.equipped_group:
+        if not e_3dglasses.is_effected:
             monster_con.dont_alpha = True
-            e_glasses.is_effected = True
+            e_3dglasses.is_effected = True
+
+    if e_talisman in equip_con.equipped_group:
+        if not e_talisman.is_effected:
+            monster_con.dont_dash = True
+            e_talisman.is_effected = True
 
     if e_ticket in equip_con.equipped_group:
         if not e_ticket.is_effected:
@@ -837,6 +875,16 @@ def equip_effect():
             item_con.potion_eff += 5
             e_straw.is_effected = True
 
+    if e_machine in equip_con.equipped_group:
+        if not e_machine.is_effected:
+            item_con.prob_potion += 3
+            e_machine.is_effected = True
+
+    if e_metaldetector in equip_con.equipped_group:
+        if not e_metaldetector.is_effected:
+            item_con.prob_coin += 3
+            e_metaldetector.is_effected = True
+
     if e_binoculars in equip_con.equipped_group:
         if not e_binoculars.is_effected:
             item_con.prob_potion += 3
@@ -846,87 +894,102 @@ def equip_effect():
     # trafficlight
     # thunder
     # dice
-    # smokebomb
-    # keys
+    # magiccloak
+    # goldenkey
     # rope
 
 def remove_from_equipped_group(equip):
-    global e_wax, e_pepper, e_heartstone, e_halfstone, e_ice, e_battery, e_rollerskate, e_boxerglove, e_helmet
-    global e_turtleshell, e_pizza, e_glasses, e_ticket, e_straw, e_binoculars
+    equip_con.equipped_group.remove(equip)
+    if equip.is_active_c:
+        player.equip_c = None
+    elif equip.is_active_v:
+        player.equip_v = None
 
     if equip == e_wax:
         player.ap -= 2
-        e_wax = E_Wax()
+        equip = E_Wax()
 
     elif equip == e_pepper:
         player.ap -= 3
-        e_pepper = E_Pepper()
+        equip = E_Pepper()
 
     elif equip == e_heartstone:
         player.max_hp -= 20
         player.hp = min(player.hp, player.max_hp)
-        e_heartstone = E_HeartStone()
+        equip = E_HeartStone()
 
     elif equip == e_halfstone:
         player.max_hp -= 10
         player.hp = min(player.hp, player.max_hp)
-        e_halfstone = E_HalfStone()
+        equip = E_HalfStone()
 
     elif equip == e_ice:
         if e_ice.charge_times == 0:
             player.speed -= 0.1
         elif e_ice.charge_times == 1:
             player.speed -= 0.05
-        e_ice = E_Ice()
+        equip = E_Ice()
 
     elif equip == e_battery:
         player.speed -= 0.1 * e_battery.charge_times
         e_battery.charge_times = 0
-        e_battery = E_Battery()
+        equip = E_Battery()
 
     elif equip == e_rollerskate:
         player.speed -= 0.1
-        e_rollerskate = E_RollerSkate()
+        equip = E_RollerSkate()
 
     elif equip == e_boxerglove:
         player.punch = punch_d_image
-        e_boxerglove = E_BoxerGlove()
+        equip = E_BoxerGlove()
     
     elif equip == e_helmet:
         player.dp -= 0.2
-        e_helmet = E_Helmet()
+        equip = E_Helmet()
 
     elif equip == e_turtleshell:
         player.damaged_time += 0.3
-        e_turtleshell = E_TurtleShell()
+        equip = E_TurtleShell()
 
     elif equip == e_pizza:
         monster_con.b_speed += 2
-        e_pizza = E_Pizza()
+        equip = E_Pizza()
 
-    elif equip == e_glasses:
+    elif equip == e_3dglasses:
         monster_con.dont_alpha = False
-        e_glasses = E_Glasses()
+        equip = E_3DGlasses()
+
+    elif equip == e_talisman:
+        monster_con.dont_dash = False
+        equip = E_Talisman()
 
     elif equip == e_ticket:
         equip_con.perc_rare -= 5
-        e_ticket = E_Ticket()
+        equip = E_Ticket()
 
     elif equip == e_straw:
         item_con.potion_eff -= 5
-        e_straw = E_Straw()
+        equip = E_Straw()
+
+    elif equip == e_machine:
+        item_con.prob_potion -= 3
+        equip = E_Machine()
+
+    elif equip == e_metaldetector:
+        item_con.prob_coin -= 3
+        equip = E_MetalDetector()
 
     elif equip == e_binoculars:
         item_con.prob_potion -= 3
         item_con.prob_coin -= 3
-        e_binoculars = E_Binoculars()
+        equip = E_Binoculars()
 
-    equip_con.equipped_group.remove(equip)
-    if equip.is_active_c:
-        player.equip_c = None
-    elif equip.is_active_v:
-        player.equip_v = None
-    equip_con.able_equip_group.append(equip)
+    if equip.grade == 0:
+        equip_con.normal_equips.add(equip)
+    elif equip.grade == 1:
+        equip_con.rare_equips.add(equip)
+    elif equip.grade == 2:
+        equip_con.unique_equips.add(equip)
 
 def setting_active_skill(key, picked_equip):
     if key == "c" and picked_equip.active:
@@ -979,7 +1042,7 @@ def monster_action():
                         break
                     shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage))
 
-            if monster.type == "alpha":
+            if monster.type == "alpha" and not monster_con.dont_alpha:
                 if 0 <= randprob <= 50:
                     for image in monster.image_group:
                         image.set_alpha(60)
@@ -987,7 +1050,7 @@ def monster_action():
                     for image in monster.image_group:
                         image.set_alpha(255)
 
-            if monster.type == "runner":
+            if monster.type == "runner" and not monster_con.dont_dash:
                 if 0 <= randprob <= 30:
                     monster.speed += 0.4
                     monster.curr_dir = monster.direction
@@ -1162,7 +1225,7 @@ shooting_group = pygame.sprite.Group()
 e_banana.target = player
 e_dice.target = player
 e_thunder.target = monster_group
-e_smokebomb.target = player
+e_magiccloak.target = player
 ##############################################################################################
 ready = True
 running = True

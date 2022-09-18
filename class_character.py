@@ -114,6 +114,28 @@ class Mon_skel(Character):
 
 
 # 21 ~ 40 : graveyard
+class Mon_zombie(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "normal"
+
+        self.hp = 18
+        self.ap = 2
+        self.speed = 0.23
+
+class Mon_warewolf(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "normal"
+
+        self.hp = 30
+        self.ap = 2.5
+        self.speed = 0.15
+
 class Mon_ghost(Character):
     def __init__(self):
         image_group = mon_ghost_images
@@ -121,9 +143,23 @@ class Mon_ghost(Character):
         Character.__init__(self, image_group, position)
         self.type = "alpha"
 
-        self.hp = 15
-        self.ap = 2
-        self.speed = 0.1
+        self.hp = 20
+        self.ap = 1.5
+        self.speed = 0.2
+
+class Mon_scarecrow(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = "shooter"
+
+        self.hp = 18
+        self.ap = 1.5
+        self.speed = 0.2
+        self.bullet = ember_attack_image
+        self.b_speed = 10
+        self.b_damage = 10
 
 
 # 41 ~ 60 : lava land
@@ -189,9 +225,9 @@ monster_con = MonsterController()
 npc_kingslime = Character(father_slime_images, (540, 360))
 npc_kingslime.direction = "RIGHT"
 npc_coffin = Character(coffin_images, (840, 600))
-npc_ghost = Character(ghost_images, (800, 150))
+# npc_ghost = Character(ghost_images, (800, 150))
 
 npc_group = pygame.sprite.Group()
-npc_group.add(npc_kingslime, npc_coffin, npc_ghost)
+npc_group.add(npc_kingslime, npc_coffin)
 
 ##### about monster

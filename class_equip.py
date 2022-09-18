@@ -294,7 +294,7 @@ class E_Battery(Equip):
 #                                                                           #### roller skate
 class E_RollerSkate(Equip):
     def __init__(self):
-        image = None
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "롤러스케이트"
         self.msg_info = "신나게 달려보자"
@@ -363,15 +363,29 @@ class E_Pizza(Equip):
         self.price = 3
 
 #                                                                           #### glasses
-class E_Glasses(Equip):
+class E_3DGlasses(Equip):
     def __init__(self):
-        image = None
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "3D 안경"
         self.msg_info = "2D로 보는거 보단 낫겠죠"
         self.msg_eff = "적 투명화 감지"
 
         # self.max_row = 5
+        self.max_col = 1
+
+        self.price = 3
+
+#                                                                           #### talisman
+class E_Talisman(Equip):
+    def __init__(self):
+        image = dummy
+        Equip.__init__(self, image)
+        self.msg_name = "부적"
+        self.msg_info = "강시 이마에 붙어있던 거"
+        self.msg_eff = "적 대시 금지"
+
+        self.max_row = 4
         # self.max_col = 2
 
         self.price = 3
@@ -379,7 +393,7 @@ class E_Glasses(Equip):
 #                                                                           #### ticket
 class E_Ticket(Equip):
     def __init__(self):
-        image = None
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "VIP 티켓"
         self.msg_info = "상점 우수 고객"
@@ -402,6 +416,34 @@ class E_Straw(Equip):
         self.grade = 1
 
         self.max_row = 3
+        # self.max_col = 2
+
+        self.price = 7
+
+#                                                                           #### machine
+class E_Machine(Equip):
+    def __init__(self):
+        image = dummy
+        Equip.__init__(self, image)
+        self.msg_name = "오래된 기계"
+        self.msg_info = "포션이 만들어지긴 할까요"
+        self.msg_eff = "포션 드롭률 +3%"
+
+        self.max_row = 4
+        self.max_col = 1
+
+        self.price = 7
+
+#                                                                           #### metal detector
+class E_MetalDetector(Equip):
+    def __init__(self):
+        image = dummy
+        Equip.__init__(self, image)
+        self.msg_name = "금속 탐지기"
+        self.msg_info = "찾아보자"
+        self.msg_eff = "코인 드롭률 +3%"
+
+        self.max_row = 4
         # self.max_col = 2
 
         self.price = 7
@@ -496,62 +538,61 @@ class E_Dice(Equip):
             else:
                 self.target.hp -= 10
 
-#                                                                           #### smokebomb
-class E_Smokebomb(Equip):
+#                                                                           #### magic cloak
+class E_MagicCloak(Equip):
     def __init__(self):
-        image = None
+        image = dummy
         Equip.__init__(self, image)
-        self.msg_name = "연막탄"
-        self.msg_info = "연기 속에 가려진"
+        self.msg_name = "마법 망토"
+        self.msg_info = "마법학교에서 가져왔다네요"
         self.msg_eff = "스킬 : 일정시간 무적"
         self.grade = 1
         self.active = True
 
         self.save = [0, 0]
 
-        # self.max_row = 5
-        # self.max_col = 1
+        self.max_row = 4
+        self.max_col = 1
 
         self.price = 3
 
     def active_skill(self):
         if self.cool_time == False:
-            skill_con.active_smokebomb[0] = True
-            skill_con.active_smokebomb[1] = pygame.time.get_ticks()
+            skill_con.active_magiccloak[0] = True
+            skill_con.active_magiccloak[1] = pygame.time.get_ticks()
             self.cool_time = True
             
-            self.save = [self.target.dp, self.target.damaged_time]
+            self.save = self.target.dp
             self.target.dp = 100
-            self.target.damaged_time = 0
 
-#                                                                           #### keys
-class E_Keys(Equip):
+#                                                                           #### golden key
+class E_GoldenKey(Equip):
     def __init__(self):
-        image = None
+        image = dummy
         Equip.__init__(self, image)
-        self.msg_name = "열쇠 꾸러미"
-        self.msg_info = "이 중 하나는 맞겠지"
+        self.msg_name = "황금 열쇠"
+        self.msg_info = "어딘가에는 맞겠지"
         self.msg_eff = "사용 : 계단 열기"
-        self.grade = 1
+        self.grade = 2
         self.active = True
 
-        # self.max_row = 4
-        # self.max_col = 1
+        self.max_row = 3
+        self.max_col = 1
 
         self.price = 4
 
     def active_skill(self):
         if not self.target % 20 == 0 :
-            field_group.add(mand)   #keys field
+            # field_group.add(mand)   #keys field
             equip_con.equipped_group.remove(self)
             equip_con.able_equip_group.append(self)
 
 #                                                                           #### rope
-class E_Rope(Equip):
+class E_EscapeRope(Equip):
     def __init__(self):
-        image = None
+        image = dummy
         Equip.__init__(self, image)
-        self.msg_name = "동굴 탈출 로프"
+        self.msg_name = "탈출 로프"
         self.msg_info = "지상으로 !"
         self.msg_eff = "사용 : 0층으로"
         self.grade = 1
@@ -564,8 +605,8 @@ class E_Rope(Equip):
 
     def active_skill(self):
         
-        field_group.add(mand)   #rope field
-        skill_con.active_rope = True
+        # field_group.add(mand)   #rope field
+        skill_con.active_escaperope = True
         equip_con.equipped_group.remove(self)
         equip_con.able_equip_group.append(self)
 ##############################################################################################
@@ -581,22 +622,20 @@ class EquipController():
             e_boxerglove,       e_helmet,               e_turtleshell,          e_pizza,            
                                 e_straw,                e_binoculars,           e_trafficlight,     e_thunder,
             e_dice,             
-
-            #e_rollerskate, e_glasses, e_ticket, e_smokebomb, e_keys, e_rope
         ]
-        # self.perc_normal = 80
         self.normal_equips = [
-            e_crescentmoon, e_wax, e_pepper, e_halfstone, e_ice, e_rollerskate, e_helmet, e_turtleshell, e_pizza, e_glasses, e_binoculars,
+            e_crescentmoon, e_wax, e_pepper, e_halfstone, e_ice, e_rollerskate, e_helmet, e_turtleshell,
+            e_pizza, e_3dglasses, e_talisman, e_machine, e_metaldetector, e_binoculars,
         ]
 
-        self.perc_rare = 15
+        self.perc_rare = 10
         self.rare_equips = [
-            e_banana, e_heartstone, e_battery, e_ticket, e_straw, e_trafficlight, e_thunder, e_dice, e_smokebomb, e_keys, e_rope
+            e_banana, e_heartstone, e_battery, e_ticket, e_straw, e_trafficlight, e_thunder, e_dice, e_magiccloak, e_escaperope
         ]
 
-        self.perc_unique = 5
+        self.perc_unique = 2
         self.unique_equips = [
-            e_mushroom, e_boxerglove,
+            e_mushroom, e_boxerglove, e_goldenkey
         ]
 
 ##### active controller
@@ -606,8 +645,8 @@ class SkillController():
         self.active_trafficlight = [False, 0]
         self.active_dice = [False, 0]
         self.active_thunder = [False, 0]
-        self.active_smokebomb = [False, 0]
-        self.active_rope = False
+        self.active_magiccloak = [False, 0]
+        self.active_escaperope = False
 
     def active_time(self):                          # 시연시간, 쿨타임 밸런스 조절 필요
         now_time = pygame.time.get_ticks()
@@ -639,18 +678,17 @@ class SkillController():
                 e_thunder.cool_time = False
                 e_thunder.image.set_alpha(255)
 
-        # smokebomb - player no damage
-        if self.active_smokebomb[0] or e_smokebomb.cool_time:
-            if now_time - self.active_smokebomb[1] > 3000:
-                if self.active_smokebomb[0]:
-                    e_smokebomb.target.dp = e_smokebomb.save[0]
-                    e_smokebomb.target.damaged_time = e_smokebomb.save[1]
-                self.active_smokebomb[0] = False
-                e_smokebomb.image.set_alpha(60)
+        # magiccloak - player no damage
+        if self.active_magiccloak[0] or e_magiccloak.cool_time:
+            if now_time - self.active_magiccloak[1] > 3000:
+                if self.active_magiccloak[0]:
+                    e_magiccloak.target.dp = e_magiccloak.save
+                self.active_magiccloak[0] = False
+                e_magiccloak.image.set_alpha(60)
                 
-            if now_time - self.active_smokebomb[1] > 30000:
-                e_smokebomb.cool_time = False
-                e_smokebomb.image.set_alpha(255)
+            if now_time - self.active_magiccloak[1] > 30000:
+                e_magiccloak.cool_time = False
+                e_magiccloak.image.set_alpha(255)
                 
             
 ##############################################################################################
@@ -682,16 +720,19 @@ e_boxerglove = E_BoxerGlove()
 e_helmet = E_Helmet()
 e_turtleshell = E_TurtleShell()
 e_pizza = E_Pizza()
-e_glasses = E_Glasses()             # NONE
+e_3dglasses = E_3DGlasses()         # NONE
+e_talisman = E_Talisman()           # NONE
 e_ticket = E_Ticket()               # NONE
 e_straw = E_Straw()
+e_machine = E_Machine()             # NONE
+e_metaldetector = E_MetalDetector() # NONE
 e_binoculars = E_Binoculars()
 e_trafficlight = E_TrafficLight()
 e_thunder = E_Thunder()
 e_dice = E_Dice()
-e_smokebomb = E_Smokebomb()         # NONE
-e_keys = E_Keys()                   # NONE
-e_rope = E_Rope()                   # NONE
+e_magiccloak = E_MagicCloak()       # NONE
+e_goldenkey = E_GoldenKey()         # NONE
+e_escaperope = E_EscapeRope()       # NONE
 
 
 

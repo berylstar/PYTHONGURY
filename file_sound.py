@@ -3,24 +3,25 @@ import pygame
 pygame.init()
 
 # BGM
-bgm_title = pygame.mixer.Sound('Soundtrack\\bgm\\title.mp3')
+bgm_title = pygame.mixer.Sound('Soundtrack\\bgm\\title.wav')
 bgm_story = pygame.mixer.Sound('Soundtrack\\bgm\\story.wav')
 
 bgm_0f = pygame.mixer.Sound('Soundtrack\\bgm\\0f.wav')
 bgm_first = pygame.mixer.Sound('Soundtrack\\bgm\\first.wav')
 
 # EFFECT
-sound_page = pygame.mixer.Sound('Soundtrack\\effect\\page.mp3')
-sound_pick = pygame.mixer.Sound('Soundtrack\\effect\\pick.mp3')
+sound_page = pygame.mixer.Sound('Soundtrack\\effect\\page.wav')
+sound_pick = pygame.mixer.Sound('Soundtrack\\effect\\pick.wav')
 sound_wasd = pygame.mixer.Sound('Soundtrack\\effect\\wasd.wav')
 
-sound_shop_buy = pygame.mixer.Sound('Soundtrack\\effect\\shop_buy.mp3')
+sound_shop_buy = pygame.mixer.Sound('Soundtrack\\effect\\buy.wav')
 
 class SoundController():
     def __init__(self):
         self.playing = False
 
-        self.bgm_volume = 1.0
+        # self.bgm_volume = 1.0
+        self.bgm_volume = 0.1
         self.effect_volume = 1.0
 
     def play_bgm(self, bgm):

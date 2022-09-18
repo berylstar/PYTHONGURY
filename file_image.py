@@ -180,3 +180,6 @@ tuto_images = [
     pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
     pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
 ]
+
+inven_img = pygame.image.load(os.path.join(file_path, "images\\inven.png"))
+dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
