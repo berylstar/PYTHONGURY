@@ -134,6 +134,9 @@ metaldetector_image = pygame.image.load(os.path.join(file_path, "images\\equips\
 piggybank_image = pygame.image.load(os.path.join(file_path, "images\\equips\\piggybank.png"))           ####
 rollerskate_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rollerskate.png"))       ####
 ticket_image = pygame.image.load(os.path.join(file_path, "images\\equips\\ticket.png"))                 ####
+talisman_image = pygame.image.load(os.path.join(file_path, "images\\equips\\talisman.png"))             ####
+magiccloak_image = pygame.image.load(os.path.join(file_path, "images\\equips\\magiccloak.png"))         ####
+goldenkey_image = pygame.image.load(os.path.join(file_path, "images\\equips\\goldenkey.png"))           ####
 
 
 ##############################################################################################

@@ -380,7 +380,7 @@ class E_3DGlasses(Equip):
 #                                                                           #### talisman
 class E_Talisman(Equip):
     def __init__(self):
-        image = dummy
+        image = talisman_image
         Equip.__init__(self, image)
         self.msg_name = "부적"
         self.msg_info = "강시 이마에 붙어있던 거"
@@ -557,7 +557,7 @@ class E_Dice(Equip):
 #                                                                           #### magic cloak
 class E_MagicCloak(Equip):
     def __init__(self):
-        image = dummy
+        image = magiccloak_image
         Equip.__init__(self, image)
         self.msg_name = "마법 망토"
         self.msg_info = "마법학교에서 가져왔다네요"
@@ -584,7 +584,7 @@ class E_MagicCloak(Equip):
 #                                                                           #### golden key
 class E_GoldenKey(Equip):
     def __init__(self):
-        image = dummy
+        image = goldenkey_image
         Equip.__init__(self, image)
         self.msg_name = "황금 열쇠"
         self.msg_info = "어딘가에는 맞겠지"
@@ -593,7 +593,7 @@ class E_GoldenKey(Equip):
         self.active = True
 
         self.max_row = 3
-        self.max_col = 1
+        # self.max_col = 2
 
         self.price = 4
 
@@ -732,7 +732,7 @@ e_helmet = E_Helmet()
 e_turtleshell = E_TurtleShell()
 e_pizza = E_Pizza()
 e_3dglasses = E_3DGlasses()
-e_talisman = E_Talisman()           # NONE
+e_talisman = E_Talisman()
 e_ticket = E_Ticket()
 e_straw = E_Straw()
 e_machine = E_Machine()
@@ -742,8 +742,8 @@ e_binoculars = E_Binoculars()
 e_trafficlight = E_TrafficLight()
 e_thunder = E_Thunder()
 e_dice = E_Dice()
-e_magiccloak = E_MagicCloak()       # NONE
-e_goldenkey = E_GoldenKey()         # NONE
+e_magiccloak = E_MagicCloak()
+e_goldenkey = E_GoldenKey()
 e_escaperope = E_EscapeRope()       # NONE
 
 

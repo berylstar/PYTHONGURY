@@ -1,3 +1,4 @@
+from enum import unique
 import pygame
 import random
 
@@ -498,8 +499,8 @@ def scene_treasure_box(doing):
     player.stop()
     choice = True
 
-    if len(equip_con.able_equip_group) >= 2:
-        choice_equip = [equip_con.able_equip_group[-1], equip_con.able_equip_group[-2]]
+    if len(equip_con.normal_equips) >= 2:
+        choice_equip = [equip_con.normal_equips[-1], equip_con.normal_equips[-2]]
     else:
         doing  = False
 
@@ -515,7 +516,7 @@ def scene_treasure_box(doing):
                     if event.key == pygame.K_1:
                         if picked_num == 1:
                             equip_con.equipped_group.append(choice_equip[0])
-                            equip_con.able_equip_group.remove(choice_equip[0])
+                            equip_con.normal_equips.remove(choice_equip[0])
                             choice = False
                             picked_num = 0
                         else:
@@ -524,7 +525,7 @@ def scene_treasure_box(doing):
                     if event.key == pygame.K_2:
                         if picked_num == 2:
                             equip_con.equipped_group.append(choice_equip[1])
-                            equip_con.able_equip_group.remove(choice_equip[1])
+                            equip_con.normal_equips.remove(choice_equip[1])
                             choice = False  
                             picked_num = 0
                         else:
@@ -636,7 +637,7 @@ def floor_zero():
             scene_shop(True)
 
     if pygame.sprite.collide_mask(player, stair):
-        scene_treasure_box(True)
+        # scene_treasure_box(True)
         floor = saved_floor - 1
 
 def next_floor(pos):
@@ -700,18 +701,28 @@ def random_for_sale():
     random.shuffle(equip_con.rare_equips)
     random.shuffle(equip_con.unique_equips)
 
-    total_number = 3
+    normal_index = 0
+    rare_index = 0
+    unique_index = 0
 
-    for i in range(total_number):
+    for i in range(3):
         percent = random.randrange(1,101)
 
-        # 예외 수정 할까말까 리스트 크기 충분해서 수정 안해도 될거같긴함
         if percent <= equip_con.perc_rare:
-            equip_con.for_sale[i] = equip_con.rare_equips[i]
+            if rare_index >= len(equip_con.rare_equips):
+                pass
+            else:
+                equip_con.for_sale[i] = equip_con.rare_equips[rare_index]
+                rare_index += 1
         elif (100 - equip_con.perc_unique) <= percent:
-            equip_con.for_sale[i] = equip_con.unique_equips[i]
+            if unique_index >= len(equip_con.unique_equips):
+                pass
+            else:
+                equip_con.for_sale[i] = equip_con.unique_equips[unique_index]
+                unique_index += 1
         else:
-            equip_con.for_sale[i] = equip_con.normal_equips[i]
+            equip_con.for_sale[i] = equip_con.normal_equips[normal_index]
+            normal_index += 1
 
         equip_con.can_buy[i] = True
 
@@ -908,94 +919,126 @@ def equip_effect():
     # rope
 
 def remove_from_equipped_group(equip):
+    global e_mushroom, e_crescentmoon, e_banana, e_wax, e_pepper, e_heartstone, e_halfstone, e_ice, e_battery, e_rollerskate
+    global e_boxerglove, e_helmet, e_turtleshell, e_pizza, e_3dglasses, e_talisman
+    global e_ticket, e_straw, e_machine, e_piggybank, e_metaldetector, e_binoculars, e_trafficlight, e_thunder, e_dice
+    global e_magiccloak, e_goldenkey, e_escaperope
+
     equip_con.equipped_group.remove(equip)
     if equip.is_active_c:
         player.equip_c = None
     elif equip.is_active_v:
         player.equip_v = None
+        
+    if equip == e_mushroom:
+        e_mushroom = E_Mushroom()
 
-    if equip == e_wax:
+    elif equip == e_crescentmoon:
+        e_crescentmoon = E_CrescentMoon()
+
+    elif equip == e_banana:
+        e_banana = E_Banana()
+
+    elif equip == e_wax:
         player.ap -= 2
-        equip = E_Wax()
+        e_wax = E_Wax()
 
     elif equip == e_pepper:
         player.ap -= 3
-        equip = E_Pepper()
+        e_pepper = E_Pepper()
 
     elif equip == e_heartstone:
         player.max_hp -= 20
         player.hp = min(player.hp, player.max_hp)
-        equip = E_HeartStone()
+        e_heartstone = E_HeartStone()
 
     elif equip == e_halfstone:
         player.max_hp -= 10
         player.hp = min(player.hp, player.max_hp)
-        equip = E_HalfStone()
+        e_halfstone = E_HalfStone()
 
     elif equip == e_ice:
         if e_ice.charge_times == 0:
             player.speed -= 0.1
         elif e_ice.charge_times == 1:
             player.speed -= 0.05
-        equip = E_Ice()
+        e_ice = E_Ice()
 
     elif equip == e_battery:
         player.speed -= 0.1 * e_battery.charge_times
         e_battery.charge_times = 0
-        equip = E_Battery()
+        e_battery = E_Battery()
 
     elif equip == e_rollerskate:
         player.speed -= 0.1
-        equip = E_RollerSkate()
+        e_rollerskate = E_RollerSkate()
 
     elif equip == e_boxerglove:
         player.punch = punch_d_image
-        equip = E_BoxerGlove()
+        e_boxerglove = E_BoxerGlove()
     
     elif equip == e_helmet:
         player.dp -= 0.2
-        equip = E_Helmet()
+        e_helmet = E_Helmet()
 
     elif equip == e_turtleshell:
         player.damaged_time += 0.3
-        equip = E_TurtleShell()
+        e_turtleshell = E_TurtleShell()
 
     elif equip == e_pizza:
         monster_con.b_speed += 2
-        equip = E_Pizza()
+        e_pizza = E_Pizza()
 
     elif equip == e_3dglasses:
         monster_con.dont_alpha = False
-        equip = E_3DGlasses()
+        e_3dglasses = E_3DGlasses()
 
     elif equip == e_talisman:
         monster_con.dont_dash = False
-        equip = E_Talisman()
+        e_talisman = E_Talisman()
 
     elif equip == e_ticket:
         equip_con.perc_rare -= 5
-        equip = E_Ticket()
+        e_ticket = E_Ticket()
 
     elif equip == e_straw:
         item_con.potion_eff -= 5
-        equip = E_Straw()
+        e_straw = E_Straw()
 
     elif equip == e_machine:
         item_con.prob_potion -= 3
-        equip = E_Machine()
+        e_machine = E_Machine()
     
     elif equip == e_piggybank:
         item_con.red_coin = False
-        equip = E_PiggyBank()
+        e_piggybank = E_PiggyBank()
 
     elif equip == e_metaldetector:
         item_con.prob_coin -= 3
-        equip = E_MetalDetector()
+        e_metaldetector = E_MetalDetector()
 
     elif equip == e_binoculars:
         item_con.prob_potion -= 3
         item_con.prob_coin -= 3
-        equip = E_Binoculars()
+        e_binoculars = E_Binoculars()
+
+    elif equip == e_trafficlight:
+        e_trafficlight = E_TrafficLight()
+
+    elif equip == e_thunder:
+        e_thunder = E_Thunder()
+    
+    elif equip == e_dice:
+        e_dice = E_Dice()
+
+    elif equip == e_magiccloak:
+        e_magiccloak = E_MagicCloak()
+    
+    elif equip == e_goldenkey:
+        e_goldenkey = E_GoldenKey()
+
+    elif equip == e_escaperope:
+        e_escaperope = E_EscapeRope()
 
     if equip.grade == 0:
         equip_con.normal_equips.append(equip)
@@ -1003,6 +1046,10 @@ def remove_from_equipped_group(equip):
         equip_con.rare_equips.append(equip)
     elif equip.grade == 2:
         equip_con.unique_equips.append(equip)
+
+    print(f"remove + {equip}")
+    print(equip.is_active_c)
+    print(equip.is_active_v)
 
 def setting_active_skill(key, picked_equip):
     if key == "c" and picked_equip.active:
@@ -1055,8 +1102,8 @@ def monster_action():
                         break
                     shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage))
 
-            if monster.type == "alpha" and not monster_con.dont_alpha:
-                if 0 <= randprob <= 50:
+            if monster.type == "alpha":
+                if 0 <= randprob <= 50 and not monster_con.dont_alpha:
                     for image in monster.image_group:
                         image.set_alpha(60)
                 elif 80 < randprob:
