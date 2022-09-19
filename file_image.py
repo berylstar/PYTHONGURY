@@ -101,6 +101,7 @@ for l in light_images:
 potion_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_potion.png"))
 coin_image = pygame.image.load(os.path.join(file_path, "design\\item\\coin.png"))
 # coin_image = pygame.transform.rotozoom(coin_image, 0, 0.7)
+redcoin_image = pygame.image.load(os.path.join(file_path, "images\\red_coin.png"))
 box_image = pygame.image.load(os.path.join(file_path, "design\\item\\box.png"))
 
 ##############################################################################################
@@ -126,6 +127,14 @@ pizza_image = pygame.image.load(os.path.join(file_path, "images\\equips\\pizza.p
 gloves_image = pygame.image.load(os.path.join(file_path, "images\\equips\\gloves.png"))                 ####
 turtleshell_image = pygame.image.load(os.path.join(file_path, "design\\equips\\turtleshell.png"))       
 binoculars_image = pygame.image.load(os.path.join(file_path, "images\\equips\\binoculars.png"))         ####
+
+sdglasses_image = pygame.image.load(os.path.join(file_path, "images\\equips\\3dglasses.png"))           ####
+machine_image = pygame.image.load(os.path.join(file_path, "images\\equips\\machine.png"))               ####
+metaldetector_image = pygame.image.load(os.path.join(file_path, "images\\equips\\metaldetector.png"))   ####
+piggybank_image = pygame.image.load(os.path.join(file_path, "images\\equips\\piggybank.png"))           ####
+rollerskate_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rollerskate.png"))       ####
+ticket_image = pygame.image.load(os.path.join(file_path, "images\\equips\\ticket.png"))                 ####
+
 
 ##############################################################################################
 ##### BACKGROUND

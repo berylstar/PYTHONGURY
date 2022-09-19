@@ -24,14 +24,18 @@ class SoundController():
         self.bgm_volume = 0.1
         self.effect_volume = 1.0
 
+        self.bgm = None
+
     def play_bgm(self, bgm):
         if not self.playing:
             bgm.set_volume(self.bgm_volume)
             bgm.play(-1)
+            self.bgm = bgm
             self.playing = True
 
     def stop_bgm(self, bgm):
         bgm.stop()
+        self.bgm = None
         self.playing = False
 
     def play_sound(self, effect):

@@ -146,11 +146,13 @@ def scene_sound_setting(doing):
                 if event.key == pygame.K_LEFT:
                     if index == 0:
                         sound_con.bgm_volume = max(sound_con.bgm_volume-0.1, 0)
+                        sound_con.bgm.set_volume(sound_con.bgm_volume)
                     elif index == 1:
                         sound_con.effect_volume = max(sound_con.effect_volume-0.1, 0)
                 if event.key == pygame.K_RIGHT:
                     if index == 0:
                         sound_con.bgm_volume = min(sound_con.bgm_volume+0.1, 1)
+                        sound_con.bgm.set_volume(sound_con.bgm_volume)
                     elif index == 1:
                         sound_con.effect_volume = min(sound_con.effect_volume+0.1, 1)
                     
@@ -764,7 +766,7 @@ def drop_item(monster):
             item_group.add(Item(potion_image, monster.position, "potion"))
         elif (100 - item_con.prob_coin) < randprob: # 100-코인드롭률 <= 확률
             if item_con.red_coin and 98 < randprob:
-                pass    # 레드 코인 드롭
+                item_group.add(Item(redcoin_image, monster.position, "red_coin"))
             else:
                 item_group.add(Item(coin_image, monster.position, "coin"))
 
@@ -788,9 +790,11 @@ def drop_item(monster):
 def item_effect(item):
     if item.info == "potion":
         player.hp = min(player.hp + item_con.potion_eff, player.max_hp)
-    if item.info == "coin":
+    elif item.info == "coin":
         player.coin += 1
-    if item.info == "box":
+    elif item.info == "red_coin":
+        player.coin += 3
+    elif item.info == "box":
         scene_treasure_box(True)
 
 def equip_effect():
@@ -879,6 +883,11 @@ def equip_effect():
         if not e_machine.is_effected:
             item_con.prob_potion += 3
             e_machine.is_effected = True
+
+    if e_piggybank in equip_con.equipped_group:
+        if not e_piggybank.is_effected:
+            item_con.red_coin = True
+            e_piggybank.is_effected = True
 
     if e_metaldetector in equip_con.equipped_group:
         if not e_metaldetector.is_effected:
@@ -974,6 +983,10 @@ def remove_from_equipped_group(equip):
     elif equip == e_machine:
         item_con.prob_potion -= 3
         equip = E_Machine()
+    
+    elif equip == e_piggybank:
+        item_con.red_coin = False
+        equip = E_PiggyBank()
 
     elif equip == e_metaldetector:
         item_con.prob_coin -= 3
@@ -985,11 +998,11 @@ def remove_from_equipped_group(equip):
         equip = E_Binoculars()
 
     if equip.grade == 0:
-        equip_con.normal_equips.add(equip)
+        equip_con.normal_equips.append(equip)
     elif equip.grade == 1:
-        equip_con.rare_equips.add(equip)
+        equip_con.rare_equips.append(equip)
     elif equip.grade == 2:
-        equip_con.unique_equips.add(equip)
+        equip_con.unique_equips.append(equip)
 
 def setting_active_skill(key, picked_equip):
     if key == "c" and picked_equip.active:

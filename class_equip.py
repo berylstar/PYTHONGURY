@@ -1,3 +1,4 @@
+from platform import machine
 import pygame
 import random
 from file_image import *
@@ -294,7 +295,7 @@ class E_Battery(Equip):
 #                                                                           #### roller skate
 class E_RollerSkate(Equip):
     def __init__(self):
-        image = dummy
+        image = rollerskate_image
         Equip.__init__(self, image)
         self.msg_name = "롤러스케이트"
         self.msg_info = "신나게 달려보자"
@@ -365,7 +366,7 @@ class E_Pizza(Equip):
 #                                                                           #### glasses
 class E_3DGlasses(Equip):
     def __init__(self):
-        image = dummy
+        image = sdglasses_image
         Equip.__init__(self, image)
         self.msg_name = "3D 안경"
         self.msg_info = "2D로 보는거 보단 낫겠죠"
@@ -393,7 +394,7 @@ class E_Talisman(Equip):
 #                                                                           #### ticket
 class E_Ticket(Equip):
     def __init__(self):
-        image = dummy
+        image = ticket_image
         Equip.__init__(self, image)
         self.msg_name = "VIP 티켓"
         self.msg_info = "상점 우수 고객"
@@ -423,13 +424,28 @@ class E_Straw(Equip):
 #                                                                           #### machine
 class E_Machine(Equip):
     def __init__(self):
-        image = dummy
+        image = machine_image
         Equip.__init__(self, image)
         self.msg_name = "오래된 기계"
-        self.msg_info = "포션이 만들어지긴 할까요"
+        self.msg_info = "옛날 포션은 기계에서 만들어졌습니다.."
         self.msg_eff = "포션 드롭률 +3%"
 
-        self.max_row = 4
+        # self.max_row = 5
+        self.max_col = 1
+
+        self.price = 7
+
+#                                                                           #### piggy bank
+class E_PiggyBank(Equip):
+    def __init__(self):
+        image = piggybank_image
+        Equip.__init__(self, image)
+        self.msg_name = "돼지 저금통"
+        self.msg_info = "----"
+        self.msg_eff = "레드 코인 등장"
+        self.grade = 1
+
+        # self.max_row = 5
         self.max_col = 1
 
         self.price = 7
@@ -437,10 +453,10 @@ class E_Machine(Equip):
 #                                                                           #### metal detector
 class E_MetalDetector(Equip):
     def __init__(self):
-        image = dummy
+        image = metaldetector_image
         Equip.__init__(self, image)
         self.msg_name = "금속 탐지기"
-        self.msg_info = "찾아보자"
+        self.msg_info = "삐비비비비빅"
         self.msg_eff = "코인 드롭률 +3%"
 
         self.max_row = 4
@@ -624,7 +640,8 @@ class EquipController():
 
         self.perc_rare = 10
         self.rare_equips = [
-            e_banana, e_heartstone, e_battery, e_ticket, e_straw, e_trafficlight, e_thunder, e_dice, e_magiccloak, e_escaperope
+            e_banana, e_heartstone, e_battery, e_ticket, e_straw, e_piggybank,
+            e_trafficlight, e_thunder, e_dice, e_magiccloak, e_escaperope
         ]
 
         self.perc_unique = 2
@@ -709,17 +726,18 @@ e_heartstone = E_HeartStone()
 e_halfstone = E_HalfStone()
 e_ice = E_Ice()
 e_battery = E_Battery()
-e_rollerskate = E_RollerSkate()     # NONE
+e_rollerskate = E_RollerSkate()
 e_boxerglove = E_BoxerGlove()
 e_helmet = E_Helmet()
 e_turtleshell = E_TurtleShell()
 e_pizza = E_Pizza()
-e_3dglasses = E_3DGlasses()         # NONE
+e_3dglasses = E_3DGlasses()
 e_talisman = E_Talisman()           # NONE
-e_ticket = E_Ticket()               # NONE
+e_ticket = E_Ticket()
 e_straw = E_Straw()
-e_machine = E_Machine()             # NONE
-e_metaldetector = E_MetalDetector() # NONE
+e_machine = E_Machine()
+e_piggybank = E_PiggyBank()
+e_metaldetector = E_MetalDetector()
 e_binoculars = E_Binoculars()
 e_trafficlight = E_TrafficLight()
 e_thunder = E_Thunder()
