@@ -56,7 +56,7 @@ class Equip(pygame.sprite.Sprite):
         self.image = image
         self.name = None
 
-        self.msg_name = None        # 12글자
+        self.msg_name = None
         self.msg_info = None
         self.msg_eff = None
         self.msg_eff_2 = None
@@ -113,6 +113,18 @@ class Equip(pygame.sprite.Sprite):
 
     def active_skill(self):
         pass
+
+    def reset(self):
+        self.row = 0
+        self.col = 0
+        self.rect_left = inven_position[self.row][self.col][0]
+        self.rect_top = inven_position[self.row][self.col][1]
+        self.rect = (self.rect_left,self.rect_top)
+
+        self.is_effected = False
+        self.is_active_c = False
+        self.is_active_v = False
+        self.cool_time = False
 
 ##############################################################################################
 #                                                                           #### mushroom
@@ -601,7 +613,7 @@ class E_GoldenKey(Equip):
         if not self.target % 20 == 0 :
             # field_group.add(mand)   #keys field
             equip_con.equipped_group.remove(self)
-            equip_con.rare_equips.append(self)
+            equip_con.unique_equips.append(self)
 
 #                                                                           #### rope
 class E_EscapeRope(Equip):

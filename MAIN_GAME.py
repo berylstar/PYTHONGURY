@@ -1,4 +1,3 @@
-from enum import unique
 import pygame
 import random
 
@@ -851,7 +850,7 @@ def equip_effect():
 
     if e_boxerglove in equip_con.equipped_group:
         if not e_boxerglove.is_effected:
-            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))        # 펀치 이미지를 다른 이미지로 변경 ?
+            big_punch_image = pygame.transform.scale(punch_d_image, (90,90))
             player.punch = big_punch_image
             e_boxerglove.is_effected = True
 
@@ -930,122 +929,124 @@ def remove_from_equipped_group(equip):
     elif equip.is_active_v:
         player.equip_v = None
         
-    if equip == e_mushroom:
-        e_mushroom = E_Mushroom()
+    # if equip == e_mushroom:
+    #     e_mushroom = E_Mushroom()
 
-    elif equip == e_crescentmoon:
-        e_crescentmoon = E_CrescentMoon()
+    # elif equip == e_crescentmoon:
+    #     e_crescentmoon = E_CrescentMoon()
 
-    elif equip == e_banana:
-        e_banana = E_Banana()
+    # elif equip == e_banana:
+    #     e_banana = E_Banana()
 
     elif equip == e_wax:
         player.ap -= 2
-        e_wax = E_Wax()
+        # e_wax = E_Wax()
 
     elif equip == e_pepper:
         player.ap -= 3
-        e_pepper = E_Pepper()
+        # e_pepper = E_Pepper()
 
     elif equip == e_heartstone:
         player.max_hp -= 20
         player.hp = min(player.hp, player.max_hp)
-        e_heartstone = E_HeartStone()
+        # e_heartstone = E_HeartStone()
 
     elif equip == e_halfstone:
         player.max_hp -= 10
         player.hp = min(player.hp, player.max_hp)
-        e_halfstone = E_HalfStone()
+        # e_halfstone = E_HalfStone()
 
     elif equip == e_ice:
         if e_ice.charge_times == 0:
             player.speed -= 0.1
         elif e_ice.charge_times == 1:
             player.speed -= 0.05
-        e_ice = E_Ice()
+        # e_ice = E_Ice()
 
     elif equip == e_battery:
         player.speed -= 0.1 * e_battery.charge_times
         e_battery.charge_times = 0
-        e_battery = E_Battery()
+        # e_battery = E_Battery()
 
     elif equip == e_rollerskate:
         player.speed -= 0.1
-        e_rollerskate = E_RollerSkate()
+        # e_rollerskate = E_RollerSkate()
 
     elif equip == e_boxerglove:
         player.punch = punch_d_image
-        e_boxerglove = E_BoxerGlove()
+        # e_boxerglove = E_BoxerGlove()
     
     elif equip == e_helmet:
         player.dp -= 0.2
-        e_helmet = E_Helmet()
+        # e_helmet = E_Helmet()
 
     elif equip == e_turtleshell:
         player.damaged_time += 0.3
-        e_turtleshell = E_TurtleShell()
+        # e_turtleshell = E_TurtleShell()
 
     elif equip == e_pizza:
         monster_con.b_speed += 2
-        e_pizza = E_Pizza()
+        # e_pizza = E_Pizza()
 
     elif equip == e_3dglasses:
         monster_con.dont_alpha = False
-        e_3dglasses = E_3DGlasses()
+        # e_3dglasses = E_3DGlasses()
 
     elif equip == e_talisman:
         monster_con.dont_dash = False
-        e_talisman = E_Talisman()
+        # e_talisman = E_Talisman()
 
     elif equip == e_ticket:
         equip_con.perc_rare -= 5
-        e_ticket = E_Ticket()
+        # e_ticket = E_Ticket()
 
     elif equip == e_straw:
         item_con.potion_eff -= 5
-        e_straw = E_Straw()
+        # e_straw = E_Straw()
 
     elif equip == e_machine:
         item_con.prob_potion -= 3
-        e_machine = E_Machine()
+        # e_machine = E_Machine()
     
     elif equip == e_piggybank:
         item_con.red_coin = False
-        e_piggybank = E_PiggyBank()
+        # e_piggybank = E_PiggyBank()
 
     elif equip == e_metaldetector:
         item_con.prob_coin -= 3
-        e_metaldetector = E_MetalDetector()
+        # e_metaldetector = E_MetalDetector()
 
     elif equip == e_binoculars:
         item_con.prob_potion -= 3
         item_con.prob_coin -= 3
-        e_binoculars = E_Binoculars()
+        # e_binoculars = E_Binoculars()
 
-    elif equip == e_trafficlight:
-        e_trafficlight = E_TrafficLight()
+    # elif equip == e_trafficlight:
+    #     e_trafficlight = E_TrafficLight()
 
-    elif equip == e_thunder:
-        e_thunder = E_Thunder()
+    # elif equip == e_thunder:
+    #     e_thunder = E_Thunder()
     
-    elif equip == e_dice:
-        e_dice = E_Dice()
+    # elif equip == e_dice:
+    #     e_dice = E_Dice()
 
-    elif equip == e_magiccloak:
-        e_magiccloak = E_MagicCloak()
+    # elif equip == e_magiccloak:
+    #     e_magiccloak = E_MagicCloak()
     
-    elif equip == e_goldenkey:
-        e_goldenkey = E_GoldenKey()
+    # elif equip == e_goldenkey:
+    #     e_goldenkey = E_GoldenKey()
 
-    elif equip == e_escaperope:
-        e_escaperope = E_EscapeRope()
+    # elif equip == e_escaperope:
+    #     e_escaperope = E_EscapeRope()
+
+    equip.reset()
 
     if equip.grade == 0:
         equip_con.normal_equips.append(equip)
     elif equip.grade == 1:
         equip_con.rare_equips.append(equip)
     elif equip.grade == 2:
-        equip_con.unique_equips.append(equip)
+        equip_con.unique_equips.append(equip)    
 
     print(f"remove + {equip}")
     print(equip.is_active_c)
@@ -1106,7 +1107,7 @@ def monster_action():
                 if 0 <= randprob <= 50 and not monster_con.dont_alpha:
                     for image in monster.image_group:
                         image.set_alpha(60)
-                elif 80 < randprob:
+                elif 80 < randprob or monster_con.dont_alpha:
                     for image in monster.image_group:
                         image.set_alpha(255)
 
