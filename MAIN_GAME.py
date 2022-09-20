@@ -118,7 +118,6 @@ def scene_esc(doing):
 
 def scene_sound_setting(doing):
     global running
-
     
     color = [GRAY, GRAY, GRAY, GRAY]
     index = 0
@@ -783,23 +782,6 @@ def drop_item(monster):
             else:
                 item_group.add(Item(coin_image, monster.position, "coin"))
 
-# def put_on_pixel(position):
-#     x = position[0]
-#     y = position[1]
-
-#     x_ahrt = x // 60
-#     x_skajwl = round((x % 60) / 60)
-
-#     y_ahrt = y // 60
-#     y_skajwl = round((y % 60) / 60)
-
-#     fin_x = (x_ahrt + x_skajwl) * 60 + 10
-#     fin_y = (y_ahrt + y_skajwl) * 60 + 30
-
-#     pixel_position = (fin_x,fin_y)
-
-#     return pixel_position
-
 def item_effect(item):
     if item.info == "potion":
         player.hp = min(player.hp + item_con.potion_eff, player.max_hp)
@@ -928,10 +910,6 @@ def equip_effect():
     # rope
 
 def remove_from_equipped_group(equip):
-    global e_mushroom, e_crescentmoon, e_banana, e_wax, e_pepper, e_heartstone, e_halfstone, e_ice, e_battery, e_rollerskate
-    global e_boxerglove, e_helmet, e_turtleshell, e_pizza, e_3dglasses, e_talisman
-    global e_ticket, e_straw, e_machine, e_piggybank, e_metaldetector, e_binoculars, e_trafficlight, e_thunder, e_dice
-    global e_magiccloak, e_goldenkey, e_escaperope
 
     equip_con.equipped_group.remove(equip)
     if equip.is_active_c:
@@ -1042,17 +1020,6 @@ def random_monster_direction():
         for monster in monster_group:
             if not monster.is_die:
                 rand = random.randrange(0,10)
-                
-                # if rand <= 1 and (monster.rect.centerx >= 340 + (monster.rect.width // 2)):
-                #     monster.direction = "LEFT"
-                # elif 1 < rand and rand <= 3 and (monster.rect.centerx <= 940 - (monster.rect.width // 2)):
-                #     monster.direction = "RIGHT"
-                # elif 3 < rand and rand <= 5 and (monster.rect.centery >= 60 + (monster.rect.height // 2)):
-                #     monster.direction = "UP"
-                # elif 5 < rand and rand <= 7 and (monster.rect.centery <= 660 - (monster.rect.height // 2)):
-                #     monster.direction = "DOWN"
-                # else:
-                #     monster.direction = "NONE"
 
                 if rand <= 1:
                     monster.direction = "LEFT"
@@ -1157,12 +1124,6 @@ def monster_die(monster):
     if monster.i_i == 2:    #마지막 인덱스
         drop_item(monster)
         monster_group.remove(monster)
-
-    # if monster.type == "slime":
-    #     pass
-    # else:
-    #     drop_item(monster)
-    # monster_group.remove(monster)
 
 def field_effect(field):
     global saved_floor

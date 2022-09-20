@@ -1,4 +1,3 @@
-from platform import machine
 import pygame
 import random
 from file_image import *
@@ -494,7 +493,7 @@ class E_MetalDetector(Equip):
 #                                                                           #### binoculars 
 class E_Binoculars(Equip):
     def __init__(self):
-        image = dummy
+        image = binoculars_image
         Equip.__init__(self, image)
         self.msg_name = "쌍안경"
         self.msg_info = "멀리 있는 아이템까지"
