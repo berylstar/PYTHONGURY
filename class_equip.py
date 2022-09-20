@@ -1,7 +1,7 @@
 import pygame
 import random
 from file_image import *
-from class_field import field_group, key_field
+from class_field import field_group, key_field, portal
 ##############################################################################################
 def is_inven_overlapped(equip_group):
     flag = False
@@ -231,7 +231,7 @@ class E_HeartStone(Equip):
 #                                                                           #### halfstone 
 class E_HalfStone(Equip):
     def __init__(self):
-        image = brokenstone_image
+        image = halfstone_image
         Equip.__init__(self, image)
         self.msg_name = "반 돌"
         self.msg_info = "나머지 반쪽은 어디에"
@@ -250,7 +250,7 @@ class E_PoisonApple(Equip):
         self.msg_name = "독사과"
         self.msg_info = "먹어도 되는 걸까..?"
         self.msg_eff = "체력 +10, 최대 체력 +10"
-        self.msg_eff_2 = "시간 데미지, 충돌 데미지 증가"
+        self.msg_eff_2 = "시간 데미지와 충돌 데미지 증가"
 
         # self.max_row = 5
         # self.max_col = 2
@@ -335,7 +335,7 @@ class E_RollerSkate(Equip):
 #                                                                           #### boxer glove
 class E_BoxerGlove(Equip):
     def __init__(self):
-        image = dummy
+        image = gloves_image
         Equip.__init__(self, image)
         self.msg_name = "복싱 글러브"
         self.msg_info = "싸울 준비 완료 !"
@@ -350,9 +350,9 @@ class E_BoxerGlove(Equip):
 #                                                                           #### helmet
 class E_Helmet(Equip):
     def __init__(self):
-        image = dummy
+        image = helmet_image
         Equip.__init__(self, image)
-        self.msg_name = "야구헬멧"
+        self.msg_name = "헬멧"
         self.msg_info = "머리를 안전하게 !"
         self.msg_eff = "적 충돌 데미지 감소"
 
@@ -422,7 +422,7 @@ class E_Ticket(Equip):
     def __init__(self):
         image = ticket_image
         Equip.__init__(self, image)
-        self.msg_name = "VIP 티켓"
+        self.msg_name = "황금 티켓"
         self.msg_info = "상점 우수 고객"
         self.msg_eff = "상점 레어도 증가"
         self.grade = 1
@@ -563,8 +563,8 @@ class E_Dice(Equip):
         self.grade = 1
         self.active = True
 
-        # self.max_row = 5
-        # self.max_col = 2
+        self.max_row = 4
+        self.max_col = 1
 
         self.price = 3
 
@@ -647,7 +647,7 @@ class E_EscapeRope(Equip):
 
     def active_skill(self):
         
-        # field_group.add(mand)   #rope field
+        field_group.add(portal)
         skill_con.active_escaperope = True
         equip_con.equipped_group.remove(self)
         equip_con.rare_equips.append(self)

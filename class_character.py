@@ -69,7 +69,7 @@ class Mon_spider(Character):
         image_group = monster_1_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "shooter"
+        self.type = ["shooter"]
 
         self.hp = 12
         self.ap = 2
@@ -83,7 +83,7 @@ class Mon_frog(Character):
         image_group = monster_3_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "normal"
+        self.type = []
 
         self.hp = 12
         self.ap = 2
@@ -94,7 +94,7 @@ class Mon_bat(Character):
         image_group = monster_2_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "runner"
+        self.type = ["runner"]
 
         self.hp = 8
         self.ap = 1.3
@@ -107,7 +107,7 @@ class Mon_skel(Character):
         image_group = mon_skel_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "normal"
+        self.type = []
 
         self.hp = 21
         self.ap = 2
@@ -120,7 +120,7 @@ class Mon_zombie(Character):
         image_group = None
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "normal"
+        self.type = []
 
         self.hp = 18
         self.ap = 2
@@ -131,7 +131,7 @@ class Mon_warewolf(Character):
         image_group = None
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "normal"
+        self.type = []
 
         self.hp = 30
         self.ap = 2.5
@@ -142,7 +142,7 @@ class Mon_ghost(Character):
         image_group = mon_ghost_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "alpha"
+        self.type = ["alpha"]
 
         self.hp = 20
         self.ap = 1.5
@@ -153,7 +153,7 @@ class Mon_scarecrow(Character):
         image_group = None
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "shooter"
+        self.type = ["shooter"]
 
         self.hp = 18
         self.ap = 1.5
@@ -169,7 +169,7 @@ class Mon_ember(Character):
         image_group = mon_ember_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "shooter"
+        self.type = ["shooter"]
 
         self.hp = 10
         self.ap = 2
@@ -183,27 +183,12 @@ class Mon_ember(Character):
 
 
 # 81 ~ 100 : king castle
-
-
-class Mon_skell(Character):
-    def __init__(self):
-        image_group = mon_skel_images
-        position = (0,0)
-        Character.__init__(self, image_group, position)
-        self.type = "runner"
-
-        self.hp = 10
-        self.ap = 2
-        self.speed = 0.1
-        self.is_dashed = False
-        self.dashes = 0
-
 class Mon_boss(Character):
     def __init__(self):
         image_group = monster_boss_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = "boss"
+        self.type = ["boss"]
 
         self.hp = 100
         self.ap = 2

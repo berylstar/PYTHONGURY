@@ -368,6 +368,7 @@ def scene_shop(doing):
             screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
             screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
             screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
+            screen_message(equip_con.for_sale[picked_num-1].msg_eff_2, YELLOW, (640,200), game_font_kor)
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -377,28 +378,39 @@ def scene_shop(doing):
         pygame.display.update()
 
 def shop_showcase(index, equip):           # 상점 가판대 이미지로 대체
-    sero = 350
-    pygame.draw.rect(screen, WHITE, ((420 + 150*index,sero),(140,260)), 2)
-    screen_message(str(index+1), WHITE, (490 + 150*index,sero+20), game_font_m)
+    sero = 290
+    pygame.draw.rect(screen, WHITE, ((370 + 180*index,sero),(180,320)), 2)
+    screen_message(str(index+1), WHITE, (460 + 180*index,sero+20), game_font_m)
 
     if equip_con.can_buy[index]:
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (550 + 150*index, sero+40))
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+100), (550 + 150*index, sero+100))
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+160), (550 + 150*index, sero+160))
-        pygame.draw.line(screen, GRAY, (430 + 150*index, sero+40), (430 + 150*index, sero+160))
-        pygame.draw.line(screen, GRAY, (490 + 150*index, sero+40), (490 + 150*index, sero+160))
-        pygame.draw.line(screen, GRAY, (550 + 150*index, sero+40), (550 + 150*index, sero+160))
-        # equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
-        equip_rect = equip.image.get_rect(left=430 + 150*index, top=sero+40)
+        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+40), (550 + 180*index, sero+40))
+        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+100), (550 + 180*index, sero+100))
+        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+160), (550 + 180*index, sero+160))
+        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+220), (550 + 180*index, sero+220))
+        pygame.draw.line(screen, GRAY, (430 + 180*index, sero+40), (430 + 180*index, sero+220))
+        pygame.draw.line(screen, GRAY, (490 + 180*index, sero+40), (490 + 180*index, sero+220))
+        # pygame.draw.line(screen, GRAY, (550 + 180*index, sero+40), (550 + 180*index, sero+160))     
+        
+
+        # if equip.max_col <= 0 or equip.max_row <= 3:
+        #     equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
+        # else:
+        #     equip_image = equip.image
+
+
+        equip_rect = equip.image.get_rect(left=370+180*index, top=sero+40)
         screen.blit(equip.image, equip_rect)
+        # screen.blit(equip_image, equip_rect)
+
+        # screen_message(f"({3-equip.max_col} X {6-equip.max_row})", WHITE, (460 + 180*index, sero+240), game_font_s)
 
         coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
-        coin_rect = coin_image_r.get_rect(center=(470 + 150*index,sero+230))
+        coin_rect = coin_image_r.get_rect(center=(440 + 180*index,sero+290))
         screen.blit(coin_image_r, coin_rect)
 
-        screen_message(f"x{equip.price}", WHITE, (500 + 150*index, sero+230), game_font_m)
+        screen_message(f"x{equip.price}", WHITE, (470 + 180*index, sero+290), game_font_m)
     else:
-        case_rect = sold_out_image.get_rect(center=(490 + 150*index,sero+130))
+        case_rect = sold_out_image.get_rect(center=(460 + 180*index,sero+160))
         screen.blit(sold_out_image, case_rect)
 
 def scene_inventory(doing):
@@ -769,9 +781,8 @@ def player_move_key():
 
 def drop_item(monster):
     randprob = random.randrange(1,101) # 1~100
-    # position = put_on_pixel(position)
 
-    if monster.type == "boss":
+    if "boss" in monster.type:
         item_group.add(Item(box_image, monster.position, "box"))
     else:
         if randprob <= item_con.prob_potion: # 확률 <= 포션드롭률
@@ -1083,7 +1094,7 @@ def monster_action():
 
     for monster in monster_group:
         if not monster.is_die:
-            if monster.type == "shooter":
+            if "shooter" in monster.type:
                 if 0 <= randprob <= 70:
                     if monster.direction == "LEFT":
                         image = monster.bullet
@@ -1097,7 +1108,7 @@ def monster_action():
                         break
                     shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage))
 
-            if monster.type == "alpha":
+            if "alpha" in monster.type:
                 if 0 <= randprob <= 50 and not monster_con.dont_alpha:
                     for image in monster.image_group:
                         image.set_alpha(60)
@@ -1105,7 +1116,7 @@ def monster_action():
                     for image in monster.image_group:
                         image.set_alpha(255)
 
-            if monster.type == "runner" and not monster_con.dont_dash:
+            if "runner" in monster.type and not monster_con.dont_dash:
                 if 0 <= randprob <= 30 and not monster.is_dashed:
                     monster.speed += 0.4
                     monster.is_dashed = True
@@ -1132,10 +1143,10 @@ def field_effect(field):
         if field.image == web_image and not field.is_activated:
             player.stop()
 
-        # if field.image == rope_field_image:
-        #     player.stop()
-        #     saved_floor = floor
-        #     floor_zero()
+        if field == portal:
+            player.stop()
+            saved_floor = floor
+            floor_zero()
 
         if field == key_field:
             player.stop()
@@ -1282,7 +1293,7 @@ ready = True
 running = True
 random_for_sale()
 while running:
-    fps = clock.tick(60)
+    fps = clock.tick(30)
 
     scene_title_game()
 

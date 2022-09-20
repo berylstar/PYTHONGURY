@@ -41,9 +41,8 @@ class Torch(pygame.sprite.Sprite):
 stair_zero_floor = (640, 90)
 stair = Field(stair_images[0], stair_zero_floor)
 
-mand = Field(mushroom_image, stair_zero_floor)  #keys, rope field 만들어줘야함
-
 key_field = Field(stair_images[1], stair_zero_floor)
+portal = Field(portal_image, stair_zero_floor)
 
 field_group = pygame.sprite.Group()
 
