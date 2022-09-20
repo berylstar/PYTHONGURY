@@ -2,7 +2,7 @@ from platform import machine
 import pygame
 import random
 from file_image import *
-from class_field import field_group, mand
+from class_field import field_group, key_field
 ##############################################################################################
 def is_inven_overlapped(equip_group):
     flag = False
@@ -239,6 +239,21 @@ class E_HalfStone(Equip):
         self.msg_eff = "최대 체력 +10"
 
         self.max_row = 4
+        # self.max_col = 2
+
+        self.price = 6
+
+#                                                                           #### poison apple 
+class E_PoisonApple(Equip):
+    def __init__(self):
+        image = poisonapple_image
+        Equip.__init__(self, image)
+        self.msg_name = "독사과"
+        self.msg_info = "먹어도 되는 걸까..?"
+        self.msg_eff = "체력 +10, 최대 체력 +10"
+        self.msg_eff_2 = "시간 데미지, 충돌 데미지 증가"
+
+        # self.max_row = 5
         # self.max_col = 2
 
         self.price = 6
@@ -611,7 +626,7 @@ class E_GoldenKey(Equip):
 
     def active_skill(self):
         if not self.target % 20 == 0 :
-            # field_group.add(mand)   #keys field
+            field_group.add(key_field)   #keys field
             equip_con.equipped_group.remove(self)
             equip_con.unique_equips.append(self)
 
@@ -646,7 +661,7 @@ class EquipController():
         self.can_buy = [False, False, False]
         
         self.normal_equips = [
-            e_crescentmoon, e_wax, e_pepper, e_halfstone, e_ice, e_rollerskate, e_helmet, e_turtleshell,
+            e_crescentmoon, e_wax, e_pepper, e_halfstone, e_poisonapple, e_ice, e_rollerskate, e_helmet, e_turtleshell,
             e_pizza, e_3dglasses, e_talisman, e_machine, e_metaldetector, e_binoculars,
         ]
 
@@ -736,6 +751,7 @@ e_wax = E_Wax()
 e_pepper = E_Pepper()
 e_heartstone = E_HeartStone()
 e_halfstone = E_HalfStone()
+e_poisonapple = E_PoisonApple()
 e_ice = E_Ice()
 e_battery = E_Battery()
 e_rollerskate = E_RollerSkate()

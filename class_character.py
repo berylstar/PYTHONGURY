@@ -99,7 +99,8 @@ class Mon_bat(Character):
         self.hp = 8
         self.ap = 1.3
         self.speed = 0.2
-        self.curr_dir = None
+        self.is_dashed = False
+        self.dashes = 0
 
 class Mon_skel(Character):
     def __init__(self):
@@ -190,11 +191,12 @@ class Mon_skell(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = "runner"
-        self.curr_dir = None        # runner는 self.curr_dir=None 필요
 
         self.hp = 10
         self.ap = 2
         self.speed = 0.1
+        self.is_dashed = False
+        self.dashes = 0
 
 class Mon_boss(Character):
     def __init__(self):
@@ -229,5 +231,3 @@ npc_coffin = Character(coffin_images, (840, 600))
 
 npc_group = pygame.sprite.Group()
 npc_group.add(npc_kingslime, npc_coffin)
-
-##### about monster

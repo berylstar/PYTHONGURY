@@ -352,6 +352,7 @@ def scene_shop(doing):
                     if player.coin >= 0:
                         player.coin -= 0
                         random_for_sale()
+                        picked_num = 0
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     doing = False
@@ -414,9 +415,11 @@ def scene_inventory(doing):
     picked_equip = None
 
     inven_img.set_alpha(180)
-    screen.blit(inven_img, (340,60))
+    
 
     while doing:
+        screen.blit(inven_img, (340,60))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 doing = False
@@ -832,6 +835,13 @@ def equip_effect():
             player.max_hp += 10
             e_halfstone.is_effected = True
 
+    if e_poisonapple in equip_con.equipped_group:
+        if not e_poisonapple.is_effected:
+            player.hp += 10
+            player.max_hp += 10
+            player.dp -= 0.5
+            player.damaged_time += 0.5
+
     if e_ice in equip_con.equipped_group:
         if not e_ice.is_effected:
             player.speed += 0.1
@@ -928,116 +938,76 @@ def remove_from_equipped_group(equip):
         player.equip_c = None
     elif equip.is_active_v:
         player.equip_v = None
-        
-    # if equip == e_mushroom:
-    #     e_mushroom = E_Mushroom()
-
-    # elif equip == e_crescentmoon:
-    #     e_crescentmoon = E_CrescentMoon()
-
-    # elif equip == e_banana:
-    #     e_banana = E_Banana()
 
     elif equip == e_wax:
         player.ap -= 2
-        # e_wax = E_Wax()
 
     elif equip == e_pepper:
         player.ap -= 3
-        # e_pepper = E_Pepper()
 
     elif equip == e_heartstone:
         player.max_hp -= 20
         player.hp = min(player.hp, player.max_hp)
-        # e_heartstone = E_HeartStone()
 
     elif equip == e_halfstone:
         player.max_hp -= 10
         player.hp = min(player.hp, player.max_hp)
-        # e_halfstone = E_HalfStone()
+
+    elif equip == e_poisonapple:
+        player.hp -= 10
+        player.max_hp -= 10
+        player.dp += 0.5
+        player.damaged_time -= 0.5
 
     elif equip == e_ice:
         if e_ice.charge_times == 0:
             player.speed -= 0.1
         elif e_ice.charge_times == 1:
             player.speed -= 0.05
-        # e_ice = E_Ice()
 
     elif equip == e_battery:
         player.speed -= 0.1 * e_battery.charge_times
         e_battery.charge_times = 0
-        # e_battery = E_Battery()
 
     elif equip == e_rollerskate:
         player.speed -= 0.1
-        # e_rollerskate = E_RollerSkate()
 
     elif equip == e_boxerglove:
         player.punch = punch_d_image
-        # e_boxerglove = E_BoxerGlove()
-    
+
     elif equip == e_helmet:
         player.dp -= 0.2
-        # e_helmet = E_Helmet()
 
     elif equip == e_turtleshell:
         player.damaged_time += 0.3
-        # e_turtleshell = E_TurtleShell()
 
     elif equip == e_pizza:
         monster_con.b_speed += 2
-        # e_pizza = E_Pizza()
 
     elif equip == e_3dglasses:
         monster_con.dont_alpha = False
-        # e_3dglasses = E_3DGlasses()
 
     elif equip == e_talisman:
         monster_con.dont_dash = False
-        # e_talisman = E_Talisman()
 
     elif equip == e_ticket:
         equip_con.perc_rare -= 5
-        # e_ticket = E_Ticket()
 
     elif equip == e_straw:
         item_con.potion_eff -= 5
-        # e_straw = E_Straw()
 
     elif equip == e_machine:
         item_con.prob_potion -= 3
-        # e_machine = E_Machine()
     
     elif equip == e_piggybank:
         item_con.red_coin = False
-        # e_piggybank = E_PiggyBank()
 
     elif equip == e_metaldetector:
         item_con.prob_coin -= 3
-        # e_metaldetector = E_MetalDetector()
 
     elif equip == e_binoculars:
         item_con.prob_potion -= 3
         item_con.prob_coin -= 3
-        # e_binoculars = E_Binoculars()
-
-    # elif equip == e_trafficlight:
-    #     e_trafficlight = E_TrafficLight()
-
-    # elif equip == e_thunder:
-    #     e_thunder = E_Thunder()
-    
-    # elif equip == e_dice:
-    #     e_dice = E_Dice()
-
-    # elif equip == e_magiccloak:
-    #     e_magiccloak = E_MagicCloak()
-    
-    # elif equip == e_goldenkey:
-    #     e_goldenkey = E_GoldenKey()
-
-    # elif equip == e_escaperope:
-    #     e_escaperope = E_EscapeRope()
 
     equip.reset()
 
@@ -1047,10 +1017,6 @@ def remove_from_equipped_group(equip):
         equip_con.rare_equips.append(equip)
     elif equip.grade == 2:
         equip_con.unique_equips.append(equip)    
-
-    print(f"remove + {equip}")
-    print(equip.is_active_c)
-    print(equip.is_active_v)
 
 def setting_active_skill(key, picked_equip):
     if key == "c" and picked_equip.active:
@@ -1070,6 +1036,67 @@ def setting_active_skill(key, picked_equip):
         player.equip_v = picked_equip
         if player.equip_c == player.equip_v:
             player.equip_c = None
+
+def random_monster_direction():
+    if monster_group and not monster_con.dontmove:
+        for monster in monster_group:
+            if not monster.is_die:
+                rand = random.randrange(0,10)
+                
+                # if rand <= 1 and (monster.rect.centerx >= 340 + (monster.rect.width // 2)):
+                #     monster.direction = "LEFT"
+                # elif 1 < rand and rand <= 3 and (monster.rect.centerx <= 940 - (monster.rect.width // 2)):
+                #     monster.direction = "RIGHT"
+                # elif 3 < rand and rand <= 5 and (monster.rect.centery >= 60 + (monster.rect.height // 2)):
+                #     monster.direction = "UP"
+                # elif 5 < rand and rand <= 7 and (monster.rect.centery <= 660 - (monster.rect.height // 2)):
+                #     monster.direction = "DOWN"
+                # else:
+                #     monster.direction = "NONE"
+
+                if rand <= 1:
+                    monster.direction = "LEFT"
+                elif 1 < rand and rand <= 3:
+                    monster.direction = "RIGHT"
+                elif 3 < rand and rand <= 5:
+                    monster.direction = "UP"
+                elif 5 < rand and rand <= 7:
+                    monster.direction = "DOWN"
+                else:
+                    monster.direction = "NONE"
+
+                if monster.rect.centerx <= 340 + (monster.rect.width // 2):
+                    monster.direction = "RIGHT"
+                elif monster.rect.centerx >= 940 - (monster.rect.width // 2):
+                    monster.direction = "LEFT"
+
+                if monster.rect.centery <= 60 + (monster.rect.height // 2):
+                    monster.direction = "DOWN"
+                elif monster.rect.centery >= 660 - (monster.rect.height // 2):
+                    monster.direction = "UP"
+
+def forward_monster_direction(target):
+    if monster_group and not monster_con.dontmove:
+        for monster in monster_group:
+            if not monster.is_die:
+                x = target.position[0] - monster.position[0]
+                y = target.position[1] - monster.position[1]
+                rand = random.randrange(1,10)
+
+                if rand <= 5:
+                    if x < -30 :
+                        monster.direction = "LEFT"
+                    elif x > 30:
+                        monster.direction = "RIGHT"
+                    else:
+                        monster.direction = "NONE"
+                else:
+                    if y < -30:
+                        monster.direction = "UP"
+                    elif y > 30:
+                        monster.direction = "DOWN"
+                    else:
+                        monster.direction = "NONE"
 
 def monster_move():
     if monster_group:
@@ -1112,13 +1139,16 @@ def monster_action():
                         image.set_alpha(255)
 
             if monster.type == "runner" and not monster_con.dont_dash:
-                if 0 <= randprob <= 30:
+                if 0 <= randprob <= 30 and not monster.is_dashed:
                     monster.speed += 0.4
-                    monster.curr_dir = monster.direction
+                    monster.is_dashed = True
 
-                if monster.curr_dir and (not monster.curr_dir == monster.direction):
-                    monster.speed -= 0.4
-                    monster.curr_dir = None
+                if monster.is_dashed:
+                    monster.dashes += 1
+                    if monster.dashes >= 2:
+                        monster.speed -= 0.4
+                        monster.dashes = 0
+                        monster.is_dashed = False
 
 def monster_die(monster):
     if not monster.is_die:
@@ -1146,13 +1176,13 @@ def field_effect(field):
         #     saved_floor = floor
         #     floor_zero()
 
-        # if field.image == keys_field_image:
-        #     player.stop()
-        #     monster_group.empty()
-        #     shooting_group.empty()
-        #     item_group.empty()
-        #     field_group.empty()
-        #     next_floor(player.position)
+        if field == key_field:
+            player.stop()
+            monster_group.empty()
+            shooting_group.empty()
+            item_group.empty()
+            field_group.empty()
+            next_floor(player.position)
 
 ##############################################################################################
 ##### PLAYER CLASS
@@ -1272,7 +1302,6 @@ info_rect = pygame.Rect(((140,60), (200, 600)))
 inven_rect = pygame.Rect(((940,60), (200, 600)))
 full_rect = pygame.Rect((140,60), (1000,600))
 
-
 ##### PLAYER
 player_first_position = (700, 360)
 player = Player(player_images, player_first_position)
@@ -1292,7 +1321,7 @@ ready = True
 running = True
 random_for_sale()
 while running:
-    fps = clock.tick(30)
+    fps = clock.tick(60)
 
     scene_title_game()
 
@@ -1439,6 +1468,7 @@ while running:
     screen.blit(cover_image, (0,0))
     display_info_ui()
     display_inven_ui()
+    screen_message(str(fps), WHITE, (960,80), game_font_m)
     
     if running: 
         pygame.display.update()

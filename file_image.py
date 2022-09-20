@@ -137,6 +137,7 @@ ticket_image = pygame.image.load(os.path.join(file_path, "images\\equips\\ticket
 talisman_image = pygame.image.load(os.path.join(file_path, "images\\equips\\talisman.png"))             ####
 magiccloak_image = pygame.image.load(os.path.join(file_path, "images\\equips\\magiccloak.png"))         ####
 goldenkey_image = pygame.image.load(os.path.join(file_path, "images\\equips\\goldenkey.png"))           ####
+poisonapple_image = pygame.image.load(os.path.join(file_path, "images\\equips\\poisonapple.png"))           ####
 
 
 ##############################################################################################
