@@ -19,6 +19,7 @@ class ItemController():
         self.potion_eff = 5
 
         self.prob_coin = 10
+        self.red_coin = False
 ##############################################################################################
 
 item_con = ItemController()

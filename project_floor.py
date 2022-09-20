@@ -10,19 +10,13 @@ from class_field import *
 # 2. 전체 세팅
 # 3. 전체 랜덤 + 추가 세팅
 ##############################################################################################
-def floor_setting(pos, floor):
+def monster_setting(pos, floor):
     number_enemies = floor//5 + 1
 
-    if not floor % 20 == 0:
-        for i in range(number_enemies):
-            spawn_monster(pos, floor)
-        floor_monster_setting(pos, floor)
-    else:
-        boss_monster = Mon_boss()
-        random_away_position(pos, boss_monster)
-        monster_group.add(boss_monster)
+    for i in range(number_enemies):
+        spawn_monster(pos, prob_spawn_monster(floor))
 
-    random_field_setting()
+    floor_monster_setting(pos, floor)
 
 def random_away_position(center, object):
     while True:
@@ -35,15 +29,9 @@ def random_away_position(center, object):
                 object.rect = object.image.get_rect(center=object.position)
                 break 
 
-def spawn_monster(pos, floor, monster_kind=None):
-    if not monster_kind:
-        monster = prob_spawn_monster(floor)
-        random_away_position(pos, monster)
-        monster_group.add(monster)
-    else:
-        monster = monster_kind
-        random_away_position(pos, monster)
-        monster_group.add(monster)
+def spawn_monster(pos, monster):
+    random_away_position(pos, monster)
+    monster_group.add(monster)
 
 def prob_spawn_monster(floor):
     randprob = random.randrange(1,101)  # 1 ~ 100
@@ -62,18 +50,21 @@ def prob_spawn_monster(floor):
 
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
-        # spawn_monster(pos, floor, Mon_1())
-        # spawn_monster(pos, floor, Mon_skel())
-        # spawn_monster(pos, floor, Mon_skel())
-        # spawn_monster(pos, floor, Mon_ember())
-        # spawn_monster(pos, floor, Mon_ember())
-        # spawn_monster(pos, floor, Mon_ghost())
-        # spawn_monster(pos, floor, Mon_ghost())
-        pass
+        # spawn_monster(pos, Mon_spider())
+        # spawn_monster(pos, Mon_frog())
+        # spawn_monster(pos, Mon_bat())
+        # spawn_monster(pos, Mon_skel())
+        spawn_monster(pos, Mon_ghost())
+        spawn_monster(pos, Mon_ghost())
+        spawn_monster(pos, Mon_ghost())
+        spawn_monster(pos, Mon_ghost())
     elif 7 <= floor < 12:
-        spawn_monster(pos, floor, Mon_ember())
+        spawn_monster(pos, Mon_ember())
     elif 12 <= floor < 15:
-        spawn_monster(pos, floor, Mon_ghost())
+        spawn_monster(pos, Mon_ghost())
+
+    if floor % 10 == 0:
+        spawn_monster(pos, Mon_boss())
 
 ##############################################################################################
 
