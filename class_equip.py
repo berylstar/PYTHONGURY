@@ -321,7 +321,7 @@ class E_RollerSkate(Equip):
 #                                                                           #### boxer glove
 class E_BoxerGlove(Equip):
     def __init__(self):
-        image = gloves_image
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "복싱 글러브"
         self.msg_info = "싸울 준비 완료 !"
@@ -336,7 +336,7 @@ class E_BoxerGlove(Equip):
 #                                                                           #### helmet
 class E_Helmet(Equip):
     def __init__(self):
-        image = helmet_image
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "야구헬멧"
         self.msg_info = "머리를 안전하게 !"
@@ -479,7 +479,7 @@ class E_MetalDetector(Equip):
 #                                                                           #### binoculars 
 class E_Binoculars(Equip):
     def __init__(self):
-        image = binoculars_image
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "쌍안경"
         self.msg_info = "멀리 있는 아이템까지"
@@ -515,7 +515,7 @@ class E_TrafficLight(Equip):
 #                                                                           #### thunder
 class E_Thunder(Equip):
     def __init__(self):
-        image = thunder_image
+        image = dummy
         Equip.__init__(self, image)
         self.msg_name = "천둥번개"
         self.msg_info = "마른 하늘에 날벼락"

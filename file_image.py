@@ -117,16 +117,16 @@ ice_images = [
     ]
 dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png"))
 heartstone_image = pygame.image.load(os.path.join(file_path, "design\\equips\\heartstone.png"))
-thunder_image = pygame.image.load(os.path.join(file_path, "images\\equips\\thunder.png"))               ####
+# thunder_image = pygame.image.load(os.path.join(file_path, "images\\equips\\thunder.png"))               ####
 wax_image = pygame.image.load(os.path.join(file_path, "design\\equips\\wax.png"))
 brokenstone_image = pygame.image.load(os.path.join(file_path, "design\\equips\\brokenstone.png"))
 crescentmoon_image = pygame.image.load(os.path.join(file_path, "design\\equips\\crescentmoon.png"))
-helmet_image = pygame.image.load(os.path.join(file_path, "images\\equips\\helmet.png"))                 ####
+# helmet_image = pygame.image.load(os.path.join(file_path, "images\\equips\\helmet.png"))                 ####
 mushroom_image = pygame.image.load(os.path.join(file_path, "design\\equips\\mushroom.png"))             
-pizza_image = pygame.image.load(os.path.join(file_path, "images\\equips\\pizza.png"))                   ####
-gloves_image = pygame.image.load(os.path.join(file_path, "images\\equips\\gloves.png"))                 ####
+pizza_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pizza.png"))
+# gloves_image = pygame.image.load(os.path.join(file_path, "images\\equips\\gloves.png"))                 ####
 turtleshell_image = pygame.image.load(os.path.join(file_path, "design\\equips\\turtleshell.png"))       
-binoculars_image = pygame.image.load(os.path.join(file_path, "images\\equips\\binoculars.png"))         ####
+# binoculars_image = pygame.image.load(os.path.join(file_path, "images\\equips\\binoculars.png"))         ####
 
 sdglasses_image = pygame.image.load(os.path.join(file_path, "images\\equips\\3dglasses.png"))           ####
 machine_image = pygame.image.load(os.path.join(file_path, "images\\equips\\machine.png"))               ####
