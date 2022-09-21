@@ -306,6 +306,7 @@ def scene_game_over(doing):
         screen.fill(BLACK)      # 게임 오버 이미지로 대체 해도되고 그냥 검은 화면으로 해도 되고
         screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
+        screen_message(f"BEATED {monster_con.mon_count} MONSTERS", WHITE, (screen_width//2, screen_height//2 + 100), game_font_m)
         screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
@@ -364,11 +365,13 @@ def scene_shop(doing):
         display_info_ui()
         display_inven_ui()
 
+
+        pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_num:
-            screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
-            screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
-            screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
-            screen_message(equip_con.for_sale[picked_num-1].msg_eff_2, YELLOW, (640,200), game_font_kor)
+            screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,120), game_font_m)
+            screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,160), game_font_kor)
+            screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,210), game_font_kor)
+            screen_message(equip_con.for_sale[picked_num-1].msg_eff_2, YELLOW, (640,230), game_font_kor)
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -389,20 +392,19 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
         pygame.draw.line(screen, GRAY, (370 + 180*index, sero+220), (550 + 180*index, sero+220))
         pygame.draw.line(screen, GRAY, (430 + 180*index, sero+40), (430 + 180*index, sero+220))
         pygame.draw.line(screen, GRAY, (490 + 180*index, sero+40), (490 + 180*index, sero+220))
-        # pygame.draw.line(screen, GRAY, (550 + 180*index, sero+40), (550 + 180*index, sero+160))     
-        
-
-        # if equip.max_col <= 0 or equip.max_row <= 3:
-        #     equip_image = pygame.transform.rotozoom(equip.image, 0, 30/60)
-        # else:
-        #     equip_image = equip.image
-
 
         equip_rect = equip.image.get_rect(left=370+180*index, top=sero+40)
         screen.blit(equip.image, equip_rect)
-        # screen.blit(equip_image, equip_rect)
-
-        # screen_message(f"({3-equip.max_col} X {6-equip.max_row})", WHITE, (460 + 180*index, sero+240), game_font_s)
+        if equip.grade == 0:
+            txt = "NORMAL"
+            color = WHITE
+        elif equip.grade == 1:
+            txt = "RARE"
+            color = YELLOW
+        elif equip.grade == 2:
+            txt = "UNIQUE"
+            color = BLUE
+        screen_message(txt, color, (460 + 180*index, sero+250), game_font_s)
 
         coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
         coin_rect = coin_image_r.get_rect(center=(440 + 180*index,sero+290))
@@ -481,25 +483,27 @@ def scene_inventory(doing):
 
         display_inven_ui()
 
-        screen_message(f"AP : {player.ap}", WHITE, (640,100), game_font_s)
-        screen_message(f"DP : {player.dp}", WHITE, (640,130), game_font_s)
-        screen_message(f"SPEED : {player.speed}", WHITE, (640,160), game_font_s)
-        screen_message(f"TIME DAMAGE : {player.damaged_time}", WHITE, (640,190), game_font_s)
+        f = 300
 
-        screen_message(f"POTION EFF : {item_con.potion_eff}", WHITE, (640,270), game_font_s)
-        screen_message(f"POTION PROB : {item_con.prob_potion}%", WHITE, (640,300), game_font_s)
-        screen_message(f"COIN PROB : {item_con.prob_coin}%", WHITE, (640,330), game_font_s)
+        screen_message(f"AP : {player.ap}", WHITE, (640,f), game_font_s)
+        screen_message(f"DP : {player.dp}", WHITE, (640,f+25), game_font_s)
+        screen_message(f"SPEED : {player.speed}", WHITE, (640,f+50), game_font_s)
+        screen_message(f"TIME DAMAGE : {player.damaged_time}", WHITE, (640,f+75), game_font_s)
 
-        screen_message(f"SHOP RARE : {equip_con.perc_rare}%", WHITE, (640,390), game_font_s)
-        screen_message(f"SHOP UNIQUE : {equip_con.perc_unique}%", WHITE, (640,420), game_font_s)
+        screen_message(f"POTION EFF : {item_con.potion_eff}", WHITE, (640,f+125), game_font_s)
+        screen_message(f"POTION PROB : {item_con.prob_potion}%", WHITE, (640,f+150), game_font_s)
+        screen_message(f"COIN PROB : {item_con.prob_coin}%", WHITE, (640,f+175), game_font_s)
+
+        screen_message(f"SHOP RARE : {equip_con.perc_rare}%", WHITE, (640,f+225), game_font_s)
+        screen_message(f"SHOP UNIQUE : {equip_con.perc_unique}%", WHITE, (640,f+250), game_font_s)
         
         
-
-        if picked_equip and not is_inven_overlapped(equip_con.equipped_group):
-            screen_message(picked_equip.msg_name, WHITE, (1040,90), game_font_m)
-            screen_message(picked_equip.msg_info, WHITE, (1040,130), game_font_kor)
-            screen_message(picked_equip.msg_eff, YELLOW, (1040,180), game_font_kor)
-            screen_message(picked_equip.msg_eff_2, YELLOW, (1040,200), game_font_kor)
+        pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
+        if picked_equip:
+            screen_message(picked_equip.msg_name, WHITE, (640,120), game_font_m)
+            screen_message(picked_equip.msg_info, WHITE, (640,160), game_font_kor)
+            screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
+            screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
 
         screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
@@ -834,6 +838,7 @@ def equip_effect():
             player.max_hp += 10
             player.dp -= 0.5
             player.damaged_time += 0.5
+            e_poisonapple.is_effected = True
 
     if e_ice in equip_con.equipped_group:
         if not e_ice.is_effected:
@@ -1106,7 +1111,7 @@ def monster_action():
                         image = pygame.transform.rotozoom(monster.bullet, 90, 1)
                     else:
                         break
-                    shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage))
+                    shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage, monster.b_type))
 
             if "alpha" in monster.type:
                 if 0 <= randprob <= 50 and not monster_con.dont_alpha:
@@ -1133,6 +1138,7 @@ def monster_die(monster):
         monster.is_die = True
         monster.change_image_group(monster_die_images)
     if monster.i_i == 2:    #마지막 인덱스
+        monster_con.mon_count += 1
         drop_item(monster)
         monster_group.remove(monster)
 
@@ -1156,6 +1162,11 @@ def field_effect(field):
             field_group.empty()
             next_floor(player.position)
 
+def bullet_effect(bullet):
+    if bullet.type == "web":
+        player.stop()
+    else:
+        pass
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -1222,10 +1233,11 @@ class Punch(pygame.sprite.Sprite):
 
 #### SHOOTING CLASS
 class Bullet(Punch):
-    def __init__(self, image, position, direction, speed, damage):
+    def __init__(self, image, position, direction, speed, damage, type):
         Punch.__init__(self, image, position, direction)
-        self.speed = max((speed + monster_con.b_speed), 0)
+        self.speed = max((speed + monster_con.b_speed), 1)
         self.damage = damage
+        self.type = type
 
     def shoot(self):
         if not skill_con.active_trafficlight[0]:
@@ -1391,6 +1403,7 @@ while running:
         bullet.draw(screen)                                                              #MONSTER SHOOING
         if pygame.sprite.collide_mask(bullet, player):
             player.hp -= bullet.damage
+            bullet_effect(bullet)
             if not player.is_die:
                 player.image = player_damaged_image
             shooting_group.remove(bullet)

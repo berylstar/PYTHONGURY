@@ -74,9 +74,10 @@ class Mon_spider(Character):
         self.hp = 12
         self.ap = 2
         self.speed = 0.15
-        self.bullet = ember_attack_image
+        self.bullet = spider_web_image
         self.b_speed = 8
         self.b_damage = 0
+        self.b_type = "web"
 
 class Mon_frog(Character):
     def __init__(self):
@@ -177,6 +178,7 @@ class Mon_ember(Character):
         self.bullet = ember_attack_image
         self.b_speed = 10
         self.b_damage = 10
+        self.b_type = "ember"
 
 
 # 61 ~ 80 : magical library
@@ -197,6 +199,8 @@ class Mon_boss(Character):
 ##############################################################################################
 class MonsterController():
     def __init__(self):
+        self.mon_count = 0
+
         self.dontmove = False
         self.dont_alpha = False
         self.dont_dash = False

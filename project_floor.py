@@ -50,7 +50,7 @@ def prob_spawn_monster(floor):
 
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
-        # spawn_monster(pos, Mon_spider())
+        spawn_monster(pos, Mon_spider())
         # spawn_monster(pos, Mon_frog())
         spawn_monster(pos, Mon_bat())
         # spawn_monster(pos, Mon_bat())

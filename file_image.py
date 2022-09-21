@@ -34,6 +34,7 @@ mon_skel_images = [
 mon_spider_images = [
     
     ]
+spider_web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 
 mon_bat_images = [
     
@@ -135,7 +136,7 @@ piggybank_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pig
 metaldetector_image = pygame.image.load(os.path.join(file_path, "images\\equips\\metaldetector.png"))   ####
 binoculars_image = pygame.image.load(os.path.join(file_path, "design\\equips\\binoculars.png"))
 trafficlight_image = pygame.image.load(os.path.join(file_path, "design\\equips\\trafficlight.png"))
-thunder_image = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))                      ####
+thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thunder.png"))               ##
 dice_image = pygame.image.load(os.path.join(file_path, "images\\dice.png"))                             ####
 magiccloak_image = pygame.image.load(os.path.join(file_path, "design\\equips\\magiccloak.png"))
 goldenkey_image = pygame.image.load(os.path.join(file_path, "images\\equips\\goldenkey.png"))           ####

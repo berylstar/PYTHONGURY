@@ -529,7 +529,7 @@ class E_TrafficLight(Equip):
 #                                                                           #### thunder
 class E_Thunder(Equip):
     def __init__(self):
-        image = dummy
+        image = thunder_image
         Equip.__init__(self, image)
         self.msg_name = "천둥번개"
         self.msg_info = "마른 하늘에 날벼락"
@@ -661,7 +661,7 @@ class EquipController():
         
         self.normal_equips = [
             e_crescentmoon, e_wax, e_pepper, e_halfstone, e_poisonapple, e_ice, e_rollerskate, e_helmet, e_turtleshell,
-            e_pizza, e_3dglasses, e_talisman, e_machine, e_metaldetector, e_binoculars,
+            e_pizza, e_3dglasses, e_talisman, e_machine, e_metaldetector, e_binoculars
         ]
 
         self.perc_rare = 10
