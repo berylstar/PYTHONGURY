@@ -37,12 +37,18 @@ mon_spider_images = [
 spider_web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 
 mon_bat_images = [
-    
     ]
 
-mon_frog_images = [
-    
+mon_frog_images = [    
+    pygame.image.load(os.path.join(file_path, "design\\monster\\frog_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\frog_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\frog_0.png")),
     ]
+frog_die_images = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png")),
+]
 
 mon_ember_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ember_0.png")),
@@ -122,24 +128,24 @@ ice_images = [
     pygame.image.load(os.path.join(file_path, "design\\equips\\ice_m.png"))
 ]
 battery_image = pygame.image.load(os.path.join(file_path, "design\\equips\\battery.png"))
-rollerskate_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rollerskate.png"))       ####
+rollerskate_image = pygame.image.load(os.path.join(file_path, "design\\equips\\rollerskate.png"))
 gloves_image = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))                       ####
 helmet_image = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))                       ####
 turtleshell_image = pygame.image.load(os.path.join(file_path, "design\\equips\\turtleshell.png"))
 pizza_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pizza.png"))
 sdglasses_image = pygame.image.load(os.path.join(file_path, "design\\equips\\3dglasses.png"))
-talisman_image = pygame.image.load(os.path.join(file_path, "images\\equips\\talisman.png"))             ####
+talisman_image = pygame.image.load(os.path.join(file_path, "design\\equips\\talisman.png"))
 ticket_image = pygame.image.load(os.path.join(file_path, "design\\equips\\ticket.png"))
 straw_image = pygame.image.load(os.path.join(file_path, "design\\equips\\straw.png"))
 machine_image = pygame.image.load(os.path.join(file_path, "design\\equips\\machine.png"))
 piggybank_image = pygame.image.load(os.path.join(file_path, "design\\equips\\piggybank.png"))
-metaldetector_image = pygame.image.load(os.path.join(file_path, "images\\equips\\metaldetector.png"))   ####
+metaldetector_image = pygame.image.load(os.path.join(file_path, "design\\equips\\metaldetector.png"))
 binoculars_image = pygame.image.load(os.path.join(file_path, "design\\equips\\binoculars.png"))
 trafficlight_image = pygame.image.load(os.path.join(file_path, "design\\equips\\trafficlight.png"))
 thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thunder.png"))               ##
 dice_image = pygame.image.load(os.path.join(file_path, "images\\dice.png"))                             ####
 magiccloak_image = pygame.image.load(os.path.join(file_path, "design\\equips\\magiccloak.png"))
-goldenkey_image = pygame.image.load(os.path.join(file_path, "images\\equips\\goldenkey.png"))           ####
+goldenkey_image = pygame.image.load(os.path.join(file_path, "design\\equips\\goldenkey.png"))
 
 ##############################################################################################
 ##### BACKGROUND

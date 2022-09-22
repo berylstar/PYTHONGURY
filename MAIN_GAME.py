@@ -263,7 +263,7 @@ def scene_tutorial(doing):
 
         screen.blit(tuto_images[index], tuto_rect)                                          # TUTORIAL
         screen_message(msg, WHITE, (640,640), game_font_m)
-        pygame.display.update(main_rect)
+        pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
     global running
@@ -364,7 +364,6 @@ def scene_shop(doing):
         screen.blit(test_image, (340,60))      # 상점 이미지로 대체
         display_info_ui()
         display_inven_ui()
-
 
         pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_num:
@@ -1095,9 +1094,10 @@ def monster_move():
                     monster.move(0,monster.speed, fps)
 
 def monster_action():
-    randprob = random.randrange(1,101)
-
+    
     for monster in monster_group:
+        randprob = random.randrange(1,101)
+
         if not monster.is_die:
             if "shooter" in monster.type:
                 if 0 <= randprob <= 70:
@@ -1133,11 +1133,32 @@ def monster_action():
                         monster.dashes = 0
                         monster.is_dashed = False
 
+            if "boss" in monster.type:
+                boss_action(monster)
+
+def boss_action(monster):
+    if "boss_spider" in monster.type:
+        web = Field(web_image, (0,0))
+        random_away_position(monster.position, web)
+        field_group.add(web)
+    elif "boss_spawner" in monster.type:
+        spawn_monster(player.position, Mon_mini())
+    elif "boss_blind" in monster.type:
+        monster_con.is_blind = True
+    elif "boss_shooter" in monster.type:
+        shooting_group.add(Bullet(monster.bullet, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
+        shooting_group.add(Bullet(monster.bullet, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
+        shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
+        shooting_group.add(Bullet(monster.bullet, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
+
 def monster_die(monster):
+    if "boss_blind" in monster.type:
+        monster_con.is_blind = False
+
     if not monster.is_die:
         monster.is_die = True
-        monster.change_image_group(monster_die_images)
-    if monster.i_i == 2:    #마지막 인덱스
+        monster.change_image_group(monster.die_images)
+    if monster.i_i == 2:    # 마지막 인덱스
         monster_con.mon_count += 1
         drop_item(monster)
         monster_group.remove(monster)
@@ -1285,6 +1306,7 @@ main_rect = pygame.Rect(((340,60), (600, 600)))
 info_rect = pygame.Rect(((140,60), (200, 600)))
 inven_rect = pygame.Rect(((940,60), (200, 600)))
 full_rect = pygame.Rect((140,60), (1000,600))
+corpus_rect = pygame.Rect((350,450), (580,200))
 
 ##### PLAYER
 player_first_position = (700, 360)
@@ -1446,8 +1468,9 @@ while running:
         else:
             scene_player_dead(True)
 
-    # blind_rect = blind_image.get_rect(center=player.position)
-    # screen.blit(blind_image, blind_rect)          # 시야 제한 구현 가능
+    if monster_con.is_blind:
+        blind_rect = blind_image.get_rect(center=player.position)
+        screen.blit(blind_image, blind_rect)
     player.draw(screen)                                                                 #PLAYER
 
     screen.blit(cover_image, (0,0))

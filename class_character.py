@@ -81,9 +81,10 @@ class Mon_spider(Character):
 
 class Mon_frog(Character):
     def __init__(self):
-        image_group = monster_3_images
+        image_group = mon_frog_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = frog_die_images
         self.type = []
 
         self.hp = 12
@@ -114,6 +115,16 @@ class Mon_skel(Character):
         self.ap = 2
         self.speed = 0.12
 
+class Mon_mini(Character):
+    def __init__(self):
+        image_group = monster_2_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = []
+
+        self.hp = 1
+        self.ap = 0.2
+        self.speed = 0.2
 
 # 21 ~ 40 : graveyard
 class Mon_zombie(Character):
@@ -190,11 +201,15 @@ class Mon_boss(Character):
         image_group = monster_boss_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["boss"]
+        self.type = ["boss", "boss_shooter"]
 
         self.hp = 100
         self.ap = 2
         self.speed = 0.1
+        self.bullet = ember_attack_image
+        self.b_speed = 10
+        self.b_damage = 10
+        self.b_type = "NONE"
 
 ##############################################################################################
 class MonsterController():
@@ -206,6 +221,8 @@ class MonsterController():
         self.dont_dash = False
 
         self.b_speed = 0
+
+        self.is_blind = False
 ##############################################################################################
 
 ##### about monster
