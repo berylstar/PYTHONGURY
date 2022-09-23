@@ -606,6 +606,7 @@ class E_MagicCloak(Equip):
             
             self.save = self.target.dp
             self.target.dp = 100
+            e_magiccloak.target.alpha(60)
 
 #                                                                           #### golden key
 class E_GoldenKey(Equip):
@@ -717,11 +718,14 @@ class SkillController():
 
         # magiccloak - player no damage
         if self.active_magiccloak[0] or e_magiccloak.cool_time:
+            
             if now_time - self.active_magiccloak[1] > 3000:
                 if self.active_magiccloak[0]:
                     e_magiccloak.target.dp = e_magiccloak.save
+                    
                 self.active_magiccloak[0] = False
                 e_magiccloak.image.set_alpha(60)
+                e_magiccloak.target.alpha(255)
                 
             if now_time - self.active_magiccloak[1] > 30000:
                 e_magiccloak.cool_time = False

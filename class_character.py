@@ -59,6 +59,10 @@ class Character(pygame.sprite.Sprite):
     def stop(self):
         self.to = [0,0,0,0]
 
+    def alpha(self, val):
+        for img in self.image_group:
+            img.set_alpha(val)
+
 ##### MONSTER CLASS
 # "normal" / "shooter" / "alpha" / "runner" / "toward" / "boss"
                                                         #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경

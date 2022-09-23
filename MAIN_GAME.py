@@ -11,7 +11,7 @@ from file_sound import *
 from project_floor import *
 ##############################################################################################
 def scene_title_game():
-    global running, ready
+    global ready
     
     option = ["START", "OPTION", "EXIT"]
     color = [GRAY, GRAY, GRAY]
@@ -22,8 +22,7 @@ def scene_title_game():
     while ready:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                ready = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     sound_con.play_sound(sound_wasd)
@@ -44,8 +43,7 @@ def scene_title_game():
                     elif index == 1:
                         scene_esc(True)
                     elif index == 2:
-                        ready = False
-                        running = False
+                        scene_exit(True)
 
         for i in range(len(color)):
             color[i] = GRAY
@@ -59,10 +57,10 @@ def scene_title_game():
         pygame.display.update()
 
 def scene_esc(doing):
-    global running
+    global ready
 
-    option = ["RESUME", "TOGGLE SCREEN", "SOUND SETTING", "EXIT"]
-    color = [GRAY, GRAY, GRAY, GRAY]
+    option = ["RESUME", "TOGGLE SCREEN", "SOUND SETTING", "RESTART", "EXIT"]
+    color = [GRAY, GRAY, GRAY, GRAY, GRAY]
     index = 0
 
     player.stop()
@@ -74,19 +72,17 @@ def scene_esc(doing):
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
-                pygame.quit()
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     sound_con.play_sound(sound_wasd)
                     index -= 1
                     if index < 0:
-                        index = 3
+                        index = 4
                 if event.key == pygame.K_DOWN:
                     sound_con.play_sound(sound_wasd)
                     index += 1
-                    if index > 3:
+                    if index > 4:
                         index = 0
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_pick)
@@ -99,8 +95,10 @@ def scene_esc(doing):
                         scene_sound_setting(True)
                     elif index == 3:
                         doing = False
-                        running = False
-                        pygame.quit()
+                        game_restart()
+                        ready = True
+                    elif index == 4:
+                        scene_exit(True)
                 if event.key == pygame.K_ESCAPE:
                     doing = False
 
@@ -109,15 +107,15 @@ def scene_esc(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
-        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
-        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
-        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
+        screen_message(option[0], color[0], (screen_width//2, 430), game_font_m)
+        screen_message(option[1], color[1], (screen_width//2, 480), game_font_m)
+        screen_message(option[2], color[2], (screen_width//2, 530), game_font_m)
+        screen_message(option[3], color[3], (screen_width//2, 580), game_font_m)
+        screen_message(option[4], color[4], (screen_width//2, 630), game_font_m)
 
         pygame.display.update()
 
 def scene_sound_setting(doing):
-    global running
     
     color = [GRAY, GRAY, GRAY, GRAY]
     index = 0
@@ -127,9 +125,7 @@ def scene_sound_setting(doing):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
-                pygame.quit()
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     sound_con.play_sound(sound_wasd)
@@ -176,6 +172,45 @@ def scene_sound_setting(doing):
         screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
 
         pygame.display.update()
+
+def scene_exit(doing):
+    global running
+
+    exit_rect = pygame.Rect((520,310),(240,100))
+
+    option = ["YES", "NO"]
+    color = [GRAY, GRAY]
+    index = 0
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                doing = False
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    sound_con.play_sound(sound_wasd)
+                    index = 0
+                if event.key == pygame.K_RIGHT:
+                    sound_con.play_sound(sound_wasd)
+                    index = 1
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_pick)
+                    if index == 0:
+                        pygame.quit()
+                    elif index == 1:
+                        doing = False
+
+        for i in range(len(color)):
+            color[i] = GRAY
+        color[index] = GREEN
+
+        screen.fill(BLACK)
+        screen_message("EXIT THE GAME", WHITE, (640,335), game_font_m)
+        screen_message(option[0], color[0], (590,385), game_font_m)
+        screen_message(option[1], color[1], (690,385), game_font_m)
+        pygame.display.update(exit_rect)
     
 def display_info_ui():
     pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
@@ -208,7 +243,6 @@ def display_inven_ui():
         screen_message("장비 확인 !", RED, (1040,150), game_font_s)
 
 def scene_story(doing):
-    global running
 
     index = 0
     fin = len(story_images)-1
@@ -217,8 +251,7 @@ def scene_story(doing):
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_page)
@@ -237,16 +270,16 @@ def scene_story(doing):
         pygame.display.update()
 
 def scene_tutorial(doing):
-    global running
 
     index = 0
     fin = len(tuto_images)-1
 
+    corpus_rect = pygame.Rect((350,450), (580,200))
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if index >= fin:
@@ -266,13 +299,11 @@ def scene_tutorial(doing):
         pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
-    global running
 
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     doing = False
@@ -288,13 +319,12 @@ def scene_player_dead(doing):
         pygame.display.update(full_rect)
 
 def scene_game_over(doing):
-    global running, ready
+    global ready
 
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     doing = False
@@ -311,15 +341,13 @@ def scene_game_over(doing):
         pygame.display.update()
 
 def scene_shop(doing):
-    global running
 
     picked_num = 0
 
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if picked_num == 1:
@@ -415,7 +443,6 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
         screen.blit(sold_out_image, case_rect)
 
 def scene_inventory(doing):
-    global running
 
     player.stop()
 
@@ -426,16 +453,10 @@ def scene_inventory(doing):
     cursor = Cursor(cursor_images[0], (980,270))
     picked_equip = None
 
-    inven_img.set_alpha(180)
-    
-
     while doing:
-        screen.blit(inven_img, (340,60))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                doing = False
-                running = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 cursor.move(event)
                 if cursor.clicking:
@@ -480,6 +501,7 @@ def scene_inventory(doing):
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
 
+        screen.blit(inven_img, (340,60))
         display_inven_ui()
 
         f = 300
@@ -510,7 +532,6 @@ def scene_inventory(doing):
         pygame.display.update(full_rect)
 
 def scene_treasure_box(doing):
-    global running
 
     player.stop()
     choice = True
@@ -525,8 +546,7 @@ def scene_treasure_box(doing):
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
+                scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if choice:
                     if event.key == pygame.K_1:
@@ -1115,11 +1135,9 @@ def monster_action():
 
             if "alpha" in monster.type:
                 if 0 <= randprob <= 50 and not monster_con.dont_alpha:
-                    for image in monster.image_group:
-                        image.set_alpha(60)
+                    monster.alpha(60)
                 elif 80 < randprob or monster_con.dont_alpha:
-                    for image in monster.image_group:
-                        image.set_alpha(255)
+                    monster.alpha(255)
 
             if "runner" in monster.type and not monster_con.dont_dash:
                 if 0 <= randprob <= 30 and not monster.is_dashed:
@@ -1306,7 +1324,6 @@ main_rect = pygame.Rect(((340,60), (600, 600)))
 info_rect = pygame.Rect(((140,60), (200, 600)))
 inven_rect = pygame.Rect(((940,60), (200, 600)))
 full_rect = pygame.Rect((140,60), (1000,600))
-corpus_rect = pygame.Rect((350,450), (580,200))
 
 ##### PLAYER
 player_first_position = (700, 360)
@@ -1333,7 +1350,7 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            scene_exit(True)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -1401,7 +1418,7 @@ while running:
         monster.draw(screen)                                                           #MONSTER
         if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
             player.hp -= max((monster.ap - player.dp), 0)
-            if not player.is_die:
+            if not player.is_die and not skill_con.active_magiccloak[0]:
                 player.image = player_damaged_image
         if monster.hp <= 0:
             monster_die(monster)
@@ -1426,7 +1443,7 @@ while running:
         if pygame.sprite.collide_mask(bullet, player):
             player.hp -= bullet.damage
             bullet_effect(bullet)
-            if not player.is_die:
+            if not player.is_die and not skill_con.active_magiccloak[0]:
                 player.image = player_damaged_image
             shooting_group.remove(bullet)
 
