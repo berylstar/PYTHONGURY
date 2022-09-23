@@ -38,7 +38,6 @@ def scene_title_game():
                     sound_con.play_sound(sound_pick)
                     if index == 0:
                         ready = False
-                        sound_con.stop_bgm(bgm_title)
                         scene_story(True)
                     elif index == 1:
                         scene_esc(True)
@@ -96,7 +95,8 @@ def scene_esc(doing):
                     elif index == 3:
                         doing = False
                         game_restart()
-                        ready = True
+                        # ready = True
+                        # scene_title_game()
                     elif index == 4:
                         scene_exit(True)
                 if event.key == pygame.K_ESCAPE:
@@ -155,6 +155,7 @@ def scene_sound_setting(doing):
                     sound_con.play_sound(sound_pick)
                     if index == 2:
                         sound_con.bgm_volume = 0
+                        sound_con.bgm.set_volume(sound_con.bgm_volume)
                         sound_con.effect_volume = 0
                     elif index == 3:
                         doing = False
@@ -256,7 +257,6 @@ def scene_story(doing):
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_page)
                     if index >= fin:
-                        sound_con.stop_bgm(bgm_story)
                         doing = False
                     else:
                         index += 1
@@ -653,7 +653,8 @@ def make_floor_zero():
 def floor_zero():
     global floor
 
-    sound_con.play_bgm(bgm_0f)
+    if not sound_con.bgm == bgm_0f:
+        sound_con.play_bgm(bgm_0f)
 
     if floor != 0:
         make_floor_zero()
@@ -1384,8 +1385,8 @@ while running:
         floor_zero()      
 
     elif floor > 0:
-        sound_con.stop_bgm(bgm_0f)
-        sound_con.play_bgm(bgm_first)
+        if not sound_con.bgm == bgm_first:
+            sound_con.play_bgm(bgm_first)
 
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
@@ -1470,7 +1471,7 @@ while running:
                 player.change_image_group(player_die_images)
         
     if player.image == player_die_images[3]:
-        sound_con.stop_bgm(bgm_first)
+        sound_con.stop_bgm()
         pygame.time.delay(2000)
         player.image_group = player_images
         player.is_die = False
@@ -1493,7 +1494,6 @@ while running:
     screen.blit(cover_image, (0,0))
     display_info_ui()
     display_inven_ui()
-    screen_message(str(fps), WHITE, (960,80), game_font_m)
     
     if running: 
         pygame.display.update()

@@ -18,24 +18,21 @@ sound_shop_buy = pygame.mixer.Sound('Soundtrack\\effect\\buy.wav')
 
 class SoundController():
     def __init__(self):
-        self.playing = False
+        self.bgm = None
 
         self.bgm_volume = 1.0
-        self.effect_volume = 1.0
-
-        self.bgm = None
+        self.effect_volume = 1.0        
 
     def play_bgm(self, bgm):
-        if not self.playing:
-            bgm.set_volume(self.bgm_volume)
-            bgm.play(-1)
-            self.bgm = bgm
-            self.playing = True
+        if self.bgm:
+            self.stop_bgm()
+        bgm.set_volume(self.bgm_volume)
+        bgm.play(-1)
+        self.bgm = bgm
 
-    def stop_bgm(self, bgm):
-        bgm.stop()
+    def stop_bgm(self):
+        self.bgm.stop()
         self.bgm = None
-        self.playing = False
 
     def play_sound(self, effect):
         effect.set_volume(self.effect_volume)

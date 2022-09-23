@@ -1,10 +1,6 @@
 import pygame
 import os
 
-# screen_width = 1280
-# screen_height = 720
-# screen = pygame.display.set_mode((screen_width, screen_height))
-
 file_path = os.path.dirname(__file__)
 ##############################################################################################
 ##### PLAYER
@@ -95,13 +91,10 @@ web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 water_image = pygame.image.load(os.path.join(file_path, "design\\field\\water_0.png"))
 
 torch_image = pygame.image.load(os.path.join(file_path, "design\\field\\torch.png"))
-
 light_images = [
-    pygame.image.load(os.path.join(file_path, "images\\light.png")),
-    pygame.image.load(os.path.join(file_path, "images\\light2.png"))
+    pygame.image.load(os.path.join(file_path, "design\\field\\torch_light_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\field\\torch_light_1.png"))
 ]
-for l in light_images:
-    l.set_alpha(80)
 
 portal_image = pygame.image.load(os.path.join(file_path, "images\\portal.png"))
 
@@ -114,7 +107,7 @@ redcoin_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_coi
 box_image = pygame.image.load(os.path.join(file_path, "design\\item\\box.png"))
 
 ##############################################################################################
-# Equip Image
+##### EQUIP
 mushroom_image = pygame.image.load(os.path.join(file_path, "design\\equips\\mushroom.png"))
 crescentmoon_image = pygame.image.load(os.path.join(file_path, "design\\equips\\crescentmoon.png"))
 banana_image = pygame.image.load(os.path.join(file_path, "design\\equips\\banana.png"))
@@ -129,8 +122,8 @@ ice_images = [
 ]
 battery_image = pygame.image.load(os.path.join(file_path, "design\\equips\\battery.png"))
 rollerskate_image = pygame.image.load(os.path.join(file_path, "design\\equips\\rollerskate.png"))
-gloves_image = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))                       ####
-helmet_image = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))                       ####
+gloves_image = pygame.image.load(os.path.join(file_path, "design\\equips\\gloves.png"))
+helmet_image = pygame.image.load(os.path.join(file_path, "design\\equips\\helmet.png"))
 turtleshell_image = pygame.image.load(os.path.join(file_path, "design\\equips\\turtleshell.png"))
 pizza_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pizza.png"))
 sdglasses_image = pygame.image.load(os.path.join(file_path, "design\\equips\\3dglasses.png"))
@@ -142,8 +135,8 @@ piggybank_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pig
 metaldetector_image = pygame.image.load(os.path.join(file_path, "design\\equips\\metaldetector.png"))
 binoculars_image = pygame.image.load(os.path.join(file_path, "design\\equips\\binoculars.png"))
 trafficlight_image = pygame.image.load(os.path.join(file_path, "design\\equips\\trafficlight.png"))
-thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thunder.png"))               ##
-dice_image = pygame.image.load(os.path.join(file_path, "images\\dice.png"))                             ####
+thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thunder.png"))
+dice_image = pygame.image.load(os.path.join(file_path, "images\\dice.png"))
 magiccloak_image = pygame.image.load(os.path.join(file_path, "design\\equips\\magiccloak.png"))
 goldenkey_image = pygame.image.load(os.path.join(file_path, "design\\equips\\goldenkey.png"))
 
@@ -152,7 +145,7 @@ goldenkey_image = pygame.image.load(os.path.join(file_path, "design\\equips\\gol
 background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0F.png"))
 
 ##############################################################################################
-# Others
+# ETC
 title_image = pygame.image.load(os.path.join(file_path, "images\\title.png"))
 cover_image = pygame.image.load(os.path.join(file_path, "images\\cover.png"))
 story_images = [
@@ -165,7 +158,7 @@ tuto_images = [
 
 # shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png"))
 
-sold_out_image = pygame.image.load(os.path.join(file_path, "design\\sold_out.png"))
+sold_out_image = pygame.image.load(os.path.join(file_path, "design\\etc\\sold_out.png"))
 cursor_images = [
     pygame.image.load(os.path.join(file_path, "design\\etc\\cursor.png")),
     pygame.image.load(os.path.join(file_path, "design\\etc\\cursor_is_picking.png"))

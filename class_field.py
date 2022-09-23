@@ -17,10 +17,10 @@ class Field(pygame.sprite.Sprite):
 
 # 데코용
 class Torch(pygame.sprite.Sprite):
-    def __init__(self, position):
+    def __init__(self, position, i_i):
         super().__init__()
         self.torch_image = torch_image
-        self.light_image = light_images[0]
+        self.light_image = light_images[i_i]
         self.position = position
 
         self.torch_rect = self.torch_image.get_rect(center=position)
@@ -47,10 +47,8 @@ portal = Field(portal_image, stair_zero_floor)
 field_group = pygame.sprite.Group()
 
 ##### DECO
-torch_lpos = (430, 150)
-torch_rpos = (850, 150)
-torch_l = Torch(torch_lpos)
-torch_r = Torch(torch_rpos)
+torch_l = Torch((430, 150), 0)
+torch_r = Torch((850, 150), 1)
 
 deco_group = pygame.sprite.Group()
 deco_group.add(torch_l, torch_r)
