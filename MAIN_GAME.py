@@ -101,6 +101,7 @@ def scene_esc(doing):
                     elif index == 4:
                         scene_exit(True)
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     doing = False
 
         for i in range(len(color)):
@@ -161,6 +162,7 @@ def scene_sound_setting(doing):
                     elif index == 3:
                         doing = False
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     doing = False
 
         for i in range(len(color)):
@@ -183,6 +185,8 @@ def scene_exit(doing):
     option = ["YES", "NO"]
     color = [GRAY, GRAY]
     index = 0
+
+    sound_con.play_sound(sound_exit)
 
     while doing:
         for event in pygame.event.get():
@@ -262,6 +266,7 @@ def scene_story(doing):
                     else:
                         index += 1
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
         story_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
@@ -283,11 +288,13 @@ def scene_tutorial(doing):
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_wasd)
                     if index >= fin:
                         doing = False
                     else:
                         index += 1
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
         tuto_rect = tuto_images[index].get_rect(center=(640, 360))
@@ -307,9 +314,11 @@ def scene_player_dead(doing):
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
+                    sound_con.play_sound(sound_pick)
                     doing = False
                     floor_zero()
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
         screen.blit(test_image, (340,60))      # 죽을 때 배경 이미지로 대체
@@ -328,10 +337,12 @@ def scene_game_over(doing):
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_pick)
                     doing = False
                     game_restart()
                     ready = True
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
         screen.fill(BLACK)      # 게임 오버 이미지로 대체 해도되고 그냥 검은 화면으로 해도 되고
@@ -352,38 +363,43 @@ def scene_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if picked_num == 1:
-                        purchase_equip(0)
                         sound_con.play_sound(sound_shop_buy)
+                        purchase_equip(0)
                         picked_num = 0
                     else:
+                        sound_con.play_sound(sound_wasd)
                         if equip_con.for_sale[0]:
                             picked_num = 1
 
                 if event.key == pygame.K_2:
                     if picked_num == 2:
-                        purchase_equip(1)
                         sound_con.play_sound(sound_shop_buy)
+                        purchase_equip(1)
                         picked_num = 0
                     else:
+                        sound_con.play_sound(sound_wasd)
                         if equip_con.for_sale[1]:
                             picked_num = 2
 
                 if event.key == pygame.K_3:
                     if picked_num == 3:
-                        purchase_equip(2)
                         sound_con.play_sound(sound_shop_buy)
+                        purchase_equip(2)
                         picked_num = 0
                     else:
+                        sound_con.play_sound(sound_wasd)
                         if equip_con.for_sale[2]:
                             picked_num = 3
 
                 if event.key == pygame.K_r:
+                    #이펙트 소리 필요
                     if player.coin >= 0:
                         player.coin -= 0
                         random_for_sale()
                         picked_num = 0
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
+                    #이펙트 소리 필요
                     doing = False
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
@@ -464,12 +480,14 @@ def scene_inventory(doing):
                     picked_equip.inven_move(event)
 
                 if event.key == pygame.K_i or event.key == pygame.K_ESCAPE:
+                    #이펙트 소리 필요
                     if not is_inven_overlapped(equip_con.equipped_group):
                         equip_effect()
                         doing = False
 
                 if event.key == pygame.K_r:
                     if picked_equip:
+                        #이펙트 소리 필요
                         remove_from_equipped_group(picked_equip)
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
@@ -477,6 +495,7 @@ def scene_inventory(doing):
 
                 if event.key == pygame.K_SPACE:
                     if cursor.clicking:
+                        #이펙트 소리 필요
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
                         picked_equip = None
@@ -484,12 +503,14 @@ def scene_inventory(doing):
                     else:
                         for equip in equip_con.equipped_group:
                             if pygame.sprite.collide_mask(equip, cursor):
+                                #이펙트 소리 필요
                                 cursor.clicking = True
                                 cursor.image = cursor_images[1]
                                 picked_equip = equip
 
                 if event.key == pygame.K_c:
                     if cursor.clicking:
+                        #이펙트 소리 필요
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
                         setting_active_skill("c", picked_equip)
@@ -497,6 +518,7 @@ def scene_inventory(doing):
 
                 if event.key == pygame.K_v:
                     if cursor.clicking:
+                        #이펙트 소리 필요
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
                         setting_active_skill("v", picked_equip)
@@ -552,23 +574,28 @@ def scene_treasure_box(doing):
                 if choice:
                     if event.key == pygame.K_1:
                         if picked_num == 1:
+                            #이펙트 소리 필요
                             equip_con.equipped_group.append(choice_equip[0])
                             equip_con.normal_equips.remove(choice_equip[0])
                             choice = False
                             picked_num = 0
                         else:
+                            sound_con.play_sound(sound_wasd)
                             picked_num = 1
 
                     if event.key == pygame.K_2:
                         if picked_num == 2:
+                            #이펙트 소리 필요
                             equip_con.equipped_group.append(choice_equip[1])
                             equip_con.normal_equips.remove(choice_equip[1])
                             choice = False  
                             picked_num = 0
                         else:
+                            sound_con.play_sound(sound_wasd)
                             picked_num = 2
 
                 if event.key == pygame.K_SPACE and not choice:
+                    #이펙트 소리 필요
                     doing = False
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
@@ -576,6 +603,7 @@ def scene_treasure_box(doing):
                         equip_effect()
 
                 if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
         screen.blit(test_image, (340,60))
@@ -680,6 +708,8 @@ def floor_zero():
 
 def next_floor(pos):
     global floor
+
+    sound_con.play_sound(sound_nextfloor)
 
     floor += 1
 
@@ -820,12 +850,16 @@ def drop_item(monster):
 
 def item_effect(item):
     if item.info == "potion":
+        sound_con.play_sound(sound_potion)
         player.hp = min(player.hp + item_con.potion_eff, player.max_hp)
     elif item.info == "coin":
+        sound_con.play_sound(sound_coin)
         player.coin += 1
     elif item.info == "red_coin":
+        sound_con.play_sound(sound_coin)
         player.coin += 3
     elif item.info == "box":
+        sound_con.play_sound(sound_box)
         scene_treasure_box(True)
 
 def equip_effect():
@@ -1228,6 +1262,7 @@ class Player(Character):
         self.equip_v = None
 
     def space_bar(self):
+        sound_con.play_sound(sound_punch)
         image = self.punch
 
         if self.direction == "LEFT":
@@ -1356,16 +1391,20 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
+                sound_con.play_sound(sound_pick)
                 scene_esc(True)
 
             if not player.is_die:
                 if event.key == pygame.K_SPACE:
                     player.space_bar()
                 if event.key == pygame.K_c and floor > 0:
+                    #이펙트 소리 필요
                     player.skill_c()
                 if event.key == pygame.K_v and floor > 0:
+                    #이펙트 소리 필요
                     player.skill_v()
                 if event.key == pygame.K_i:
+                    #이펙트 소리 필요
                     scene_inventory(True)
 
         if not player.is_die:
@@ -1421,6 +1460,7 @@ while running:
         if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
             player.hp -= max((monster.ap - player.dp), 0)
             if not player.is_die and not skill_con.active_magiccloak[0]:
+                sound_con.play_sound(sound_damaged)
                 player.image = player_damaged_image
         if monster.hp <= 0:
             monster_die(monster)
@@ -1446,6 +1486,7 @@ while running:
             player.hp -= bullet.damage
             bullet_effect(bullet)
             if not player.is_die and not skill_con.active_magiccloak[0]:
+                sound_con.play_sound(sound_damaged)
                 player.image = player_damaged_image
             shooting_group.remove(bullet)
 
