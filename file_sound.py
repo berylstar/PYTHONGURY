@@ -15,13 +15,20 @@ sound_pick = pygame.mixer.Sound('Soundtrack\\effect\\pick.wav')
 sound_wasd = pygame.mixer.Sound('Soundtrack\\effect\\wasd.wav')
 sound_exit = pygame.mixer.Sound('Soundtrack\\effect\\exit.wav')
 
+sound_shop_open = pygame.mixer.Sound('Soundtrack\\effect\\shop_open.ogg')
+sound_shop_close = pygame.mixer.Sound('Soundtrack\\effect\\shop_close.ogg')
 sound_shop_buy = pygame.mixer.Sound('Soundtrack\\effect\\buy.wav')
+sound_shop_refresh = pygame.mixer.Sound('Soundtrack\\effect\\shop_refresh.wav')
+
+sound_inven_click = pygame.mixer.Sound('Soundtrack\\effect\\inven_click.wav')
+sound_inven_active = pygame.mixer.Sound('Soundtrack\\effect\\inven_active.wav')
 
 sound_nextfloor = pygame.mixer.Sound('Soundtrack\\effect\\next_floor.wav')
 
-sound_coin = pygame.mixer.Sound('Soundtrack\\effect\\item_coin.wav')
+sound_coin = pygame.mixer.Sound('Soundtrack\\effect\\item_coin.ogg')
 sound_potion = pygame.mixer.Sound('Soundtrack\\effect\\item_potion.wav')
 sound_box = pygame.mixer.Sound('Soundtrack\\effect\\item_box.wav')
+sound_box_get = pygame.mixer.Sound('Soundtrack\\effect\\item_box_get.wav')
 
 sound_punch = pygame.mixer.Sound('Soundtrack\\effect\\player_punch.wav')
 sound_damaged = pygame.mixer.Sound('Soundtrack\\effect\\player_damaged.wav')

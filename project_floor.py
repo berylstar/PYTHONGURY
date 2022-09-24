@@ -49,12 +49,14 @@ def random_spawn_monster(floor):
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
         spawn_monster(pos, Mon_frog())
+        spawn_monster(pos, Mon_werewolf())
     elif 7 <= floor < 12:
         spawn_monster(pos, Mon_bat())
     elif 12 <= floor < 15:
         spawn_monster(pos, Mon_spider())
     elif 15 <= floor < 20:
         spawn_monster(pos, Mon_bat())
+
 
     if floor == 20:
         spawn_monster(pos, Mon_boss())

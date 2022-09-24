@@ -1,4 +1,3 @@
-from turtle import forward
 import pygame
 import random
 
@@ -356,6 +355,8 @@ def scene_shop(doing):
 
     picked_num = 0
 
+    sound_con.play_sound(sound_shop_open)
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -363,7 +364,6 @@ def scene_shop(doing):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     if picked_num == 1:
-                        sound_con.play_sound(sound_shop_buy)
                         purchase_equip(0)
                         picked_num = 0
                     else:
@@ -373,7 +373,6 @@ def scene_shop(doing):
 
                 if event.key == pygame.K_2:
                     if picked_num == 2:
-                        sound_con.play_sound(sound_shop_buy)
                         purchase_equip(1)
                         picked_num = 0
                     else:
@@ -383,7 +382,6 @@ def scene_shop(doing):
 
                 if event.key == pygame.K_3:
                     if picked_num == 3:
-                        sound_con.play_sound(sound_shop_buy)
                         purchase_equip(2)
                         picked_num = 0
                     else:
@@ -392,14 +390,14 @@ def scene_shop(doing):
                             picked_num = 3
 
                 if event.key == pygame.K_r:
-                    #이펙트 소리 필요
                     if player.coin >= 0:
+                        sound_con.play_sound(sound_shop_refresh)
                         player.coin -= 0
                         random_for_sale()
                         picked_num = 0
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
-                    #이펙트 소리 필요
+                    sound_con.play_sound(sound_shop_close)
                     doing = False
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
@@ -494,8 +492,8 @@ def scene_inventory(doing):
                         picked_equip = None
 
                 if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_inven_click)
                     if cursor.clicking:
-                        #이펙트 소리 필요
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
                         picked_equip = None
@@ -503,14 +501,12 @@ def scene_inventory(doing):
                     else:
                         for equip in equip_con.equipped_group:
                             if pygame.sprite.collide_mask(equip, cursor):
-                                #이펙트 소리 필요
                                 cursor.clicking = True
                                 cursor.image = cursor_images[1]
                                 picked_equip = equip
 
                 if event.key == pygame.K_c:
                     if cursor.clicking:
-                        #이펙트 소리 필요
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
                         setting_active_skill("c", picked_equip)
@@ -518,7 +514,6 @@ def scene_inventory(doing):
 
                 if event.key == pygame.K_v:
                     if cursor.clicking:
-                        #이펙트 소리 필요
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
                         setting_active_skill("v", picked_equip)
@@ -574,7 +569,7 @@ def scene_treasure_box(doing):
                 if choice:
                     if event.key == pygame.K_1:
                         if picked_num == 1:
-                            #이펙트 소리 필요
+                            sound_con.play_sound(sound_box_get)
                             equip_con.equipped_group.append(choice_equip[0])
                             equip_con.normal_equips.remove(choice_equip[0])
                             choice = False
@@ -585,7 +580,7 @@ def scene_treasure_box(doing):
 
                     if event.key == pygame.K_2:
                         if picked_num == 2:
-                            #이펙트 소리 필요
+                            sound_con.play_sound(sound_box_get)
                             equip_con.equipped_group.append(choice_equip[1])
                             equip_con.normal_equips.remove(choice_equip[1])
                             choice = False  
@@ -797,6 +792,7 @@ def random_for_sale():
 def purchase_equip(index):
     equip = equip_con.for_sale[index]
     if equip_con.can_buy[index] and player.coin >= equip.price:
+        sound_con.play_sound(sound_shop_buy)
         equip_con.equipped_group.append(equip)
         player.coin -= equip.price
         equip_con.can_buy[index] = False
@@ -1068,23 +1064,25 @@ def remove_from_equipped_group(equip):
         equip_con.unique_equips.append(equip)    
 
 def setting_active_skill(key, picked_equip):
-    if key == "c" and picked_equip.active:
-        for equip in equip_con.equipped_group:
-            equip.is_active_c = False
-        picked_equip.is_active_c = True
-        picked_equip.is_active_v = False
-        player.equip_c = picked_equip
-        if player.equip_v == player.equip_c:
-            player.equip_v = None
+    if picked_equip.active:
+        sound_con.play_sound(sound_inven_active)
+        if key == "c":
+            for equip in equip_con.equipped_group:
+                equip.is_active_c = False
+            picked_equip.is_active_c = True
+            picked_equip.is_active_v = False
+            player.equip_c = picked_equip
+            if player.equip_v == player.equip_c:
+                player.equip_v = None
 
-    if key == "v" and picked_equip.active:
-        for equip in equip_con.equipped_group:
-            equip.is_active_v = False
-        picked_equip.is_active_c = False
-        picked_equip.is_active_v = True
-        player.equip_v = picked_equip
-        if player.equip_c == player.equip_v:
-            player.equip_c = None
+        if key == "v":
+            for equip in equip_con.equipped_group:
+                equip.is_active_v = False
+            picked_equip.is_active_c = False
+            picked_equip.is_active_v = True
+            player.equip_v = picked_equip
+            if player.equip_c == player.equip_v:
+                player.equip_c = None
 
 def random_monster_direction():
     if monster_group and not monster_con.dontmove:

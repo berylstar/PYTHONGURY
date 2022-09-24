@@ -1,6 +1,7 @@
 import pygame
 import random
 from file_image import *
+from file_sound import *
 from class_field import field_group, key_field, portal
 ##############################################################################################
 def is_inven_overlapped(equip_group):
@@ -27,6 +28,7 @@ class Cursor(pygame.sprite.Sprite):
 
     def move(self, event):
         if event.type == pygame.KEYDOWN:
+            sound_con.play_sound(sound_wasd)
             if event.key == pygame.K_LEFT:
                 self.rect.centerx -= 60
             if event.key == pygame.K_RIGHT:

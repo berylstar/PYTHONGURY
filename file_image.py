@@ -27,6 +27,7 @@ mon_skel_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\skel_1.png")),
     ]
 
+
 mon_spider_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\spider_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\spider_1.png")),
@@ -41,21 +42,24 @@ mon_bat_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
     ]
 
+
 mon_frog_images = [    
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_1.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_0.png")),
     ]
-frog_die_images = [
+frog_die = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png")),
 ]
 
+
 mon_ember_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ember_0.png")),
     ]
 ember_attack_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_attack.png"))
+
 
 mon_ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_0.png")),
@@ -64,6 +68,18 @@ mon_ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")),
 ]
 
+
+mon_werewolf_images = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_3.png")),
+]
+werewolf_die = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_x.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_x.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_x.png")),
+]
 ##############################################################################################
 ##### NPC
 father_slime_images = [

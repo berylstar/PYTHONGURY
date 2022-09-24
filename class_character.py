@@ -88,7 +88,7 @@ class Mon_frog(Character):
         image_group = mon_frog_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = frog_die_images
+        self.die_images = frog_die
         self.type = []
 
         self.hp = 12
@@ -131,11 +131,12 @@ class Mon_zombie(Character):
         self.ap = 2
         self.speed = 0.23
 
-class Mon_warewolf(Character):
+class Mon_werewolf(Character):
     def __init__(self):
-        image_group = None
+        image_group = mon_werewolf_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = werewolf_die
         self.type = []
 
         self.hp = 30
@@ -189,12 +190,15 @@ class Mon_ember(Character):
 
 
 # 81 ~ 100 : king castle
+
+
+# BOSS
 class Mon_boss(Character):
     def __init__(self):
         image_group = monster_boss_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["boss", "boss_shooter"]
+        self.type = ["boss", "boss_spawner"]
 
         self.hp = 100
         self.ap = 2
