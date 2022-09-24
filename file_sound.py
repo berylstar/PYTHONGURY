@@ -37,7 +37,8 @@ class SoundController():
     def __init__(self):
         self.bgm = None
 
-        self.bgm_volume = 1.0
+        # self.bgm_volume = 1.0
+        self.bgm_volume = 0.1
         self.effect_volume = 1.0        
 
     def play_bgm(self, bgm):

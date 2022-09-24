@@ -171,7 +171,9 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0F.p
 title_image = pygame.image.load(os.path.join(file_path, "images\\title.png"))
 cover_image = pygame.image.load(os.path.join(file_path, "images\\cover.png"))
 story_images = [
-    
+    pygame.image.load(os.path.join(file_path, "images\\story\\story_1.png")),
+    pygame.image.load(os.path.join(file_path, "images\\story\\story_2.png")),
+    pygame.image.load(os.path.join(file_path, "images\\story\\story_3.png")),
 ]
 
 tuto_images = [
@@ -206,10 +208,10 @@ monster_die_images = [
 ]
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
-story_images = [
-    pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
-    pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
-]
+# story_images = [
+#     pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
+#     pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
+# ]
 
 tuto_images = [
     pygame.image.load(os.path.join(file_path, "images\\test_0.png")),

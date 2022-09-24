@@ -20,6 +20,18 @@ def scene_title_game():
     if ready:
         sound_con.play_bgm(bgm_title)
     while ready:
+
+        for i in range(len(color)):
+            color[i] = GRAY
+        color[index] = GREEN
+
+        screen.blit(title_image, (0,0))
+        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
+        screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
+        screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
+        screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
+        pygame.display.update()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 scene_exit(True)
@@ -43,17 +55,6 @@ def scene_title_game():
                         scene_esc(True)
                     elif index == 2:
                         scene_exit(True)
-
-        for i in range(len(color)):
-            color[i] = GRAY
-        color[index] = GREEN
-
-        screen.blit(title_image, (0,0))
-        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
-        screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
-        screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
-        screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
-        pygame.display.update()
 
 def scene_esc(doing):
     global ready
@@ -145,12 +146,14 @@ def scene_sound_setting(doing):
                         sound_con.bgm.set_volume(sound_con.bgm_volume)
                     elif index == 1:
                         sound_con.effect_volume = max(sound_con.effect_volume-0.1, 0)
+                        sound_con.play_sound(sound_wasd)
                 if event.key == pygame.K_RIGHT:
                     if index == 0:
                         sound_con.bgm_volume = min(sound_con.bgm_volume+0.1, 1)
                         sound_con.bgm.set_volume(sound_con.bgm_volume)
                     elif index == 1:
                         sound_con.effect_volume = min(sound_con.effect_volume+0.1, 1)
+                        sound_con.play_sound(sound_wasd)
                     
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_pick)
@@ -270,8 +273,15 @@ def scene_story(doing):
 
         story_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
 
-        screen.fill(BLACK)          # 스토리 배경 이미지로 대체 - 타이틀 배경 이미지나 검은화면도 가능
-        screen.blit(story_images[index], story_rect)                                        #STORY IMAGE
+        screen.fill(BLACK)
+        # screen.blit(story_images[index], story_rect)                                        #STORY IMAGE
+        print(index)
+        if index >= 0 :
+            screen.blit(story_images[0], (340,160))
+            if index > 0:
+                screen.blit(story_images[1], (640,160))
+                if index > 1:
+                    screen.blit(story_images[2], (640,260))
         pygame.display.update()
 
 def scene_tutorial(doing):
