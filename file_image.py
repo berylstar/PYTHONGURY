@@ -28,11 +28,17 @@ mon_skel_images = [
     ]
 
 mon_spider_images = [
-    
+    pygame.image.load(os.path.join(file_path, "design\\monster\\spider_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\spider_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\spider_2.png")),
     ]
-spider_web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
+spider_web_image = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\field\\web.png")), 0, 0.5)
+
 
 mon_bat_images = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\bat_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
     ]
 
 mon_frog_images = [    

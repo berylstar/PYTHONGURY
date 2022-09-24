@@ -16,7 +16,7 @@ class Item(pygame.sprite.Sprite):
 class ItemController():
     def __init__(self):
         self.prob_potion = 10
-        self.potion_eff = 5
+        self.potion_eff = 10
 
         self.prob_coin = 10
         self.red_coin = False

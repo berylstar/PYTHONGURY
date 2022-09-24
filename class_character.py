@@ -70,7 +70,7 @@ class Character(pygame.sprite.Sprite):
 # 1 ~ 20 : lower part of tower
 class Mon_spider(Character):
     def __init__(self):
-        image_group = monster_1_images
+        image_group = mon_spider_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["shooter"]
@@ -97,7 +97,7 @@ class Mon_frog(Character):
 
 class Mon_bat(Character):
     def __init__(self):
-        image_group = monster_2_images
+        image_group = mon_bat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["runner"]

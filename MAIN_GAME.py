@@ -1,3 +1,4 @@
+from turtle import forward
 import pygame
 import random
 
@@ -376,7 +377,7 @@ def scene_shop(doing):
                         if equip_con.for_sale[2]:
                             picked_num = 3
 
-                if event.key == pygame.K_0:
+                if event.key == pygame.K_r:
                     if player.coin >= 0:
                         player.coin -= 0
                         random_for_sale()
@@ -508,8 +509,8 @@ def scene_inventory(doing):
 
         screen_message(f"AP : {player.ap}", WHITE, (640,f), game_font_s)
         screen_message(f"DP : {player.dp}", WHITE, (640,f+25), game_font_s)
-        screen_message(f"SPEED : {player.speed}", WHITE, (640,f+50), game_font_s)
-        screen_message(f"TIME DAMAGE : {player.damaged_time}", WHITE, (640,f+75), game_font_s)
+        screen_message("SPEED : {0:.2f}".format(player.speed), WHITE, (640,f+50), game_font_s)
+        screen_message("TIME DAMAGE : {0:.2f}".format(player.damaged_time), WHITE, (640,f+75), game_font_s)
 
         screen_message(f"POTION EFF : {item_con.potion_eff}", WHITE, (640,f+125), game_font_s)
         screen_message(f"POTION PROB : {item_con.prob_potion}%", WHITE, (640,f+150), game_font_s)
@@ -1055,51 +1056,51 @@ def random_monster_direction():
     if monster_group and not monster_con.dontmove:
         for monster in monster_group:
             if not monster.is_die:
-                rand = random.randrange(0,10)
+                if not "toward" in monster.type:
+                    rand = random.randrange(0,10)
 
-                if rand <= 1:
-                    monster.direction = "LEFT"
-                elif 1 < rand and rand <= 3:
-                    monster.direction = "RIGHT"
-                elif 3 < rand and rand <= 5:
-                    monster.direction = "UP"
-                elif 5 < rand and rand <= 7:
-                    monster.direction = "DOWN"
-                else:
-                    monster.direction = "NONE"
-
-                if monster.rect.centerx <= 340 + (monster.rect.width // 2):
-                    monster.direction = "RIGHT"
-                elif monster.rect.centerx >= 940 - (monster.rect.width // 2):
-                    monster.direction = "LEFT"
-
-                if monster.rect.centery <= 60 + (monster.rect.height // 2):
-                    monster.direction = "DOWN"
-                elif monster.rect.centery >= 660 - (monster.rect.height // 2):
-                    monster.direction = "UP"
-
-def forward_monster_direction(target):
-    if monster_group and not monster_con.dontmove:
-        for monster in monster_group:
-            if not monster.is_die:
-                x = target.position[0] - monster.position[0]
-                y = target.position[1] - monster.position[1]
-                rand = random.randrange(1,10)
-
-                if rand <= 5:
-                    if x < -30 :
+                    if rand <= 1:
                         monster.direction = "LEFT"
-                    elif x > 30:
+                    elif 1 < rand and rand <= 3:
                         monster.direction = "RIGHT"
-                    else:
-                        monster.direction = "NONE"
-                else:
-                    if y < -30:
+                    elif 3 < rand and rand <= 5:
                         monster.direction = "UP"
-                    elif y > 30:
+                    elif 5 < rand and rand <= 7:
                         monster.direction = "DOWN"
                     else:
                         monster.direction = "NONE"
+
+                    if monster.rect.centerx <= 340 + (monster.rect.width // 2):
+                        monster.direction = "RIGHT"
+                    elif monster.rect.centerx >= 940 - (monster.rect.width // 2):
+                        monster.direction = "LEFT"
+
+                    if monster.rect.centery <= 60 + (monster.rect.height // 2):
+                        monster.direction = "DOWN"
+                    elif monster.rect.centery >= 660 - (monster.rect.height // 2):
+                        monster.direction = "UP"
+                else:
+                    forward_monster_direction(monster, player)
+
+def forward_monster_direction(monster, target):
+    x = target.position[0] - monster.position[0]
+    y = target.position[1] - monster.position[1]
+    rand = random.randrange(1,10)
+
+    if rand <= 5:
+        if x < -30 :
+            monster.direction = "LEFT"
+        elif x > 30:
+            monster.direction = "RIGHT"
+        else:
+            monster.direction = "NONE"
+    else:
+        if y < -30:
+            monster.direction = "UP"
+        elif y > 30:
+            monster.direction = "DOWN"
+        else:
+            monster.direction = "NONE"
 
 def monster_move():
     if monster_group:
@@ -1215,7 +1216,7 @@ class Player(Character):
 
         self.life = 3
         self.hp = 100
-        self.coin = 888
+        self.coin = 10
         self.ap = 10
         self.max_hp = 100
         self.speed = 0.3

@@ -11,10 +11,10 @@ from class_field import *
 # 3. 전체 랜덤 + 추가 세팅
 ##############################################################################################
 def monster_setting(pos, floor):
-    number_enemies = floor//5 + 1
+    number_enemies = floor//6 + 1
 
     for i in range(number_enemies):
-        spawn_monster(pos, prob_spawn_monster(floor))
+        spawn_monster(pos, random_spawn_monster(floor))
 
     floor_monster_setting(pos, floor)
 
@@ -33,37 +33,30 @@ def spawn_monster(pos, monster):
     random_away_position(pos, monster)
     monster_group.add(monster)
 
-def prob_spawn_monster(floor):
+def random_spawn_monster(floor):
     randprob = random.randrange(1,101)  # 1 ~ 100
     percent = 70 - floor
 
     if randprob < percent:
-        return Mon_bat()
+        return Mon_skel()
     elif percent <= randprob < percent + 30:
         return Mon_frog()
-    elif randprob % 3 == 0:
-        return Mon_ghost()
-    elif randprob % 3 == 1:
-        return Mon_ember()
-    else:
-        return Mon_skel()
+    elif randprob % 2 == 0:
+        return Mon_bat()
+    elif randprob % 2 == 1:
+        return Mon_spider()
 
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
-        # spawn_monster(pos, Mon_spider())
         spawn_monster(pos, Mon_frog())
-        # spawn_monster(pos, Mon_bat())
-        # spawn_monster(pos, Mon_bat())
-        # spawn_monster(pos, Mon_skel())
-        spawn_monster(pos, Mon_ghost())
-        spawn_monster(pos, Mon_ghost())
-        spawn_monster(pos, Mon_ghost())
-        spawn_monster(pos, Mon_boss())
     elif 7 <= floor < 12:
-        spawn_monster(pos, Mon_ember())
+        spawn_monster(pos, Mon_bat())
     elif 12 <= floor < 15:
-        spawn_monster(pos, Mon_ghost())
-    if floor % 10 == 0:
+        spawn_monster(pos, Mon_spider())
+    elif 15 <= floor < 20:
+        spawn_monster(pos, Mon_bat())
+
+    if floor == 20:
         spawn_monster(pos, Mon_boss())
 
 ##############################################################################################
