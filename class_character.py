@@ -22,6 +22,7 @@ class Character(pygame.sprite.Sprite):
     def change_image_group(self, new_images):
         self.i_i = 0
         self.image_group = new_images
+        self.image_update()
 
     def image_update(self):
         g_len = len(self.image_group)
@@ -137,7 +138,7 @@ class Mon_werewolf(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = werewolf_die
-        self.type = []
+        self.type = ["toward"]
 
         self.hp = 30
         self.ap = 2.5
@@ -213,7 +214,7 @@ class Mon_mini(Character):
         image_group = monster_2_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = []
+        self.type = ["mini"]
 
         self.hp = 1
         self.ap = 0.2

@@ -14,7 +14,7 @@ def monster_setting(pos, floor):
     number_enemies = floor//6 + 1
 
     for i in range(number_enemies):
-        spawn_monster(pos, random_spawn_monster(floor))
+        spawn_monster(pos, random_monster(floor))
 
     floor_monster_setting(pos, floor)
 
@@ -30,21 +30,25 @@ def random_away_position(center, object):
                 break 
 
 def spawn_monster(pos, monster):
-    random_away_position(pos, monster)
-    monster_group.add(monster)
+    if monster:
+        random_away_position(pos, monster)
+        monster_group.add(monster)
 
-def random_spawn_monster(floor):
+def random_monster(floor):
     randprob = random.randrange(1,101)  # 1 ~ 100
-    percent = 70 - floor
+    if 1 <= floor < 40:
+        percent = 70 - floor
 
-    if randprob < percent:
-        return Mon_skel()
-    elif percent <= randprob < percent + 30:
-        return Mon_frog()
-    elif randprob % 2 == 0:
-        return Mon_bat()
-    elif randprob % 2 == 1:
-        return Mon_spider()
+        if randprob < percent:
+            return Mon_skel()
+        elif percent <= randprob < percent + 30:
+            return Mon_frog()
+        elif randprob % 2 == 0:
+            return Mon_bat()
+        elif randprob % 2 == 1:
+            return Mon_spider()
+    else:
+        return None
 
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
@@ -75,8 +79,6 @@ def random_field_setting():
             field_group.add(web)
 
     if randprob <= 50:
-        # i = randprob % 3
-        # water = Field(water_images[i], (0,0))
         water = Field(water_image, (0,0))
         random_away_position((0,0), water)
         field_group.add(water)

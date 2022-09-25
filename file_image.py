@@ -39,7 +39,7 @@ spider_web_image = pygame.transform.rotozoom(pygame.image.load(os.path.join(file
 mon_bat_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\bat_1.png")),
-    pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
+    # pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
     ]
 
 
@@ -111,6 +111,7 @@ stair_images = [
 web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 
 water_image = pygame.image.load(os.path.join(file_path, "design\\field\\water_0.png"))
+water_image.set_alpha(170)
 
 torch_image = pygame.image.load(os.path.join(file_path, "design\\field\\torch.png"))
 light_images = [
@@ -174,6 +175,7 @@ story_images = [
     pygame.image.load(os.path.join(file_path, "images\\story\\story_1.png")),
     pygame.image.load(os.path.join(file_path, "images\\story\\story_2.png")),
     pygame.image.load(os.path.join(file_path, "images\\story\\story_3.png")),
+    pygame.image.load(os.path.join(file_path, "images\\story\\story_4.png")),
 ]
 
 tuto_images = [
@@ -208,10 +210,6 @@ monster_die_images = [
 ]
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
-# story_images = [
-#     pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
-#     pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
-# ]
 
 tuto_images = [
     pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
@@ -220,3 +218,4 @@ tuto_images = [
 
 inven_img = pygame.image.load(os.path.join(file_path, "images\\inven.png"))
 dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
+big_coffin = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\npc\\coffin_1.png")), 0, 5)

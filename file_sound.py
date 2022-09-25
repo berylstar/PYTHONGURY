@@ -27,11 +27,13 @@ sound_nextfloor = pygame.mixer.Sound('Soundtrack\\effect\\next_floor.wav')
 
 sound_coin = pygame.mixer.Sound('Soundtrack\\effect\\item_coin.ogg')
 sound_potion = pygame.mixer.Sound('Soundtrack\\effect\\item_potion.wav')
-sound_box = pygame.mixer.Sound('Soundtrack\\effect\\item_box.wav')
+sound_box_open = pygame.mixer.Sound('Soundtrack\\effect\\item_box_open.wav')
+sound_box_close = pygame.mixer.Sound('Soundtrack\\effect\\item_box_close.ogg')
 sound_box_get = pygame.mixer.Sound('Soundtrack\\effect\\item_box_get.wav')
 
 sound_punch = pygame.mixer.Sound('Soundtrack\\effect\\player_punch.wav')
 sound_damaged = pygame.mixer.Sound('Soundtrack\\effect\\player_damaged.wav')
+# sound_reborn = pygame.mixer.Sound('Soundtrack\\effect\\reborn.wav')
 ##############################################################################################
 class SoundController():
     def __init__(self):

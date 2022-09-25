@@ -20,6 +20,8 @@ class ItemController():
 
         self.prob_coin = 10
         self.red_coin = False
+        
+        self.first_box = True
 ##############################################################################################
 
 item_con = ItemController()

@@ -40,11 +40,11 @@ def scene_title_game():
                     sound_con.play_sound(sound_wasd)
                     index -= 1
                     if index < 0 :
-                        index = 2
+                        index = len(option)-1
                 if event.key == pygame.K_DOWN:
                     sound_con.play_sound(sound_wasd)
                     index += 1
-                    if index > 2:
+                    if index > len(option)-1:
                         index = 0
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_pick)
@@ -55,6 +55,8 @@ def scene_title_game():
                         scene_esc(True)
                     elif index == 2:
                         scene_exit(True)
+                if event.key == pygame.K_ESCAPE:
+                    scene_exit(True)
 
 def scene_esc(doing):
     global ready
@@ -78,11 +80,11 @@ def scene_esc(doing):
                     sound_con.play_sound(sound_wasd)
                     index -= 1
                     if index < 0:
-                        index = 4
+                        index = len(option)-1
                 if event.key == pygame.K_DOWN:
                     sound_con.play_sound(sound_wasd)
                     index += 1
-                    if index > 4:
+                    if index > len(option)-1:
                         index = 0
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_pick)
@@ -96,8 +98,6 @@ def scene_esc(doing):
                     elif index == 3:
                         doing = False
                         game_restart()
-                        # ready = True
-                        # scene_title_game()
                     elif index == 4:
                         scene_exit(True)
                 if event.key == pygame.K_ESCAPE:
@@ -133,13 +133,12 @@ def scene_sound_setting(doing):
                     sound_con.play_sound(sound_wasd)
                     index -= 1
                     if index < 0:
-                        index = 3
+                        index = len(option)-1
                 if event.key == pygame.K_DOWN:
                     sound_con.play_sound(sound_wasd)
                     index += 1
-                    if index > 3:
+                    if index > len(option)-1:
                         index = 0
-
                 if event.key == pygame.K_LEFT:
                     if index == 0:
                         sound_con.bgm_volume = max(sound_con.bgm_volume-0.1, 0)
@@ -154,7 +153,6 @@ def scene_sound_setting(doing):
                     elif index == 1:
                         sound_con.effect_volume = min(sound_con.effect_volume+0.1, 1)
                         sound_con.play_sound(sound_wasd)
-                    
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_pick)
                     if index == 2:
@@ -275,13 +273,15 @@ def scene_story(doing):
 
         screen.fill(BLACK)
         # screen.blit(story_images[index], story_rect)                                        #STORY IMAGE
-        print(index)
-        if index >= 0 :
+        # 후에 위치 조정
+        if -1 < index < 3 : #0
             screen.blit(story_images[0], (340,160))
-            if index > 0:
+            if index > 0: #1
                 screen.blit(story_images[1], (640,160))
-                if index > 1:
+                if index > 1: #2
                     screen.blit(story_images[2], (640,260))
+        elif index > 2: #3
+            screen.blit(story_images[3], (340,160))
         pygame.display.update()
 
 def scene_tutorial(doing):
@@ -316,14 +316,13 @@ def scene_tutorial(doing):
         pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
-
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    sound_con.play_sound(sound_pick)
+                    # sound_con.play_sound(sound_reborn)
                     doing = False
                     floor_zero()
                 if event.key == pygame.K_ESCAPE:
@@ -362,10 +361,8 @@ def scene_game_over(doing):
         pygame.display.update()
 
 def scene_shop(doing):
-
-    picked_num = 0
-
     sound_con.play_sound(sound_shop_open)
+    picked_num = 0
 
     while doing:
         for event in pygame.event.get():
@@ -377,8 +374,8 @@ def scene_shop(doing):
                         purchase_equip(0)
                         picked_num = 0
                     else:
-                        sound_con.play_sound(sound_wasd)
                         if equip_con.for_sale[0]:
+                            sound_con.play_sound(sound_wasd)
                             picked_num = 1
 
                 if event.key == pygame.K_2:
@@ -386,8 +383,8 @@ def scene_shop(doing):
                         purchase_equip(1)
                         picked_num = 0
                     else:
-                        sound_con.play_sound(sound_wasd)
                         if equip_con.for_sale[1]:
+                            sound_con.play_sound(sound_wasd)
                             picked_num = 2
 
                 if event.key == pygame.K_3:
@@ -395,8 +392,8 @@ def scene_shop(doing):
                         purchase_equip(2)
                         picked_num = 0
                     else:
-                        sound_con.play_sound(sound_wasd)
                         if equip_con.for_sale[2]:
+                            sound_con.play_sound(sound_wasd)
                             picked_num = 3
 
                 if event.key == pygame.K_r:
@@ -414,16 +411,17 @@ def scene_shop(doing):
                     else:
                         equip_effect()
 
-        screen.blit(test_image, (340,60))      # 상점 이미지로 대체
+        screen.blit(test_image, (340,60))      # 상점 이미지로 대체 - big_coffin
         display_info_ui()
         display_inven_ui()
 
         pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_num:
-            screen_message(equip_con.for_sale[picked_num-1].msg_name, WHITE, (640,120), game_font_m)
-            screen_message(equip_con.for_sale[picked_num-1].msg_info, WHITE, (640,160), game_font_kor)
-            screen_message(equip_con.for_sale[picked_num-1].msg_eff, YELLOW, (640,210), game_font_kor)
-            screen_message(equip_con.for_sale[picked_num-1].msg_eff_2, YELLOW, (640,230), game_font_kor)
+            equip = equip_con.for_sale[picked_num-1]
+            screen_message(equip.msg_name, WHITE, (640,120), game_font_m)
+            screen_message(equip.msg_info, WHITE, (640,160), game_font_kor)
+            screen_message(equip.msg_eff, YELLOW, (640,210), game_font_kor)
+            screen_message(equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -437,7 +435,7 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
     pygame.draw.rect(screen, WHITE, ((370 + 180*index,sero),(180,320)), 2)
     screen_message(str(index+1), WHITE, (460 + 180*index,sero+20), game_font_m)
 
-    if equip_con.can_buy[index]:
+    if equip_con.can_buy[index] and equip_con.for_sale[index]:
         pygame.draw.line(screen, GRAY, (370 + 180*index, sero+40), (550 + 180*index, sero+40))
         pygame.draw.line(screen, GRAY, (370 + 180*index, sero+100), (550 + 180*index, sero+100))
         pygame.draw.line(screen, GRAY, (370 + 180*index, sero+160), (550 + 180*index, sero+160))
@@ -447,15 +445,7 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
 
         equip_rect = equip.image.get_rect(left=370+180*index, top=sero+40)
         screen.blit(equip.image, equip_rect)
-        if equip.grade == 0:
-            txt = "NORMAL"
-            color = WHITE
-        elif equip.grade == 1:
-            txt = "RARE"
-            color = YELLOW
-        elif equip.grade == 2:
-            txt = "UNIQUE"
-            color = BLUE
+        (txt,color) = equip_con.equip_grade(equip)
         screen_message(txt, color, (460 + 180*index, sero+250), game_font_s)
 
         coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
@@ -468,7 +458,7 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
         screen.blit(sold_out_image, case_rect)
 
 def scene_inventory(doing):
-
+    # 이펙트 소리 필요
     player.stop()
 
     monster_con.dontmove = True
@@ -550,6 +540,7 @@ def scene_inventory(doing):
         pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_equip:
             screen_message(picked_equip.msg_name, WHITE, (640,120), game_font_m)
+            screen_message(equip_con.equip_grade(picked_equip)[0], equip_con.equip_grade(picked_equip)[1], (800,120), game_font_s)
             screen_message(picked_equip.msg_info, WHITE, (640,160), game_font_kor)
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
@@ -559,17 +550,22 @@ def scene_inventory(doing):
         cursor.draw(screen)
         pygame.display.update(full_rect)
 
-def scene_treasure_box(doing):
-
+def scene_treasurebox(doing, reward):
+    sound_con.play_sound(sound_box_open)
     player.stop()
-    choice = True
 
-    if len(equip_con.normal_equips) >= 2:
+    if reward == "normal":
         choice_equip = [equip_con.normal_equips[-1], equip_con.normal_equips[-2]]
-    else:
-        doing  = False
+    elif reward == "boss":
+        if equip_con.unique_equips:
+            choice_equip = [equip_con.unique_equips[-1], e_potion]
+        elif equip_con.rare_equips:
+            choice_equip = [equip_con.rare_equips[-1], e_potion]
+        else:
+            choice_equip = [equip_con.normal_equips[-1], e_potion]
 
     picked_num = 0
+    choice = True
 
     while doing:
         for event in pygame.event.get():
@@ -581,7 +577,7 @@ def scene_treasure_box(doing):
                         if picked_num == 1:
                             sound_con.play_sound(sound_box_get)
                             equip_con.equipped_group.append(choice_equip[0])
-                            equip_con.normal_equips.remove(choice_equip[0])
+                            equip_con.equip_on(choice_equip[0])
                             choice = False
                             picked_num = 0
                         else:
@@ -591,8 +587,11 @@ def scene_treasure_box(doing):
                     if event.key == pygame.K_2:
                         if picked_num == 2:
                             sound_con.play_sound(sound_box_get)
-                            equip_con.equipped_group.append(choice_equip[1])
-                            equip_con.normal_equips.remove(choice_equip[1])
+                            if reward == "normal":
+                                equip_con.equipped_group.append(choice_equip[1])
+                                equip_con.equip_on(choice_equip[1])
+                            elif reward == "boss":
+                                player.hp = min(player.hp+50, player.max_hp)
                             choice = False  
                             picked_num = 0
                         else:
@@ -600,7 +599,7 @@ def scene_treasure_box(doing):
                             picked_num = 2
 
                 if event.key == pygame.K_SPACE and not choice:
-                    #이펙트 소리 필요
+                    sound_con.play_sound(sound_box_close)
                     doing = False
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
@@ -612,15 +611,17 @@ def scene_treasure_box(doing):
                     scene_esc(True)
 
         screen.blit(test_image, (340,60))
+        display_info_ui()
         display_inven_ui()
 
         zero_rect = choice_equip[0].image.get_rect(center=(490,450))
         one_rect = choice_equip[1].image.get_rect(center=(790,450))
 
         if picked_num:
-            screen_message(choice_equip[picked_num-1].msg_name, WHITE, (640,90), game_font_m)
-            screen_message(choice_equip[picked_num-1].msg_info, WHITE, (640,130), game_font_kor)
-            screen_message(choice_equip[picked_num-1].msg_eff, YELLOW, (640,180), game_font_kor)
+            screen_message(choice_equip[picked_num-1].msg_name, WHITE, (640,120), game_font_m)
+            screen_message(choice_equip[picked_num-1].msg_info, WHITE, (640,160), game_font_kor)
+            screen_message(choice_equip[picked_num-1].msg_eff, YELLOW, (640,210), game_font_kor)
+            screen_message(choice_equip[picked_num-1].msg_eff_2, YELLOW, (640,230), game_font_kor)
         
         if choice:          # 보물 상자 이미지 대체
             screen_message("<1>", WHITE, (490, 350), game_font_m)
@@ -637,8 +638,7 @@ def scene_treasure_box(doing):
         else:
             screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         
-        pygame.display.update(main_rect)
-        pygame.display.update(inven_rect)
+        pygame.display.update(full_rect)
 
 ##############################################################################################
 def screen_message(writing, color, position, font):
@@ -677,6 +677,8 @@ def make_floor_zero():
 
     random_for_sale()
 
+    item_con.first_box = True
+
     player.rect = player.image.get_rect(center=player_first_position)
 
     if not skill_con.active_escaperope:
@@ -698,6 +700,10 @@ def floor_zero():
     for npc in npc_group:
         npc.draw(screen)
 
+    if item_con.first_box:
+        item_group.add(Item(box_image, (400,500), "normal_box"))
+        item_con.first_box = False
+
     for punch in punch_group:
         if pygame.sprite.collide_mask(punch, npc_kingslime):
             player.stop()
@@ -708,7 +714,6 @@ def floor_zero():
             scene_shop(True)
 
     if pygame.sprite.collide_mask(player, stair):
-        # scene_treasure_box(True)
         floor = saved_floor - 1
 
 def next_floor(pos):
@@ -781,23 +786,24 @@ def random_for_sale():
     for i in range(3):
         percent = random.randrange(1,101)
 
-        if percent <= equip_con.perc_rare:
-            if rare_index >= len(equip_con.rare_equips):
-                pass
-            else:
-                equip_con.for_sale[i] = equip_con.rare_equips[rare_index]
-                rare_index += 1
-        elif (100 - equip_con.perc_unique) <= percent:
-            if unique_index >= len(equip_con.unique_equips):
-                pass
-            else:
-                equip_con.for_sale[i] = equip_con.unique_equips[unique_index]
-                unique_index += 1
+        if (100 - equip_con.perc_unique) <= percent and not unique_index >= len(equip_con.unique_equips):
+            equip_con.for_sale[i] = equip_con.unique_equips[unique_index]
+            unique_index += 1
+            equip_con.can_buy[i] = True
+        elif percent <= equip_con.perc_rare and not rare_index >= len(equip_con.rare_equips):
+            equip_con.for_sale[i] = equip_con.rare_equips[rare_index]
+            rare_index += 1
+            equip_con.can_buy[i] = True
         else:
-            equip_con.for_sale[i] = equip_con.normal_equips[normal_index]
-            normal_index += 1
-
-        equip_con.can_buy[i] = True
+            if normal_index >= len(equip_con.normal_equips):
+                print("OUT NORMAL")
+                equip_con.can_buy[i] = False
+            else:
+                equip_con.for_sale[i] = equip_con.normal_equips[normal_index]
+                normal_index += 1
+                equip_con.can_buy[i] = True
+        
+    print(percent, len(equip_con.normal_equips), len(equip_con.rare_equips), len(equip_con.unique_equips), equip_con.can_buy)
 
 def purchase_equip(index):
     equip = equip_con.for_sale[index]
@@ -808,12 +814,7 @@ def purchase_equip(index):
         equip_con.can_buy[index] = False
         equip_con.for_sale[index] = None
 
-        if equip.grade == 0:
-            equip_con.normal_equips.remove(equip)
-        elif equip.grade == 1:
-            equip_con.rare_equips.remove(equip)
-        elif equip.grade == 2:
-            equip_con.unique_equips.remove(equip)
+        equip_con.equip_on(equip)
 
 def player_move_key():
     if event.type == pygame.KEYDOWN:
@@ -844,7 +845,9 @@ def drop_item(monster):
     randprob = random.randrange(1,101) # 1~100
 
     if "boss" in monster.type:
-        item_group.add(Item(box_image, monster.position, "box"))
+        item_group.add(Item(box_image, monster.position, "boss_box"))
+    elif "mini" in monster.type:
+        pass
     else:
         if randprob <= item_con.prob_potion: # 확률 <= 포션드롭률
             item_group.add(Item(potion_image, monster.position, "potion"))
@@ -864,9 +867,10 @@ def item_effect(item):
     elif item.info == "red_coin":
         sound_con.play_sound(sound_coin)
         player.coin += 3
-    elif item.info == "box":
-        sound_con.play_sound(sound_box)
-        scene_treasure_box(True)
+    elif item.info == "boss_box":
+        scene_treasurebox(True, "boss")
+    elif item.info == "normal_box":
+        scene_treasurebox(True, "normal")
 
 def equip_effect():
     # mushroom
@@ -989,89 +993,85 @@ def equip_effect():
 def remove_from_equipped_group(equip):
 
     equip_con.equipped_group.remove(equip)
-    if equip.is_active_c:
-        player.equip_c = None
-    elif equip.is_active_v:
-        player.equip_v = None
+    if equip.is_effected:
+        if equip.is_active_c:
+            player.equip_c = None
+        elif equip.is_active_v:
+            player.equip_v = None
 
-    elif equip == e_wax:
-        player.ap -= 2
+        elif equip == e_wax:
+            player.ap -= 2
 
-    elif equip == e_pepper:
-        player.ap -= 3
+        elif equip == e_pepper:
+            player.ap -= 3
 
-    elif equip == e_heartstone:
-        player.max_hp -= 20
-        player.hp = min(player.hp, player.max_hp)
+        elif equip == e_heartstone:
+            player.max_hp -= 20
+            player.hp = min(player.hp, player.max_hp)
 
-    elif equip == e_halfstone:
-        player.max_hp -= 10
-        player.hp = min(player.hp, player.max_hp)
+        elif equip == e_halfstone:
+            player.max_hp -= 10
+            player.hp = min(player.hp, player.max_hp)
 
-    elif equip == e_poisonapple:
-        player.hp -= 10
-        player.max_hp -= 10
-        player.dp += 0.5
-        player.damaged_time -= 0.5
+        elif equip == e_poisonapple:
+            player.hp -= 10
+            player.max_hp -= 10
+            player.dp += 0.5
+            player.damaged_time -= 0.5
 
-    elif equip == e_ice:
-        if e_ice.charge_times == 0:
+        elif equip == e_ice:
+            if e_ice.charge_times == 0:
+                player.speed -= 0.1
+            elif e_ice.charge_times == 1:
+                player.speed -= 0.05
+
+        elif equip == e_battery:
+            player.speed -= 0.1 * e_battery.charge_times
+            e_battery.charge_times = 0
+
+        elif equip == e_rollerskate:
             player.speed -= 0.1
-        elif e_ice.charge_times == 1:
-            player.speed -= 0.05
 
-    elif equip == e_battery:
-        player.speed -= 0.1 * e_battery.charge_times
-        e_battery.charge_times = 0
+        elif equip == e_boxerglove:
+            player.punch = punch_d_image
 
-    elif equip == e_rollerskate:
-        player.speed -= 0.1
+        elif equip == e_helmet:
+            player.dp -= 0.2
 
-    elif equip == e_boxerglove:
-        player.punch = punch_d_image
+        elif equip == e_turtleshell:
+            player.damaged_time += 0.3
 
-    elif equip == e_helmet:
-        player.dp -= 0.2
+        elif equip == e_pizza:
+            monster_con.b_speed += 2
 
-    elif equip == e_turtleshell:
-        player.damaged_time += 0.3
+        elif equip == e_3dglasses:
+            monster_con.dont_alpha = False
 
-    elif equip == e_pizza:
-        monster_con.b_speed += 2
+        elif equip == e_talisman:
+            monster_con.dont_dash = False
 
-    elif equip == e_3dglasses:
-        monster_con.dont_alpha = False
+        elif equip == e_ticket:
+            equip_con.perc_rare -= 5
 
-    elif equip == e_talisman:
-        monster_con.dont_dash = False
+        elif equip == e_straw:
+            item_con.potion_eff -= 5
 
-    elif equip == e_ticket:
-        equip_con.perc_rare -= 5
+        elif equip == e_machine:
+            item_con.prob_potion -= 3
+        
+        elif equip == e_piggybank:
+            item_con.red_coin = False
 
-    elif equip == e_straw:
-        item_con.potion_eff -= 5
+        elif equip == e_metaldetector:
+            item_con.prob_coin -= 3
 
-    elif equip == e_machine:
-        item_con.prob_potion -= 3
-    
-    elif equip == e_piggybank:
-        item_con.red_coin = False
+        elif equip == e_binoculars:
+            item_con.prob_potion -= 3
+            item_con.prob_coin -= 3
 
-    elif equip == e_metaldetector:
-        item_con.prob_coin -= 3
+        equip.reset()
 
-    elif equip == e_binoculars:
-        item_con.prob_potion -= 3
-        item_con.prob_coin -= 3
-
-    equip.reset()
-
-    if equip.grade == 0:
-        equip_con.normal_equips.append(equip)
-    elif equip.grade == 1:
-        equip_con.rare_equips.append(equip)
-    elif equip.grade == 2:
-        equip_con.unique_equips.append(equip)    
+        equip_con.equip_off(equip)
 
 def setting_active_skill(key, picked_equip):
     if picked_equip.active:
@@ -1258,9 +1258,9 @@ class Player(Character):
 
         self.life = 3
         self.hp = 100
-        self.coin = 10
-        self.ap = 10
         self.max_hp = 100
+        self.coin = 1000
+        self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
         self.dp = 0
@@ -1268,6 +1268,8 @@ class Player(Character):
 
         self.equip_c = None
         self.equip_v = None
+
+        self.time = 0
 
     def space_bar(self):
         sound_con.play_sound(sound_punch)
@@ -1294,6 +1296,14 @@ class Player(Character):
     def skill_v(self):
         if self.equip_v:
             self.equip_v.active_skill()
+
+    def damage_sound(self):
+        if not self.time:
+            self.time = pygame.time.get_ticks()
+            sound_con.play_sound(sound_damaged)
+
+        if pygame.time.get_ticks() - self.time > 500:
+            self.time = 0
 
 #### PUNCH CLASS
 class Punch(pygame.sprite.Sprite):
@@ -1443,7 +1453,6 @@ while running:
             
             if not skill_con.active_trafficlight[0]:
                 random_monster_direction()
-                # forward_monster_direction(player)
                 monster_action()
         b_counter = second_time
 
@@ -1468,7 +1477,7 @@ while running:
         if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
             player.hp -= max((monster.ap - player.dp), 0)
             if not player.is_die and not skill_con.active_magiccloak[0]:
-                sound_con.play_sound(sound_damaged)
+                player.damage_sound()
                 player.image = player_damaged_image
         if monster.hp <= 0:
             monster_die(monster)
@@ -1494,14 +1503,14 @@ while running:
             player.hp -= bullet.damage
             bullet_effect(bullet)
             if not player.is_die and not skill_con.active_magiccloak[0]:
-                sound_con.play_sound(sound_damaged)
+                player.damage_sound()
                 player.image = player_damaged_image
             shooting_group.remove(bullet)
 
     for item in item_group:
         item.draw(screen)                                                               #ITEM
         if pygame.sprite.collide_mask(item, player):
-            if item.info == "box":
+            if item.info == "boss_box":
                 if len(monster_group):
                     continue
             item_effect(item)

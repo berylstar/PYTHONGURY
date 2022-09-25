@@ -654,6 +654,20 @@ class E_EscapeRope(Equip):
         skill_con.active_escaperope = True
         equip_con.equipped_group.remove(self)
         equip_con.rare_equips.append(self)
+
+#                                                                           #### for treasure box 
+class E_Potion(Equip):
+    def __init__(self):
+        image = potion_image
+        Equip.__init__(self, image)
+        self.msg_name = "대용량 포션"
+        self.msg_info = "마시고 기운내세요"
+        self.msg_eff = "HP + 50"
+
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 0
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -677,6 +691,30 @@ class EquipController():
         self.unique_equips = [
             e_mushroom, e_boxerglove, e_goldenkey
         ]
+
+    def equip_grade(self, equip):
+        if equip.grade == 0:
+            return ("NORMAL", (255,255,255))
+        elif equip.grade == 1:
+            return ("RARE", (255,255,0))
+        elif equip.grade == 2:
+            return ("UNIQUE", (255,0,255))
+
+    def equip_on(self, equip):
+        if equip.grade == 0:
+            self.normal_equips.remove(equip)
+        elif equip.grade == 1:
+            self.rare_equips.remove(equip)
+        elif equip.grade == 2:
+            self.unique_equips.remove(equip)
+
+    def equip_off(self, equip):
+        if equip.grade == 0:
+            self.normal_equips.append(equip)
+        elif equip.grade == 1:
+            self.rare_equips.append(equip)
+        elif equip.grade == 2:
+            self.unique_equips.append(equip)
 
 ##### active controller
 class SkillController():
@@ -778,6 +816,8 @@ e_dice = E_Dice()
 e_magiccloak = E_MagicCloak()
 e_goldenkey = E_GoldenKey()
 e_escaperope = E_EscapeRope()       # NONE
+
+e_potion = E_Potion()
 
 
 
