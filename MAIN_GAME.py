@@ -154,12 +154,13 @@ def scene_sound_setting(doing):
                         sound_con.effect_volume = min(sound_con.effect_volume+0.1, 1)
                         sound_con.play_sound(sound_wasd)
                 if event.key == pygame.K_SPACE:
-                    sound_con.play_sound(sound_pick)
                     if index == 2:
+                        sound_con.play_sound(sound_pick)
                         sound_con.bgm_volume = 0
                         sound_con.bgm.set_volume(sound_con.bgm_volume)
                         sound_con.effect_volume = 0
                     elif index == 3:
+                        sound_con.play_sound(sound_pick)
                         doing = False
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
@@ -796,14 +797,11 @@ def random_for_sale():
             equip_con.can_buy[i] = True
         else:
             if normal_index >= len(equip_con.normal_equips):
-                print("OUT NORMAL")
                 equip_con.can_buy[i] = False
             else:
                 equip_con.for_sale[i] = equip_con.normal_equips[normal_index]
                 normal_index += 1
                 equip_con.can_buy[i] = True
-        
-    print(percent, len(equip_con.normal_equips), len(equip_con.rare_equips), len(equip_con.unique_equips), equip_con.can_buy)
 
 def purchase_equip(index):
     equip = equip_con.for_sale[index]
@@ -1259,7 +1257,7 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.max_hp = 100
-        self.coin = 1000
+        self.coin = 10
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image

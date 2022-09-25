@@ -77,7 +77,7 @@ class Mon_spider(Character):
         self.type = ["shooter"]
 
         self.hp = 12
-        self.ap = 2
+        self.ap = 1
         self.speed = 0.15
         self.bullet = spider_web_image
         self.b_speed = 8
@@ -93,7 +93,7 @@ class Mon_frog(Character):
         self.type = []
 
         self.hp = 12
-        self.ap = 2
+        self.ap = 1
         self.speed = 0.2
 
 class Mon_bat(Character):
@@ -104,7 +104,7 @@ class Mon_bat(Character):
         self.type = ["runner"]
 
         self.hp = 8
-        self.ap = 1.3
+        self.ap = 0.5
         self.speed = 0.2
         self.is_dashed = False
         self.dashes = 0
@@ -117,7 +117,7 @@ class Mon_skel(Character):
         self.type = []
 
         self.hp = 21
-        self.ap = 2
+        self.ap = 1
         self.speed = 0.12
 
 # 21 ~ 40 : graveyard
@@ -204,10 +204,10 @@ class Mon_boss(Character):
         self.hp = 100
         self.ap = 2
         self.speed = 0.1
-        self.bullet = ember_attack_image
-        self.b_speed = 10
-        self.b_damage = 10
-        self.b_type = "NONE"
+        # self.bullet = ember_attack_image
+        # self.b_speed = 10
+        # self.b_damage = 10
+        # self.b_type = "NONE"
 
 class Mon_mini(Character):
     def __init__(self):
