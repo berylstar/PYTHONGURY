@@ -737,7 +737,6 @@ def next_floor(pos):
 
     if e_battery in equip_con.equipped_group and e_battery.charge_times < 3:
         if floor - e_battery.floor >= 1:
-            print("충전중" + str(e_battery.charge_times))
             player.speed += 0.05
             e_battery.floor = floor
             e_battery.charge_times += 1
@@ -745,7 +744,6 @@ def next_floor(pos):
 
     if e_ice in equip_con.equipped_group and e_ice.charge_times < 3:
         if floor - e_ice.floor >= 1:
-            print("녹는중" + str(e_ice.charge_times))
             player.speed -= 0.05
             e_ice.floor = floor
             e_ice.charge_times += 1
@@ -882,25 +880,25 @@ def equip_effect():
 
     if e_pepper in equip_con.equipped_group:
         if not e_pepper.is_effected:
-            player.ap += 3            
+            player.ap += 4            
             e_pepper.is_effected = True
 
     if e_heartstone in equip_con.equipped_group:
         if not e_heartstone.is_effected:
-            player.max_hp += 20
+            player.max_hp += 50
             e_heartstone.is_effected = True
 
     if e_halfstone in equip_con.equipped_group:
         if not e_halfstone.is_effected:
-            player.max_hp += 10
+            player.max_hp += 20
             e_halfstone.is_effected = True
 
     if e_poisonapple in equip_con.equipped_group:
         if not e_poisonapple.is_effected:
             player.hp += 10
             player.max_hp += 10
-            player.dp -= 0.5
-            player.damaged_time += 0.5
+            player.dp -= 0.2
+            player.damaged_time += 0.2
             e_poisonapple.is_effected = True
 
     if e_ice in equip_con.equipped_group:
@@ -927,7 +925,7 @@ def equip_effect():
 
     if e_helmet in equip_con.equipped_group:
         if not e_helmet.is_effected:
-            player.dp += 0.2
+            player.dp += 0.3
             e_helmet.is_effected = True
 
     if e_turtleshell in equip_con.equipped_group:
@@ -962,7 +960,7 @@ def equip_effect():
 
     if e_machine in equip_con.equipped_group:
         if not e_machine.is_effected:
-            item_con.prob_potion += 3
+            item_con.prob_potion += 5
             e_machine.is_effected = True
 
     if e_piggybank in equip_con.equipped_group:
@@ -972,7 +970,7 @@ def equip_effect():
 
     if e_metaldetector in equip_con.equipped_group:
         if not e_metaldetector.is_effected:
-            item_con.prob_coin += 3
+            item_con.prob_coin += 5
             e_metaldetector.is_effected = True
 
     if e_binoculars in equip_con.equipped_group:
@@ -1001,21 +999,21 @@ def remove_from_equipped_group(equip):
             player.ap -= 2
 
         elif equip == e_pepper:
-            player.ap -= 3
+            player.ap -= 4
 
         elif equip == e_heartstone:
-            player.max_hp -= 20
+            player.max_hp -= 50
             player.hp = min(player.hp, player.max_hp)
 
         elif equip == e_halfstone:
-            player.max_hp -= 10
+            player.max_hp -= 20
             player.hp = min(player.hp, player.max_hp)
 
         elif equip == e_poisonapple:
             player.hp -= 10
             player.max_hp -= 10
-            player.dp += 0.5
-            player.damaged_time -= 0.5
+            player.dp += 0.2
+            player.damaged_time -= 0.2
 
         elif equip == e_ice:
             if e_ice.charge_times == 0:
@@ -1034,7 +1032,7 @@ def remove_from_equipped_group(equip):
             player.punch = punch_d_image
 
         elif equip == e_helmet:
-            player.dp -= 0.2
+            player.dp -= 0.3
 
         elif equip == e_turtleshell:
             player.damaged_time += 0.3
@@ -1055,13 +1053,13 @@ def remove_from_equipped_group(equip):
             item_con.potion_eff -= 5
 
         elif equip == e_machine:
-            item_con.prob_potion -= 3
+            item_con.prob_potion -= 5
         
         elif equip == e_piggybank:
             item_con.red_coin = False
 
         elif equip == e_metaldetector:
-            item_con.prob_coin -= 3
+            item_con.prob_coin -= 5
 
         elif equip == e_binoculars:
             item_con.prob_potion -= 3
@@ -1257,7 +1255,7 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.max_hp = 100
-        self.coin = 10
+        self.coin = 100
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image

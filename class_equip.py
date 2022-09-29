@@ -133,15 +133,15 @@ class E_Mushroom(Equip):
     def __init__(self):
         image = mushroom_image
         Equip.__init__(self, image)
-        self.msg_name = "보너스 버섯"
-        self.msg_info = "어디서 본 듯 한 버섯 ?"
-        self.msg_eff = "목숨이 0 되면 부활"
+        self.msg_name = "1UP"
+        self.msg_info = "어디서 본 듯한 버섯입니다..."
+        self.msg_eff = "목숨이 0 되면 life +1"
         self.grade = 2
 
         # self.max_row = 4
         # self.max_col = 2
 
-        self.price = 6
+        self.price = 15
 
 #                                                                           #### crescentmoon
 class E_CrescentMoon(Equip):
@@ -149,15 +149,15 @@ class E_CrescentMoon(Equip):
         image = crescentmoon_image
         Equip.__init__(self, image)
         self.msg_name = "초승달"
-        self.msg_info = "달에게 소원을 빌어보자"
-        self.msg_eff = "낮은 확률로 부활"
+        self.msg_info = "달에게 소원을 빌어보자 !"
+        self.msg_eff = "낮은 확률로 즉시 부활"
 
         self.revival = False
 
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 6
+        self.price = 7
 
     def prob_revival(self):
         randprob = random.randrange(1,101)
@@ -172,18 +172,37 @@ class E_Banana(Equip):
         image = banana_image
         Equip.__init__(self, image)
         self.msg_name = "바나나"
-        self.msg_info = "밥 대신 바나나 하나정도"
-        self.msg_eff = "사용 : HP +20"
-        self.grade = 1
+        self.msg_info = "맛있으면 바나나, 바나나는 길어"
+        self.msg_eff = "사용 : HP +25"
         self.active = True
 
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 4
+        self.price = 5
 
     def active_skill(self):
-        self.target.hp = min(self.target.hp+20, self.target.max_hp)
+        self.target.hp = min(self.target.hp+25, self.target.max_hp)
+        equip_con.equipped_group.remove(self)
+        equip_con.rare_equips.append(self)
+
+#                                                                           #### banana
+class E_Mandoo(Equip):
+    def __init__(self):
+        image = mandoo_image
+        Equip.__init__(self, image)
+        self.msg_name = "만두"
+        self.msg_info = "일단 한번 잡솨봐"
+        self.msg_eff = "사용 : HP +10"
+        self.active = True
+
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 0
+
+    def active_skill(self):
+        self.target.hp = min(self.target.hp+10, self.target.max_hp)
         equip_con.equipped_group.remove(self)
         equip_con.rare_equips.append(self)
 
@@ -193,7 +212,7 @@ class E_Wax(Equip):
         image = wax_image
         Equip.__init__(self, image)
         self.msg_name = "헤어 왁스"
-        self.msg_info = "슬라임도 왁스 바른다네요"
+        self.msg_info = "던전에서도 멋을 챙기자 !"
         self.msg_eff = "공격력 +2"
 
         # self.max_row = 5
@@ -207,13 +226,13 @@ class E_Pepper(Equip):
         image = pepper_image
         Equip.__init__(self, image)
         self.msg_name = "빨간 고추"
-        self.msg_info = "슬라임이 매운맛이라면?"
-        self.msg_eff = "공격력 +3"
+        self.msg_info = "맵지만 작지 않습니다."
+        self.msg_eff = "공격력 +4"
 
         # self.max_row = 5
         self.max_col = 1
 
-        self.price = 3
+        self.price = 5
 
 #                                                                           #### heartstone
 class E_HeartStone(Equip):
@@ -222,22 +241,22 @@ class E_HeartStone(Equip):
         Equip.__init__(self, image)
         self.msg_name = "마음의 돌"
         self.msg_info = "하트스톤"
-        self.msg_eff = "최대 체력 +20"
-        self.grade = 1
+        self.msg_eff = "최대 체력 +50"
+        self.grade = 2
 
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 6
+        self.price = 13
 
 #                                                                           #### halfstone 
 class E_HalfStone(Equip):
     def __init__(self):
         image = halfstone_image
         Equip.__init__(self, image)
-        self.msg_name = "반 돌"
-        self.msg_info = "나머지 반쪽은 어디에"
-        self.msg_eff = "최대 체력 +10"
+        self.msg_name = "미움의 돌"
+        self.msg_info = "하프스톤"
+        self.msg_eff = "최대 체력 +20"
 
         self.max_row = 4
         # self.max_col = 2
@@ -250,14 +269,14 @@ class E_PoisonApple(Equip):
         image = poisonapple_image
         Equip.__init__(self, image)
         self.msg_name = "독사과"
-        self.msg_info = "먹어도 되는 걸까..?"
+        self.msg_info = "마녀의 애장품"
         self.msg_eff = "체력 +10, 최대 체력 +10"
         self.msg_eff_2 = "시간 데미지와 충돌 데미지 증가"
 
         # self.max_row = 5
         # self.max_col = 2
 
-        self.price = 6
+        self.price = 0
 
 #                                                                           #### ice
 class E_Ice(Equip):
@@ -265,7 +284,7 @@ class E_Ice(Equip):
         image = ice_images[0]
         Equip.__init__(self, image)
         self.msg_name = "얼음"
-        self.msg_info = "녹기 전에 빨리 움직이세요"
+        self.msg_info = "배탈 조심"
         self.msg_eff = "이동속도 +0.1"
         self.msg_eff_2 = "녹으면서 점점 감소"
 
@@ -275,7 +294,7 @@ class E_Ice(Equip):
         # self.max_row = 5
         # self.max_col = 2
 
-        self.price = 2
+        self.price = 4
 
     def draw(self, screen):
         if self.charge_times == 0:
@@ -296,7 +315,7 @@ class E_Battery(Equip):
         self.msg_name = "건전지"
         self.msg_info = "충전 중-!"
         self.msg_eff = "충전마다 이동속도 +0.05"
-        self.msg_eff_2 = "최대 3번"
+        self.msg_eff_2 = "최대 3번 충전"
         self.grade = 1
 
         self.floor = 0
@@ -305,7 +324,7 @@ class E_Battery(Equip):
         self.max_row = 4
         # self.max_col = 2
 
-        self.price = 7
+        self.price = 8
 
     # def draw(self, screen):
     #     if self.charge_times == 0:
@@ -325,14 +344,14 @@ class E_RollerSkate(Equip):
     def __init__(self):
         image = rollerskate_image
         Equip.__init__(self, image)
-        self.msg_name = "롤러스케이트"
-        self.msg_info = "신나게 달려보자"
+        self.msg_name = "인라인 스케이트"
+        self.msg_info = "거꾸로 해도 인라인"
         self.msg_eff = "이동속도 + 0.1"
 
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 7
+        self.price = 5
 
 #                                                                           #### boxer glove
 class E_BoxerGlove(Equip):
@@ -340,28 +359,28 @@ class E_BoxerGlove(Equip):
         image = gloves_image
         Equip.__init__(self, image)
         self.msg_name = "복싱 글러브"
-        self.msg_info = "싸울 준비 완료 !"
+        self.msg_info = "무려 18온스입니다."
         self.msg_eff = "펀치 크기 증가"
         self.grade = 2
         
         self.max_row = 3
         self.max_col = 1
 
-        self.price = 10
+        self.price = 18
 
 #                                                                           #### helmet
 class E_Helmet(Equip):
     def __init__(self):
         image = helmet_image
         Equip.__init__(self, image)
-        self.msg_name = "헬멧"
-        self.msg_info = "머리를 안전하게 !"
+        self.msg_name = "하이바"
+        self.msg_info = "모자랄게 없는 헬멧입니다."
         self.msg_eff = "적 충돌 데미지 감소"
 
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 6
+        self.price = 8
 
 #                                                                           #### turtle shell
 class E_TurtleShell(Equip):
@@ -369,7 +388,7 @@ class E_TurtleShell(Equip):
         image = turtleshell_image
         Equip.__init__(self, image)
         self.msg_name = "거북이 등껍질"
-        self.msg_info = "시간이.. 느리게.."
+        self.msg_info = "생각한 것처럼 던질수는 없습니다."
         self.msg_eff = "시간 데미지 감소"
 
         self.max_row = 4
@@ -397,7 +416,7 @@ class E_3DGlasses(Equip):
         image = sdglasses_image
         Equip.__init__(self, image)
         self.msg_name = "3D 안경"
-        self.msg_info = "2D로 보는거 보단 낫겠죠"
+        self.msg_info = "나는 3D로 본다."
         self.msg_eff = "적 투명화 감지"
 
         # self.max_row = 5
@@ -411,13 +430,14 @@ class E_Talisman(Equip):
         image = talisman_image
         Equip.__init__(self, image)
         self.msg_name = "부적"
-        self.msg_info = "강시 이마에 붙어있던 거"
+        self.msg_info = "강시 이마에 붙여주세요."
         self.msg_eff = "적 대시 금지"
+        self.grade = 1
 
         self.max_row = 4
         # self.max_col = 2
 
-        self.price = 3
+        self.price = 6
 
 #                                                                           #### ticket
 class E_Ticket(Equip):
@@ -425,14 +445,14 @@ class E_Ticket(Equip):
         image = ticket_image
         Equip.__init__(self, image)
         self.msg_name = "황금 티켓"
-        self.msg_info = "상점 우수 고객"
+        self.msg_info = "상점 VIP 고객"
         self.msg_eff = "상점 레어도 증가"
         self.grade = 1
 
         # self.max_row = 5
         self.max_col = 0
 
-        self.price = 3
+        self.price = 7
 
 #                                                                           #### straw
 class E_Straw(Equip):
@@ -447,21 +467,21 @@ class E_Straw(Equip):
         self.max_row = 3
         # self.max_col = 2
 
-        self.price = 7
+        self.price = 6
 
 #                                                                           #### machine
 class E_Machine(Equip):
     def __init__(self):
         image = machine_image
         Equip.__init__(self, image)
-        self.msg_name = "오래된 기계"
-        self.msg_info = "옛날 포션은 기계에서 만들어졌습니다.."
-        self.msg_eff = "포션 드롭률 +3%"
+        self.msg_name = "ESP-8266"
+        self.msg_info = "포션 자동화 기술의 부산물"
+        self.msg_eff = "포션 드롭률 +5%"
 
         # self.max_row = 5
         self.max_col = 1
 
-        self.price = 7
+        self.price = 5
 
 #                                                                           #### piggy bank
 class E_PiggyBank(Equip):
@@ -469,14 +489,14 @@ class E_PiggyBank(Equip):
         image = piggybank_image
         Equip.__init__(self, image)
         self.msg_name = "돼지 저금통"
-        self.msg_info = "----"
+        self.msg_info = "티끌 모아 태산"
         self.msg_eff = "레드 코인 등장"
         self.grade = 1
 
         # self.max_row = 5
         self.max_col = 1
 
-        self.price = 7
+        self.price = 9
 
 #                                                                           #### metal detector
 class E_MetalDetector(Equip):
@@ -484,13 +504,13 @@ class E_MetalDetector(Equip):
         image = metaldetector_image
         Equip.__init__(self, image)
         self.msg_name = "금속 탐지기"
-        self.msg_info = "삐비비비비빅"
-        self.msg_eff = "코인 드롭률 +3%"
+        self.msg_info = "삐비비비비비빅"
+        self.msg_eff = "코인 드롭률 +5%"
 
         self.max_row = 4
         # self.max_col = 2
 
-        self.price = 7
+        self.price = 5
 
 #                                                                           #### binoculars 
 class E_Binoculars(Equip):
@@ -498,13 +518,14 @@ class E_Binoculars(Equip):
         image = binoculars_image
         Equip.__init__(self, image)
         self.msg_name = "쌍안경"
-        self.msg_info = "멀리 있는 아이템까지"
+        self.msg_info = "보일락 말락"
         self.msg_eff = "아이템 드롭률 +3%"
+        self.grade = 1
 
         # self.max_row = 5
         self.max_col = 0
 
-        self.price = 6
+        self.price = 7
 
 #                                                                           #### traffic light
 class E_TrafficLight(Equip):
@@ -512,15 +533,15 @@ class E_TrafficLight(Equip):
         image = trafficlight_image
         Equip.__init__(self, image)
         self.msg_name = "신호등"
-        self.msg_info = "빨간 불에는 멈춰"
-        self.msg_eff = "스킬 : 3초간 적 정지"
+        self.msg_info = "붉은색 푸른색 그 사이 3초 그 짧은 시간"
+        self.msg_eff = "스킬 : 3초간 모두 정지"
         self.grade = 1
         self.active = True
 
         self.max_row = 3
         # self.max_col = 2
 
-        self.price = 4
+        self.price = 10
 
     def active_skill(self):
         if self.cool_time == False:
@@ -533,16 +554,16 @@ class E_Thunder(Equip):
     def __init__(self):
         image = thunder_image
         Equip.__init__(self, image)
-        self.msg_name = "천둥번개"
+        self.msg_name = "벼락"
         self.msg_info = "마른 하늘에 날벼락"
-        self.msg_eff = "스킬 : 전체 적에게 5 데미지"
+        self.msg_eff = "스킬 : 전체 적에게 10 데미지"
         self.grade = 1
         self.active = True
 
         self.max_row = 3
         self.max_col = 1
 
-        self.price = 7
+        self.price = 10
 
     def active_skill(self):
         if self.cool_time == False:
@@ -551,15 +572,15 @@ class E_Thunder(Equip):
             self.cool_time = True
             
             for monster in self.target:
-                monster.hp -= 5
+                monster.hp -= 10
 
 #                                                                           #### dice
 class E_Dice(Equip):
     def __init__(self):
         image = dice_image
         Equip.__init__(self, image)
-        self.msg_name = "행운의 주사위"
-        self.msg_info = "운을 시험해보세요 !"
+        self.msg_name = "사기 주사위"
+        self.msg_info = "♚♚주☆사☆위♚♚굴릴시$$HP☜☜100%증정※"
         self.msg_eff = "스킬 : 50퍼센트 확률로"
         self.msg_eff_2 = "HP +10 또는 -10"
         self.grade = 1
@@ -568,7 +589,7 @@ class E_Dice(Equip):
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 3
+        self.price = 5
 
     def active_skill(self):
         if self.cool_time == False:
@@ -587,10 +608,10 @@ class E_MagicCloak(Equip):
     def __init__(self):
         image = magiccloak_image
         Equip.__init__(self, image)
-        self.msg_name = "마법 망토"
-        self.msg_info = "마법학교에서 가져왔다네요"
-        self.msg_eff = "스킬 : 일정시간 무적"
-        self.grade = 1
+        self.msg_name = "투명 망토"
+        self.msg_info = "마법사의 비밀 컬렉션 2호"
+        self.msg_eff = "스킬 : 1초간 무적"
+        self.grade = 2
         self.active = True
 
         self.save = [0, 0]
@@ -598,7 +619,7 @@ class E_MagicCloak(Equip):
         self.max_row = 4
         self.max_col = 1
 
-        self.price = 3
+        self.price = 10
 
     def active_skill(self):
         if self.cool_time == False:
@@ -616,15 +637,16 @@ class E_GoldenKey(Equip):
         image = goldenkey_image
         Equip.__init__(self, image)
         self.msg_name = "황금 열쇠"
-        self.msg_info = "어딘가에는 맞겠지"
-        self.msg_eff = "사용 : 계단 열기"
-        self.grade = 2
+        self.msg_info = "어디로든 키"
+        self.msg_eff = "사용 : 다음층으로 가는"
+        self.msg_eff_2 = "계단 열기"
+        self.grade = 1
         self.active = True
 
         self.max_row = 3
         # self.max_col = 2
 
-        self.price = 4
+        self.price = 5
 
     def active_skill(self):
         if not self.target % 20 == 0 :
@@ -637,16 +659,16 @@ class E_EscapeRope(Equip):
     def __init__(self):
         image = dummy
         Equip.__init__(self, image)
-        self.msg_name = "탈출 로프"
-        self.msg_info = "지상으로 !"
+        self.msg_name = "오누이의 동앗줄"
+        self.msg_info = "떡 하나 주면 안잡아먹지 !"
         self.msg_eff = "사용 : 0층으로"
-        self.grade = 1
+        self.grade = 2
         self.active = True
 
-        # self.max_row = 4
-        # self.max_col = 1
+        self.max_row = 4
+        self.max_col = 0
 
-        self.price = 4
+        self.price = 10
 
     def active_skill(self):
         
@@ -677,19 +699,19 @@ class EquipController():
         self.can_buy = [False, False, False]
         
         self.normal_equips = [
-            e_crescentmoon, e_wax, e_pepper, e_halfstone, e_poisonapple, e_ice, e_rollerskate, e_helmet, e_turtleshell,
-            e_pizza, e_3dglasses, e_talisman, e_machine, e_metaldetector, e_binoculars
+            e_crescentmoon, e_banana, e_mandoo, e_wax, e_pepper, e_halfstone, e_poisonapple, e_ice, e_rollerskate, e_helmet, e_turtleshell,
+            e_pizza, e_3dglasses, e_machine, e_metaldetector,
         ]
 
         self.perc_rare = 10
         self.rare_equips = [
-            e_banana, e_heartstone, e_battery, e_ticket, e_straw, e_piggybank,
-            e_trafficlight, e_thunder, e_dice, e_magiccloak, e_escaperope
+            e_battery, e_talisman, e_ticket, e_straw, e_piggybank, e_binoculars,
+            e_trafficlight, e_thunder, e_dice, e_goldenkey,
         ]
 
         self.perc_unique = 2
         self.unique_equips = [
-            e_mushroom, e_boxerglove, e_goldenkey
+            e_mushroom, e_heartstone, e_boxerglove, e_magiccloak, e_escaperope,
         ]
 
     def equip_grade(self, equip):
@@ -734,7 +756,7 @@ class SkillController():
             if now_time - self.active_trafficlight[1] > 3000:
                 self.active_trafficlight[0] = False
                 e_trafficlight.image.set_alpha(60)
-            if now_time - self.active_trafficlight[1] > 30000:
+            if now_time - self.active_trafficlight[1] > 100000:
                 e_trafficlight.cool_time = False
                 e_trafficlight.image.set_alpha(255)
 
@@ -743,7 +765,7 @@ class SkillController():
             if now_time - self.active_dice[1] > 100:
                 self.active_dice[0] = False
                 e_dice.image.set_alpha(60)
-            if now_time - self.active_dice[1] > 1000:
+            if now_time - self.active_dice[1] > 5000:
                 e_dice.cool_time = False
                 e_dice.image.set_alpha(255)
 
@@ -752,14 +774,14 @@ class SkillController():
             if now_time - self.active_thunder[1] > 100:
                 self.active_thunder[0] = False
                 e_thunder.image.set_alpha(60)
-            if now_time - self.active_thunder[1] > 600:
+            if now_time - self.active_thunder[1] > 50000:
                 e_thunder.cool_time = False
                 e_thunder.image.set_alpha(255)
 
         # magiccloak - player no damage
         if self.active_magiccloak[0] or e_magiccloak.cool_time:
             
-            if now_time - self.active_magiccloak[1] > 3000:
+            if now_time - self.active_magiccloak[1] > 1000:
                 if self.active_magiccloak[0]:
                     e_magiccloak.target.dp = e_magiccloak.save
                     
@@ -767,7 +789,7 @@ class SkillController():
                 e_magiccloak.image.set_alpha(60)
                 e_magiccloak.target.alpha(255)
                 
-            if now_time - self.active_magiccloak[1] > 30000:
+            if now_time - self.active_magiccloak[1] > 10000:
                 e_magiccloak.cool_time = False
                 e_magiccloak.image.set_alpha(255)
                 
@@ -790,6 +812,7 @@ inven_position = [
 e_mushroom = E_Mushroom()
 e_crescentmoon = E_CrescentMoon()
 e_banana = E_Banana()
+e_mandoo = E_Mandoo()
 e_wax = E_Wax()
 e_pepper = E_Pepper()
 e_heartstone = E_HeartStone()
