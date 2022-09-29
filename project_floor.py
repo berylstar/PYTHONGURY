@@ -53,7 +53,8 @@ def random_monster(floor):
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
         spawn_monster(pos, Mon_frog())
-        spawn_monster(pos, Mon_werewolf())
+        spawn_monster(pos, Mon_golem())
+        spawn_monster(pos, Mon_scarecrow())
     elif 7 <= floor < 12:
         spawn_monster(pos, Mon_bat())
     elif 12 <= floor < 15:

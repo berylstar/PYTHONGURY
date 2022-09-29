@@ -79,7 +79,7 @@ class Mon_spider(Character):
         self.hp = 12
         self.ap = 1
         self.speed = 0.15
-        self.bullet = spider_web_image
+        self.bullet = spider_atk_image
         self.b_speed = 8
         self.b_damage = 0
         self.b_type = "web"
@@ -157,7 +157,7 @@ class Mon_ghost(Character):
 
 class Mon_scarecrow(Character):
     def __init__(self):
-        image_group = None
+        image_group = mon_scarecrow_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["shooter"]
@@ -165,12 +165,25 @@ class Mon_scarecrow(Character):
         self.hp = 18
         self.ap = 1.5
         self.speed = 0.2
-        self.bullet = ember_attack_image
-        self.b_speed = 10
+        self.bullet = crow_atk_image
+        self.b_speed = 15
         self.b_damage = 10
+        self.b_type = "crow"
 
 
 # 41 ~ 60 : lava land
+class Mon_golem(Character):
+    def __init__(self):
+        image_group = mon_golem_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = golem_die
+        self.type = []
+
+        self.hp = 50
+        self.ap = 2.5
+        self.speed = 0.1
+
 class Mon_ember(Character):
     def __init__(self):
         image_group = mon_ember_images
@@ -178,13 +191,41 @@ class Mon_ember(Character):
         Character.__init__(self, image_group, position)
         self.type = ["shooter"]
 
-        self.hp = 10
-        self.ap = 2
-        self.speed = 0.05
-        self.bullet = ember_attack_image
-        self.b_speed = 10
+        self.hp = 25
+        self.ap = 1.7
+        self.speed = 0.2
+        self.bullet = ember_atk_image
+        self.b_speed = 15
         self.b_damage = 10
         self.b_type = "ember"
+
+class Mon_firesnake(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["shooter"]
+
+        self.hp = 32
+        self.ap = 2
+        self.speed = 0
+        self.bullet = ember_atk_image
+        self.b_speed = 15
+        self.b_damage = 10
+        self.b_type = "ember"
+
+class Mon_firebat(Character):
+    def __init__(self):
+        image_group = mon_firebat_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["runner"]
+
+        self.hp = 18
+        self.ap = 1.3
+        self.speed = 0.2
+        self.is_dashed = False
+        self.dashes = 0
 
 
 # 61 ~ 80 : magical library

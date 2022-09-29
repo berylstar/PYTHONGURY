@@ -90,6 +90,7 @@ def scene_esc(doing):
                     sound_con.play_sound(sound_pick)
                     if index == 0:
                         doing = False
+                        pygame.display.update()
                     elif index == 1:
                         pygame.display.toggle_fullscreen()
                         pygame.display.update()
@@ -103,6 +104,7 @@ def scene_esc(doing):
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     doing = False
+                    pygame.display.update()
 
         for i in range(len(color)):
             color[i] = GRAY
@@ -288,7 +290,14 @@ def scene_story(doing):
 def scene_tutorial(doing):
 
     index = 0
-    fin = len(tuto_images)-1
+    msg = [
+        "어쩐일로 슬라임이 이곳까지 왔는지 모르겠군.",
+        "이 앞은 지성이 없는 몬스터들로 가득한 위험한 곳 이라네.",
+        "내가 직접적으로 도움을 줄 수 없으니 , 몇가지 팁을 알려주도록 하겠네.", 
+        "우선 , (전후좌우 화살표 아이콘 )으로 움직일 수 있다네.", 
+        "( spacebar 아이콘 ) 으로 적을 공격할 수 있지."
+    ]
+    fin = len(msg)-1
 
     corpus_rect = pygame.Rect((350,450), (580,200))
 
@@ -307,13 +316,8 @@ def scene_tutorial(doing):
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
-        tuto_rect = tuto_images[index].get_rect(center=(640, 360))
-        msg = "NEXT"
-        if index >= fin:
-            msg = "PRESS 'SPACE BAR' TO BACK"
-
-        screen.blit(tuto_images[index], tuto_rect)                                          # TUTORIAL
-        screen_message(msg, WHITE, (640,640), game_font_m)
+        screen.fill(BLACK)
+        screen_message(msg[index], WHITE, (640,500), game_font_kor)
         pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
