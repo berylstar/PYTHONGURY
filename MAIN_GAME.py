@@ -243,7 +243,6 @@ def display_inven_ui():
         pygame.draw.line(screen, D_GRAY, (950 + 60*i, 240), (950 + 60*i, 600))
     for i in range(MAX_ROW+2):
         pygame.draw.line(screen, D_GRAY, (950, 240 + 60*i), (1130, 240 + 60*i))
-    # pygame.draw.rect(screen, D_GRAY, ((950, 70), (180, 160)), 1)
 
     for equip in equip_con.equipped_group:
         equip.draw(screen)                                                                  #EQUIP
@@ -271,33 +270,43 @@ def scene_story(doing):
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
-
-        story_rect = story_images[index].get_rect(center=(screen_width//2, screen_height//2))
-
         screen.fill(BLACK)
-        # screen.blit(story_images[index], story_rect)                                        #STORY IMAGE
-        # 후에 위치 조정
-        if -1 < index < 3 : #0
-            screen.blit(story_images[0], (340,160))
-            if index > 0: #1
-                screen.blit(story_images[1], (640,160))
-                if index > 1: #2
-                    screen.blit(story_images[2], (640,260))
-        elif index > 2: #3
-            screen.blit(story_images[3], (340,160))
+
+        if -1 < index < 3 :
+            screen.blit(story_images[0], (200,100))
+            if index > 0:
+                screen.blit(story_images[1], (680,50))
+                if index > 1:
+                    screen.blit(story_images[2], (680,300))
+        elif index == 3:
+            screen.blit(story_images[3], (240,100))
+        elif 3 < index < 7:
+            screen.blit(story_images[4], (200,100))
+            if index > 4:
+                screen.blit(story_images[5], (680,50))
+                if index > 5:
+                    screen.blit(story_images[6], (680,300))
+        elif index == 7:
+            screen.blit(story_images[7], (240,100))
+        elif 7 < index < 11:
+            screen.blit(story_images[8], (200,100))
+            if index > 8:
+                screen.blit(story_images[9], (680,50))
+                if index > 9:
+                    screen.blit(story_images[10], (680,300))
+        elif index == 11:
+            screen.blit(story_images[11], (240,100))
+        elif 11 < index:
+            screen.blit(story_images[12], (100,50))
+            if 12 < index:
+                screen.blit(story_images[13], (400,100))
+        
         pygame.display.update()
 
 def scene_tutorial(doing):
 
     index = 0
-    msg = [
-        "어쩐일로 슬라임이 이곳까지 왔는지 모르겠군.",
-        "이 앞은 지성이 없는 몬스터들로 가득한 위험한 곳 이라네.",
-        "내가 직접적으로 도움을 줄 수 없으니 , 몇가지 팁을 알려주도록 하겠네.", 
-        "우선 , (전후좌우 화살표 아이콘 )으로 움직일 수 있다네.", 
-        "( spacebar 아이콘 ) 으로 적을 공격할 수 있지."
-    ]
-    fin = len(msg)-1
+    fin = len(tuto_images)-1
 
     corpus_rect = pygame.Rect((350,450), (580,200))
 
@@ -312,12 +321,12 @@ def scene_tutorial(doing):
                         doing = False
                     else:
                         index += 1
-                if event.key == pygame.K_ESCAPE:
-                    sound_con.play_sound(sound_pick)
-                    scene_esc(True)
+                # if event.key == pygame.K_ESCAPE:
+                #     sound_con.play_sound(sound_pick)
+                #     scene_esc(True)
 
-        screen.fill(BLACK)
-        screen_message(msg[index], WHITE, (640,500), game_font_kor)
+        tuto_rect = tuto_images[index].get_rect(center=(640, 360))
+        screen.blit(tuto_images[index], tuto_rect)                                          # TUTORIAL
         pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
@@ -1257,8 +1266,8 @@ class Player(Character):
         Character.__init__(self, image_group, position)
 
         self.life = 3
-        self.hp = 100
-        self.max_hp = 100
+        self.hp = 10000
+        self.max_hp = 10000
         self.coin = 100
         self.ap = 10
         self.speed = 0.3
@@ -1373,7 +1382,7 @@ GREEN = (0,255,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 1
+saved_floor = 19
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
 info_rect = pygame.Rect(((140,60), (200, 600)))
@@ -1495,6 +1504,7 @@ while running:
             if pygame.sprite.collide_mask(monster, punch):
                 punch_group.remove(punch)
                 monster.hp -= player.ap
+                sound_con.play_sound(sound_monster_damage)
 
     for bullet in shooting_group:
         bullet.shoot()

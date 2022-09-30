@@ -141,7 +141,7 @@ stair_images = [
 web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 
 water_image = pygame.image.load(os.path.join(file_path, "design\\field\\water_0.png"))
-water_image.set_alpha(170)
+water_image.set_alpha(140)
 
 torch_image = pygame.image.load(os.path.join(file_path, "design\\field\\torch.png"))
 light_images = [
@@ -190,7 +190,7 @@ metaldetector_image = pygame.image.load(os.path.join(file_path, "design\\equips\
 binoculars_image = pygame.image.load(os.path.join(file_path, "design\\equips\\binoculars.png"))
 trafficlight_image = pygame.image.load(os.path.join(file_path, "design\\equips\\trafficlight.png"))
 thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thunder.png"))
-dice_image = pygame.image.load(os.path.join(file_path, "images\\dice.png"))
+dice_image = pygame.image.load(os.path.join(file_path, "design\\dice.png"))
 magiccloak_image = pygame.image.load(os.path.join(file_path, "design\\equips\\magiccloak.png"))
 goldenkey_image = pygame.image.load(os.path.join(file_path, "design\\equips\\goldenkey.png"))
 
@@ -203,10 +203,20 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0F.p
 title_image = pygame.image.load(os.path.join(file_path, "images\\title.png"))
 cover_image = pygame.image.load(os.path.join(file_path, "images\\cover.png"))
 story_images = [
-    pygame.image.load(os.path.join(file_path, "images\\story\\story_1.png")),
-    pygame.image.load(os.path.join(file_path, "images\\story\\story_2.png")),
-    pygame.image.load(os.path.join(file_path, "images\\story\\story_3.png")),
-    pygame.image.load(os.path.join(file_path, "images\\story\\story_4.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\00.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\01.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\02.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\03.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\04.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\05.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\06.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\07.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\08.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\09.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\10.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\11.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\12.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\13.png")),
 ]
 
 tuto_images = [

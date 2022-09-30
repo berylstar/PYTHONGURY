@@ -68,7 +68,7 @@ class Character(pygame.sprite.Sprite):
 # "normal" / "shooter" / "alpha" / "runner" / "toward" / "boss"
                                                         #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경
 
-# 1 ~ 20 : lower part of tower
+                                        # 1 ~ 20 : lower part of tower
 class Mon_spider(Character):
     def __init__(self):
         image_group = mon_spider_images
@@ -101,7 +101,7 @@ class Mon_bat(Character):
         image_group = mon_bat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["runner"]
+        self.type = ["runner", "toward"]
 
         self.hp = 8
         self.ap = 0.5
@@ -120,7 +120,7 @@ class Mon_skel(Character):
         self.ap = 1
         self.speed = 0.12
 
-# 21 ~ 40 : graveyard
+                                        # 21 ~ 40 : graveyard
 class Mon_zombie(Character):
     def __init__(self):
         image_group = None
@@ -171,7 +171,7 @@ class Mon_scarecrow(Character):
         self.b_type = "crow"
 
 
-# 41 ~ 60 : lava land
+                                        # 41 ~ 60 : lava land
 class Mon_golem(Character):
     def __init__(self):
         image_group = mon_golem_images
@@ -219,7 +219,7 @@ class Mon_firebat(Character):
         image_group = mon_firebat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["runner"]
+        self.type = ["runner", "toward"]
 
         self.hp = 18
         self.ap = 1.3
@@ -228,10 +228,60 @@ class Mon_firebat(Character):
         self.dashes = 0
 
 
-# 61 ~ 80 : magical library
+                                        # 61 ~ 80 : magical library
+class Mon_witch(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["runner"]
 
+        self.hp = 21
+        self.ap = 1.5
+        self.speed = 0.22
+        self.is_dashed = False
+        self.dashes = 0
 
-# 81 ~ 100 : king castle
+class Mon_book(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = None
+        self.type = ["toward"]
+
+        self.hp = 18
+        self.ap = 1.3
+        self.speed = 0.2
+
+class Mon_magician(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["shooter"]
+
+        self.hp = 21
+        self.ap = 0.7
+        self.speed = 0.1
+        self.bullet = None
+        self.b_speed = 10
+        self.b_damage = 15
+        self.b_type = "magic"
+
+class Mon_candle(Character):
+    def __init__(self):
+        image_group = None
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = None
+        self.type = []
+
+        self.hp = 60
+        self.ap = 2
+        self.speed = 0.3
+
+                                        # 81 ~ 100 : king castle
 
 
 # BOSS
@@ -240,7 +290,7 @@ class Mon_boss(Character):
         image_group = monster_boss_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["boss", "boss_spawner"]
+        self.type = ["boss", "boss_spawner", "runner"]
 
         self.hp = 100
         self.ap = 2
@@ -249,6 +299,8 @@ class Mon_boss(Character):
         # self.b_speed = 10
         # self.b_damage = 10
         # self.b_type = "NONE"
+        self.is_dashed = False
+        self.dashes = 0
 
 class Mon_mini(Character):
     def __init__(self):
