@@ -64,6 +64,17 @@ class Character(pygame.sprite.Sprite):
         for img in self.image_group:
             img.set_alpha(val)
 
+    def damaged(self, screen):
+        if not self.is_die:
+            surface = self.image.copy()
+            w, h = surface.get_size()
+            r, g, b, _ = (120,0,0,0)
+            for x in range(w):
+                for y in range(h):
+                    a = surface.get_at((x, y))[3]
+                    surface.set_at((x, y), pygame.Color(r, g, b, a))
+            screen.blit(surface, self.rect)
+
 ##### MONSTER CLASS
 # "normal" / "shooter" / "alpha" / "runner" / "toward" / "boss"
                                                         #후에 클래스에 이미지그룹, 죽음이미지그룹 넣는 클래스로 변경
@@ -119,6 +130,39 @@ class Mon_skel(Character):
         self.hp = 21
         self.ap = 1
         self.speed = 0.12
+
+# BOSS
+class Boss_spider(Character):
+    def __init__(self):
+        image_group = mon_spider_images
+        list = []
+        for img in image_group:
+            img = pygame.transform.rotozoom(img, 0, 2)
+            list.append(img)
+        position = (0,0)
+        Character.__init__(self, list, position)
+        self.type = ["boss", "boss_spider"]
+
+        self.hp = 120
+        self.ap = 2
+        self.speed = 0.1
+
+class Boss_bat(Character):
+    def __init__(self):
+        image_group = mon_bat_images
+        list = []
+        for img in image_group:
+            img = pygame.transform.rotozoom(img, 0, 2)
+            list.append(img)
+        position = (0,0)
+        Character.__init__(self, list, position)
+        self.type = ["boss", "boss_blind", "runner"]
+
+        self.hp = 80
+        self.ap = 1
+        self.speed = 0.2
+        self.is_dashed = False
+        self.dashes = 0
 
                                         # 21 ~ 40 : graveyard
 class Mon_zombie(Character):

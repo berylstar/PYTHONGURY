@@ -235,6 +235,8 @@ def display_info_ui():
     life_image_rect = player_icon.get_rect(center=(220, 390))
     screen.blit(player_icon, life_image_rect)
     screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)                  #LIFE
+    
+    screen.blit(block_1, (140,60))
 
 def display_inven_ui():
     pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))     # 인벤 이미지로 대체
@@ -743,7 +745,10 @@ def next_floor(pos):
     item_group.empty()
     shooting_group.empty()
 
-    stair.image = stair_images[1]
+    if (floor % 20 == 19):
+        stair.image = stair_images[0]
+    else:
+        stair.image = stair_images[1]
 
     monster_setting(pos, floor)
     random_field_setting()
@@ -1254,11 +1259,14 @@ def field_effect(field):
             field_group.empty()
             next_floor(player.position)
 
+        # 불 바닥
+
 def bullet_effect(bullet):
     if bullet.type == "web":
         player.stop()
     else:
         pass
+
 ##############################################################################################
 ##### PLAYER CLASS
 class Player(Character):
@@ -1266,9 +1274,9 @@ class Player(Character):
         Character.__init__(self, image_group, position)
 
         self.life = 3
-        self.hp = 10000
-        self.max_hp = 10000
-        self.coin = 100
+        self.hp = 100
+        self.max_hp = 100
+        self.coin = 10
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
@@ -1382,7 +1390,7 @@ GREEN = (0,255,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 19
+saved_floor = 1
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
 info_rect = pygame.Rect(((140,60), (200, 600)))
@@ -1505,6 +1513,7 @@ while running:
                 punch_group.remove(punch)
                 monster.hp -= player.ap
                 sound_con.play_sound(sound_monster_damage)
+                monster.damaged(screen)
 
     for bullet in shooting_group:
         bullet.shoot()

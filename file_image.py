@@ -190,9 +190,10 @@ metaldetector_image = pygame.image.load(os.path.join(file_path, "design\\equips\
 binoculars_image = pygame.image.load(os.path.join(file_path, "design\\equips\\binoculars.png"))
 trafficlight_image = pygame.image.load(os.path.join(file_path, "design\\equips\\trafficlight.png"))
 thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thunder.png"))
-dice_image = pygame.image.load(os.path.join(file_path, "design\\dice.png"))
+dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png"))
 magiccloak_image = pygame.image.load(os.path.join(file_path, "design\\equips\\magiccloak.png"))
 goldenkey_image = pygame.image.load(os.path.join(file_path, "design\\equips\\goldenkey.png"))
+rope_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rope.png"))
 
 ##############################################################################################
 ##### BACKGROUND
@@ -260,3 +261,5 @@ tuto_images = [
 inven_img = pygame.image.load(os.path.join(file_path, "images\\inven.png"))
 dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
 big_coffin = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\npc\\coffin_1.png")), 0, 5)
+
+block_1 = pygame.image.load(os.path.join(file_path, "design\\block_1.png"))

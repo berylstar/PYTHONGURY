@@ -50,21 +50,36 @@ def random_monster(floor):
     else:
         return None
 
+def random_boss(floor):
+    randprob = random.randrange(1,5)
+    if floor == 20:
+        if randprob == 1:
+            return Boss_spider()
+        elif randprob == 2:
+            return Boss_bat()
+        elif randprob == 3:
+            return Mon_boss()
+        elif randprob == 4:
+            return Mon_boss()
+    else:
+        return Mon_boss()
+
 def floor_monster_setting(pos, floor):
     if 1 <= floor < 7:
         spawn_monster(pos, Mon_frog())
-        spawn_monster(pos, Mon_golem())
-        spawn_monster(pos, Mon_scarecrow())
     elif 7 <= floor < 12:
         spawn_monster(pos, Mon_bat())
     elif 12 <= floor < 15:
         spawn_monster(pos, Mon_spider())
     elif 15 <= floor < 20:
         spawn_monster(pos, Mon_bat())
+    elif floor == 20:
+        spawn_monster(pos, random_boss(floor))
 
-
-    if floor == 20:
-        spawn_monster(pos, Mon_boss())
+    elif 21 <= floor < 27:
+        spawn_monster(pos, Mon_golem())
+    else:
+        spawn_monster(pos, Mon_werewolf())
 
 ##############################################################################################
 

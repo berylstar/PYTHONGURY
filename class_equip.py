@@ -657,7 +657,7 @@ class E_GoldenKey(Equip):
 #                                                                           #### rope
 class E_EscapeRope(Equip):
     def __init__(self):
-        image = dummy
+        image = rope_image
         Equip.__init__(self, image)
         self.msg_name = "오누이의 동앗줄"
         self.msg_info = "떡 하나 주면 안잡아먹지 !"
