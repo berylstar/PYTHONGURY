@@ -82,9 +82,9 @@ class Equip(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
         
         if self.is_active_c:
-            screen.blit(skill_c_image, self.rect)
+            screen.blit(skill_c_image, (self.rect[0]+15, self.rect[1]+15))
         elif self.is_active_v:
-            screen.blit(skill_v_image, self.rect)
+            screen.blit(skill_v_image, (self.rect[0]+15, self.rect[1]+15))
 
     def inven_move(self, event):
         if event.type == pygame.KEYDOWN:

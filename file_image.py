@@ -26,6 +26,7 @@ mon_skel_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\skel_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\skel_1.png")),
     ]
+skel_atk_images = pygame.image.load(os.path.join(file_path, "design\\bone.png"))
 skel_die = []
 
 ##### SPIDER
@@ -34,7 +35,7 @@ mon_spider_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\spider_1.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\spider_2.png")),
     ]
-spider_atk_image = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\field\\web.png")), 0, 1)
+spider_atk_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
 
 ##### BAT
 mon_bat_images = [
@@ -88,7 +89,7 @@ mon_scarecrow_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_1.png")),
 ]
-crow_atk_image = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "images\\crow.png")), 0, 0.5)
+crow_atk_image = pygame.image.load(os.path.join(file_path, "images\\crow.png"))
 scarecrow_die = []
 
 ##### GOLEM
@@ -155,7 +156,6 @@ portal_image = pygame.image.load(os.path.join(file_path, "images\\portal.png"))
 ##### ITEM
 potion_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_potion.png"))
 coin_image = pygame.image.load(os.path.join(file_path, "design\\item\\coin.png"))
-# coin_image = pygame.transform.rotozoom(coin_image, 0, 0.7)
 redcoin_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_coin.png"))
 box_image = pygame.image.load(os.path.join(file_path, "design\\item\\box.png"))
 
@@ -201,7 +201,7 @@ background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0F.p
 
 ##############################################################################################
 # ETC
-title_image = pygame.image.load(os.path.join(file_path, "images\\title.png"))
+title_image = pygame.image.load(os.path.join(file_path, "design\\title.png"))
 cover_image = pygame.image.load(os.path.join(file_path, "images\\cover.png"))
 story_images = [
     pygame.image.load(os.path.join(file_path, "design\\story\\00.png")),
@@ -224,7 +224,7 @@ tuto_images = [
 
 ]
 
-# shop_image = pygame.image.load(os.path.join(file_path, "images\\shop.png"))
+inven_image = pygame.image.load(os.path.join(file_path, "design\\etc\\inven.png"))
 
 sold_out_image = pygame.image.load(os.path.join(file_path, "design\\etc\\sold_out.png"))
 cursor_images = [
@@ -232,9 +232,9 @@ cursor_images = [
     pygame.image.load(os.path.join(file_path, "design\\etc\\cursor_is_picking.png"))
 ]
 skill_c_image = pygame.image.load(os.path.join(file_path, "design\\etc\\skill_c.png"))
-skill_c_image = pygame.transform.rotozoom(skill_c_image, 0, 0.5)
+# skill_c_image = pygame.transform.rotozoom(skill_c_image, 0, 0.5)
 skill_v_image = pygame.image.load(os.path.join(file_path, "design\\etc\\skill_v.png"))
-skill_v_image = pygame.transform.rotozoom(skill_v_image, 0, 0.5)
+# skill_v_image = pygame.transform.rotozoom(skill_v_image, 0, 0.5)
 
 ##############################################################################################
 # 테스트 용
@@ -260,6 +260,5 @@ tuto_images = [
 
 inven_img = pygame.image.load(os.path.join(file_path, "images\\inven.png"))
 dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
-big_coffin = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\npc\\coffin_1.png")), 0, 5)
 
 block_1 = pygame.image.load(os.path.join(file_path, "design\\block_1.png"))

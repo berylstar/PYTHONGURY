@@ -210,6 +210,9 @@ def scene_exit(doing):
                         pygame.quit()
                     elif index == 1:
                         doing = False
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    doing = False
 
         for i in range(len(color)):
             color[i] = GRAY
@@ -236,21 +239,23 @@ def display_info_ui():
     screen.blit(player_icon, life_image_rect)
     screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)                  #LIFE
     
-    screen.blit(block_1, (140,60))
+    # screen.blit(block_1, (140,60))
 
 def display_inven_ui():
     pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))     # 인벤 이미지로 대체
-    pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1) 
-    for i in range(MAX_COL+2):
-        pygame.draw.line(screen, D_GRAY, (950 + 60*i, 240), (950 + 60*i, 600))
-    for i in range(MAX_ROW+2):
-        pygame.draw.line(screen, D_GRAY, (950, 240 + 60*i), (1130, 240 + 60*i))
+    screen.blit(inven_image, (940,60))
+    # pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1) 
+    # for i in range(MAX_COL+2):
+    #     pygame.draw.line(screen, GREEN, (950 + 60*i, 240), (950 + 60*i, 600))
+    # for i in range(MAX_ROW+2):
+    #     pygame.draw.line(screen, GREEN, (950, 240 + 60*i), (1130, 240 + 60*i))
+    
 
     for equip in equip_con.equipped_group:
         equip.draw(screen)                                                                  #EQUIP
 
     if is_inven_overlapped(equip_con.equipped_group):
-        screen_message("장비 확인 !", RED, (1040,150), game_font_s)
+        screen_message("장비 확인 !", RED, (1040,220), game_font_s)
 
 def scene_story(doing):
 
@@ -272,6 +277,7 @@ def scene_story(doing):
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
+
         screen.fill(BLACK)
 
         if -1 < index < 3 :
@@ -427,7 +433,7 @@ def scene_shop(doing):
                     else:
                         equip_effect()
 
-        screen.blit(test_image, (340,60))      # 상점 이미지로 대체 - big_coffin
+        screen.blit(test_image, (340,60))      # 상점 이미지로 대체
         display_info_ui()
         display_inven_ui()
 
@@ -474,7 +480,7 @@ def shop_showcase(index, equip):           # 상점 가판대 이미지로 대�
         screen.blit(sold_out_image, case_rect)
 
 def scene_inventory(doing):
-    # 이펙트 소리 필요
+    sound_con.play_sound(sound_inven_open)
     player.stop()
 
     monster_con.dontmove = True
@@ -494,14 +500,13 @@ def scene_inventory(doing):
                     picked_equip.inven_move(event)
 
                 if event.key == pygame.K_i or event.key == pygame.K_ESCAPE:
-                    #이펙트 소리 필요
                     if not is_inven_overlapped(equip_con.equipped_group):
+                        sound_con.play_sound(sound_inven_close)
                         equip_effect()
                         doing = False
 
                 if event.key == pygame.K_r:
                     if picked_equip:
-                        #이펙트 소리 필요
                         remove_from_equipped_group(picked_equip)
                         cursor.clicking = False
                         cursor.image = cursor_images[0]
@@ -535,13 +540,15 @@ def scene_inventory(doing):
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
 
-        screen.blit(inven_img, (340,60))
+        # screen.blit(inven_img, (340,60))
         display_inven_ui()
 
         f = 300
 
+        pygame.draw.rect(screen, BLACK, ((490,280), (300,300)))
+        pygame.draw.rect(screen, WHITE, ((490,280), (300,300)), 1)
         screen_message(f"AP : {player.ap}", WHITE, (640,f), game_font_s)
-        screen_message(f"DP : {player.dp}", WHITE, (640,f+25), game_font_s)
+        screen_message("DP : {0:.2f}".format(player.dp), WHITE, (640,f+25), game_font_s)
         screen_message("SPEED : {0:.2f}".format(player.speed), WHITE, (640,f+50), game_font_s)
         screen_message("TIME DAMAGE : {0:.2f}".format(player.damaged_time), WHITE, (640,f+75), game_font_s)
 
@@ -553,6 +560,7 @@ def scene_inventory(doing):
         screen_message(f"SHOP UNIQUE : {equip_con.perc_unique}%", WHITE, (640,f+250), game_font_s)
         
         
+        pygame.draw.rect(screen, BLACK, ((440,90),(400,160)))
         pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_equip:
             screen_message(picked_equip.msg_name, WHITE, (640,120), game_font_m)
@@ -561,7 +569,7 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
 
-        screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
+        # screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
         cursor.draw(screen)
         pygame.display.update(full_rect)
@@ -640,17 +648,17 @@ def scene_treasurebox(doing, reward):
             screen_message(choice_equip[picked_num-1].msg_eff_2, YELLOW, (640,230), game_font_kor)
         
         if choice:          # 보물 상자 이미지 대체
-            screen_message("<1>", WHITE, (490, 350), game_font_m)
+            # screen_message("<1>", WHITE, (490, 350), game_font_m)
             screen.blit(choice_equip[0].image, zero_rect)
             screen_message(choice_equip[0].name, WHITE, (490,550), game_font_m)
 
-            screen_message("OR", WHITE, (640,450), game_font_m)
+            # screen_message("OR", WHITE, (640,450), game_font_m)
 
-            screen_message("<2>", WHITE, (790, 350), game_font_m)
+            # screen_message("<2>", WHITE, (790, 350), game_font_m)
             screen.blit(choice_equip[1].image, one_rect)
             screen_message(choice_equip[1].name, WHITE, (790,550), game_font_m)
 
-            screen_message("CHOICE ONE EQUIP !", WHITE, (640,640), game_font_m)
+            screen_message("CHOICE 1 or 2 !", WHITE, (640,640), game_font_m)
         else:
             screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         
@@ -890,6 +898,7 @@ def equip_effect():
     # mushroom
     # crescentmoon
     # banana
+    # mandoo
 
     if e_wax in equip_con.equipped_group:
         if not e_wax.is_effected:
@@ -1005,6 +1014,7 @@ def equip_effect():
     # rope
 
 def remove_from_equipped_group(equip):
+    sound_con.play_sound(sound_equip_remove)
 
     equip_con.equipped_group.remove(equip)
     if equip.is_effected:
@@ -1213,22 +1223,25 @@ def monster_action():
                 boss_action(monster)
 
 def boss_action(monster):
-    if "boss_spider" in monster.type:
+    if "boss_spider" in monster.type:       # field spawner
         web = Field(web_image, (0,0))
         random_away_position(monster.position, web)
         field_group.add(web)
-    elif "boss_spawner" in monster.type:
-        spawn_monster(player.position, Mon_mini())
-    elif "boss_blind" in monster.type:
+    elif "boss_frog" in monster.type:       # monster spawner
+        monster.cycle += 1
+        if monster.cycle == 3:
+            spawn_monster(player.position, Mon_frog())
+            monster.cycle = 0
+    elif "boss_bat" in monster.type:        # blind
         monster_con.is_blind = True
-    elif "boss_shooter" in monster.type:
+    elif "boss_skel" in monster.type:    # boss shooter
         shooting_group.add(Bullet(monster.bullet, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
         shooting_group.add(Bullet(monster.bullet, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
         shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
         shooting_group.add(Bullet(monster.bullet, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
 
 def monster_die(monster):
-    if "boss_blind" in monster.type:
+    if "boss" in monster.type:
         monster_con.is_blind = False
 
     if not monster.is_die:
@@ -1274,8 +1287,8 @@ class Player(Character):
         Character.__init__(self, image_group, position)
 
         self.life = 3
-        self.hp = 100
-        self.max_hp = 100
+        self.hp = 10000
+        self.max_hp = 10000
         self.coin = 10
         self.ap = 10
         self.speed = 0.3
@@ -1387,6 +1400,7 @@ GRAY = (127,127,127)
 BLACK = (0,0,0)
 RED = (127,0,0)
 GREEN = (0,255,0)
+D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0

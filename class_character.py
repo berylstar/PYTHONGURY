@@ -156,13 +156,49 @@ class Boss_bat(Character):
             list.append(img)
         position = (0,0)
         Character.__init__(self, list, position)
-        self.type = ["boss", "boss_blind", "runner"]
+        self.type = ["boss", "boss_bat", "runner"]
 
         self.hp = 80
         self.ap = 1
         self.speed = 0.2
         self.is_dashed = False
         self.dashes = 0
+
+class Boss_frog(Character):
+    def __init__(self):
+        image_group = mon_frog_images
+        list = []
+        for img in image_group:
+            img = pygame.transform.rotozoom(img, 0, 2)
+            list.append(img)
+        position = (0,0)
+        Character.__init__(self, list, position)
+        # self.die_images = frog_die
+        self.type = ["boss", "boss_frog"]
+
+        self.hp = 200
+        self.ap = 1
+        self.speed = 0.15
+        self.cycle = 2
+
+class Boss_skel(Character):
+    def __init__(self):
+        image_group = mon_skel_images
+        list = []
+        for img in image_group:
+            img = pygame.transform.rotozoom(img, 0, 2)
+            list.append(img)
+        position = (0,0)
+        Character.__init__(self, list, position)
+        self.type = ["boss", "boss_skel"]
+
+        self.hp = 160
+        self.ap = 1.5
+        self.speed = 0.2
+        self.bullet = skel_atk_images
+        self.b_speed = 15
+        self.b_damage = 10
+        self.b_type = "bone"
 
                                         # 21 ~ 40 : graveyard
 class Mon_zombie(Character):
