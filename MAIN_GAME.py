@@ -26,7 +26,7 @@ def scene_title_game():
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message("SLIME PUNCH", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
+        screen_message("slime wanna be not slime", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
         screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
         screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
         screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
@@ -559,7 +559,7 @@ def scene_inventory(doing):
         screen_message(f"SHOP RARE : {equip_con.perc_rare}%", WHITE, (640,f+225), game_font_s)
         screen_message(f"SHOP UNIQUE : {equip_con.perc_unique}%", WHITE, (640,f+250), game_font_s)
         
-        
+
         pygame.draw.rect(screen, BLACK, ((440,90),(400,160)))
         pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_equip:
@@ -1287,8 +1287,8 @@ class Player(Character):
         Character.__init__(self, image_group, position)
 
         self.life = 3
-        self.hp = 10000
-        self.max_hp = 10000
+        self.hp = 100
+        self.max_hp = 100
         self.coin = 10
         self.ap = 10
         self.speed = 0.3
