@@ -1,5 +1,7 @@
+from pickle import TRUE
 import pygame
 import random
+import sys
 
 from class_equip import *
 from class_character import *
@@ -26,10 +28,10 @@ def scene_title_game():
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message("slime wanna be not slime", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
-        screen_message(option[0], color[0], (screen_width//2,500), game_font_m)
-        screen_message(option[1], color[1], (screen_width//2,550), game_font_m)
-        screen_message(option[2], color[2], (screen_width//2,600), game_font_m)
+        screen_message("RE : SLIME", GREEN, (screen_width//2,200), game_font_l, True)    # 타이틀 로고 이미지로 대체
+        screen_message(option[0], color[0], (screen_width//2,500), game_font_m, True)
+        screen_message(option[1], color[1], (screen_width//2,550), game_font_m, True)
+        screen_message(option[2], color[2], (screen_width//2,600), game_font_m, True)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -111,11 +113,11 @@ def scene_esc(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message(option[0], color[0], (screen_width//2, 430), game_font_m)
-        screen_message(option[1], color[1], (screen_width//2, 480), game_font_m)
-        screen_message(option[2], color[2], (screen_width//2, 530), game_font_m)
-        screen_message(option[3], color[3], (screen_width//2, 580), game_font_m)
-        screen_message(option[4], color[4], (screen_width//2, 630), game_font_m)
+        screen_message(option[0], color[0], (screen_width//2, 430), game_font_m, True)
+        screen_message(option[1], color[1], (screen_width//2, 480), game_font_m, True)
+        screen_message(option[2], color[2], (screen_width//2, 530), game_font_m, True)
+        screen_message(option[3], color[3], (screen_width//2, 580), game_font_m, True)
+        screen_message(option[4], color[4], (screen_width//2, 630), game_font_m, True)
 
         pygame.display.update()
 
@@ -173,10 +175,10 @@ def scene_sound_setting(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m)
-        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m)
-        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m)
-        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m)
+        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m, True)
+        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m, True)
+        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m, True)
+        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m, True)
 
         pygame.display.update()
 
@@ -194,9 +196,7 @@ def scene_exit(doing):
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-                doing = False
-                pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     sound_con.play_sound(sound_wasd)
@@ -207,7 +207,7 @@ def scene_exit(doing):
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_pick)
                     if index == 0:
-                        pygame.quit()
+                        sys.exit()
                     elif index == 1:
                         doing = False
                 if event.key == pygame.K_ESCAPE:
@@ -277,6 +277,8 @@ def scene_story(doing):
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
+                if event.key == pygame.K_r:
+                    doing = False
 
         screen.fill(BLACK)
 
@@ -287,7 +289,7 @@ def scene_story(doing):
                 if index > 1:
                     screen.blit(story_images[2], (680,300))
         elif index == 3:
-            screen.blit(story_images[3], (240,100))
+            screen.blit(story_images[3], (240,80))
         elif 3 < index < 7:
             screen.blit(story_images[4], (200,100))
             if index > 4:
@@ -295,7 +297,7 @@ def scene_story(doing):
                 if index > 5:
                     screen.blit(story_images[6], (680,300))
         elif index == 7:
-            screen.blit(story_images[7], (240,100))
+            screen.blit(story_images[7], (240,80))
         elif 7 < index < 11:
             screen.blit(story_images[8], (200,100))
             if index > 8:
@@ -303,7 +305,7 @@ def scene_story(doing):
                 if index > 9:
                     screen.blit(story_images[10], (680,300))
         elif index == 11:
-            screen.blit(story_images[11], (240,100))
+            screen.blit(story_images[11], (240,80))
         elif 11 < index:
             screen.blit(story_images[12], (100,50))
             if 12 < index:
@@ -356,7 +358,8 @@ def scene_player_dead(doing):
         screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
         display_info_ui()
         display_inven_ui()
-        pygame.display.update(full_rect)
+        # pygame.display.update(full_rect)
+        pygame.display.update()
 
 def scene_game_over(doing):
     global ready
@@ -433,17 +436,23 @@ def scene_shop(doing):
                     else:
                         equip_effect()
 
-        screen.blit(test_image, (340,60))      # 상점 이미지로 대체
+        screen.blit(shop_image, (340,60))
         display_info_ui()
         display_inven_ui()
 
-        pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
         if picked_num:
             equip = equip_con.for_sale[picked_num-1]
-            screen_message(equip.msg_name, WHITE, (640,120), game_font_m)
-            screen_message(equip.msg_info, WHITE, (640,160), game_font_kor)
-            screen_message(equip.msg_eff, YELLOW, (640,210), game_font_kor)
-            screen_message(equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
+            screen_message(equip.msg_name, WHITE, (540,100), game_font_m)
+            screen_message(equip.msg_info, WHITE, (540,150), game_font_s)
+            screen_message(equip.msg_eff, YELLOW, (540,200), game_font_s)
+            screen_message(equip.msg_eff_2, YELLOW, (540,230), game_font_s)
+            screen_message(equip_con.equip_grade(equip)[0], equip_con.equip_grade(equip)[1], (820,160), game_font_s)
+            coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
+            coin_rect = coin_image_r.get_rect(center=(800, 200))
+            screen.blit(coin_image_r, coin_rect)
+            screen_message(f"x {equip.price}", WHITE, (850,200), game_font_m)
+        else:
+            screen_message("1 or 2 or 3", WHITE, (540,150), game_font_m)
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -452,31 +461,12 @@ def scene_shop(doing):
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
-def shop_showcase(index, equip):           # 상점 가판대 이미지로 대체
-    sero = 290
-    pygame.draw.rect(screen, WHITE, ((370 + 180*index,sero),(180,320)), 2)
-    screen_message(str(index+1), WHITE, (460 + 180*index,sero+20), game_font_m)
-
+def shop_showcase(index, equip):
     if equip_con.can_buy[index] and equip_con.for_sale[index]:
-        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+40), (550 + 180*index, sero+40))
-        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+100), (550 + 180*index, sero+100))
-        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+160), (550 + 180*index, sero+160))
-        pygame.draw.line(screen, GRAY, (370 + 180*index, sero+220), (550 + 180*index, sero+220))
-        pygame.draw.line(screen, GRAY, (430 + 180*index, sero+40), (430 + 180*index, sero+220))
-        pygame.draw.line(screen, GRAY, (490 + 180*index, sero+40), (490 + 180*index, sero+220))
-
-        equip_rect = equip.image.get_rect(left=370+180*index, top=sero+40)
+        equip_rect = equip.image.get_rect(center=(460+180*index, 420))
         screen.blit(equip.image, equip_rect)
-        (txt,color) = equip_con.equip_grade(equip)
-        screen_message(txt, color, (460 + 180*index, sero+250), game_font_s)
-
-        coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
-        coin_rect = coin_image_r.get_rect(center=(440 + 180*index,sero+290))
-        screen.blit(coin_image_r, coin_rect)
-
-        screen_message(f"x{equip.price}", WHITE, (470 + 180*index, sero+290), game_font_m)
     else:
-        case_rect = sold_out_image.get_rect(center=(460 + 180*index,sero+160))
+        case_rect = sold_out_image.get_rect(center=(460 + 180*index, 420))
         screen.blit(sold_out_image, case_rect)
 
 def scene_inventory(doing):
@@ -569,10 +559,11 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
 
-        # screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
+        screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
         cursor.draw(screen)
-        pygame.display.update(full_rect)
+        # pygame.display.update(full_rect)
+        pygame.display.update()
 
 def scene_treasurebox(doing, reward):
     sound_con.play_sound(sound_box_open)
@@ -662,11 +653,14 @@ def scene_treasurebox(doing, reward):
         else:
             screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         
-        pygame.display.update(full_rect)
+        # pygame.display.update(full_rect)
+        pygame.display.update()
 
 ##############################################################################################
-def screen_message(writing, color, position, font):
+def screen_message(writing, color, position, font, back=None):
     msg = font.render(writing, True, color)
+    if back:
+        msg = font.render(writing, True, color, BLACK)
     msg_rect = msg.get_rect(center=position)
     screen.blit(msg, msg_rect)
 
@@ -711,13 +705,15 @@ def make_floor_zero():
         skill_con.active_escaperope = False
 
 def floor_zero():
-    global floor
+    global floor, background
 
     if not sound_con.bgm == bgm_0f:
         sound_con.play_bgm(bgm_0f)
 
     if floor != 0:
         make_floor_zero()
+
+    background = background_zero
 
     for deco in deco_group:
         deco.draw(screen)
@@ -741,7 +737,7 @@ def floor_zero():
         floor = saved_floor - 1
 
 def next_floor(pos):
-    global floor
+    global floor, background
 
     sound_con.play_sound(sound_nextfloor)
 
@@ -759,7 +755,10 @@ def next_floor(pos):
         stair.image = stair_images[1]
 
     monster_setting(pos, floor)
-    random_field_setting()
+
+    random_field_setting(floor)
+
+    background = setting_background(floor)
 
     if e_battery in equip_con.equipped_group and e_battery.charge_times < 3:
         if floor - e_battery.floor >= 1:
@@ -773,8 +772,9 @@ def next_floor(pos):
             player.speed -= 0.05
             e_ice.floor = floor
             e_ice.charge_times += 1
-            if e_ice.charge_times == 2:
-                remove_from_equipped_group(e_ice)
+
+    if e_ice.charge_times == 2:
+        remove_from_equipped_group(e_ice)
             # 녹음에 따라 얼음 이미지도 바꾸기
 
     if e_crescentmoon in equip_con.equipped_group:
@@ -782,13 +782,14 @@ def next_floor(pos):
 
     e_goldenkey.target = floor
 
-def display_background(floor):
-    if floor >= 0:
+def setting_background(floor):
+    randprob = random.randrange(0,3)
+    if floor == 0:
         background = background_zero
-    else:
-        background = None
+    elif floor > 0:
+        background = background_sec[randprob]
 
-    screen.blit(background, (340,60))
+    return background
 
 def show_animation():
     player.image_update()
@@ -912,11 +913,13 @@ def equip_effect():
 
     if e_heartstone in equip_con.equipped_group:
         if not e_heartstone.is_effected:
+            player.hp += 50
             player.max_hp += 50
             e_heartstone.is_effected = True
 
     if e_halfstone in equip_con.equipped_group:
         if not e_halfstone.is_effected:
+            player.hp += 20
             player.max_hp += 20
             e_halfstone.is_effected = True
 
@@ -1093,6 +1096,7 @@ def remove_from_equipped_group(equip):
             item_con.prob_potion -= 3
             item_con.prob_coin -= 3
 
+        equip.__init__()
         equip.reset()
 
         equip_con.equip_off(equip)
@@ -1383,7 +1387,7 @@ pygame.init()
 screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("No More Slime")
+pygame.display.set_caption("RE : SLIME")
 clock = pygame.time.Clock()
 game_font_kor = pygame.font.Font("fonts\\DungGeunMo.ttf", 15)
 game_font_s = pygame.font.Font("fonts\\DungGeunMo.ttf", 20)
@@ -1405,6 +1409,7 @@ BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
 saved_floor = 1
+background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
 info_rect = pygame.Rect(((140,60), (200, 600)))
@@ -1422,6 +1427,7 @@ shooting_group = pygame.sprite.Group()
 
 ##### EQUIP
 e_banana.target = player
+e_mandoo.target = player
 e_dice.target = player
 e_thunder.target = monster_group
 e_magiccloak.target = player
@@ -1461,7 +1467,7 @@ while running:
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
-    display_background(floor)                                                           #BACKGROUND
+    screen.blit(background, (340,60))                                                           #BACKGROUND
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
     if a_counter != milli_time:

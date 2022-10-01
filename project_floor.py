@@ -14,7 +14,6 @@ def monster_setting(pos, floor):
     num = (floor % 20) //6 + 1
 
     for i in range(num):
-        print(num)
         spawn_monster(pos, random_monster(floor))
 
     monster_floor_setting(pos, floor)
@@ -55,7 +54,7 @@ def random_monster(floor):
             return Mon_scarecrow()
         elif randprob % 2 == 1:
             # return Mon_zombie()
-            return None
+            return Mon_ghost()
 
 def monster_floor_setting(pos, floor):
     if 1 <= floor < 5:
@@ -97,18 +96,26 @@ def random_boss(floor):
     else:
         return Mon_boss()
 ##############################################################################################
-def random_field_setting():
+def random_field_setting(floor):
     randprob = random.randrange(1,101)
 
     field_group.empty()
 
-    for i in range(randprob % 4):
-        if randprob % 2 == 0:
-            web = Field(web_image, (0,0))
-            random_away_position((0,0), web)
-            field_group.add(web)
+    if 0 < floor <= 20:
+        for i in range(randprob % 4):
+            if randprob % 2 == 0:
+                web = Field(web_image, (0,0))
+                random_away_position((0,0), web)
+                field_group.add(web)
 
-    if randprob <= 50:
-        water = Field(water_image, (0,0))
-        random_away_position((0,0), water)
-        field_group.add(water)
+        if randprob <= 50:
+            water = Field(water_image, (0,0))
+            random_away_position((0,0), water)
+            field_group.add(water)
+
+    elif 20 < floor <= 40:
+        if randprob <= 50:
+            index = randprob % 4
+            deco = Field(graveyard_deco[index], (0,0))
+            random_away_position((0,0), deco)
+            field_group.add(deco)

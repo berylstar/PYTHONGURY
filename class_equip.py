@@ -182,9 +182,10 @@ class E_Banana(Equip):
         self.price = 5
 
     def active_skill(self):
+        print(self.target)
         self.target.hp = min(self.target.hp+25, self.target.max_hp)
         equip_con.equipped_group.remove(self)
-        equip_con.rare_equips.append(self)
+        equip_con.normal_equips.append(self)
 
 #                                                                           #### banana
 class E_Mandoo(Equip):
@@ -204,7 +205,7 @@ class E_Mandoo(Equip):
     def active_skill(self):
         self.target.hp = min(self.target.hp+10, self.target.max_hp)
         equip_con.equipped_group.remove(self)
-        equip_con.rare_equips.append(self)
+        equip_con.normal_equips.append(self)
 
 #                                                                           #### wax
 class E_Wax(Equip):
@@ -652,7 +653,7 @@ class E_GoldenKey(Equip):
         if not self.target % 20 == 0 :
             field_group.add(key_field)   #keys field
             equip_con.equipped_group.remove(self)
-            equip_con.unique_equips.append(self)
+            equip_con.rare_equips.append(self)
 
 #                                                                           #### rope
 class E_EscapeRope(Equip):
@@ -675,7 +676,7 @@ class E_EscapeRope(Equip):
         field_group.add(portal)
         skill_con.active_escaperope = True
         equip_con.equipped_group.remove(self)
-        equip_con.rare_equips.append(self)
+        equip_con.unique_equips.append(self)
 
 #                                                                           #### for treasure box 
 class E_Potion(Equip):
@@ -711,7 +712,7 @@ class EquipController():
 
         self.perc_unique = 2
         self.unique_equips = [
-            e_mushroom, e_heartstone, e_boxerglove, e_magiccloak, e_escaperope,
+            e_mushroom, e_heartstone, e_boxerglove, e_magiccloak, #e_escaperope,
         ]
 
     def equip_grade(self, equip):

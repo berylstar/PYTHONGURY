@@ -65,7 +65,7 @@ I          : 인벤토리 닫기
 
 exe 파일 생성 콘솔 코드
 
-> pyinstaller --name=no_more_slime --icon=main_0.ico --noconsole MAIN_GAME.py
+> pyinstaller --name=re_slime --icon=main_0.ico --noconsole MAIN_GAME.py
 
 	--name= : 파일명
 	--icon=   : 아이콘 선택 ( .ico )
