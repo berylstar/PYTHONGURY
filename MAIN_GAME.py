@@ -315,28 +315,61 @@ def scene_story(doing):
 
 def scene_tutorial(doing):
 
+    if not tuto_con.tutorial:
+        msg = [
+            ("                   그린 슬라임",  ".........?", "여기가..... 어디죠....?"),
+            ("킹 슬라임",                       "어쩐일로 슬라임이 이 곳까지 왔는지 모르겠네.", "이 앞은 몬스터들로 가득한 위험한 곳이여."),
+            ("킹 슬라임",                       "나는 같이 가줄 수 없으니께.", "몇가지만 좀 알려주도록 하겠네."),
+            ("킹 슬라임",                       "먼저, '방향키'로 움직일 수 있는 건 알제 ?", "그리고 '스페이스 바'로 주먹을 날려봐."),
+            ("킹 슬라임",                       "공격을 할 수 도 있고, 여러가지 상호작용도", "가능하니 꼭 기억하도록 혀."),
+            ("킹 슬라임",                       "그리고 우리 슬라임들은 뱃 속이 아~주 넓어서", "장비를 먹을 수 있는거 알고 있는겨 없는겨."),
+            ("                   그린 슬라임",  ".........?", "장비가 뭐죠 ?"),
+            ("킹 슬라임",                       "정말 하나도 모르는구만.", "그 동안의 용사들이 떨어뜨리고 간 물건들인디."),
+            ("킹 슬라임",                       "공격력, HP같은 능력치를 올려주거나,", "스킬로 특별하게 사용할 수 있는 게 장비란 말이여"),
+            ("킹 슬라임",                       "어떻게 사용하느냐에 따라 자네가", "탑을 더 오를 수 있을겨"),
+            ("킹 슬라임",                       "아 그리고 'I'를 통해 뱃 속을 정리해야 혀", "배 속이 정리가 잘 되야 움직이기도 편하제."),
+            ("킹 슬라임",                       "장비를 구매하고 싶으면,", "저~ 밑에 관을 열어보도록 혀."),
+            ("                   그린 슬라임",  "감사합니다 아저씨! 그럼 바로 가볼게요.", "안녕히 계세요 ~"),
+            ("킹 슬라임",                       "잠 - 깐 !", "아직 내 말 안 끝났는디,,,"),
+            ("킹 슬라임",                       "이 탑에 흐르는 이상한 마력때문에 점점", "힘들어지니께 빨리 움직이는 게 좋을거여."),
+            ("킹 슬라임",                       "젊은 친구가 딱 하니께, 이 돈 가져가.", ""),
+            ("킹 슬라임",                       "그럼 잘 해보라고.", ""),
+        ]
+    else:
+        msg = [
+                ("킹 슬라임",                       "이제 돈 없어", "얼른 가봐")
+            ]
+
     index = 0
-    fin = len(tuto_images)-1
+    fin = len(msg)-1
 
     corpus_rect = pygame.Rect((350,450), (580,200))
 
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                doing = False
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_wasd)
                     if index >= fin:
                         doing = False
+                        if not tuto_con.tutorial:
+                            sound_con.play_sound(sound_coin)
+                            player.coin += 10
+                            tuto_con.tutorial = True
                     else:
                         index += 1
-                # if event.key == pygame.K_ESCAPE:
-                #     sound_con.play_sound(sound_pick)
-                #     scene_esc(True)
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    doing = False
+                    scene_esc(True)
 
-        tuto_rect = tuto_images[index].get_rect(center=(640, 360))
-        screen.blit(tuto_images[index], tuto_rect)                                          # TUTORIAL
+        screen.fill(BLACK)
+        screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
+        screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
+        screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
         pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
@@ -422,15 +455,16 @@ def scene_shop(doing):
                             picked_num = 3
 
                 if event.key == pygame.K_r:
-                    if player.coin >= 0:
+                    if player.coin >= 1:
                         sound_con.play_sound(sound_shop_refresh)
-                        player.coin -= 0
+                        player.coin -= 1
                         random_for_sale()
                         picked_num = 0
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_shop_close)
                     doing = False
+                    tuto_con.shop = True
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
                     else:
@@ -452,7 +486,11 @@ def scene_shop(doing):
             screen.blit(coin_image_r, coin_rect)
             screen_message(f"x {equip.price}", WHITE, (850,200), game_font_m)
         else:
-            screen_message("1 or 2 or 3", WHITE, (540,150), game_font_m)
+            if not tuto_con.shop:
+                screen_message_2("장비 구매 : '1' or '2' or '3'", YELLOW, (380,100), game_font_s)
+                screen_message_2("상점 새로고침 : 'R' - 1코인", YELLOW, (380,130), game_font_s)
+                screen_message_2("'사용' 장비는 사용하면 제거", YELLOW, (380,160), game_font_s)
+                screen_message_2("'스킬' 장비는 쿨타임이 지나면 재사용이 가능합니다.", YELLOW, (380,190), game_font_s)
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -533,22 +571,19 @@ def scene_inventory(doing):
         # screen.blit(inven_img, (340,60))
         display_inven_ui()
 
-        f = 300
-
         pygame.draw.rect(screen, BLACK, ((490,280), (300,300)))
         pygame.draw.rect(screen, WHITE, ((490,280), (300,300)), 1)
-        screen_message(f"AP : {player.ap}", WHITE, (640,f), game_font_s)
-        screen_message("DP : {0:.2f}".format(player.dp), WHITE, (640,f+25), game_font_s)
-        screen_message("SPEED : {0:.2f}".format(player.speed), WHITE, (640,f+50), game_font_s)
-        screen_message("TIME DAMAGE : {0:.2f}".format(player.damaged_time), WHITE, (640,f+75), game_font_s)
+        screen_message(f"공격력 : {player.ap}", WHITE, (640,300), game_font_s)
+        screen_message("방어력 : {0:.2f}".format(player.dp), WHITE, (640,330), game_font_s)
+        screen_message("이동 속도 : {0:.2f}".format(player.speed), WHITE, (640,360), game_font_s)
+        screen_message("시간 데미지 : {0:.2f}".format(player.damaged_time), WHITE, (640,390), game_font_s)
 
-        screen_message(f"POTION EFF : {item_con.potion_eff}", WHITE, (640,f+125), game_font_s)
-        screen_message(f"POTION PROB : {item_con.prob_potion}%", WHITE, (640,f+150), game_font_s)
-        screen_message(f"COIN PROB : {item_con.prob_coin}%", WHITE, (640,f+175), game_font_s)
+        screen_message(f"포션 회복량 : {item_con.potion_eff}", WHITE, (640,450), game_font_s)
+        screen_message(f"포션 드롭 확률 : {item_con.prob_potion}%", WHITE, (640,480), game_font_s)
+        screen_message(f"코인 드롭 확률 : {item_con.prob_coin}%", WHITE, (640,510), game_font_s)
 
-        screen_message(f"SHOP RARE : {equip_con.perc_rare}%", WHITE, (640,f+225), game_font_s)
-        screen_message(f"SHOP UNIQUE : {equip_con.perc_unique}%", WHITE, (640,f+250), game_font_s)
-        
+        # screen_message(f"레어 등장 확률 : {equip_con.perc_rare}%", WHITE, (640,f+225), game_font_s)
+        # screen_message(f"유니크 등장 확률 : {equip_con.perc_unique}%", WHITE, (640,f+250), game_font_s)
 
         pygame.draw.rect(screen, BLACK, ((440,90),(400,160)))
         pygame.draw.rect(screen, WHITE, ((440,90),(400,160)), 1)
@@ -664,6 +699,11 @@ def screen_message(writing, color, position, font, back=None):
     msg_rect = msg.get_rect(center=position)
     screen.blit(msg, msg_rect)
 
+def screen_message_2(writing, color, position, font):
+    msg = font.render(writing, True, color)
+    # msg_rect = msg.get_rect()
+    screen.blit(msg, position)
+
 def game_restart():
     global player, saved_floor
     global item_con, equip_con, skill_con, monster_con
@@ -720,21 +760,21 @@ def floor_zero():
     for npc in npc_group:
         npc.draw(screen)
 
-    if item_con.first_box:
+    if item_con.first_box and tuto_con.tutorial:
         item_group.add(Item(box_image, (400,500), "normal_box"))
         item_con.first_box = False
+
+    if pygame.sprite.collide_mask(player, stair):
+        floor = saved_floor - 1
 
     for punch in punch_group:
         if pygame.sprite.collide_mask(punch, npc_kingslime):
             player.stop()
             scene_tutorial(True)
 
-        if pygame.sprite.collide_mask(punch, npc_coffin):
+        if pygame.sprite.collide_mask(punch, npc_coffin) and tuto_con.tutorial:
             player.stop()
             scene_shop(True)
-
-    if pygame.sprite.collide_mask(player, stair):
-        floor = saved_floor - 1
 
 def next_floor(pos):
     global floor, background
@@ -1293,7 +1333,7 @@ class Player(Character):
         self.life = 3
         self.hp = 100
         self.max_hp = 100
-        self.coin = 10
+        self.coin = 0
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
@@ -1382,6 +1422,13 @@ class Bullet(Punch):
 
         if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
             shooting_group.remove(self)
+
+class TutorialController():
+    def __init__(self):
+        self.tutorial = False
+        self.shop = False
+        self.inven = False
+        self.box = False
 ##############################################################################################
 pygame.init()
 screen_width = 1280
@@ -1421,6 +1468,8 @@ player_first_position = (700, 360)
 player = Player(player_images, player_first_position)
 
 punch_group = pygame.sprite.Group()
+
+tuto_con = TutorialController()
 
 ##### MONSTER
 shooting_group = pygame.sprite.Group()
