@@ -232,23 +232,16 @@ story_images = [
     pygame.image.load(os.path.join(file_path, "design\\story\\12.png")),
     pygame.image.load(os.path.join(file_path, "design\\story\\13.png")),
 ]
-
-tuto_images = [
-
-]
-
-inven_image = pygame.image.load(os.path.join(file_path, "design\\etc\\inven.png"))
 shop_image = pygame.image.load(os.path.join(file_path, "design\\etc\\shop.png"))
-
 sold_out_image = pygame.image.load(os.path.join(file_path, "design\\etc\\sold_out.png"))
+treasurebox_image = pygame.image.load(os.path.join(file_path, "design\\etc\\treasurebox.png"))
+inven_image = pygame.image.load(os.path.join(file_path, "design\\etc\\inven.png"))
 cursor_images = [
     pygame.image.load(os.path.join(file_path, "design\\etc\\cursor.png")),
     pygame.image.load(os.path.join(file_path, "design\\etc\\cursor_is_picking.png"))
 ]
 skill_c_image = pygame.image.load(os.path.join(file_path, "design\\etc\\skill_c.png"))
-# skill_c_image = pygame.transform.rotozoom(skill_c_image, 0, 0.5)
 skill_v_image = pygame.image.load(os.path.join(file_path, "design\\etc\\skill_v.png"))
-# skill_v_image = pygame.transform.rotozoom(skill_v_image, 0, 0.5)
 
 ##############################################################################################
 # 테스트 용

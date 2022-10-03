@@ -594,7 +594,7 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
 
-        screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
+        # screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
         cursor.draw(screen)
         # pygame.display.update(full_rect)
@@ -616,6 +616,7 @@ def scene_treasurebox(doing, reward):
 
     picked_num = 0
     choice = True
+    exit_flag = False
 
     while doing:
         for event in pygame.event.get():
@@ -647,48 +648,50 @@ def scene_treasurebox(doing, reward):
                         else:
                             sound_con.play_sound(sound_wasd)
                             picked_num = 2
+                    exit_flag = False
 
-                if event.key == pygame.K_SPACE and not choice:
-                    sound_con.play_sound(sound_box_close)
-                    doing = False
-                    if is_inven_overlapped(equip_con.equipped_group):
-                        scene_inventory(True)
-                    else:
-                        equip_effect()
+                if event.key == pygame.K_SPACE:
+                    
+                    if not choice:
+                        sound_con.play_sound(sound_box_close)
+                        doing = False
+                        if is_inven_overlapped(equip_con.equipped_group):
+                            scene_inventory(True)
+                        else:
+                            equip_effect()
+                    elif not exit_flag:
+                        exit_flag = True
 
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
-        screen.blit(test_image, (340,60))
+        screen.fill(BLACK)
+        screen.blit(treasurebox_image, (340,60))
         display_info_ui()
         display_inven_ui()
 
-        zero_rect = choice_equip[0].image.get_rect(center=(490,450))
-        one_rect = choice_equip[1].image.get_rect(center=(790,450))
+        zero_rect = choice_equip[0].image.get_rect(center=(540,420))
+        one_rect = choice_equip[1].image.get_rect(center=(740,420))
 
-        if picked_num:
-            screen_message(choice_equip[picked_num-1].msg_name, WHITE, (640,120), game_font_m)
-            screen_message(choice_equip[picked_num-1].msg_info, WHITE, (640,160), game_font_kor)
-            screen_message(choice_equip[picked_num-1].msg_eff, YELLOW, (640,210), game_font_kor)
+        if picked_num and not exit_flag:
+            screen_message(choice_equip[picked_num-1].msg_name, WHITE, (640,100), game_font_m)
+            screen_message(choice_equip[picked_num-1].msg_info, WHITE, (640,150), game_font_kor)
+            screen_message(choice_equip[picked_num-1].msg_eff, YELLOW, (640,200), game_font_kor)
             screen_message(choice_equip[picked_num-1].msg_eff_2, YELLOW, (640,230), game_font_kor)
-        
-        if choice:          # 보물 상자 이미지 대체
-            # screen_message("<1>", WHITE, (490, 350), game_font_m)
-            screen.blit(choice_equip[0].image, zero_rect)
-            screen_message(choice_equip[0].name, WHITE, (490,550), game_font_m)
-
-            # screen_message("OR", WHITE, (640,450), game_font_m)
-
-            # screen_message("<2>", WHITE, (790, 350), game_font_m)
-            screen.blit(choice_equip[1].image, one_rect)
-            screen_message(choice_equip[1].name, WHITE, (790,550), game_font_m)
-
-            screen_message("CHOICE 1 or 2 !", WHITE, (640,640), game_font_m)
         else:
-            screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
+            if exit_flag:
+                screen_message("ARE YOU SURE ?", WHITE, (640,150), game_font_m)
+                picked_num = 0
+            elif choice:
+                screen_message("CHOICE '1' or '2' !", WHITE, (640,150), game_font_m)
         
-        # pygame.display.update(full_rect)
+        if choice:
+            screen.blit(choice_equip[0].image, zero_rect)
+            screen.blit(choice_equip[1].image, one_rect)
+            
+        screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
+        
         pygame.display.update()
 
 ##############################################################################################
