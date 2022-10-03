@@ -25,6 +25,8 @@ punch_d_image = pygame.image.load(os.path.join(file_path, "design\\player\\punch
 mon_skel_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\skel_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\skel_1.png")),
+    # pygame.image.load(os.path.join(file_path, "design\\monster\\skel_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\skel_3.png")),
     ]
 skel_atk_images = pygame.image.load(os.path.join(file_path, "design\\bone.png"))
 skel_x = pygame.image.load(os.path.join(file_path, "design\\monster\\skel_x.png"))
