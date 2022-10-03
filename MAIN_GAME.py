@@ -1364,7 +1364,6 @@ class Player(Character):
         self.equip_v = None
 
         self.time = 0
-        self.on_stair = False
 
     def space_bar(self):
         sound_con.play_sound(sound_punch)
@@ -1555,7 +1554,6 @@ while running:
         if b_counter != second_time:
             #for 1 second
             player.hp -= player.damaged_time
-            player.on_stair = False
             
             if not skill_con.active_trafficlight[0]:
                 random_monster_direction()
@@ -1577,11 +1575,10 @@ while running:
 
         if pygame.sprite.collide_mask(player, stair):
             next_floor(player.position)
-            player.on_stair = True
 
     for monster in monster_group:
         monster.draw(screen)                                                           #MONSTER
-        if pygame.sprite.collide_mask(player, monster) and not monster.is_die and player.on_stair:
+        if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
             player.hp -= max((monster.ap - player.dp), 0)
             if not player.is_die and not skill_con.active_magiccloak[0]:
                 player.damage_sound()
