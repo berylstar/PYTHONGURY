@@ -8,6 +8,8 @@ bgm_story = pygame.mixer.Sound('Soundtrack\\bgm\\story.wav')
 
 bgm_0f = pygame.mixer.Sound('Soundtrack\\bgm\\0f.wav')
 bgm_first = pygame.mixer.Sound('Soundtrack\\bgm\\first.wav')
+bgm_second = pygame.mixer.Sound('Soundtrack\\bgm\\first.wav')
+bgm_third = pygame.mixer.Sound('Soundtrack\\bgm\\first.wav')
 ##############################################################################################
 # EFFECT
 sound_page = pygame.mixer.Sound('Soundtrack\\effect\\page.wav')

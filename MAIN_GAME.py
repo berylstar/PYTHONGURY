@@ -28,10 +28,10 @@ def scene_title_game():
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message("RE : SLIME", GREEN, (screen_width//2,200), game_font_l, True)    # 타이틀 로고 이미지로 대체
-        screen_message(option[0], color[0], (screen_width//2,500), game_font_m, True)
-        screen_message(option[1], color[1], (screen_width//2,550), game_font_m, True)
-        screen_message(option[2], color[2], (screen_width//2,600), game_font_m, True)
+        screen_message_3("RE : SLIME", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
+        screen_message_3(option[0], color[0], (screen_width//2,500), game_font_m)
+        screen_message_3(option[1], color[1], (screen_width//2,550), game_font_m)
+        screen_message_3(option[2], color[2], (screen_width//2,600), game_font_m)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -113,11 +113,11 @@ def scene_esc(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message(option[0], color[0], (screen_width//2, 430), game_font_m, True)
-        screen_message(option[1], color[1], (screen_width//2, 480), game_font_m, True)
-        screen_message(option[2], color[2], (screen_width//2, 530), game_font_m, True)
-        screen_message(option[3], color[3], (screen_width//2, 580), game_font_m, True)
-        screen_message(option[4], color[4], (screen_width//2, 630), game_font_m, True)
+        screen_message_3(option[0], color[0], (screen_width//2, 430), game_font_m)
+        screen_message_3(option[1], color[1], (screen_width//2, 480), game_font_m)
+        screen_message_3(option[2], color[2], (screen_width//2, 530), game_font_m)
+        screen_message_3(option[3], color[3], (screen_width//2, 580), game_font_m)
+        screen_message_3(option[4], color[4], (screen_width//2, 630), game_font_m)
 
         pygame.display.update()
 
@@ -175,10 +175,10 @@ def scene_sound_setting(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message(option[0], color[0], (screen_width//2, 480), game_font_m, True)
-        screen_message(option[1], color[1], (screen_width//2, 530), game_font_m, True)
-        screen_message(option[2], color[2], (screen_width//2, 580), game_font_m, True)
-        screen_message(option[3], color[3], (screen_width//2, 630), game_font_m, True)
+        screen_message_3(option[0], color[0], (screen_width//2, 480), game_font_m)
+        screen_message_3(option[1], color[1], (screen_width//2, 530), game_font_m)
+        screen_message_3(option[2], color[2], (screen_width//2, 580), game_font_m)
+        screen_message_3(option[3], color[3], (screen_width//2, 630), game_font_m)
 
         pygame.display.update()
 
@@ -317,22 +317,22 @@ def scene_tutorial(doing):
 
     if not tuto_con.tutorial:
         msg = [
-            ("                   그린 슬라임",  ".........?", "여기가..... 어디죠....?"),
-            ("킹 슬라임",                       "어쩐일로 슬라임이 이 곳까지 왔는지 모르겠네.", "이 앞은 몬스터들로 가득한 위험한 곳이여."),
-            ("킹 슬라임",                       "나는 같이 가줄 수 없으니께.", "몇가지만 좀 알려주도록 하겠네."),
-            ("킹 슬라임",                       "먼저, '방향키'로 움직일 수 있는 건 알제 ?", "그리고 '스페이스 바'로 주먹을 날려봐."),
-            ("킹 슬라임",                       "공격을 할 수 도 있고, 여러가지 상호작용도", "가능하니 꼭 기억하도록 혀."),
+            ("                      슬라임",    ".........?", "여기가..... 어디죠....?"),
+            ("킹 슬라임",                       "요 앞은 몬스터들로 가득한 위험한 곳인디.", "뭔 일로 슬라임이 여까지 왔는겨~.", ),
+            ("킹 슬라임",                       "나는 같이 가줄 수 없응께.", "몇가지만 내가 조께 알려줄라니까."),
+            ("킹 슬라임",                       "먼저, '방향키'로 움직일 수 있는 건 아는겨 ?", "그리고 '스페이스 바'로 주먹도 날려 봐."),
+            ("킹 슬라임",                       "공격을 할 수 있고, 여러가지 상호작용도", "가능하니 꼭 기억하도록 혀."),
             ("킹 슬라임",                       "그리고 우리 슬라임들은 뱃 속이 아~주 넓어서", "장비를 먹을 수 있는거 알고 있는겨 없는겨."),
-            ("                   그린 슬라임",  ".........?", "장비가 뭐죠 ?"),
-            ("킹 슬라임",                       "정말 하나도 모르는구만.", "그 동안의 용사들이 떨어뜨리고 간 물건들인디."),
+            ("                      슬라임",    ".........?", "장비가 뭐죠 ?"),
+            ("킹 슬라임",                       "정말 하나도 모르는구마이.", "그 동안의 용사들이 떨어뜨리고 간 물건들인디."),
             ("킹 슬라임",                       "공격력, HP같은 능력치를 올려주거나,", "스킬로 특별하게 사용할 수 있는 게 장비란 말이여"),
             ("킹 슬라임",                       "어떻게 사용하느냐에 따라 자네가", "탑을 더 오를 수 있을겨"),
-            ("킹 슬라임",                       "아 그리고 'I'를 통해 뱃 속을 정리해야 혀", "배 속이 정리가 잘 되야 움직이기도 편하제."),
+            ("킹 슬라임",                       "아 그리고 'I'를 통해 뱃 속을 정리해야 혀", "뱃 속이 정리가 잘 되야 움직이기도 편한겨."),
             ("킹 슬라임",                       "장비를 구매하고 싶으면,", "저~ 밑에 관을 열어보도록 혀."),
-            ("                   그린 슬라임",  "감사합니다 아저씨! 그럼 바로 가볼게요.", "안녕히 계세요 ~"),
-            ("킹 슬라임",                       "잠 - 깐 !", "아직 내 말 안 끝났는디,,,"),
+            ("                      슬라임",    "감사합니다 아저씨! 그럼 바로 가볼게요.", "안녕히 계세요 ~"),
+            ("킹 슬라임",                       "잠 - 깐 - 만 !", "아직 내 말 안 끝났는디 어딜가는겨"),
             ("킹 슬라임",                       "이 탑에 흐르는 이상한 마력때문에 점점", "힘들어지니께 빨리 움직이는 게 좋을거여."),
-            ("킹 슬라임",                       "젊은 친구가 딱 하니께, 이 돈 가져가.", ""),
+            ("킹 슬라임",                       "젊은 친구가 딱 하니께, 이 돈 가져가보록 혀.", ""),
             ("킹 슬라임",                       "그럼 잘 해보라고.", ""),
         ]
     else:
@@ -373,6 +373,8 @@ def scene_tutorial(doing):
         pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
+    monster_con.is_blind = False
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -396,6 +398,8 @@ def scene_player_dead(doing):
 
 def scene_game_over(doing):
     global ready
+
+    player.coin += 10
 
     while doing:
         for event in pygame.event.get():
@@ -593,6 +597,11 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_info, WHITE, (640,160), game_font_kor)
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
+        else:
+            screen_message_2("장비 클릭 - 'SPACE BAR'", WHITE, (460,120), game_font_s)
+            screen_message_2("장비 제거 - 'R'", WHITE, (460,150), game_font_s)
+            screen_message_2("스킬 등록 - 'C' or 'V'", WHITE, (460,180), game_font_s)
+            screen_message_2("장비는 항상 정리해주세요.", WHITE, (460,210), game_font_s)
 
         # screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
@@ -650,8 +659,7 @@ def scene_treasurebox(doing, reward):
                             picked_num = 2
                     exit_flag = False
 
-                if event.key == pygame.K_SPACE:
-                    
+                if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     if not choice:
                         sound_con.play_sound(sound_box_close)
                         doing = False
@@ -662,9 +670,9 @@ def scene_treasurebox(doing, reward):
                     elif not exit_flag:
                         exit_flag = True
 
-                if event.key == pygame.K_ESCAPE:
-                    sound_con.play_sound(sound_pick)
-                    scene_esc(True)
+                # if event.key == pygame.K_ESCAPE:
+                #     sound_con.play_sound(sound_pick)
+                #     scene_esc(True)
 
         screen.fill(BLACK)
         screen.blit(treasurebox_image, (340,60))
@@ -695,17 +703,20 @@ def scene_treasurebox(doing, reward):
         pygame.display.update()
 
 ##############################################################################################
-def screen_message(writing, color, position, font, back=None):
+def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
-    if back:
-        msg = font.render(writing, True, color, BLACK)
     msg_rect = msg.get_rect(center=position)
     screen.blit(msg, msg_rect)
-
+    
 def screen_message_2(writing, color, position, font):
     msg = font.render(writing, True, color)
-    # msg_rect = msg.get_rect()
     screen.blit(msg, position)
+
+def screen_message_3(writing, color, position, font):
+    msg = font.render(writing, True, color, BLACK)
+    msg_rect = msg.get_rect(center=position)
+    pygame.draw.rect(screen, WHITE, msg_rect, 0, 10)
+    screen.blit(msg, msg_rect)
 
 def game_restart():
     global player, saved_floor
@@ -785,9 +796,7 @@ def next_floor(pos):
     sound_con.play_sound(sound_nextfloor)
 
     floor += 1
-
-    if floor % 10 == 0:
-        player.hp += 10
+    player.hp = min(player.hp+5, player.max_hp)
 
     item_group.empty()
     shooting_group.empty()
@@ -830,9 +839,17 @@ def setting_background(floor):
     if floor == 0:
         background = background_zero
     elif floor > 0:
-        background = background_sec[randprob]
+        background = background_second[randprob]
 
     return background
+
+def bgm_setting(floor):
+    if 0 < floor <= 20 and not sound_con.bgm == bgm_first:
+        sound_con.play_bgm(bgm_first)
+    elif 20 < floor <= 40 and not sound_con.bgm == bgm_second:
+        sound_con.play_bgm(bgm_second)
+    elif 40 < floor <= 60 and not sound_con.bgm == bgm_second:
+        sound_con.play_bgm(bgm_second)
 
 def show_animation():
     player.image_update()
@@ -970,8 +987,8 @@ def equip_effect():
         if not e_poisonapple.is_effected:
             player.hp += 10
             player.max_hp += 10
-            player.dp -= 0.2
-            player.damaged_time += 0.2
+            player.dp -= 0.1
+            player.damaged_time += 0.1
             e_poisonapple.is_effected = True
 
     if e_ice in equip_con.equipped_group:
@@ -1347,6 +1364,7 @@ class Player(Character):
         self.equip_v = None
 
         self.time = 0
+        self.on_stair = False
 
     def space_bar(self):
         sound_con.play_sound(sound_punch)
@@ -1511,7 +1529,6 @@ while running:
                     #이펙트 소리 필요
                     player.skill_v()
                 if event.key == pygame.K_i:
-                    #이펙트 소리 필요
                     scene_inventory(True)
 
         if not player.is_die:
@@ -1532,13 +1549,13 @@ while running:
         floor_zero()      
 
     elif floor > 0:
-        if not sound_con.bgm == bgm_first:
-            sound_con.play_bgm(bgm_first)
+        bgm_setting(floor)
 
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
             #for 1 second
             player.hp -= player.damaged_time
+            player.on_stair = False
             
             if not skill_con.active_trafficlight[0]:
                 random_monster_direction()
@@ -1555,15 +1572,16 @@ while running:
         field.draw(screen)                                                              #FIELD
         field_effect(field)
 
-    if not monster_group:
+    if not monster_group and tuto_con.tutorial:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
             next_floor(player.position)
+            player.on_stair = True
 
     for monster in monster_group:
         monster.draw(screen)                                                           #MONSTER
-        if pygame.sprite.collide_mask(player, monster) and not monster.is_die:
+        if pygame.sprite.collide_mask(player, monster) and not monster.is_die and player.on_stair:
             player.hp -= max((monster.ap - player.dp), 0)
             if not player.is_die and not skill_con.active_magiccloak[0]:
                 player.damage_sound()

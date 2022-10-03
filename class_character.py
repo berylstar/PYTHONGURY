@@ -250,8 +250,8 @@ class Mon_scarecrow(Character):
         self.ap = 1.5
         self.speed = 0.2
         self.bullet = crow_atk_image
-        self.b_speed = 15
-        self.b_damage = 10
+        self.b_speed = 10
+        self.b_damage = 5
         self.b_type = "crow"
 
 

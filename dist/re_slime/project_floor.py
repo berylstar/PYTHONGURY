@@ -54,7 +54,7 @@ def random_monster(floor):
             return Mon_scarecrow()
         elif randprob % 2 == 1:
             # return Mon_zombie()
-            return None
+            return Mon_ghost()
 
 def monster_floor_setting(pos, floor):
     if 1 <= floor < 5:
@@ -84,7 +84,7 @@ def monster_floor_setting(pos, floor):
 
 def random_boss(floor):
     randprob = random.randrange(1,5)
-    if floor == 20:
+    if floor == 20 or floor == 40:
         if randprob == 1:
             return Boss_spider()
         elif randprob == 2:

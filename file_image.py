@@ -38,7 +38,7 @@ mon_spider_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\spider_1.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\spider_2.png")),
     ]
-spider_atk_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
+spider_atk_image = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\field\\web.png")), 0, 0.5)
 spider_x = pygame.image.load(os.path.join(file_path, "design\\monster\\spider_x.png"))
 spider_die = [spider_x, spider_x, spider_x]
 
@@ -90,7 +90,7 @@ mon_scarecrow_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_1.png")),
 ]
-crow_atk_image = pygame.image.load(os.path.join(file_path, "images\\crow.png"))
+crow_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\crow.png"))
 scarecrow_x = pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_x.png"))
 scarecrow_die = [scarecrow_x, scarecrow_x, scarecrow_x]
 
@@ -197,7 +197,7 @@ rope_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rope.png
 ##############################################################################################
 ##### BACKGROUND
 background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0.png"))
-background_sec = [
+background_second = [
     pygame.image.load(os.path.join(file_path, "design\\floor\\1_1.png")),
     pygame.image.load(os.path.join(file_path, "design\\floor\\1_2.png")),
     pygame.image.load(os.path.join(file_path, "design\\floor\\1_3.png"))

@@ -182,9 +182,10 @@ class E_Banana(Equip):
         self.price = 5
 
     def active_skill(self):
+        print(self.target)
         self.target.hp = min(self.target.hp+25, self.target.max_hp)
         equip_con.equipped_group.remove(self)
-        equip_con.rare_equips.append(self)
+        equip_con.normal_equips.append(self)
 
 #                                                                           #### banana
 class E_Mandoo(Equip):
@@ -204,7 +205,7 @@ class E_Mandoo(Equip):
     def active_skill(self):
         self.target.hp = min(self.target.hp+10, self.target.max_hp)
         equip_con.equipped_group.remove(self)
-        equip_con.rare_equips.append(self)
+        equip_con.normal_equips.append(self)
 
 #                                                                           #### wax
 class E_Wax(Equip):
@@ -375,7 +376,7 @@ class E_Helmet(Equip):
         Equip.__init__(self, image)
         self.msg_name = "하이바"
         self.msg_info = "모자랄게 없는 헬멧입니다."
-        self.msg_eff = "적 충돌 데미지 감소"
+        self.msg_eff = "방어력 +0.3"
 
         self.max_row = 4
         self.max_col = 1
@@ -652,7 +653,7 @@ class E_GoldenKey(Equip):
         if not self.target % 20 == 0 :
             field_group.add(key_field)   #keys field
             equip_con.equipped_group.remove(self)
-            equip_con.unique_equips.append(self)
+            equip_con.rare_equips.append(self)
 
 #                                                                           #### rope
 class E_EscapeRope(Equip):
@@ -675,7 +676,7 @@ class E_EscapeRope(Equip):
         field_group.add(portal)
         skill_con.active_escaperope = True
         equip_con.equipped_group.remove(self)
-        equip_con.rare_equips.append(self)
+        equip_con.unique_equips.append(self)
 
 #                                                                           #### for treasure box 
 class E_Potion(Equip):

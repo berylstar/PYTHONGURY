@@ -84,7 +84,7 @@ def monster_floor_setting(pos, floor):
 
 def random_boss(floor):
     randprob = random.randrange(1,5)
-    if floor == 20:
+    if floor == 20 or floor == 40:
         if randprob == 1:
             return Boss_spider()
         elif randprob == 2:
