@@ -85,6 +85,7 @@ class Mon_spider(Character):
         image_group = mon_spider_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = spider_die
         self.type = ["shooter"]
 
         self.hp = 12
@@ -112,6 +113,7 @@ class Mon_bat(Character):
         image_group = mon_bat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = bat_die
         self.type = ["runner", "toward"]
 
         self.hp = 8
@@ -125,6 +127,7 @@ class Mon_skel(Character):
         image_group = mon_skel_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = skel_die
         self.type = []
 
         self.hp = 21
@@ -173,7 +176,6 @@ class Boss_frog(Character):
             list.append(img)
         position = (0,0)
         Character.__init__(self, list, position)
-        # self.die_images = frog_die
         self.type = ["boss", "boss_frog"]
 
         self.hp = 200
@@ -229,6 +231,7 @@ class Mon_ghost(Character):
         image_group = mon_ghost_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = ghost_die
         self.type = ["alpha"]
 
         self.hp = 20
@@ -240,6 +243,7 @@ class Mon_scarecrow(Character):
         image_group = mon_scarecrow_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = scarecrow_die
         self.type = ["shooter"]
 
         self.hp = 18
@@ -415,7 +419,6 @@ monster_con = MonsterController()
 npc_kingslime = Character(father_slime_images, (540, 360))
 npc_kingslime.direction = "RIGHT"
 npc_coffin = Character(coffin_images, (840, 600))
-# npc_ghost = Character(ghost_images, (800, 150))
 
 npc_group = pygame.sprite.Group()
 npc_group.add(npc_kingslime, npc_coffin)
