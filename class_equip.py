@@ -182,10 +182,10 @@ class E_Banana(Equip):
         self.price = 5
 
     def active_skill(self):
-        print(self.target)
-        self.target.hp = min(self.target.hp+25, self.target.max_hp)
-        equip_con.equipped_group.remove(self)
-        equip_con.normal_equips.append(self)
+        if self in equip_con.equipped_group:
+            self.target.hp = min(self.target.hp+25, self.target.max_hp)
+            equip_con.equipped_group.remove(self)
+            equip_con.normal_equips.append(self)
 
 #                                                                           #### banana
 class E_Mandoo(Equip):
@@ -203,9 +203,10 @@ class E_Mandoo(Equip):
         self.price = 0
 
     def active_skill(self):
-        self.target.hp = min(self.target.hp+10, self.target.max_hp)
-        equip_con.equipped_group.remove(self)
-        equip_con.normal_equips.append(self)
+        if self in equip_con.equipped_group:
+            self.target.hp = min(self.target.hp+10, self.target.max_hp)
+            equip_con.equipped_group.remove(self)
+            equip_con.normal_equips.append(self)
 
 #                                                                           #### wax
 class E_Wax(Equip):
@@ -545,7 +546,7 @@ class E_TrafficLight(Equip):
         self.price = 10
 
     def active_skill(self):
-        if self.cool_time == False:
+        if self.cool_time == False and self in equip_con.equipped_group:
             skill_con.active_trafficlight[0] = True
             skill_con.active_trafficlight[1] = pygame.time.get_ticks()
             self.cool_time = True
@@ -567,7 +568,7 @@ class E_Thunder(Equip):
         self.price = 10
 
     def active_skill(self):
-        if self.cool_time == False:
+        if self.cool_time == False and self in equip_con.equipped_group:
             skill_con.active_thunder[0] = True
             skill_con.active_thunder[1] = pygame.time.get_ticks()
             self.cool_time = True
@@ -593,7 +594,7 @@ class E_Dice(Equip):
         self.price = 5
 
     def active_skill(self):
-        if self.cool_time == False:
+        if self.cool_time == False and self in equip_con.equipped_group:
             skill_con.active_dice[0] = True
             skill_con.active_dice[1] = pygame.time.get_ticks()
             self.cool_time = True
@@ -623,7 +624,7 @@ class E_MagicCloak(Equip):
         self.price = 10
 
     def active_skill(self):
-        if self.cool_time == False:
+        if self.cool_time == False and self in equip_con.equipped_group:
             skill_con.active_magiccloak[0] = True
             skill_con.active_magiccloak[1] = pygame.time.get_ticks()
             self.cool_time = True
@@ -650,7 +651,7 @@ class E_GoldenKey(Equip):
         self.price = 5
 
     def active_skill(self):
-        if not self.target % 20 == 0 :
+        if not self.target % 20 == 0 and self in equip_con.equipped_group:
             field_group.add(key_field)   #keys field
             equip_con.equipped_group.remove(self)
             equip_con.rare_equips.append(self)
@@ -672,11 +673,11 @@ class E_EscapeRope(Equip):
         self.price = 10
 
     def active_skill(self):
-        
-        field_group.add(portal)
-        skill_con.active_escaperope = True
-        equip_con.equipped_group.remove(self)
-        equip_con.unique_equips.append(self)
+        if self in equip_con.equipped_group:
+            field_group.add(portal)
+            skill_con.active_escaperope = True
+            equip_con.equipped_group.remove(self)
+            equip_con.unique_equips.append(self)
 
 #                                                                           #### for treasure box 
 class E_Potion(Equip):

@@ -45,6 +45,7 @@ def random_monster(floor):
             return Mon_bat()
         elif randprob % 2 == 1:
             return Mon_spider()
+
     elif 20 < floor <= 40:
         if randprob < 30:
             return Mon_ghost()
@@ -53,8 +54,7 @@ def random_monster(floor):
         elif randprob % 2 == 0:
             return Mon_scarecrow()
         elif randprob % 2 == 1:
-            # return Mon_zombie()
-            return Mon_ghost()
+            return Mon_zombie()
 
 def monster_floor_setting(pos, floor):
     if 1 <= floor < 5:
@@ -77,14 +77,17 @@ def monster_floor_setting(pos, floor):
         spawn_monster(pos, Mon_ghost())
         spawn_monster(pos, Mon_werewolf())
     elif 35 <= floor < 40:
-        # spawn_monster(pos, Mon_zombie())
+        spawn_monster(pos, Mon_zombie())
+        spawn_monster(pos, Mon_zombie())
+        spawn_monster(pos, Mon_zombie())
         pass
     elif floor == 40:
         spawn_monster(pos, random_boss(floor))
 
 def random_boss(floor):
     randprob = random.randrange(1,5)
-    if floor == 20 or floor == 40:
+    
+    if floor == 20:
         if randprob == 1:
             return Boss_spider()
         elif randprob == 2:
@@ -93,6 +96,17 @@ def random_boss(floor):
             return Boss_frog()
         elif randprob == 4:
             return Boss_skel()
+
+    elif floor == 40:
+        if randprob == 1:
+            return Boss_zombie()
+        elif randprob == 2:
+            return Boss_werewolf()
+        elif randprob == 3:
+            return Boss_ghost()
+        elif randprob == 4:
+            return Boss_scarecrow()
+
     else:
         return Mon_boss()
 ##############################################################################################

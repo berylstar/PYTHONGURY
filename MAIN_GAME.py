@@ -399,8 +399,6 @@ def scene_player_dead(doing):
 def scene_game_over(doing):
     global ready
 
-    player.coin += 10
-
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -634,6 +632,7 @@ def scene_treasurebox(doing, reward):
             if event.type == pygame.KEYDOWN:
                 if choice:
                     if event.key == pygame.K_1:
+                        exit_flag = False
                         if picked_num == 1:
                             sound_con.play_sound(sound_box_get)
                             equip_con.equipped_group.append(choice_equip[0])
@@ -645,6 +644,7 @@ def scene_treasurebox(doing, reward):
                             picked_num = 1
 
                     if event.key == pygame.K_2:
+                        exit_flag = False
                         if picked_num == 2:
                             sound_con.play_sound(sound_box_get)
                             if reward == "normal":
@@ -657,7 +657,7 @@ def scene_treasurebox(doing, reward):
                         else:
                             sound_con.play_sound(sound_wasd)
                             picked_num = 2
-                    exit_flag = False
+                    
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     if not choice:
@@ -669,6 +669,8 @@ def scene_treasurebox(doing, reward):
                             equip_effect()
                     elif not exit_flag:
                         exit_flag = True
+                    elif exit_flag:
+                        doing = False
 
                 # if event.key == pygame.K_ESCAPE:
                 #     sound_con.play_sound(sound_pick)
@@ -723,6 +725,7 @@ def game_restart():
     global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
+    player.coin += 10
     make_floor_zero()
     equip_reset()
     saved_floor = 1
@@ -1299,6 +1302,16 @@ def boss_action(monster):
     elif "boss_bat" in monster.type:        # blind
         monster_con.is_blind = True
     elif "boss_skel" in monster.type:    # boss shooter
+        if monster.direction == "UP" or monster.direction == "DOWN":
+            shooting_group.add(Bullet(monster.bullet, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
+            shooting_group.add(Bullet(monster.bullet, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
+        else:
+            shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
+            shooting_group.add(Bullet(monster.bullet, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
+
+    elif "boss_ghost" in monster.type:
+        monster_con.is_blind = True
+    elif "boss_scarecrow" in monster.type:
         shooting_group.add(Bullet(monster.bullet, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
         shooting_group.add(Bullet(monster.bullet, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
         shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
@@ -1307,6 +1320,11 @@ def boss_action(monster):
 def monster_die(monster):
     if "boss" in monster.type:
         monster_con.is_blind = False
+
+    if "boss_zombie" in monster.type and monster_con.boss_zombie < 2:
+        monster_group.remove(monster)
+        spawn_monster(player.position, Boss_zombie())
+        monster_con.boss_zombie += 1
 
     if not monster.is_die:
         monster.is_die = True
@@ -1354,7 +1372,7 @@ class Player(Character):
         self.hp = 100
         self.max_hp = 100
         self.coin = 0
-        self.ap = 10
+        self.ap = 50
         self.speed = 0.3
         self.punch = punch_d_image
         self.dp = 0

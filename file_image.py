@@ -28,7 +28,7 @@ mon_skel_images = [
     # pygame.image.load(os.path.join(file_path, "design\\monster\\skel_2.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\skel_3.png")),
     ]
-skel_atk_images = pygame.image.load(os.path.join(file_path, "design\\bone.png"))
+skel_atk_images = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\bone.png")), 0, 0.5)
 skel_x = pygame.image.load(os.path.join(file_path, "design\\monster\\skel_x.png"))
 skel_die = [skel_x, skel_x, skel_x]
 
@@ -59,13 +59,16 @@ mon_frog_images = [
     ]
 frog_x = pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png"))
 frog_die = [frog_x, frog_x, frog_x]
-
-##### EMBER
-mon_ember_images = [
-    pygame.image.load(os.path.join(file_path, "design\\monster\\ember_0.png")),
-    ]
-ember_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_attack.png"))
-ember_die = []
+#########################
+##### ZOMBIE
+mon_zombie_images = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_1.png")),
+    # pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_3.png")),
+]
+zombie_x = pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_x.png"))
+zombie_die = [zombie_x, zombie_x, zombie_x]
 
 ##### GHOST
 mon_ghost_images = [
@@ -94,6 +97,7 @@ crow_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\cro
 scarecrow_x = pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_x.png"))
 scarecrow_die = [scarecrow_x, scarecrow_x, scarecrow_x]
 
+#########################
 ##### GOLEM
 mon_golem_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\golem_0.png")),
@@ -104,12 +108,39 @@ mon_golem_images = [
 golem_x = pygame.image.load(os.path.join(file_path, "design\\monster\\golem_x.png"))
 golem_die = [golem_x, golem_x, golem_x]
 
+##### EMBER
+mon_ember_images = [
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ember_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ember_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\ember_2.png")),
+    ]
+fire_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_attack.png"))
+ember_x = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_x.png"))
+ember_die = [ember_x, ember_x, ember_x]
+
+##### FLAME SNAKE
+mon_flamesnake_images = [
+    # pygame.image.load(os.path.join(file_path, "design\\monster\\ember_0.png")),
+    # pygame.image.load(os.path.join(file_path, "design\\monster\\ember_1.png")),
+    # pygame.image.load(os.path.join(file_path, "design\\monster\\ember_2.png")),
+    ]
+flamesnake_x = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_x.png"))
+flamesnake_die = [flamesnake_x, flamesnake_x, flamesnake_x]
+
 ##### FIRE BAT
 mon_firebat_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\firebat_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\firebat_1.png")),
 ]
-firebat_die = []
+firebat_x = None
+firebat_die = [firebat_x, firebat_x, firebat_x]
+
+
+monster_die_images = [
+    pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
+    pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
+    pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
+]
 ##############################################################################################
 ##### NPC
 father_slime_images = [
@@ -243,11 +274,7 @@ monster_3_images = [pygame.image.load(os.path.join(file_path, "images\\monster_3
 monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png"))]
 runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))]
 blind_image = pygame.image.load(os.path.join(file_path, "images\\blind.png"))
-monster_die_images = [
-    pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
-    pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
-    pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
-]
+
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
 
