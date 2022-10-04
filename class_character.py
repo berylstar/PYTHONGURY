@@ -75,10 +75,10 @@ class Character(pygame.sprite.Sprite):
                     surface.set_at((x, y), pygame.Color(r, g, b, a))
             screen.blit(surface, self.rect)
 
-def images_bigger(images):
+def images_bigger(images, xg):
     list = []
     for img in images:
-        img = pygame.transform.rotozoom(img, 0, 2)
+        img = pygame.transform.rotozoom(img, 0, xg)
         list.append(img)
     return list
 
@@ -143,7 +143,7 @@ class Mon_skel(Character):
 # BOSS
 class Boss_spider(Character):
     def __init__(self):
-        image_group = images_bigger(mon_spider_images)
+        image_group = images_bigger(mon_spider_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_spider"]
@@ -154,7 +154,7 @@ class Boss_spider(Character):
 
 class Boss_bat(Character):
     def __init__(self):
-        image_group = images_bigger(mon_bat_images)
+        image_group = images_bigger(mon_bat_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_bat", "runner"]
@@ -167,7 +167,7 @@ class Boss_bat(Character):
 
 class Boss_frog(Character):
     def __init__(self):
-        image_group = images_bigger(mon_frog_images)
+        image_group = images_bigger(mon_frog_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_frog"]
@@ -179,7 +179,7 @@ class Boss_frog(Character):
 
 class Boss_skel(Character):
     def __init__(self):
-        image_group = images_bigger(mon_skel_images)
+        image_group = images_bigger(mon_skel_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_skel"]
@@ -248,7 +248,7 @@ class Mon_scarecrow(Character):
 # BOSS
 class Boss_zombie(Character):
     def __init__(self):
-        image_group = images_bigger(mon_zombie_images)
+        image_group = images_bigger(mon_zombie_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_zombie"]
@@ -259,12 +259,12 @@ class Boss_zombie(Character):
 
 class Boss_werewolf(Character):
     def __init__(self):
-        image_group = images_bigger(mon_werewolf_images)
+        image_group = images_bigger(mon_werewolf_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "runner", "toward"]
 
-        self.hp = 30
+        self.hp = 180
         self.ap = 2.5
         self.speed = 0.15
         self.is_dashed = False
@@ -272,18 +272,18 @@ class Boss_werewolf(Character):
 
 class Boss_ghost(Character):
     def __init__(self):
-        image_group = images_bigger(mon_ghost_images)
+        image_group = images_bigger(mon_ghost_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_ghost", "alpha"]
 
-        self.hp = 170
+        self.hp = 230
         self.ap = 1.5
         self.speed = 0.25
 
 class Boss_scarecrow(Character):
     def __init__(self):
-        image_group = images_bigger(mon_scarecrow_images)
+        image_group = images_bigger(mon_scarecrow_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_scarecrow"]
@@ -299,7 +299,7 @@ class Boss_scarecrow(Character):
                                         # 41 ~ 60 : lava land
 class Mon_golem(Character):
     def __init__(self):
-        image_group = mon_golem_images
+        image_group = images_bigger(mon_golem_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = golem_die
@@ -311,9 +311,10 @@ class Mon_golem(Character):
 
 class Mon_ember(Character):
     def __init__(self):
-        image_group = mon_ember_images
+        image_group = images_bigger(mon_ember_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = ember_die
         self.type = ["shooter"]
 
         self.hp = 25
@@ -326,10 +327,11 @@ class Mon_ember(Character):
 
 class Mon_flamesnake(Character):
     def __init__(self):
-        image_group = None
+        image_group = images_bigger(mon_flamesnake_images, 1.5)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["shooter"]
+        self.die_images = flamesnake_die
+        self.type = ["shooter_four"]
 
         self.hp = 32
         self.ap = 2
@@ -341,9 +343,10 @@ class Mon_flamesnake(Character):
 
 class Mon_firebat(Character):
     def __init__(self):
-        image_group = mon_firebat_images
+        image_group = images_bigger(mon_firebat_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = firebat_die
         self.type = ["runner", "toward"]
 
         self.hp = 18
@@ -352,6 +355,49 @@ class Mon_firebat(Character):
         self.is_dashed = False
         self.dashes = 0
 
+# BOSS
+class Boss_golem(Character):
+    def __init__(self):
+        image_group = mon_golem_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["boss", "toward"]
+
+        self.hp = 400
+        self.ap = 2
+        self.speed = 0.08
+
+class Boss_ember(Character):
+    def __init__(self):
+        image_group = mon_ember_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["boss", "boss_ember", "shooter"]
+
+        self.hp = 220
+        self.ap = 1.7
+        self.speed = 0.17
+        self.bullet = fire_atk_image
+        self.b_speed = 18
+        self.b_damage = 10
+        self.b_type = "ember"
+        self.cycle = 0
+
+class Boss_flamesnake(Character):
+    def __init__(self):
+        image_group = mon_flamesnake_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["boss", "boss_flamesnake", "shooter_four"]
+
+        self.hp = 250
+        self.ap = 3
+        self.speed = 0
+        self.bullet = fire_atk_image
+        self.b_speed = 18
+        self.b_damage = 10
+        self.b_type = "ember"
+        self.cycle = 0
 
                                         # 61 ~ 80 : magical library
 class Mon_witch(Character):

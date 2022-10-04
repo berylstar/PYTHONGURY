@@ -725,7 +725,8 @@ def game_restart():
     global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
-    player.coin += 10
+    if tuto_con.tutorial:
+        player.coin += 10
     make_floor_zero()
     equip_reset()
     saved_floor = 1
@@ -1267,6 +1268,15 @@ def monster_action():
                     else:
                         break
                     shooting_group.add(Bullet(image, monster.position, monster.direction, monster.b_speed, monster.b_damage, monster.b_type))
+            elif "shooter_four" in monster.type:
+                if 0 <= randprob <= 50:
+                    u_image = pygame.transform.rotozoom(monster.bullet, 270, 1)
+                    shooting_group.add(Bullet(u_image, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
+                    d_image = pygame.transform.rotozoom(monster.bullet, 90, 1)
+                    shooting_group.add(Bullet(d_image, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
+                    shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
+                    r_image = pygame.transform.flip(monster.bullet, True, False)
+                    shooting_group.add(Bullet(r_image, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
 
             if "alpha" in monster.type:
                 if 0 <= randprob <= 50 and not monster_con.dont_alpha:
@@ -1303,8 +1313,9 @@ def boss_action(monster):
         monster_con.is_blind = True
     elif "boss_skel" in monster.type:    # boss shooter
         if monster.direction == "UP" or monster.direction == "DOWN":
-            shooting_group.add(Bullet(monster.bullet, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
-            shooting_group.add(Bullet(monster.bullet, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
+            image = pygame.transform.rotozoom(monster.bullet, 90, 1)
+            shooting_group.add(Bullet(image, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
+            shooting_group.add(Bullet(image, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
         else:
             shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
             shooting_group.add(Bullet(monster.bullet, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
@@ -1312,10 +1323,26 @@ def boss_action(monster):
     elif "boss_ghost" in monster.type:
         monster_con.is_blind = True
     elif "boss_scarecrow" in monster.type:
-        shooting_group.add(Bullet(monster.bullet, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
-        shooting_group.add(Bullet(monster.bullet, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
+        u_image = pygame.transform.rotozoom(monster.bullet, 270, 1)
+        shooting_group.add(Bullet(u_image, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
+        d_image = pygame.transform.rotozoom(monster.bullet, 90, 1)
+        shooting_group.add(Bullet(d_image, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
         shooting_group.add(Bullet(monster.bullet, monster.position, "LEFT", monster.b_speed, monster.b_damage, monster.b_type))
-        shooting_group.add(Bullet(monster.bullet, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
+        r_image = pygame.transform.flip(monster.bullet, True, False)
+        shooting_group.add(Bullet(r_image, monster.position, "RIGHT", monster.b_speed, monster.b_damage, monster.b_type))
+
+    elif "boss_ember" in monster.type:
+        monster.cycle += 1
+        if monster.cycle == 2:
+            lava = Field(lava_image, (0,0))
+            random_away_position(monster.position, lava)
+            field_group.add(lava)
+            monster.cycle == 0
+    elif "boss_flamesnake" in monster.type:
+        monster.cycle += 1
+        if monster.cycle == 3:
+            spawn_monster(player.position, Mon_ember())
+            monster.cycle = 0
 
 def monster_die(monster):
     if "boss" in monster.type:
@@ -1337,22 +1364,23 @@ def monster_die(monster):
 def field_effect(field):
     global saved_floor
 
-    if pygame.sprite.collide_mask(field, player):
-        if field.image == web_image and not field.is_activated:
-            player.stop()
+    if field.image == web_image and not field.is_activated:
+        player.stop()
+    if field.image == lava_image and not field.is_activated:
+        player.hp -= 0.5
 
-        if field == portal:
-            player.stop()
-            saved_floor = floor
-            floor_zero()
+    if field == portal:
+        player.stop()
+        saved_floor = floor
+        floor_zero()
 
-        if field == key_field:
-            player.stop()
-            monster_group.empty()
-            shooting_group.empty()
-            item_group.empty()
-            field_group.empty()
-            next_floor(player.position)
+    if field == key_field:
+        player.stop()
+        monster_group.empty()
+        shooting_group.empty()
+        item_group.empty()
+        field_group.empty()
+        next_floor(player.position)
 
         # 불 바닥
 
@@ -1586,7 +1614,8 @@ while running:
 
     for field in field_group:
         field.draw(screen)                                                              #FIELD
-        field_effect(field)
+        if pygame.sprite.collide_mask(field, player):
+            field_effect(field)
 
     if not monster_group and tuto_con.tutorial:
         stair.draw(screen)                                                              #STAIR
