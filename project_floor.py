@@ -137,7 +137,7 @@ def random_boss(floor):
             return Boss_golem()
         elif randprob == 2:
             return Boss_ember()
-        elif randprob == 3 and randprob == 4:
+        elif randprob == 3 or randprob == 4:
             return Boss_flamesnake()
 
     else:
@@ -148,16 +148,11 @@ def random_field_setting(floor):
 
     field_group.empty()
 
-    lava = Field(lava_image, (0,0))
-    random_away_position((0,0), lava)
-    field_group.add(lava)
-
     if 0 < floor <= 20:
-        for i in range(randprob % 4):
-            if randprob % 2 == 0:
-                web = Field(web_image, (0,0))
-                random_away_position((0,0), web)
-                field_group.add(web)
+        for i in range(randprob % 3):
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)
 
         if randprob <= 50:
             water = Field(water_image, (0,0))
@@ -165,8 +160,19 @@ def random_field_setting(floor):
             field_group.add(water)
 
     elif 20 < floor <= 40:
+        for i in range(randprob % 4):
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)
+
         if randprob <= 50:
-            index = randprob % 4
+            index = randprob % 2
             deco = Field(graveyard_deco[index], (0,0))
             random_away_position((0,0), deco)
             field_group.add(deco)
+
+    elif 40 < floor <= 60:
+        for i in range(randprob % 3):
+            lava = Field(lava_image, (0,0))
+            random_away_position((0,0), lava)
+            field_group.add(lava)

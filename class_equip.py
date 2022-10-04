@@ -692,6 +692,19 @@ class E_Potion(Equip):
         # self.max_col = 2
 
         self.price = 0
+
+class E_Coins(Equip):
+    def __init__(self):
+        image = coins_image
+        Equip.__init__(self, image)
+        self.msg_name = "돈 뭉치"
+        self.msg_info = "이것만 있으면 나도 부자"
+        self.msg_eff = "COIN + 15"
+
+        # self.max_row = 5
+        # self.max_col = 2
+
+        self.price = 0
 ##############################################################################################
 ##### equip controller
 class EquipController():
@@ -843,6 +856,7 @@ e_goldenkey = E_GoldenKey()
 e_escaperope = E_EscapeRope()       # NONE
 
 e_potion = E_Potion()
+e_coins = E_Coins()
 
 
 

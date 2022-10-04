@@ -613,13 +613,15 @@ def scene_treasurebox(doing, reward):
 
     if reward == "normal":
         choice_equip = [equip_con.normal_equips[-1], equip_con.normal_equips[-2]]
+    # elif reward == "boss":
+    #     if equip_con.unique_equips:
+    #         choice_equip = [equip_con.unique_equips[-1], e_potion]
+    #     elif equip_con.rare_equips:
+    #         choice_equip = [equip_con.rare_equips[-1], e_potion]
+    #     else:
+    #         choice_equip = [equip_con.normal_equips[-1], e_potion]
     elif reward == "boss":
-        if equip_con.unique_equips:
-            choice_equip = [equip_con.unique_equips[-1], e_potion]
-        elif equip_con.rare_equips:
-            choice_equip = [equip_con.rare_equips[-1], e_potion]
-        else:
-            choice_equip = [equip_con.normal_equips[-1], e_potion]
+        choice_equip = [e_coins, e_potion]
 
     picked_num = 0
     choice = True
@@ -634,9 +636,12 @@ def scene_treasurebox(doing, reward):
                     if event.key == pygame.K_1:
                         exit_flag = False
                         if picked_num == 1:
-                            sound_con.play_sound(sound_box_get)
-                            equip_con.equipped_group.append(choice_equip[0])
-                            equip_con.equip_on(choice_equip[0])
+                            if reward == "normal":
+                                sound_con.play_sound(sound_box_get)
+                                equip_con.equipped_group.append(choice_equip[0])
+                                equip_con.equip_on(choice_equip[0])
+                            elif reward == "boss":
+                                player.coin += 15
                             choice = False
                             picked_num = 0
                         else:
@@ -657,7 +662,7 @@ def scene_treasurebox(doing, reward):
                         else:
                             sound_con.play_sound(sound_wasd)
                             picked_num = 2
-                    
+
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     if not choice:
@@ -852,8 +857,8 @@ def bgm_setting(floor):
         sound_con.play_bgm(bgm_first)
     elif 20 < floor <= 40 and not sound_con.bgm == bgm_second:
         sound_con.play_bgm(bgm_second)
-    elif 40 < floor <= 60 and not sound_con.bgm == bgm_second:
-        sound_con.play_bgm(bgm_second)
+    elif 40 < floor <= 60 and not sound_con.bgm == bgm_third:
+        sound_con.play_bgm(bgm_third)
 
 def show_animation():
     player.image_update()
@@ -1575,6 +1580,10 @@ while running:
                     player.skill_v()
                 if event.key == pygame.K_i:
                     scene_inventory(True)
+                if event.key == pygame.K_o:
+                    if monster_group:
+                        for monster in monster_group:
+                            monster.hp -= 100
 
         if not player.is_die:
             player_move_key()

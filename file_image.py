@@ -121,9 +121,9 @@ ember_die = [ember_x, ember_x, ember_x]
 ##### FLAME SNAKE
 mon_flamesnake_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_0.png")),
-    pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_0.png")),
-    pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_0.png")),
-    pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_1.png")),
     ]
 flamesnake_x = pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_x.png"))
 flamesnake_die = [flamesnake_x, flamesnake_x, flamesnake_x]
@@ -188,6 +188,7 @@ potion_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_poti
 coin_image = pygame.image.load(os.path.join(file_path, "design\\item\\coin.png"))
 redcoin_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_coin.png"))
 box_image = pygame.image.load(os.path.join(file_path, "design\\item\\box.png"))
+coins_image = pygame.image.load(os.path.join(file_path, "design\\item\\coins.png"))
 
 ##############################################################################################
 ##### EQUIP
@@ -278,12 +279,4 @@ blind_image = pygame.image.load(os.path.join(file_path, "images\\blind.png"))
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
 
-tuto_images = [
-    pygame.image.load(os.path.join(file_path, "images\\test_0.png")),
-    pygame.image.load(os.path.join(file_path, "images\\test_1.png")),
-]
-
-inven_img = pygame.image.load(os.path.join(file_path, "images\\inven.png"))
 dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
-
-block_1 = pygame.image.load(os.path.join(file_path, "design\\block_1.png"))

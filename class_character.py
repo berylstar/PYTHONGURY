@@ -299,7 +299,7 @@ class Boss_scarecrow(Character):
                                         # 41 ~ 60 : lava land
 class Mon_golem(Character):
     def __init__(self):
-        image_group = images_bigger(mon_golem_images, 2)
+        image_group = mon_golem_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = golem_die
@@ -311,7 +311,7 @@ class Mon_golem(Character):
 
 class Mon_ember(Character):
     def __init__(self):
-        image_group = images_bigger(mon_ember_images, 2)
+        image_group = mon_ember_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = ember_die
@@ -327,7 +327,7 @@ class Mon_ember(Character):
 
 class Mon_flamesnake(Character):
     def __init__(self):
-        image_group = images_bigger(mon_flamesnake_images, 1.5)
+        image_group = mon_flamesnake_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = flamesnake_die
@@ -343,7 +343,7 @@ class Mon_flamesnake(Character):
 
 class Mon_firebat(Character):
     def __init__(self):
-        image_group = images_bigger(mon_firebat_images, 2)
+        image_group = mon_firebat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = firebat_die
@@ -358,7 +358,7 @@ class Mon_firebat(Character):
 # BOSS
 class Boss_golem(Character):
     def __init__(self):
-        image_group = mon_golem_images
+        image_group = images_bigger(mon_golem_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "toward"]
@@ -369,7 +369,7 @@ class Boss_golem(Character):
 
 class Boss_ember(Character):
     def __init__(self):
-        image_group = mon_ember_images
+        image_group = images_bigger(mon_ember_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_ember", "shooter"]
@@ -385,7 +385,7 @@ class Boss_ember(Character):
 
 class Boss_flamesnake(Character):
     def __init__(self):
-        image_group = mon_flamesnake_images
+        image_group = images_bigger(mon_flamesnake_images, 1.5)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.type = ["boss", "boss_flamesnake", "shooter_four"]
