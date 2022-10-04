@@ -45,6 +45,7 @@ def random_monster(floor):
             return Mon_bat()
         elif randprob % 2 == 1:
             return Mon_spider()
+
     elif 20 < floor <= 40:
         if randprob < 30:
             return Mon_ghost()
@@ -53,8 +54,17 @@ def random_monster(floor):
         elif randprob % 2 == 0:
             return Mon_scarecrow()
         elif randprob % 2 == 1:
-            # return Mon_zombie()
-            return Mon_ghost()
+            return Mon_zombie()
+
+    elif 40 < floor <= 60:
+        if randprob < 30:
+            return Mon_ember()
+        elif 30 <= randprob < 60:
+            return Mon_golem()
+        elif randprob % 2 == 0:
+            return Mon_flamesnake()
+        elif randprob % 2 == 1:
+            return Mon_firebat()
 
 def monster_floor_setting(pos, floor):
     if 1 <= floor < 5:
@@ -77,14 +87,32 @@ def monster_floor_setting(pos, floor):
         spawn_monster(pos, Mon_ghost())
         spawn_monster(pos, Mon_werewolf())
     elif 35 <= floor < 40:
-        # spawn_monster(pos, Mon_zombie())
+        spawn_monster(pos, Mon_zombie())
+        spawn_monster(pos, Mon_zombie())
+        spawn_monster(pos, Mon_zombie())
         pass
     elif floor == 40:
         spawn_monster(pos, random_boss(floor))
 
+    if 41 <= floor < 45:
+        spawn_monster(pos, Mon_ember())
+    elif 45 <= floor < 50:
+        spawn_monster(pos, Mon_firebat())
+        spawn_monster(pos, Mon_golem())
+    elif 50 <= floor < 55:
+        spawn_monster(pos, Mon_flamesnake())
+    elif 55 <= floor < 60:
+        spawn_monster(pos, Mon_firebat())
+        spawn_monster(pos, Mon_ember())
+        spawn_monster(pos, Mon_golem())
+        pass
+    elif floor == 60:
+        spawn_monster(pos, random_boss(floor))
+
 def random_boss(floor):
     randprob = random.randrange(1,5)
-    if floor == 20 or floor == 40:
+
+    if floor == 20:
         if randprob == 1:
             return Boss_spider()
         elif randprob == 2:
@@ -93,6 +121,25 @@ def random_boss(floor):
             return Boss_frog()
         elif randprob == 4:
             return Boss_skel()
+
+    elif floor == 40:
+        if randprob == 1:
+            return Boss_zombie()
+        elif randprob == 2:
+            return Boss_werewolf()
+        elif randprob == 3:
+            return Boss_ghost()
+        elif randprob == 4:
+            return Boss_scarecrow()
+
+    elif floor == 60:
+        if randprob == 1:
+            return Boss_golem()
+        elif randprob == 2:
+            return Boss_ember()
+        elif randprob == 3 or randprob == 4:
+            return Boss_flamesnake()
+
     else:
         return Mon_boss()
 ##############################################################################################
@@ -102,11 +149,10 @@ def random_field_setting(floor):
     field_group.empty()
 
     if 0 < floor <= 20:
-        for i in range(randprob % 4):
-            if randprob % 2 == 0:
-                web = Field(web_image, (0,0))
-                random_away_position((0,0), web)
-                field_group.add(web)
+        for i in range(randprob % 3):
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)
 
         if randprob <= 50:
             water = Field(water_image, (0,0))
@@ -114,8 +160,19 @@ def random_field_setting(floor):
             field_group.add(water)
 
     elif 20 < floor <= 40:
+        for i in range(randprob % 4):
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)
+
         if randprob <= 50:
-            index = randprob % 4
+            index = randprob % 2
             deco = Field(graveyard_deco[index], (0,0))
             random_away_position((0,0), deco)
             field_group.add(deco)
+
+    elif 40 < floor <= 60:
+        for i in range(randprob % 3):
+            lava = Field(lava_image, (0,0))
+            random_away_position((0,0), lava)
+            field_group.add(lava)

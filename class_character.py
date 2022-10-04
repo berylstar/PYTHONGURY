@@ -177,6 +177,18 @@ class Boss_frog(Character):
         self.speed = 0.15
         self.cycle = 2
 
+class Mon_frog_m(Character):
+    def __init__(self):
+        image_group = mon_frog_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = frog_die
+        self.type = []
+
+        self.hp = 3
+        self.ap = 0.5
+        self.speed = 0.2
+
 class Boss_skel(Character):
     def __init__(self):
         image_group = images_bigger(mon_skel_images, 2)
@@ -488,6 +500,7 @@ class Mon_mini(Character):
 class MonsterController():
     def __init__(self):
         self.mon_count = 0
+        self.boss_scene = False
 
         self.dontmove = False
         self.dont_alpha = False

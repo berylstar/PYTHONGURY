@@ -407,6 +407,7 @@ def scene_tutorial(doing, tuto):
                 ("킹 슬라임",                       "왼쪽에 있는거 부터 순서대로", "'1','2','3'번으로 살수 있는겨"),
                 ("                      슬라임",    "근데요...", "여기 있는게 맘에 안드는데요 ?"),
                 ("킹 슬라임",                       "맘에 안들면 바꿀 수 도 있으니께", "'R' 버튼을 눌러봐"),
+                ("킹 슬라임",                       "근데 1원씩 내야혀", "세상에 공짜는 없다 몰러 ?"),
                 ("킹 슬라임",                       "아 그리고 '스킬'이나 '사용'인것들은", "'C'나 'V'로 쓸 수 있는겨"),
                 ("킹 슬라임",                       "'스킬'은 쿨타임이 있는거고", "'사용'은 한번 쓰면 없이지니 조심하고"),
                 ("킹 슬라임",                       "맘에 드는 걸로 잘 해봐", "난 간다잉"),
@@ -458,25 +459,32 @@ def scene_tutorial(doing, tuto):
 
 def scene_boss(doing):
 
+    player.stop()
+    monster_con.dontmove = True
+    for monster in monster_group:
+        monster.direction = "NONE"
+
+    monster_con.boss_scene = True
+    init_time = pygame.time.get_ticks()
+
     while doing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 scene_exit(True)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    # sound_con.play_sound(sound_reborn)
-                    doing = False
-                    floor_zero()
-                if event.key == pygame.K_ESCAPE:
-                    sound_con.play_sound(sound_pick)
-                    scene_esc(True)
+
+        second_time = pygame.time.get_ticks()
+
+        if second_time - init_time > 2000:
+            doing = False
 
         screen.fill(BLACK)
         cut_rect = pygame.Rect((340,200), (600,100))
+        screen_message("BOSS STAGE", RED, (640,250), game_font_l)
         pygame.display.update(cut_rect)
 
 def scene_player_dead(doing):
     monster_con.is_blind = False
+    monster_con.boss_scene = False
 
     while doing:
         for event in pygame.event.get():
@@ -491,16 +499,14 @@ def scene_player_dead(doing):
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
-        screen.blit(test_image, (340,60))      # 죽을 때 배경 이미지로 대체
+        screen.fill(BLACK)      # 죽을 때 배경 이미지로 대체
         screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
         display_info_ui()
         display_inven_ui()
-        # pygame.display.update(full_rect)
         pygame.display.update()
 
 def scene_game_over(doing):
-    global ready
 
     while doing:
         for event in pygame.event.get():
@@ -511,7 +517,6 @@ def scene_game_over(doing):
                     sound_con.play_sound(sound_pick)
                     doing = False
                     game_restart()
-                    ready = True
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
@@ -611,8 +616,8 @@ def shop_showcase(index, equip):
 
 def scene_inventory(doing):
     sound_con.play_sound(sound_inven_open)
-    player.stop()
 
+    player.stop()
     monster_con.dontmove = True
     for monster in monster_group:
         monster.direction = "NONE"
@@ -1409,7 +1414,7 @@ def boss_action(monster):
     elif "boss_frog" in monster.type:       # monster spawner
         monster.cycle += 1
         if monster.cycle == 3:
-            spawn_monster(player.position, Mon_frog())
+            spawn_monster(player.position, Mon_frog_m())
             monster.cycle = 0
     elif "boss_bat" in monster.type:        # blind
         monster_con.is_blind = True
@@ -1502,7 +1507,7 @@ class Player(Character):
         self.hp = 100
         self.max_hp = 100
         self.coin = 0
-        self.ap = 50
+        self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
         self.dp = 0
@@ -1718,12 +1723,15 @@ while running:
         if not skill_con.active_trafficlight[0]:
             monster_move()
 
+        if floor % 20 == 0 and not monster_con.boss_scene:
+            scene_boss(True)
+
     for field in field_group:
         field.draw(screen)                                                              #FIELD
         if pygame.sprite.collide_mask(field, player):
             field_effect(field)
 
-    if not monster_group and tuto_con.inven:
+    if not monster_group and tuto_con.shop:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
