@@ -313,32 +313,116 @@ def scene_story(doing):
         
         pygame.display.update()
 
-def scene_tutorial(doing):
+def scene_ending(doing):
 
-    if not tuto_con.tutorial:
-        msg = [
-            ("                      슬라임",    ".........?", "여기가..... 어디죠....?"),
-            ("킹 슬라임",                       "요 앞은 몬스터들로 가득한 위험한 곳인디.", "뭔 일로 슬라임이 여까지 왔는겨~.", ),
-            ("킹 슬라임",                       "나는 같이 가줄 수 없응께.", "몇가지만 내가 조께 알려줄라니까."),
-            ("킹 슬라임",                       "먼저, '방향키'로 움직일 수 있는 건 아는겨 ?", "그리고 '스페이스 바'로 주먹도 날려 봐."),
-            ("킹 슬라임",                       "공격을 할 수 있고, 여러가지 상호작용도", "가능하니 꼭 기억하도록 혀."),
-            ("킹 슬라임",                       "그리고 우리 슬라임들은 뱃 속이 아~주 넓어서", "장비를 먹을 수 있는거 알고 있는겨 없는겨."),
-            ("                      슬라임",    ".........?", "장비가 뭐죠 ?"),
-            ("킹 슬라임",                       "정말 하나도 모르는구마이.", "그 동안의 용사들이 떨어뜨리고 간 물건들인디."),
-            ("킹 슬라임",                       "공격력, HP같은 능력치를 올려주거나,", "스킬로 특별하게 사용할 수 있는 게 장비란 말이여"),
-            ("킹 슬라임",                       "어떻게 사용하느냐에 따라 자네가", "탑을 더 오를 수 있을겨"),
-            ("킹 슬라임",                       "아 그리고 'I'를 통해 뱃 속을 정리해야 혀", "뱃 속이 정리가 잘 되야 움직이기도 편한겨."),
-            ("킹 슬라임",                       "장비를 구매하고 싶으면,", "저~ 밑에 관을 열어보도록 혀."),
-            ("                      슬라임",    "감사합니다 아저씨! 그럼 바로 가볼게요.", "안녕히 계세요 ~"),
-            ("킹 슬라임",                       "잠 - 깐 - 만 !", "아직 내 말 안 끝났는디 어딜가는겨"),
-            ("킹 슬라임",                       "이 탑에 흐르는 이상한 마력때문에 점점", "힘들어지니께 빨리 움직이는 게 좋을거여."),
-            ("킹 슬라임",                       "젊은 친구가 딱 하니께, 이 돈 가져가보록 혀.", ""),
-            ("킹 슬라임",                       "그럼 잘 해보라고.", ""),
-        ]
-    else:
-        msg = [
-                ("킹 슬라임",                       "이제 돈 없어", "얼른 가봐")
+    index = 0
+    fin = len(story_images)-1
+
+    sound_con.play_bgm(bgm_story)
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_page)
+                    if index >= fin:
+                        doing = False
+                    else:
+                        index += 1
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    scene_esc(True)
+                if event.key == pygame.K_r:
+                    doing = False
+
+        screen.fill(BLACK)
+
+        if -1 < index < 3 :
+            screen.blit(story_images[0], (200,100))
+            if index > 0:
+                screen.blit(story_images[1], (680,50))
+                if index > 1:
+                    screen.blit(story_images[2], (680,300))
+        elif index == 3:
+            screen.blit(story_images[3], (240,80))
+        elif 3 < index < 7:
+            screen.blit(story_images[4], (200,100))
+            if index > 4:
+                screen.blit(story_images[5], (680,50))
+                if index > 5:
+                    screen.blit(story_images[6], (680,300))
+        elif index == 7:
+            screen.blit(story_images[7], (240,80))
+        elif 7 < index < 11:
+            screen.blit(story_images[8], (200,100))
+            if index > 8:
+                screen.blit(story_images[9], (680,50))
+                if index > 9:
+                    screen.blit(story_images[10], (680,300))
+        elif index == 11:
+            screen.blit(story_images[11], (240,80))
+        elif 11 < index:
+            screen.blit(story_images[12], (100,50))
+            if 12 < index:
+                screen.blit(story_images[13], (400,100))
+        
+        pygame.display.update()
+
+def scene_tutorial(doing, tuto):
+
+    punch_group.empty()
+
+    if tuto == "intro":
+        if not tuto_con.tutorial:
+            msg = [
+                ("                      슬라임",    ".........?", "여기가..... 어디죠....?"),
+                ("킹 슬라임",                       "요 앞은 몬스터들로 가득한 위험한 곳인디.", "뭔 일로 슬라임이 여까지 왔는겨.", ),
+                ("                      슬라임",    "그래도 저는 더 안쪽으로 가보고 싶어요.", "계속 입구에만 있었는걸요."),
+                ("킹 슬라임",                       "흠... 간다면 어쩔수 없제.", "가기 전에 몇가지만 내가 알려줄라니까."),
+                ("킹 슬라임",                       "먼저, '방향키'로 움직일 수 있는 건 아는겨 ?", "그리고 '스페이스 바'로 주먹을 날려부러."),
+                ("킹 슬라임",                       "공격도 할 수 있고, 여러가지 상호작용도", "가능하니께 단단히 기억해야 할 거여."),
+                ("킹 슬라임",                       "그리고 우리 슬라임들은 뱃 속이 아~주 넓어서", "장비를 먹을 수 있는거 알고 있는겨 없는겨."),
+                ("                      슬라임",    ".........?", "장비가 뭐죠 ?"),
+                ("킹 슬라임",                       "정말 하나도 모르는구마이.", "그 동안의 용사들이 떨어뜨리고 간 물건들인디."),
+                ("킹 슬라임",                       "공격력, HP같은 능력치를 올려주거나,", "스킬로 특별하게 사용할 수 있는 게 장비란 말이여"),
+                ("킹 슬라임",                       "장비를 구매하고 싶으면,", "저~ 밑에 관을 열어보도록 혀."),
+                ("                      슬라임",    "감사합니다 아저씨! 그럼 바로 가볼게요.", "안녕히 계세요 ~"),
+                ("킹 슬라임",                       "아 - 야 !", "아직 내 말 안 끝났는디 어딜가는겨"),
+                ("킹 슬라임",                       "이 탑에 흐르는 이상한 마력때문에", "힘들어지니께 빨리 움직이는 게 좋을거여."),
+                ("킹 슬라임",                       "젊은 친구가 딱 하니께, 이 돈은 가져가보록 혀.", ""),
+                ("킹 슬라임",                       "그럼 잘 해보라고.", ""),
             ]
+        else:
+            msg = [
+                    ("킹 슬라임",                       "이제 돈 없어", "얼른 가봐")
+                ]
+    elif tuto == "shop":
+        msg = [
+                ("킹 슬라임",                       "뭘 그렇게 쳐다 보는겨", "관 처음 열어보는가?"),
+                ("                      슬라임",    "여기까지 따라오신 거에요 ?", ""),
+                ("킹 슬라임",                       "아니 저 오랜만에 심심해서 그라제.", "내 좀 알려줄라니까"),
+                ("킹 슬라임",                       "딱 열어보면은 여기 있는 건", "용사들이 놔두고 간 거 다 주워온겨"),
+                ("킹 슬라임",                       "왼쪽에 있는거 부터 순서대로", "'1','2','3'번으로 살수 있는겨"),
+                ("                      슬라임",    "근데요...", "여기 있는게 맘에 안드는데요 ?"),
+                ("킹 슬라임",                       "맘에 안들면 바꿀 수 도 있으니께", "'R' 버튼을 눌러봐"),
+                ("킹 슬라임",                       "아 그리고 '스킬'이나 '사용'인것들은", "'C'나 'V'로 쓸 수 있는겨"),
+                ("킹 슬라임",                       "'스킬'은 쿨타임이 있는거고", "'사용'은 한번 쓰면 없이지니 조심하고"),
+                ("킹 슬라임",                       "맘에 드는 걸로 잘 해봐", "난 간다잉"),
+            ]
+    elif tuto == "inven":
+        msg = [
+                ("                      슬라임",    "으으-", "뱃 속이 덥수룩한데 ?"),
+                ("킹 슬라임",                       "그럴 땐 뱃 속 정리를 해야제", "'I' 버튼으로 할 수 있응께"),
+                ("킹 슬라임",                       "'스페이스바'로 장비를 딱 골라서", "여기저기 움직이면서 정리해보라고"),
+                ("                      슬라임",    "으으-", "그래도 뱃 속이 꽉 찬거 같아요."),
+                ("킹 슬라임",                       "그럴 땐 'R'버튼으로 소화해보라고", "배가 편안해질거여"),
+                ("킹 슬라임",                       "아 그리고 아까 스킬 등록하는 거는", "'C'나 'V'로 되는것도 알아두고"),
+                ("킹 슬라임",                       "음 내가 뭐 더 알려줄건 없는거 같은디", "이젠 진짜 잘해봐"),
+            ]
+    elif tuto == "box":
+        pass
 
     index = 0
     fin = len(msg)-1
@@ -371,6 +455,25 @@ def scene_tutorial(doing):
         screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
         screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
         pygame.display.update(corpus_rect)
+
+def scene_boss(doing):
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    # sound_con.play_sound(sound_reborn)
+                    doing = False
+                    floor_zero()
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    scene_esc(True)
+
+        screen.fill(BLACK)
+        cut_rect = pygame.Rect((340,200), (600,100))
+        pygame.display.update(cut_rect)
 
 def scene_player_dead(doing):
     monster_con.is_blind = False
@@ -466,7 +569,6 @@ def scene_shop(doing):
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_shop_close)
                     doing = False
-                    tuto_con.shop = True
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
                     else:
@@ -486,13 +588,7 @@ def scene_shop(doing):
             coin_image_r = pygame.transform.rotozoom(coin_image, 0, 0.5)
             coin_rect = coin_image_r.get_rect(center=(800, 200))
             screen.blit(coin_image_r, coin_rect)
-            screen_message(f"x {equip.price}", WHITE, (850,200), game_font_m)
-        else:
-            if not tuto_con.shop:
-                screen_message_2("장비 구매 : '1' or '2' or '3'", YELLOW, (380,100), game_font_s)
-                screen_message_2("상점 새로고침 : 'R' - 1코인", YELLOW, (380,130), game_font_s)
-                screen_message_2("'사용' 장비는 사용하면 제거", YELLOW, (380,160), game_font_s)
-                screen_message_2("'스킬' 장비는 쿨타임이 지나면 재사용이 가능합니다.", YELLOW, (380,190), game_font_s)
+            screen_message(f"x {equip.price}", WHITE, (850,200), game_font_m)\
 
         shop_showcase(0, equip_con.for_sale[0])
         shop_showcase(1, equip_con.for_sale[1])
@@ -500,6 +596,10 @@ def scene_shop(doing):
 
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         pygame.display.update()
+
+        if not tuto_con.shop:
+            scene_tutorial(True, "shop")
+            tuto_con.shop = True
 
 def shop_showcase(index, equip):
     if equip_con.can_buy[index] and equip_con.for_sale[index]:
@@ -570,7 +670,7 @@ def scene_inventory(doing):
                         setting_active_skill("v", picked_equip)
                         picked_equip = None
 
-        # screen.blit(inven_img, (340,60))
+        display_info_ui()
         display_inven_ui()
 
         pygame.draw.rect(screen, BLACK, ((490,280), (300,300)))
@@ -595,17 +695,14 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_info, WHITE, (640,160), game_font_kor)
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
-        else:
-            screen_message_2("장비 클릭 - 'SPACE BAR'", WHITE, (460,120), game_font_s)
-            screen_message_2("장비 제거 - 'R'", WHITE, (460,150), game_font_s)
-            screen_message_2("스킬 등록 - 'C' or 'V'", WHITE, (460,180), game_font_s)
-            screen_message_2("장비는 항상 정리해주세요.", WHITE, (460,210), game_font_s)
-
-        # screen_message("PRESS 'I' TO BACK", WHITE, (640,640), game_font_m)
     
         cursor.draw(screen)
-        # pygame.display.update(full_rect)
         pygame.display.update()
+
+        if not tuto_con.inven:
+            scene_tutorial(True, "inven")
+            tuto_con.inven = True
+            screen.fill(BLACK)
 
 def scene_treasurebox(doing, reward):
     sound_con.play_sound(sound_box_open)
@@ -783,7 +880,7 @@ def floor_zero():
     for npc in npc_group:
         npc.draw(screen)
 
-    if item_con.first_box and tuto_con.tutorial:
+    if item_con.first_box and tuto_con.shop:
         item_group.add(Item(box_image, (400,500), "normal_box"))
         item_con.first_box = False
 
@@ -793,7 +890,7 @@ def floor_zero():
     for punch in punch_group:
         if pygame.sprite.collide_mask(punch, npc_kingslime):
             player.stop()
-            scene_tutorial(True)
+            scene_tutorial(True, "intro")
 
         if pygame.sprite.collide_mask(punch, npc_coffin) and tuto_con.tutorial:
             player.stop()
@@ -1578,7 +1675,7 @@ while running:
                 if event.key == pygame.K_v and floor > 0:
                     #이펙트 소리 필요
                     player.skill_v()
-                if event.key == pygame.K_i:
+                if event.key == pygame.K_i and tuto_con.shop:
                     scene_inventory(True)
                 if event.key == pygame.K_o:
                     if monster_group:
@@ -1626,7 +1723,7 @@ while running:
         if pygame.sprite.collide_mask(field, player):
             field_effect(field)
 
-    if not monster_group and tuto_con.tutorial:
+    if not monster_group and tuto_con.inven:
         stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
