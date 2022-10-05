@@ -136,12 +136,47 @@ mon_firebat_images = [
 firebat_x = pygame.image.load(os.path.join(file_path, "design\\monster\\firebat_x.png"))
 firebat_die = [firebat_x, firebat_x, firebat_x]
 
+##### WITCH
+mon_witch_images = [
+
+]
+witch_x = None
+witch_die = [witch_x, witch_x, witch_x]
+
+##### BOOK
+mon_book_images = [
+    
+]
+book_x = None
+book_die = [book_x, book_x, book_x]
+
+##### MAGICIAN
+mon_magician_images = [
+    
+]
+magician_atk_image = None
+magician_x = None
+magician_die = [magician_x, magician_x, magician_x]
+
+##### CANDLE
+mon_candle_images = [
+    
+]
+candle_x = None
+candle_die = [candle_x, candle_x, candle_x]
 
 monster_die_images = [
     pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
     pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
     pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
 ]
+
+##### DEVIL
+devil_images =[
+
+]
+devil_x = None
+devil_die = [devil_x, devil_x, devil_x, devil_x, devil_x]
 ##############################################################################################
 ##### NPC
 father_slime_images = [
@@ -179,7 +214,10 @@ graveyard_deco = [
 
 portal_image = pygame.image.load(os.path.join(file_path, "images\\portal.png"))
 
-lava_image = pygame.image.load(os.path.join(file_path, "design\\field\\lava.png"))
+lava_images = [
+    pygame.image.load(os.path.join(file_path, "design\\field\\lava_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\field\\lava_2.png"))
+]
 
 ##############################################################################################
 ##### ITEM
@@ -227,11 +265,21 @@ rope_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rope.png
 
 ##############################################################################################
 ##### BACKGROUND
-background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0.png"))
-background_second = [
+background_zero = pygame.image.load(os.path.join(file_path, "design\\floor\\0_0.png"))
+background_first = [
     pygame.image.load(os.path.join(file_path, "design\\floor\\1_1.png")),
     pygame.image.load(os.path.join(file_path, "design\\floor\\1_2.png")),
     pygame.image.load(os.path.join(file_path, "design\\floor\\1_3.png"))
+]
+background_second = [
+    pygame.image.load(os.path.join(file_path, "design\\floor\\2_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\floor\\2_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\floor\\2_3.png"))
+]
+background_third = [
+    pygame.image.load(os.path.join(file_path, "design\\floor\\3_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\floor\\3_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\floor\\3_3.png"))
 ]
 
 ##############################################################################################
@@ -274,13 +322,21 @@ ending_images = [
     pygame.image.load(os.path.join(file_path, "design\\story\\e_06.png")),
     pygame.image.load(os.path.join(file_path, "design\\story\\e_07.png")),
 ]
-player_blue = [
-    pygame.image.load(os.path.join(file_path, "design\\player\\blue_0.png")),
-    pygame.image.load(os.path.join(file_path, "design\\player\\blue_1.png")),
-    pygame.image.load(os.path.join(file_path, "design\\player\\blue_2.png")),
-    pygame.image.load(os.path.join(file_path, "design\\player\\blue_1.png")),
+
+player_blue_images = [
+    pygame.image.load(os.path.join(file_path, "design\\ending\\blue_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\ending\\blue_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\ending\\blue_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\ending\\blue_1.png")),
 ]
-blue_punch = pygame.image.load(os.path.join(file_path, "design\\player\\blue_punch.png"))
+blue_die_images = [
+    pygame.image.load(os.path.join(file_path, "design\\ending\\die_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\ending\\die_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\ending\\die_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\ending\\die_2.png")),
+]
+blue_inven = pygame.image.load(os.path.join(file_path, "design\\ending\\inven.png"))
+blue_punch = pygame.image.load(os.path.join(file_path, "design\\ending\\blue_punch.png"))
 ##############################################################################################
 # 테스트 용
 player_icon = pygame.image.load(os.path.join(file_path, "design\\player\\main_1.png"))

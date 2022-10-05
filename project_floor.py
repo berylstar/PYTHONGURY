@@ -69,6 +69,16 @@ def random_monster(floor):
         elif randprob % 2 == 1:
             return Mon_firebat()
 
+    elif 60 < floor < 80:
+        if randprob < 30:
+            return Mon_magician()
+        elif 30 <= randprob < 60:
+            return Mon_book()
+        elif randprob % 2 == 0:
+            return Mon_candle()
+        elif randprob % 2 == 1:
+            return Mon_witch()
+
     else:
         return False
 
@@ -115,6 +125,25 @@ def monster_floor_setting(pos, floor):
     elif floor == 60:
         spawn_monster(pos, random_boss(floor))
 
+    if 61 <= floor < 65:
+        spawn_monster(pos, Mon_book())
+    elif 65 <= floor < 70:
+        spawn_monster(pos, Mon_witch())
+    elif 70 <= floor < 75:
+        spawn_monster(pos, Mon_magician())
+    elif 75 <= floor < 80:
+        spawn_monster(pos, Mon_candle())
+        spawn_monster(pos, Mon_book())
+        pass
+    elif floor == 80:
+        randprob = random.randrange(0,2)
+        if randprob == 1:
+            spawn_monster(pos, random_boss(floor))
+        else:
+            spawn_monster(pos, Boss_witch())
+            spawn_monster(pos, Boss_book())
+        
+
 def random_boss(floor):
     randprob = random.randrange(1,5)
 
@@ -145,6 +174,12 @@ def random_boss(floor):
             return Boss_ember()
         elif randprob == 3 or randprob == 4:
             return Boss_flamesnake()
+
+    elif floor == 80:
+        if randprob % 2 == 1 :
+            return Boss_magician()
+        elif randprob % 2 == 0:
+            return Boss_candle()
 
     else:
         return Mon_boss()
@@ -178,7 +213,10 @@ def random_field_setting(floor):
             field_group.add(deco)
 
     elif 40 < floor <= 60:
-        for i in range(randprob % 3):
-            lava = Field(lava_image, (0,0))
+        num = max(8, randprob%11)
+        aa = 0 
+        for i in range(num):
+            lava = Field(lava_images[aa%2], (0,0))
             random_away_position((0,0), lava)
             field_group.add(lava)
+            aa += 1

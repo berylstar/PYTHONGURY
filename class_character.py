@@ -95,7 +95,7 @@ class Mon_spider(Character):
         self.type = ["shooter"]
 
         self.hp = 12
-        self.ap = 1
+        self.ap = 0.8
         self.speed = 0.15
         self.bullet = spider_atk_image
         self.b_speed = 8
@@ -111,7 +111,7 @@ class Mon_frog(Character):
         self.type = []
 
         self.hp = 12
-        self.ap = 1
+        self.ap = 0.8
         self.speed = 0.2
 
 class Mon_bat(Character):
@@ -183,7 +183,7 @@ class Mon_frog_m(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = frog_die
-        self.type = []
+        self.type = ["mini"]
 
         self.hp = 3
         self.ap = 0.5
@@ -213,9 +213,9 @@ class Mon_zombie(Character):
         self.die_images = zombie_die
         self.type = []
 
-        self.hp = 18
-        self.ap = 2
-        self.speed = 0.23
+        self.hp = 23
+        self.ap = 1
+        self.speed = 0.13
 
 class Mon_werewolf(Character):
     def __init__(self):
@@ -226,7 +226,7 @@ class Mon_werewolf(Character):
         self.type = ["toward"]
 
         self.hp = 30
-        self.ap = 2.5
+        self.ap = 1.2
         self.speed = 0.15
 
 class Mon_ghost(Character):
@@ -238,7 +238,7 @@ class Mon_ghost(Character):
         self.type = ["alpha"]
 
         self.hp = 20
-        self.ap = 1.5
+        self.ap = 0.6
         self.speed = 0.2
 
 class Mon_scarecrow(Character):
@@ -250,8 +250,8 @@ class Mon_scarecrow(Character):
         self.type = ["shooter"]
 
         self.hp = 18
-        self.ap = 1.5
-        self.speed = 0.2
+        self.ap = 0.8
+        self.speed = 0.1
         self.bullet = crow_atk_image
         self.b_speed = 15
         self.b_damage = 5
@@ -304,8 +304,8 @@ class Boss_scarecrow(Character):
         self.ap = 1.5
         self.speed = 0.1
         self.bullet = crow_atk_image
-        self.b_speed = 16
-        self.b_damage = 4
+        self.b_speed = 15
+        self.b_damage = 5
         self.b_type = "crow"
 
                                         # 41 ~ 60 : lava land
@@ -318,8 +318,8 @@ class Mon_golem(Character):
         self.type = []
 
         self.hp = 50
-        self.ap = 2.5
-        self.speed = 0.1
+        self.ap = 1.6
+        self.speed = 0.08
 
 class Mon_ember(Character):
     def __init__(self):
@@ -330,11 +330,11 @@ class Mon_ember(Character):
         self.type = ["shooter"]
 
         self.hp = 25
-        self.ap = 1.7
+        self.ap = 1.4
         self.speed = 0.2
         self.bullet = fire_atk_image
-        self.b_speed = 15
-        self.b_damage = 10
+        self.b_speed = 20
+        self.b_damage = 5
         self.b_type = "ember"
 
 class Mon_flamesnake(Character):
@@ -349,8 +349,8 @@ class Mon_flamesnake(Character):
         self.ap = 2
         self.speed = 0
         self.bullet = fire_atk_image
-        self.b_speed = 15
-        self.b_damage = 10
+        self.b_speed = 20
+        self.b_damage = 5
         self.b_type = "ember"
 
 class Mon_firebat(Character):
@@ -362,7 +362,7 @@ class Mon_firebat(Character):
         self.type = ["runner", "toward"]
 
         self.hp = 18
-        self.ap = 1.3
+        self.ap = 1.1
         self.speed = 0.2
         self.is_dashed = False
         self.dashes = 0
@@ -390,8 +390,8 @@ class Boss_ember(Character):
         self.ap = 1.7
         self.speed = 0.17
         self.bullet = fire_atk_image
-        self.b_speed = 18
-        self.b_damage = 10
+        self.b_speed = 20
+        self.b_damage = 5
         self.b_type = "ember"
         self.cycle = 0
 
@@ -406,66 +406,134 @@ class Boss_flamesnake(Character):
         self.ap = 3
         self.speed = 0
         self.bullet = fire_atk_image
-        self.b_speed = 18
-        self.b_damage = 10
+        self.b_speed = 20
+        self.b_damage = 5
         self.b_type = "ember"
         self.cycle = 0
 
                                         # 61 ~ 80 : magical library
 class Mon_witch(Character):
     def __init__(self):
-        image_group = None
+        image_group = mon_witch_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = witch_die
         self.type = ["runner"]
 
-        self.hp = 21
-        self.ap = 1.5
+        self.hp = 19
+        self.ap = 0.9
         self.speed = 0.22
         self.is_dashed = False
         self.dashes = 0
 
 class Mon_book(Character):
     def __init__(self):
-        image_group = None
+        image_group = mon_book_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = None
+        self.die_images = book_die
         self.type = ["toward"]
 
-        self.hp = 18
-        self.ap = 1.3
-        self.speed = 0.2
+        self.hp = 27
+        self.ap = 1.2
+        self.speed = 0.15
 
 class Mon_magician(Character):
     def __init__(self):
-        image_group = None
+        image_group = mon_magician_images
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = magician_die
         self.type = ["shooter", "toward"]
 
-        self.hp = 21
-        self.ap = 0.7
+        self.hp = 30
+        self.ap = 0.6
         self.speed = 0.1
-        self.bullet = None
+        self.bullet = magician_atk_image
         self.b_speed = 10
         self.b_damage = 15
         self.b_type = "magic"
 
 class Mon_candle(Character):
     def __init__(self):
-        image_group = None
+        image_group = mon_candle_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = candle_die
+        self.type = ["mon_candle"]
+
+        self.hp = 60
+        self.ap = 1
+        self.speed = 0.3
+        self.cycle = 0
+
+class Mon_ember_m(Character):
+    def __init__(self):
+        image_group = images_bigger(mon_ember_images, 0.7)
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = ember_die
+        self.type = ["mini"]
+
+        self.hp = 5
+        self.ap = 0.3
+        self.speed = 0.1
+
+# BOSS
+class Boss_witch(Character):
+    def __init__(self):
+        image_group = images_bigger(mon_witch_images, 2)
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["boss", "runner"]
+
+        self.hp = 100
+        self.ap = 0.9
+        self.speed = 0.17
+        self.is_dashed = False
+        self.dashes = 0
+
+class Boss_book(Character):
+    def __init__(self):
+        image_group = images_bigger(mon_book_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = None
-        self.type = []
+        self.type = ["toward"]
 
-        self.hp = 60
-        self.ap = 2
-        self.speed = 0.3
+        self.hp = 120
+        self.ap = 1.2
+        self.speed = 0.12
 
+class Boss_magician(Character):
+    def __init__(self):
+        image_group = images_bigger(mon_magician_images, 2)
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.type = ["boss", "boss_magician", "shooter", "toward"]
+
+        self.hp = 150
+        self.ap = 0.7
+        self.speed = 0.09
+        self.bullet = None
+        self.b_speed = 10
+        self.b_damage = 15
+        self.b_type = "magic"
+        self.activate = False
+
+class Boss_candle(Character):
+    def __init__(self):
+        image_group = images_bigger(mon_candle_images, 2)
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = None
+        self.type = ["boss", "mon_candle"]
+
+        self.hp = 170
+        self.ap = 1
+        self.speed = 0.1
+        self.cycle = 0
                                         # 81 ~ 100 : king castle
-
 
 # BOSS
 class Mon_boss(Character):
@@ -521,6 +589,8 @@ monster_con = MonsterController()
 npc_kingslime = Character(father_slime_images, (540, 360))
 npc_kingslime.direction = "RIGHT"
 npc_coffin = Character(coffin_images, (840, 600))
+
+# npc_devil = Character(devil_images, (540,360))
 
 npc_group = pygame.sprite.Group()
 npc_group.add(npc_kingslime, npc_coffin)

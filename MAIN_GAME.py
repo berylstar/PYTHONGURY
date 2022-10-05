@@ -425,10 +425,58 @@ def scene_boss(doing):
         screen_message("BOSS STAGE", RED, (640,250), game_font_l)
         pygame.display.update(cut_rect)
 
+def scene_finalboss(doing):
+
+    msg =[
+        ("마왕",                            "아랫층이 소란스럽던데...", "고작 슬라임 한마리인가"),
+        ("마왕",                            "어떻게 여기까지 올라온거지 ?", "당장 내려가라."),
+        ("                      슬라임",    ".....?", "아저씨는 누구세요 ?"),
+        ("마왕",                            "너같은 녀석이 알 필요 없다.", "정해진 위치로 내려가도록."),
+        ("                      슬라임",    "......", "저 위에 뭐가 있는지만 보고 가면 안되나요 ?"),
+        ("마왕",                            "화가 나려고 하는군...", ""),
+    ]
+
+    index = 0
+    fin = len(msg)-1
+
+    tuto_con.devil = True
+
+    corpus_rect = pygame.Rect((350,450), (580,200))
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                doing = False
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_wasd)
+                    if index >= fin:
+                        doing = False
+                        if not tuto_con.tutorial:
+                            sound_con.play_sound(sound_coin)
+                            player.coin += 10
+                            tuto_con.tutorial = True
+                    else:
+                        index += 1
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    doing = False
+                    scene_esc(True)
+
+        screen.fill(BLACK)
+        screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
+        screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
+        screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
+        pygame.display.update(corpus_rect)
+
 def scene_player_dead(doing):
     monster_con.is_blind = False
     monster_con.boss_scene = False
     sound_con.play_sound(sound_die)
+
+    if tuto_con.ending:
+        player.image_group = player_blue_images
 
     while doing:
         for event in pygame.event.get():
@@ -756,6 +804,7 @@ def scene_treasurebox(doing, reward):
         pygame.display.update()
 
 def scene_ending(doing):
+    global inven_image
 
     index = 0
     fin = len(ending_images)
@@ -770,8 +819,7 @@ def scene_ending(doing):
                 if event.key == pygame.K_SPACE:
                     sound_con.play_sound(sound_page)
                     if index >= fin:
-                        # doing = False
-                        pass
+                        doing = False
                     else:
                         index += 1
                 if event.key == pygame.K_ESCAPE:
@@ -798,11 +846,16 @@ def scene_ending(doing):
             screen.blit(ending_images[6], (240,100))
         elif index == 7:
             screen_message("TO BE CONTINUE...", (WHITE), (screen_width//2, screen_height//2), game_font_l)
+            
         
         pygame.display.update()
 
-    player.image_group = player_blue
+    tuto_con.ending = True
+    player.image_group = player_blue_images
+    player.die_images = blue_die_images
     player.punch = blue_punch
+    inven_image = blue_inven
+    scene_credit(True)
 
 def scene_credit(doing):
     
@@ -939,6 +992,18 @@ def floor_zero():
             player.stop()
             scene_shop(True)
 
+def floor_81():
+    # if not sound_con.bgm == bgm_0f:
+    #     sound_con.play_bgm(bgm_0f)
+
+    # npc_devil.draw(screen)
+
+    # for punch in punch_group:
+    #     if pygame.sprite.collide_mask(punch, npc_devil):
+    #         scene_finalboss(True)
+
+    pass
+
 def next_floor(pos):
     global floor, background
 
@@ -961,15 +1026,17 @@ def next_floor(pos):
 
     background = setting_background(floor)
 
+    monster_con.boss_scene = False
+
     if e_battery in equip_con.equipped_group and e_battery.charge_times < 3:
-        if floor - e_battery.floor >= 1:
+        if floor - e_battery.floor >= 10:
             player.speed += 0.05
             e_battery.floor = floor
             e_battery.charge_times += 1
             # 충전됨에 따라 배터리 이미지도 바꾸기
 
     if e_ice in equip_con.equipped_group and e_ice.charge_times < 3:
-        if floor - e_ice.floor >= 1:
+        if floor - e_ice.floor >= 20:
             player.speed -= 0.05
             e_ice.floor = floor
             e_ice.charge_times += 1
@@ -987,8 +1054,12 @@ def setting_background(floor):
     randprob = random.randrange(0,3)
     if floor == 0:
         background = background_zero
-    elif floor > 0:
+    elif 0 < floor <= 20:
+        background = background_first[randprob]
+    elif 20 < floor <= 40:
         background = background_second[randprob]
+    elif 40 < floor <= 60:
+        background = background_third[randprob]
 
     return background
 
@@ -999,6 +1070,10 @@ def bgm_setting(floor):
         sound_con.play_bgm(bgm_second)
     elif 40 < floor <= 60 and not sound_con.bgm == bgm_third:
         sound_con.play_bgm(bgm_third)
+    elif 60 < floor <= 80 and not sound_con.bgm == bgm_fourth:
+        sound_con.play_bgm(bgm_fourth)
+    elif 80 < floor <= 100 and not sound_con.bgm == bgm_fifth:
+        sound_con.play_bgm(bgm_fifth)
 
 def show_animation():
     player.image_update()
@@ -1395,7 +1470,6 @@ def monster_move():
                     monster.move(0,monster.speed, fps)
 
 def monster_action():
-    
     for monster in monster_group:
         randprob = random.randrange(1,101)
 
@@ -1441,6 +1515,13 @@ def monster_action():
                         monster.dashes = 0
                         monster.is_dashed = False
 
+            if "mon_candle" in monster.type:
+                if 0 <= randprob < 30:
+                    monster.cycle += 1
+                    if monster.cycle > 2:
+                        spawn_monster(player.position, Mon_ember_m())
+                        monster.cycle = 0
+
             if "boss" in monster.type:
                 boss_action(monster)
 
@@ -1457,7 +1538,7 @@ def boss_action(monster):
     elif "boss_bat" in monster.type:        # blind
         monster_con.is_blind = True
     elif "boss_skel" in monster.type:    # boss shooter
-        if monster.direction == "UP" or monster.direction == "DOWN":
+        if monster.direction == "LEFT" or monster.direction == "RIGHT":
             image = pygame.transform.rotozoom(monster.bullet, 90, 1)
             shooting_group.add(Bullet(image, monster.position, "UP", monster.b_speed, monster.b_damage, monster.b_type))
             shooting_group.add(Bullet(image, monster.position, "DOWN", monster.b_speed, monster.b_damage, monster.b_type))
@@ -1479,13 +1560,23 @@ def boss_action(monster):
     elif "boss_ember" in monster.type:
         monster.cycle += 1
         if monster.cycle == 2:
-            lava = Field(lava_image, (0,0))
+            lava = Field(lava_images[1], (0,0))
             random_away_position(monster.position, lava)
             field_group.add(lava)
             monster.cycle == 0
     elif "boss_flamesnake" in monster.type:
         monster.cycle += 1
         if monster.cycle == 3:
+            spawn_monster(player.position, Mon_ember())
+            monster.cycle = 0
+
+    elif "boss_magician" in monster.type:
+        if not monster.activate:
+            player.speed -= 0.15
+            monster.activate = True
+    elif "boss_candle" in monster.type:
+        monster.cycle += 1
+        if monster.cycle > 3:
             spawn_monster(player.position, Mon_ember())
             monster.cycle = 0
 
@@ -1497,6 +1588,9 @@ def monster_die(monster):
         monster_group.remove(monster)
         spawn_monster(player.position, Boss_zombie())
         monster_con.boss_zombie += 1
+    elif "boss_magician" in monster.type:
+        if monster.activate:
+            player.speed += 0.15
 
     if not monster.is_die:
         monster.is_die = True
@@ -1511,8 +1605,8 @@ def field_effect(field):
 
     if field.image == web_image and not field.is_activated:
         player.stop()
-    if field.image == lava_image and not field.is_activated:
-        player.hp -= 0.5
+    if field.image in lava_images and not field.is_activated:
+        player.hp -= 0.2
 
     if field == portal:
         player.stop()
@@ -1555,6 +1649,7 @@ class Player(Character):
         self.equip_v = None
 
         self.time = 0
+        self.die_images = player_die_images
 
     def space_bar(self):
         sound_con.play_sound(sound_punch)
@@ -1643,6 +1738,8 @@ class TutorialController():
         self.inven = False
         self.box = False
 
+        self.devil = False
+
         self.ending = False
 ##############################################################################################
 pygame.init()
@@ -1670,7 +1767,7 @@ D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 1
+saved_floor = 41
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
@@ -1722,13 +1819,12 @@ while running:
                     player.skill_v()
                 if event.key == pygame.K_i and tuto_con.shop:
                     scene_inventory(True)
-                # if event.key == pygame.K_o:
-                #     if monster_group:
-                #         for monster in monster_group:
-                #             monster.hp -= 100
-                # if event.key == pygame.K_p:
-                #     # scene_ending(True)
-                #     scene_credit(True)
+                if event.key == pygame.K_o:
+                    if monster_group:
+                        for monster in monster_group:
+                            monster.hp -= 100
+                if event.key == pygame.K_p:
+                    scene_ending(True)
 
         if not player.is_die:
             player_move_key()
@@ -1771,8 +1867,13 @@ while running:
         if pygame.sprite.collide_mask(field, player):
             field_effect(field)
 
-    if not monster_group and tuto_con.shop:
-        stair.draw(screen)                                                              #STAIR
+    if not monster_group:
+        if not tuto_con.shop:
+            pass
+        elif floor == 81 and not tuto_con.devil:
+            pass
+        else:
+            stair.draw(screen)                                                              #STAIR
 
         if pygame.sprite.collide_mask(player, stair):
             next_floor(player.position)
@@ -1835,15 +1936,12 @@ while running:
             if not player.is_die:
                 saved_floor = floor
                 player.is_die = True
-                player.change_image_group(player_die_images)
+                player.change_image_group(player.die_images)
         
     if player.image == player_die_images[3]:
         sound_con.stop_bgm()
         pygame.time.delay(2000)
-        if tuto_con.ending:
-            player.image_group = player_blue
-        else:
-            player.image_group = player_images
+        player.image_group = player_images
         player.is_die = False
         player.life -= 1
         
@@ -1862,7 +1960,9 @@ while running:
     player.draw(screen)                                                                 #PLAYER
 
     if floor > 0 and floor % 20 == 0 and not monster_con.boss_scene:
-            scene_boss(True)
+        scene_boss(True)
+    elif floor == 81:
+        floor_81()
 
     screen.blit(cover_image, (0,0))
     display_info_ui()
