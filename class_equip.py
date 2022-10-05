@@ -859,7 +859,6 @@ e_potion = E_Potion()
 e_coins = E_Coins()
 
 
-
 skill_con = SkillController()
 equip_con = EquipController()
 

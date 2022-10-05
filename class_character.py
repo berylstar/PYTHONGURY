@@ -442,7 +442,7 @@ class Mon_magician(Character):
         image_group = None
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["shooter"]
+        self.type = ["shooter", "toward"]
 
         self.hp = 21
         self.ap = 0.7

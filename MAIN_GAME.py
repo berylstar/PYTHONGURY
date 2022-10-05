@@ -313,54 +313,6 @@ def scene_story(doing):
         
         pygame.display.update()
 
-def scene_ending(doing):
-
-    index = 0
-    fin = len(ending_images)
-
-    sound_con.play_bgm(bgm_story)
-
-    while doing:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                scene_exit(True)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    sound_con.play_sound(sound_page)
-                    if index >= fin:
-                        doing = False
-                    else:
-                        index += 1
-                if event.key == pygame.K_ESCAPE:
-                    sound_con.play_sound(sound_pick)
-                    scene_esc(True)
-                if event.key == pygame.K_r:
-                    doing = False
-
-        screen.fill(BLACK)
-
-        if -1 < index < 3:
-            screen.blit(ending_images[0], (200,50))
-            if index > 0:
-                screen.blit(ending_images[1], (200, 350))
-                if index > 1:
-                    screen.blit(ending_images[2], (600,100))
-        elif index == 3:
-            screen.blit(ending_images[3], (240,100))
-        elif 3 < index < 6:
-            screen.blit(ending_images[4], (200,50))
-            if index > 4:
-                screen.blit(ending_images[5], (600, 80))
-        elif index == 6:
-            screen.blit(ending_images[6], (240,100))
-        elif index == 7:
-            screen_message("TO BE CONTINUE...", (WHITE), (screen_width//2, screen_height//2), game_font_l)
-        
-        pygame.display.update()
-
-    player.image_group = player_blue
-    player.punch = blue_punch
-
 def scene_tutorial(doing, tuto):
 
     punch_group.empty()
@@ -803,6 +755,100 @@ def scene_treasurebox(doing, reward):
         
         pygame.display.update()
 
+def scene_ending(doing):
+
+    index = 0
+    fin = len(ending_images)
+
+    sound_con.play_bgm(bgm_story)
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_page)
+                    if index >= fin:
+                        # doing = False
+                        pass
+                    else:
+                        index += 1
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    scene_esc(True)
+                if event.key == pygame.K_r:
+                    doing = False
+
+        screen.fill(BLACK)
+
+        if -1 < index < 3:
+            screen.blit(ending_images[0], (200,50))
+            if index > 0:
+                screen.blit(ending_images[1], (200, 350))
+                if index > 1:
+                    screen.blit(ending_images[2], (600,100))
+        elif index == 3:
+            screen.blit(ending_images[3], (240,100))
+        elif 3 < index < 6:
+            screen.blit(ending_images[4], (200,50))
+            if index > 4:
+                screen.blit(ending_images[5], (600, 80))
+        elif index == 6:
+            screen.blit(ending_images[6], (240,100))
+        elif index == 7:
+            screen_message("TO BE CONTINUE...", (WHITE), (screen_width//2, screen_height//2), game_font_l)
+        
+        pygame.display.update()
+
+    player.image_group = player_blue
+    player.punch = blue_punch
+
+def scene_credit(doing):
+    
+    pos_bottom = screen_height + 100        # pos_bottom = 820    
+    credit_speed = 0.5
+
+    # sound_con.play_bgm(bgm_credit)
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    credit_speed = 1
+                else:
+                    credit_speed = 0.5
+
+        screen.fill(BLACK)
+
+        msg = [
+            ("RE : SLIME", pos_bottom), 
+            ("", pos_bottom+100),
+            ("KIM MINSANG", pos_bottom+300), 
+            ("BAE SUNGHYUN", pos_bottom+400), 
+            ("SHIN JUNHA", pos_bottom+500), 
+            ("LEE SUBIN", pos_bottom+600), 
+            ("", pos_bottom+700)
+        ]
+
+        screen_message(msg[0][0], WHITE, (screen_width//2, msg[0][1]), game_font_l)
+        screen.blit(mon_skel_images[0], (screen_width//2-150, msg[1][1]+60))
+        screen.blit(father_slime_images[0], (screen_width//2-50, msg[1][1]))
+        screen.blit(player_images[0], (screen_width//2+50, msg[1][1]+60))
+        screen.blit(mon_werewolf_images[0], (screen_width//2+150, msg[1][1]))
+        screen_message(msg[2][0], WHITE, (screen_width//2, msg[2][1]), game_font_l)
+        screen_message(msg[3][0], WHITE, (screen_width//2, msg[3][1]), game_font_l)
+        screen_message(msg[4][0], WHITE, (screen_width//2, msg[4][1]), game_font_l)
+        screen_message(msg[5][0], WHITE, (screen_width//2, msg[5][1]), game_font_l)
+
+        pos_bottom -= credit_speed
+
+        pygame.display.update()
+
+        if pos_bottom < -1000:
+            doing = False
 ##############################################################################################
 def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
@@ -1495,7 +1541,7 @@ class Player(Character):
     def __init__(self, image_group, position):
         Character.__init__(self, image_group, position)
 
-        self.life = 3
+        self.life = 5
         self.hp = 100
         self.max_hp = 100
         self.coin = 0
@@ -1624,7 +1670,7 @@ D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 18
+saved_floor = 1
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
@@ -1676,12 +1722,13 @@ while running:
                     player.skill_v()
                 if event.key == pygame.K_i and tuto_con.shop:
                     scene_inventory(True)
-                if event.key == pygame.K_o:
-                    if monster_group:
-                        for monster in monster_group:
-                            monster.hp -= 100
-                if event.key == pygame.K_p:
-                    scene_ending(True)
+                # if event.key == pygame.K_o:
+                #     if monster_group:
+                #         for monster in monster_group:
+                #             monster.hp -= 100
+                # if event.key == pygame.K_p:
+                #     # scene_ending(True)
+                #     scene_credit(True)
 
         if not player.is_die:
             player_move_key()
