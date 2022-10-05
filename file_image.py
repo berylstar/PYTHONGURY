@@ -266,6 +266,15 @@ cursor_images = [
 skill_c_image = pygame.image.load(os.path.join(file_path, "design\\etc\\skill_c.png"))
 skill_v_image = pygame.image.load(os.path.join(file_path, "design\\etc\\skill_v.png"))
 
+ending_images = [
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_01.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_02.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_03.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_04.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_05.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_06.png")),
+    pygame.image.load(os.path.join(file_path, "design\\story\\e_07.png")),
+]
 ##############################################################################################
 # 테스트 용
 player_icon = pygame.image.load(os.path.join(file_path, "design\\player\\main_1.png"))

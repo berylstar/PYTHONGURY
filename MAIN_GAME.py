@@ -316,7 +316,7 @@ def scene_story(doing):
 def scene_ending(doing):
 
     index = 0
-    fin = len(story_images)-1
+    fin = len(ending_images)
 
     sound_con.play_bgm(bgm_story)
 
@@ -339,34 +339,22 @@ def scene_ending(doing):
 
         screen.fill(BLACK)
 
-        if -1 < index < 3 :
-            screen.blit(story_images[0], (200,100))
+        if -1 < index < 3:
+            screen.blit(ending_images[0], (200,50))
             if index > 0:
-                screen.blit(story_images[1], (680,50))
+                screen.blit(ending_images[1], (200, 300))
                 if index > 1:
-                    screen.blit(story_images[2], (680,300))
+                    screen.blit(ending_images[2], (680,50))
         elif index == 3:
-            screen.blit(story_images[3], (240,80))
-        elif 3 < index < 7:
-            screen.blit(story_images[4], (200,100))
+            screen.blit(ending_images[3], (240,50))
+        elif 3 < index < 6:
+            screen.blit(ending_images[4], (200,50))
             if index > 4:
-                screen.blit(story_images[5], (680,50))
-                if index > 5:
-                    screen.blit(story_images[6], (680,300))
+                screen.blit(ending_images[5], (680, 50))
+        elif index == 6:
+            screen.blit(ending_images[6], (240,50))
         elif index == 7:
-            screen.blit(story_images[7], (240,80))
-        elif 7 < index < 11:
-            screen.blit(story_images[8], (200,100))
-            if index > 8:
-                screen.blit(story_images[9], (680,50))
-                if index > 9:
-                    screen.blit(story_images[10], (680,300))
-        elif index == 11:
-            screen.blit(story_images[11], (240,80))
-        elif 11 < index:
-            screen.blit(story_images[12], (100,50))
-            if 12 < index:
-                screen.blit(story_images[13], (400,100))
+            screen_message("TO BE CONTINUE...", (WHITE), (screen_width//2, screen_height//2), game_font_l)
         
         pygame.display.update()
 
@@ -485,6 +473,7 @@ def scene_boss(doing):
 def scene_player_dead(doing):
     monster_con.is_blind = False
     monster_con.boss_scene = False
+    sound_con.play_sound(sound_die)
 
     while doing:
         for event in pygame.event.get():
@@ -492,14 +481,14 @@ def scene_player_dead(doing):
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    # sound_con.play_sound(sound_reborn)
                     doing = False
+                    sound_con.play_sound(sound_reborn)
                     floor_zero()
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
                     scene_esc(True)
 
-        screen.fill(BLACK)      # 죽을 때 배경 이미지로 대체
+        screen.fill(BLACK)
         screen_message("YOU DIE", RED, (screen_width//2, screen_height//2), game_font_l)
         screen_message("PRESS 'R' TO GO 0F", WHITE, (640,640), game_font_m)
         display_info_ui()
@@ -1538,10 +1527,12 @@ class Player(Character):
     
     def skill_c(self):
         if self.equip_c:
+            sound_con.play_sound(sound_skill)
             self.equip_c.active_skill()
     
     def skill_v(self):
         if self.equip_v:
+            sound_con.play_sound(sound_skill)
             self.equip_v.active_skill()
 
     def damage_sound(self):
@@ -1628,7 +1619,7 @@ D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 1
+saved_floor = 18
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
@@ -1675,10 +1666,8 @@ while running:
                 if event.key == pygame.K_SPACE:
                     player.space_bar()
                 if event.key == pygame.K_c and floor > 0:
-                    #이펙트 소리 필요
                     player.skill_c()
                 if event.key == pygame.K_v and floor > 0:
-                    #이펙트 소리 필요
                     player.skill_v()
                 if event.key == pygame.K_i and tuto_con.shop:
                     scene_inventory(True)
@@ -1686,6 +1675,8 @@ while running:
                     if monster_group:
                         for monster in monster_group:
                             monster.hp -= 100
+                if event.key == pygame.K_p:
+                    scene_ending(True)
 
         if not player.is_die:
             player_move_key()
@@ -1722,9 +1713,6 @@ while running:
 
         if not skill_con.active_trafficlight[0]:
             monster_move()
-
-        if floor % 20 == 0 and not monster_con.boss_scene:
-            scene_boss(True)
 
     for field in field_group:
         field.draw(screen)                                                              #FIELD
@@ -1816,6 +1804,9 @@ while running:
         blind_rect = blind_image.get_rect(center=player.position)
         screen.blit(blind_image, blind_rect)
     player.draw(screen)                                                                 #PLAYER
+
+    if floor > 0 and floor % 20 == 0 and not monster_con.boss_scene:
+            scene_boss(True)
 
     screen.blit(cover_image, (0,0))
     display_info_ui()
