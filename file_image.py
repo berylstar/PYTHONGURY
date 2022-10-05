@@ -46,8 +46,8 @@ spider_die = [spider_x, spider_x, spider_x]
 mon_bat_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
     pygame.image.load(os.path.join(file_path, "design\\monster\\bat_1.png")),
-    # pygame.image.load(os.path.join(file_path, "design\\monster\\bat_0.png")),
     ]
+blind_image = pygame.image.load(os.path.join(file_path, "design\\etc\\blind.png"))
 bat_x = pygame.image.load(os.path.join(file_path, "design\\monster\\bat_x.png"))
 bat_die = [bat_x, bat_x, bat_x]
 
@@ -153,7 +153,6 @@ father_slime_images = [
 
 coffin_images = [
     pygame.image.load(os.path.join(file_path, "design\\npc\\coffin_0.png")),
-    # pygame.image.load(os.path.join(file_path, "design\\npc\\coffin_1.png"))
 ]
 ##############################################################################################
 ##### FIELD
@@ -275,6 +274,13 @@ ending_images = [
     pygame.image.load(os.path.join(file_path, "design\\story\\e_06.png")),
     pygame.image.load(os.path.join(file_path, "design\\story\\e_07.png")),
 ]
+player_blue = [
+    pygame.image.load(os.path.join(file_path, "design\\player\\blue_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\player\\blue_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\player\\blue_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\player\\blue_1.png")),
+]
+blue_punch = pygame.image.load(os.path.join(file_path, "design\\player\\blue_punch.png"))
 ##############################################################################################
 # 테스트 용
 player_icon = pygame.image.load(os.path.join(file_path, "design\\player\\main_1.png"))
@@ -283,7 +289,6 @@ monster_2_images = [pygame.image.load(os.path.join(file_path, "images\\monster_2
 monster_3_images = [pygame.image.load(os.path.join(file_path, "images\\monster_3.png"))]
 monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png"))]
 runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))]
-blind_image = pygame.image.load(os.path.join(file_path, "images\\blind.png"))
 
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))

@@ -21,8 +21,8 @@ def scene_title_game():
 
     if ready:
         sound_con.play_bgm(bgm_title)
-    while ready:
 
+    while ready:
         for i in range(len(color)):
             color[i] = GRAY
         color[index] = GREEN
@@ -342,21 +342,24 @@ def scene_ending(doing):
         if -1 < index < 3:
             screen.blit(ending_images[0], (200,50))
             if index > 0:
-                screen.blit(ending_images[1], (200, 300))
+                screen.blit(ending_images[1], (200, 350))
                 if index > 1:
-                    screen.blit(ending_images[2], (680,50))
+                    screen.blit(ending_images[2], (600,100))
         elif index == 3:
-            screen.blit(ending_images[3], (240,50))
+            screen.blit(ending_images[3], (240,100))
         elif 3 < index < 6:
             screen.blit(ending_images[4], (200,50))
             if index > 4:
-                screen.blit(ending_images[5], (680, 50))
+                screen.blit(ending_images[5], (600, 80))
         elif index == 6:
-            screen.blit(ending_images[6], (240,50))
+            screen.blit(ending_images[6], (240,100))
         elif index == 7:
             screen_message("TO BE CONTINUE...", (WHITE), (screen_width//2, screen_height//2), game_font_l)
         
         pygame.display.update()
+
+    player.image_group = player_blue
+    player.punch = blue_punch
 
 def scene_tutorial(doing, tuto):
 
@@ -1593,6 +1596,8 @@ class TutorialController():
         self.shop = False
         self.inven = False
         self.box = False
+
+        self.ending = False
 ##############################################################################################
 pygame.init()
 screen_width = 1280
@@ -1737,6 +1742,7 @@ while running:
             if len(monster_group) == 0:
                 random_away_position(player.position, stair)
 
+
     for punch in punch_group:
         if not player.is_die:
             punch.draw(screen)                                                         #PUNCH
@@ -1787,7 +1793,10 @@ while running:
     if player.image == player_die_images[3]:
         sound_con.stop_bgm()
         pygame.time.delay(2000)
-        player.image_group = player_images
+        if tuto_con.ending:
+            player.image_group = player_blue
+        else:
+            player.image_group = player_images
         player.is_die = False
         player.life -= 1
         

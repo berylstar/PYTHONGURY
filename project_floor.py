@@ -30,13 +30,16 @@ def random_away_position(center, object):
                 break 
 
 def spawn_monster(pos, monster):
-    random_away_position(pos, monster)
-    monster_group.add(monster)
+    if not monster:
+        pass
+    else:
+        random_away_position(pos, monster)
+        monster_group.add(monster)
 
 def random_monster(floor):
     randprob = random.randrange(1,101) # 1~100
 
-    if 0 < floor <= 20:
+    if 0 < floor < 20:
         if randprob < 30:
             return Mon_skel()
         elif 30 <= randprob < 60:
@@ -46,7 +49,7 @@ def random_monster(floor):
         elif randprob % 2 == 1:
             return Mon_spider()
 
-    elif 20 < floor <= 40:
+    elif 20 < floor < 40:
         if randprob < 30:
             return Mon_ghost()
         elif 30 <= randprob < 60:
@@ -56,7 +59,7 @@ def random_monster(floor):
         elif randprob % 2 == 1:
             return Mon_zombie()
 
-    elif 40 < floor <= 60:
+    elif 40 < floor < 60:
         if randprob < 30:
             return Mon_ember()
         elif 30 <= randprob < 60:
@@ -65,6 +68,9 @@ def random_monster(floor):
             return Mon_flamesnake()
         elif randprob % 2 == 1:
             return Mon_firebat()
+
+    else:
+        return False
 
 def monster_floor_setting(pos, floor):
     if 1 <= floor < 5:
