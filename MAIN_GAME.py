@@ -318,7 +318,7 @@ def scene_tutorial(doing, tuto):
     punch_group.empty()
 
     if tuto == "intro":
-        if not tuto_con.tutorial:
+        if not game_con.tutorial:
             msg = [
                 ("                      슬라임",    ".........?", "여기가..... 어디죠....?"),
                 ("킹 슬라임",                       "요 앞은 몬스터들로 가득한 위험한 곳인디.", "뭔 일로 슬라임이 여까지 왔는겨.", ),
@@ -383,10 +383,10 @@ def scene_tutorial(doing, tuto):
                     sound_con.play_sound(sound_wasd)
                     if index >= fin:
                         doing = False
-                        if not tuto_con.tutorial:
+                        if not game_con.tutorial:
                             sound_con.play_sound(sound_coin)
                             player.coin += 10
-                            tuto_con.tutorial = True
+                            game_con.tutorial = True
                     else:
                         index += 1
                 if event.key == pygame.K_ESCAPE:
@@ -439,7 +439,7 @@ def scene_finalboss(doing):
     index = 0
     fin = len(msg)-1
 
-    tuto_con.devil = True
+    game_con.devil = True
 
     corpus_rect = pygame.Rect((350,450), (580,200))
 
@@ -453,10 +453,10 @@ def scene_finalboss(doing):
                     sound_con.play_sound(sound_wasd)
                     if index >= fin:
                         doing = False
-                        if not tuto_con.tutorial:
+                        if not game_con.tutorial:
                             sound_con.play_sound(sound_coin)
                             player.coin += 10
-                            tuto_con.tutorial = True
+                            game_con.tutorial = True
                     else:
                         index += 1
                 if event.key == pygame.K_ESCAPE:
@@ -475,7 +475,7 @@ def scene_player_dead(doing):
     monster_con.boss_scene = False
     sound_con.play_sound(sound_die)
 
-    if tuto_con.ending:
+    if game_con.ending:
         player.image_group = player_blue_images
 
     while doing:
@@ -594,9 +594,9 @@ def scene_shop(doing):
         screen_message("PRESS 'SPACE BAR' TO BACK", WHITE, (640,640), game_font_m)
         pygame.display.update()
 
-        if not tuto_con.shop:
+        if not game_con.shop:
             scene_tutorial(True, "shop")
-            tuto_con.shop = True
+            game_con.shop = True
 
 def shop_showcase(index, equip):
     if equip_con.can_buy[index] and equip_con.for_sale[index]:
@@ -696,9 +696,9 @@ def scene_inventory(doing):
         cursor.draw(screen)
         pygame.display.update()
 
-        if not tuto_con.inven:
+        if not game_con.inven:
             scene_tutorial(True, "inven")
-            tuto_con.inven = True
+            game_con.inven = True
             screen.fill(BLACK)
 
 def scene_treasurebox(doing, reward):
@@ -850,7 +850,7 @@ def scene_ending(doing):
         
         pygame.display.update()
 
-    tuto_con.ending = True
+    game_con.ending = True
     player.image_group = player_blue_images
     player.die_images = blue_die_images
     player.punch = blue_punch
@@ -923,7 +923,7 @@ def game_restart():
     global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
-    if tuto_con.tutorial:
+    if game_con.tutorial:
         player.coin += 10
     make_floor_zero()
     equip_reset()
@@ -976,7 +976,7 @@ def floor_zero():
     for npc in npc_group:
         npc.draw(screen)
 
-    if item_con.first_box and tuto_con.shop:
+    if item_con.first_box and game_con.shop:
         item_group.add(Item(box_image, (400,500), "normal_box"))
         item_con.first_box = False
 
@@ -988,7 +988,7 @@ def floor_zero():
             player.stop()
             scene_tutorial(True, "intro")
 
-        if pygame.sprite.collide_mask(punch, npc_coffin) and tuto_con.tutorial:
+        if pygame.sprite.collide_mask(punch, npc_coffin) and game_con.tutorial:
             player.stop()
             scene_shop(True)
 
@@ -1620,9 +1620,7 @@ def field_effect(field):
         item_group.empty()
         field_group.empty()
         next_floor(player.position)
-
-        # 불 바닥
-
+        
 def bullet_effect(bullet):
     if bullet.type == "web":
         player.stop()
@@ -1731,7 +1729,7 @@ class Bullet(Punch):
         if self.rect.left < 340 or 940 < self.rect.right or self.rect.top < 60 or 660 < self.rect.bottom:
             shooting_group.remove(self)
 
-class TutorialController():
+class GameController():
     def __init__(self):
         self.tutorial = False
         self.shop = False
@@ -1781,7 +1779,7 @@ player = Player(player_images, player_first_position)
 
 punch_group = pygame.sprite.Group()
 
-tuto_con = TutorialController()
+game_con = GameController()
 
 ##### MONSTER
 shooting_group = pygame.sprite.Group()
@@ -1817,7 +1815,7 @@ while running:
                     player.skill_c()
                 if event.key == pygame.K_v and floor > 0:
                     player.skill_v()
-                if event.key == pygame.K_i and tuto_con.shop:
+                if event.key == pygame.K_i and game_con.shop:
                     scene_inventory(True)
                 if event.key == pygame.K_o:
                     if monster_group:
@@ -1868,9 +1866,9 @@ while running:
             field_effect(field)
 
     if not monster_group:
-        if not tuto_con.shop:
+        if not game_con.shop:
             pass
-        elif floor == 81 and not tuto_con.devil:
+        elif floor == 81 and not game_con.devil:
             pass
         else:
             stair.draw(screen)                                                              #STAIR

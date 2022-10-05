@@ -181,8 +181,11 @@ def random_boss(floor):
         elif randprob % 2 == 0:
             return Boss_candle()
 
+    elif floor == 100:
+        return Boss_devil()
+
     else:
-        return Mon_boss()
+        return False
 ##############################################################################################
 def random_field_setting(floor):
     randprob = random.randrange(1,101)
@@ -216,7 +219,7 @@ def random_field_setting(floor):
         num = max(8, randprob%11)
         aa = 0 
         for i in range(num):
-            lava = Field(lava_images[aa%2], (0,0))
+            lava = Field(lava_images[aa%3], (0,0))
             random_away_position((0,0), lava)
             field_group.add(lava)
             aa += 1

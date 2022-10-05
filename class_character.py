@@ -418,7 +418,7 @@ class Mon_witch(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = witch_die
-        self.type = ["runner"]
+        self.type = ["runner", "alpha"]
 
         self.hp = 19
         self.ap = 0.9
@@ -485,7 +485,7 @@ class Boss_witch(Character):
         image_group = images_bigger(mon_witch_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["boss", "runner"]
+        self.type = ["boss", "runner", "alpha"]
 
         self.hp = 100
         self.ap = 0.9
@@ -526,7 +526,6 @@ class Boss_candle(Character):
         image_group = images_bigger(mon_candle_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = None
         self.type = ["boss", "mon_candle"]
 
         self.hp = 170
@@ -535,34 +534,19 @@ class Boss_candle(Character):
         self.cycle = 0
                                         # 81 ~ 100 : king castle
 
-# BOSS
-class Mon_boss(Character):
+# DEVIL BOSS
+class Boss_devil(Character):
     def __init__(self):
-        image_group = monster_boss_images
+        image_group = devil_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.type = ["boss", "boss_spawner", "runner"]
+        self.die_images = devil_die
+        self.type = ["devil", "toward", "runner", "alpha"]
 
-        self.hp = 100
-        self.ap = 2
+        self.hp = 170
+        self.ap = 1
         self.speed = 0.1
-        # self.bullet = ember_attack_image
-        # self.b_speed = 10
-        # self.b_damage = 10
-        # self.b_type = "NONE"
-        self.is_dashed = False
-        self.dashes = 0
-
-class Mon_mini(Character):
-    def __init__(self):
-        image_group = monster_2_images
-        position = (0,0)
-        Character.__init__(self, image_group, position)
-        self.type = ["mini"]
-
-        self.hp = 1
-        self.ap = 0.2
-        self.speed = 0.2
+        self.cycle = 0
 
 ##############################################################################################
 class MonsterController():

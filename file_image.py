@@ -216,7 +216,8 @@ portal_image = pygame.image.load(os.path.join(file_path, "images\\portal.png"))
 
 lava_images = [
     pygame.image.load(os.path.join(file_path, "design\\field\\lava_1.png")),
-    pygame.image.load(os.path.join(file_path, "design\\field\\lava_2.png"))
+    pygame.image.load(os.path.join(file_path, "design\\field\\lava_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\field\\lava_3.png")),
 ]
 
 ##############################################################################################
