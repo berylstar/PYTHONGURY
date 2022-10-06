@@ -498,7 +498,6 @@ class Boss_book(Character):
         image_group = images_bigger(mon_book_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = None
         self.type = ["toward"]
 
         self.hp = 120
@@ -515,7 +514,7 @@ class Boss_magician(Character):
         self.hp = 150
         self.ap = 0.7
         self.speed = 0.09
-        self.bullet = None
+        self.bullet = dummy
         self.b_speed = 10
         self.b_damage = 15
         self.b_type = "magic"
@@ -541,12 +540,13 @@ class Boss_devil_first(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = devil_die
-        self.type = ["devil", "toward", "runner", "alpha"]
+        self.type = ["boss", "devil_first", "toward", "runner", "alpha"]
 
         self.hp = 170
         self.ap = 1
         self.speed = 0.1
-        self.cycle = 0
+        self.is_dashed = False
+        self.dashes = 0
 
 class Boss_devil_final(Character):
     def __init__(self):
@@ -554,12 +554,14 @@ class Boss_devil_final(Character):
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = devil_die
-        self.type = ["devil", "toward", "runner", "alpha"]
+        self.type = ["devil_final", "toward", "runner", "alpha"]
 
         self.hp = 170
         self.ap = 1
         self.speed = 0.1
         self.cycle = 0
+        self.is_dashed = False
+        self.dashes = 0
 
 ##############################################################################################
 class MonsterController():
@@ -588,6 +590,7 @@ npc_kingslime.direction = "RIGHT"
 npc_coffin = Character(coffin_images, (840, 600))
 
 npc_devil = Character(devil_images, (540,360))
+npc_devil.diretion = "RIGHT"
 
 npc_group = pygame.sprite.Group()
 npc_group.add(npc_kingslime, npc_coffin)

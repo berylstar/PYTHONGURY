@@ -422,7 +422,10 @@ def scene_boss(doing):
 
         screen.fill(BLACK)
         cut_rect = pygame.Rect((340,200), (600,100))
-        screen_message("BOSS STAGE", RED, (640,250), game_font_l)
+        if floor == 100:
+            screen_message("FINAL BOSS STAGE", RED, (640,250), game_font_l)
+        else:
+            screen_message("BOSS STAGE", RED, (640,250), game_font_l)
         pygame.display.update(cut_rect)
 
 def scene_finalboss(doing):
@@ -435,36 +438,43 @@ def scene_finalboss(doing):
             ("                      슬라임",    "......", "저 위에 뭐가 있는지만 보고 가면 안되나요 ?"),
             ("마왕",                            "화가 나려고 하는군...", ""),
         ]
+    else:
+        msg = [
+            ("마왕",                            "아니..!", "이 슬라임따위가"),
+            ("마왕",                            "다음엔 제대로 상대해주마", "맨 위에서 보자"),
+        ]
 
-        index = 0
-        fin = len(msg)-1
+    index = 0
+    fin = len(msg)-1
 
-        game_con.devil = True
+    corpus_rect = pygame.Rect((350,450), (580,200))
 
-        corpus_rect = pygame.Rect((350,450), (580,200))
-
-        while doing:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    doing = False
-                    scene_exit(True)
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        sound_con.play_sound(sound_wasd)
-                        if index >= fin:
-                            doing = False
-                        else:
-                            index += 1
-                    if event.key == pygame.K_ESCAPE:
-                        sound_con.play_sound(sound_pick)
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                doing = False
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_wasd)
+                    if index >= fin:
                         doing = False
-                        scene_esc(True)
+                        if not game_con.devil:
+                            spawn_monster(player.position, Boss_devil_first())
+                    else:
+                        index += 1
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    doing = False
+                    scene_esc(True)
 
-            screen.fill(BLACK)
-            screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
-            screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
-            screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
-            pygame.display.update(corpus_rect)
+        screen.fill(BLACK)
+        screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
+        screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
+        screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
+        pygame.display.update(corpus_rect)
+
+    game_con.devil = True
 
 def scene_player_dead(doing):
     monster_con.is_blind = False
@@ -800,7 +810,6 @@ def scene_treasurebox(doing, reward):
         pygame.display.update()
 
 def scene_ending(doing):
-    global inven_image
 
     index = 0
     fin = len(ending_images)
@@ -846,14 +855,10 @@ def scene_ending(doing):
         
         pygame.display.update()
 
-    game_con.ending = True
-    player.image_group = player_blue_images
-    player.die_images = blue_die_images
-    player.punch = blue_punch
-    inven_image = blue_inven
     scene_credit(True)
 
 def scene_credit(doing):
+    global player_images, punch_d_image, inven_image
     
     pos_bottom = screen_height + 100        # pos_bottom = 820    
     credit_speed = 0.5
@@ -898,6 +903,14 @@ def scene_credit(doing):
 
         if pos_bottom < -1000:
             doing = False
+            game_con.ending = True
+            player_images = player_blue_images
+            player.image_group = player_blue_images
+            player.die_images = blue_die_images
+            punch_d_image = blue_punch
+            player.punch = blue_punch
+            inven_image = blue_inven
+            game_restart()
 ##############################################################################################
 def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
@@ -929,7 +942,6 @@ def game_restart():
     equip_con = EquipController()
     skill_con = SkillController()
     monster_con = MonsterController()
-    # sound_con = SoundController()
     random_for_sale()
 
 def make_floor_zero():
@@ -991,14 +1003,12 @@ def floor_zero():
 def floor_81():
     # if not sound_con.bgm == bgm_0f:
     #     sound_con.play_bgm(bgm_0f)
+    if not game_con.devil:
+        npc_devil.draw(screen)
 
-    npc_devil.draw(screen)
-
-    for punch in punch_group:
-        if pygame.sprite.collide_mask(punch, npc_devil):
-            scene_finalboss(True)
-
-    pass
+        for punch in punch_group:
+            if pygame.sprite.collide_mask(punch, npc_devil):
+                scene_finalboss(True)
 
 def next_floor(pos):
     global floor, background
@@ -1039,6 +1049,8 @@ def setting_background(floor):
         background = background_second[randprob]
     elif 40 < floor <= 60:
         background = background_third[randprob]
+    else:
+        background = background_zero
 
     return background
 
@@ -1562,9 +1574,13 @@ def monster_die(monster):
         monster_group.remove(monster)
         spawn_monster(player.position, Boss_zombie())
         monster_con.boss_zombie += 1
-    elif "boss_magician" in monster.type:
+    elif "boss_magician" in monster.type and not monster.is_die:
         if monster.activate:
             player.speed += 0.15
+    elif "devil_first" in monster.type and not monster.is_die:
+        scene_finalboss(True)
+    elif "devil_final" in monster.type and not monster.is_die:
+        scene_ending(True)
 
     if not monster.is_die:
         monster.is_die = True
@@ -1740,7 +1756,7 @@ D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 1
+saved_floor = 79
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
@@ -1796,8 +1812,6 @@ while running:
                     if monster_group:
                         for monster in monster_group:
                             monster.hp -= 100
-                if event.key == pygame.K_p:
-                    scene_ending(True)
 
         if not player.is_die:
             player_move_key()
@@ -1843,13 +1857,13 @@ while running:
     if not monster_group:
         if not game_con.shop:
             pass
-        elif floor == 81 and not game_con.devil:
+        elif floor > 80 and not game_con.devil:
             pass
         else:
             stair.draw(screen)                                                              #STAIR
 
-        if pygame.sprite.collide_mask(player, stair):
-            next_floor(player.position)
+            if pygame.sprite.collide_mask(player, stair):
+                next_floor(player.position)
 
     for monster in monster_group:
         monster.draw(screen)                                                           #MONSTER

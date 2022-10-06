@@ -139,31 +139,38 @@ firebat_die = [firebat_x, firebat_x, firebat_x]
 
 ##### WITCH
 mon_witch_images = [
-
+    dummy,
+    dummy,
 ]
-witch_x = None
+witch_x = dummy
 witch_die = [witch_x, witch_x, witch_x]
 
 ##### BOOK
 mon_book_images = [
-    
+    dummy,
+    dummy,
+    dummy
 ]
-book_x = None
+book_x = dummy
 book_die = [book_x, book_x, book_x]
 
 ##### MAGICIAN
 mon_magician_images = [
-    
+    dummy,
+    dummy,
+    dummy,
 ]
-magician_atk_image = None
-magician_x = None
+magician_atk_image = dummy
+magician_x = dummy
 magician_die = [magician_x, magician_x, magician_x]
 
 ##### CANDLE
 mon_candle_images = [
-    
+    dummy,
+    dummy,
+    dummy,
 ]
-candle_x = None
+candle_x = dummy
 candle_die = [candle_x, candle_x, candle_x]
 
 monster_die_images = [

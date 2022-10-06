@@ -79,6 +79,9 @@ def random_monster(floor):
         elif randprob % 2 == 1:
             return Mon_witch()
 
+    elif 80 < floor < 100:
+        pass
+
     else:
         return False
 
@@ -143,13 +146,27 @@ def monster_floor_setting(pos, floor):
             spawn_monster(pos, Boss_witch())
             spawn_monster(pos, Boss_book())
 
-    elif floor == 81:
-        spawn_monster(pos, Boss_devil_first())
-
+    elif 82 <= floor < 85:
+        spawn_monster(pos, random_monster(5))
+        spawn_monster(pos, random_monster(25))
+        spawn_monster(pos, random_monster(45))
+        spawn_monster(pos, random_monster(65))
+    elif 85 <= floor < 90:
+        spawn_monster(pos, random_monster(15))
+        spawn_monster(pos, random_monster(35))
+        spawn_monster(pos, random_monster(55))
+        spawn_monster(pos, random_monster(75))
+    elif 90 <= floor < 100:
+        spawn_monster(pos, random_monster(5))
+        spawn_monster(pos, random_monster(15))
+        spawn_monster(pos, random_monster(25))
+        spawn_monster(pos, random_monster(35))
+        spawn_monster(pos, random_monster(55))
+        spawn_monster(pos, random_monster(75))
+        
     elif floor == 100:
         spawn_monster(pos, Boss_devil_final())
         
-
 def random_boss(floor):
     randprob = random.randrange(1,5)
 
