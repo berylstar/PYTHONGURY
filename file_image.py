@@ -20,7 +20,7 @@ player_die_images = [
 ]
 
 punch_d_image = pygame.image.load(os.path.join(file_path, "design\\player\\punch.png"))
-
+player_icon = pygame.image.load(os.path.join(file_path, "design\\player\\main_1.png"))
 ##############################################################################################
 ##### SKEL
 mon_skel_images = [
@@ -347,13 +347,12 @@ blue_inven = pygame.image.load(os.path.join(file_path, "design\\ending\\inven.pn
 blue_punch = pygame.image.load(os.path.join(file_path, "design\\ending\\blue_punch.png"))
 ##############################################################################################
 # 테스트 용
-player_icon = pygame.image.load(os.path.join(file_path, "design\\player\\main_1.png"))
-monster_1_images = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png"))]
-monster_2_images = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png"))]
-monster_3_images = [pygame.image.load(os.path.join(file_path, "images\\monster_3.png"))]
-monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png"))]
-runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))]
+# monster_1_images = [pygame.image.load(os.path.join(file_path, "images\\monster_1.png"))]
+# monster_2_images = [pygame.image.load(os.path.join(file_path, "images\\monster_2.png"))]
+# monster_3_images = [pygame.image.load(os.path.join(file_path, "images\\monster_3.png"))]
+# monster_boss_images = [pygame.image.load(os.path.join(file_path, "images\\monster_boss.png"))]
+# runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))]
 
 
-test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
+# test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
 

@@ -64,7 +64,7 @@ class Equip(pygame.sprite.Sprite):
         self.grade = 0              # 0:normal / 1:rare / 2: unique
 
         self.row = 0
-        self.col = 0     #(0,0)으로 초기화 해도 문제없나 ?
+        self.col = 0
         self.max_row = MAX_ROW
         self.max_col = MAX_COL
         self.rect_left = inven_position[self.row][self.col][0]

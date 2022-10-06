@@ -1,4 +1,3 @@
-from pickle import TRUE
 import pygame
 import random
 import sys
@@ -423,6 +422,12 @@ def scene_boss(doing):
         pygame.display.update(cut_rect)
 
 def scene_finalboss(doing):
+
+    player.stop()
+    monster_con.dontmove = True
+    for monster in monster_group:
+        monster.direction = "NONE"
+
     if not game_con.devil:
         msg =[
             ("마왕",                            "아랫층이 소란스럽던데...", "고작 슬라임 한마리인가"),
@@ -1640,6 +1645,7 @@ def field_effect(field):
             player.stop()
         if field.image in lava_images and not field.is_activated:
             player.hp -= 0.2
+            player.image = player_damaged_image
 
     if field == portal:
         player.stop()
@@ -1765,7 +1771,7 @@ class Bullet(Punch):
 class GameController():
     def __init__(self):
         self.floor = 0
-        self.saved_floor = 1
+        self.saved_floor = 50
 
         self.tutorial = False
         self.shop = False
