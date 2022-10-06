@@ -863,7 +863,8 @@ def scene_credit(doing):
     pos_bottom = screen_height + 100        # pos_bottom = 820    
     credit_speed = 0.5
 
-    # sound_con.play_bgm(bgm_credit)
+    if not sound_con.bgm == bgm_title:
+        sound_con.play_bgm(bgm_title)
 
     while doing:
         for event in pygame.event.get():
@@ -871,7 +872,7 @@ def scene_credit(doing):
                 scene_exit(True)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    credit_speed = 1
+                    credit_speed = 1.5
                 else:
                     credit_speed = 0.5
 
@@ -879,29 +880,79 @@ def scene_credit(doing):
 
         msg = [
             ("RE : SLIME", pos_bottom), 
-            ("", pos_bottom+100),
-            ("KIM MINSANG", pos_bottom+300), 
-            ("BAE SUNGHYUN", pos_bottom+400), 
-            ("SHIN JUNHA", pos_bottom+500), 
-            ("LEE SUBIN", pos_bottom+600), 
-            ("", pos_bottom+700)
+
+            ("", pos_bottom+200),
+            ("CODE DESIGNER", pos_bottom+350),
+            ("KIM MINSANG", pos_bottom+400), 
+
+            ("", pos_bottom+500),
+            ("GAME DIRECTOR", pos_bottom+650),
+            ("BAE SUNGHYUN", pos_bottom+700), 
+
+            ("", pos_bottom+800),
+            ("SOUND DESIGNER", pos_bottom+950),
+            ("SHIN JUNHA", pos_bottom+1000), 
+
+            ("", pos_bottom+1100),
+            ("GRAPHIC DESIGNER", pos_bottom+1250),
+            ("LEE SOOBIN", pos_bottom+1300), 
+
+            ("SPECIAL THANKS TO", pos_bottom+1550),
+            ("YOON YEOJUN & TEAM GSS", pos_bottom+1600),
+
+            ("PYTHONGURY", pos_bottom+1900),
+            ("HANYANG UNIV. ERICA", pos_bottom+2000),
+
+            ("THANKS FOR PLAYING", pos_bottom+2500),
         ]
 
         screen_message(msg[0][0], WHITE, (screen_width//2, msg[0][1]), game_font_l)
-        screen.blit(mon_skel_images[0], (screen_width//2-150, msg[1][1]+60))
-        screen.blit(father_slime_images[0], (screen_width//2-50, msg[1][1]))
-        screen.blit(player_images[0], (screen_width//2+50, msg[1][1]+60))
-        screen.blit(mon_werewolf_images[0], (screen_width//2+150, msg[1][1]))
-        screen_message(msg[2][0], WHITE, (screen_width//2, msg[2][1]), game_font_l)
+
+        screen.blit(mon_skel_images[0], (screen_width//2-200, msg[1][1]+60))
+        screen.blit(father_slime_images[0], (screen_width//2-100, msg[1][1]))
+        screen.blit(player_images[0], (screen_width//2+100, msg[1][1]+60))
+        screen.blit(mon_werewolf_images[0], (screen_width//2+200, msg[1][1]))
+
+        screen_message(msg[2][0], WHITE, (screen_width//2, msg[2][1]), game_font_m)
         screen_message(msg[3][0], WHITE, (screen_width//2, msg[3][1]), game_font_l)
-        screen_message(msg[4][0], WHITE, (screen_width//2, msg[4][1]), game_font_l)
-        screen_message(msg[5][0], WHITE, (screen_width//2, msg[5][1]), game_font_l)
+
+        screen.blit(mon_skel_images[0], (screen_width//2-200, msg[4][1]+60))
+        screen.blit(father_slime_images[0], (screen_width//2-100, msg[4][1]))
+        screen.blit(player_images[0], (screen_width//2+100, msg[4][1]+60))
+        screen.blit(mon_werewolf_images[0], (screen_width//2+200, msg[4][1]))
+
+        screen_message(msg[5][0], WHITE, (screen_width//2, msg[5][1]), game_font_m)
+        screen_message(msg[6][0], WHITE, (screen_width//2, msg[6][1]), game_font_l)
+
+        screen.blit(mon_skel_images[0], (screen_width//2-200, msg[7][1]+60))
+        screen.blit(father_slime_images[0], (screen_width//2-100, msg[7][1]))
+        screen.blit(player_images[0], (screen_width//2+100, msg[7][1]+60))
+        screen.blit(mon_werewolf_images[0], (screen_width//2+200, msg[7][1]))
+
+        screen_message(msg[8][0], WHITE, (screen_width//2, msg[8][1]), game_font_m)
+        screen_message(msg[9][0], WHITE, (screen_width//2, msg[9][1]), game_font_l)
+
+        screen.blit(mon_skel_images[0], (screen_width//2-200, msg[10][1]+60))
+        screen.blit(father_slime_images[0], (screen_width//2-100, msg[10][1]))
+        screen.blit(player_images[0], (screen_width//2+100, msg[10][1]+60))
+        screen.blit(mon_werewolf_images[0], (screen_width//2+200, msg[10][1]))
+
+        screen_message(msg[11][0], WHITE, (screen_width//2, msg[11][1]), game_font_m)
+        screen_message(msg[12][0], WHITE, (screen_width//2, msg[12][1]), game_font_l)
+
+        screen_message(msg[13][0], WHITE, (screen_width//2, msg[13][1]), game_font_m)
+        screen_message(msg[14][0], WHITE, (screen_width//2, msg[14][1]), game_font_l)
+
+        screen_message(msg[15][0], WHITE, (screen_width//2, msg[15][1]), game_font_l)
+        screen_message(msg[16][0], WHITE, (screen_width//2, msg[16][1]), game_font_m)
+
+        screen_message(msg[17][0], WHITE, (screen_width//2, msg[17][1]), game_font_l)
 
         pos_bottom -= credit_speed
 
         pygame.display.update()
 
-        if pos_bottom < -1000:
+        if pos_bottom < -2500:
             doing = False
             game_con.ending = True
             player_images = player_blue_images
@@ -910,7 +961,8 @@ def scene_credit(doing):
             punch_d_image = blue_punch
             player.punch = blue_punch
             inven_image = blue_inven
-            game_restart()
+
+    game_restart()
 ##############################################################################################
 def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
@@ -963,10 +1015,10 @@ def make_floor_zero():
 
     player.rect = player.image.get_rect(center=player_first_position)
 
-    if not skill_con.active_escaperope:
+    if not skill_con.active_skelhead:
         player.hp = player.max_hp
     else:
-        skill_con.active_escaperope = False
+        skill_con.active_skelhead = False
 
 def floor_zero():
     global floor, background
@@ -1627,7 +1679,7 @@ class Player(Character):
         self.life = 5
         self.hp = 100
         self.max_hp = 100
-        self.coin = 0
+        self.coin = 90
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
@@ -1756,7 +1808,7 @@ D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 79
+saved_floor = 1
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
@@ -1812,6 +1864,8 @@ while running:
                     if monster_group:
                         for monster in monster_group:
                             monster.hp -= 100
+                if event.key == pygame.K_p:
+                    scene_credit(True)
 
         if not player.is_die:
             player_move_key()

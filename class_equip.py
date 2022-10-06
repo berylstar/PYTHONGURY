@@ -632,25 +632,26 @@ class E_GoldenKey(Equip):
             equip_con.rare_equips.append(self)
 
 #                                                                           #### rope
-class E_EscapeRope(Equip):
+class E_Skelhead(Equip):
     def __init__(self):
-        image = rope_image
+        image = skelhead_image
         Equip.__init__(self, image)
-        self.msg_name = "오누이의 동앗줄"
-        self.msg_info = "떡 하나 주면 안잡아먹지 !"
-        self.msg_eff = "사용 : 0층으로"
+        self.msg_name = "에메랄드 해골"
+        self.msg_info = "이거 저주가 깃든 거 맞나요"
+        self.msg_eff = "사용 : 0층으로 가는 "
+        self.msg_eff_2 = "포탈 열기"
         self.grade = 2
         self.active = True
 
         self.max_row = 4
-        self.max_col = 0
+        self.max_col = 1
 
         self.price = 10
 
     def active_skill(self):
         if self in equip_con.equipped_group:
             field_group.add(portal)
-            skill_con.active_escaperope = True
+            skill_con.active_skelhead = True
             equip_con.equipped_group.remove(self)
             equip_con.unique_equips.append(self)
 
@@ -701,7 +702,7 @@ class EquipController():
 
         self.perc_unique = 2
         self.unique_equips = [
-            e_mushroom, e_heartstone, e_boxerglove, e_magiccloak, #e_escaperope,
+            e_mushroom, e_heartstone, e_boxerglove, e_magiccloak, e_skelhead,
         ]
 
     def equip_grade(self, equip):
@@ -736,7 +737,7 @@ class SkillController():
         self.active_dice = [False, 0]
         self.active_thunder = [False, 0]
         self.active_magiccloak = [False, 0]
-        self.active_escaperope = False
+        self.active_skelhead = False
 
     def active_time(self):                          # 시연시간, 쿨타임 밸런스 조절 필요
         now_time = pygame.time.get_ticks()
@@ -828,7 +829,7 @@ e_thunder = E_Thunder()
 e_dice = E_Dice()
 e_magiccloak = E_MagicCloak()
 e_goldenkey = E_GoldenKey()
-e_escaperope = E_EscapeRope()       # NONE
+e_skelhead = E_Skelhead()       # NONE
 
 e_potion = E_Potion()
 e_coins = E_Coins()

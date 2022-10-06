@@ -269,7 +269,7 @@ thunder_image = pygame.image.load(os.path.join(file_path, "design\\equips\\thund
 dice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\dice.png"))
 magiccloak_image = pygame.image.load(os.path.join(file_path, "design\\equips\\magiccloak.png"))
 goldenkey_image = pygame.image.load(os.path.join(file_path, "design\\equips\\goldenkey.png"))
-rope_image = pygame.image.load(os.path.join(file_path, "images\\equips\\rope.png"))
+skelhead_image = pygame.image.load(os.path.join(file_path, "design\\equips\\skeleton.png"))
 
 ##############################################################################################
 ##### BACKGROUND
