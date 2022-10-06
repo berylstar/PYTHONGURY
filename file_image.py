@@ -3,6 +3,7 @@ import os
 
 file_path = os.path.dirname(__file__)
 ##############################################################################################
+dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
 ##### PLAYER
 player_images =[
     pygame.image.load(os.path.join(file_path, "design\\player\\main_0.png")),
@@ -173,9 +174,11 @@ monster_die_images = [
 
 ##### DEVIL
 devil_images =[
-
+    dummy,
+    dummy,
+    dummy
 ]
-devil_x = None
+devil_x = dummy
 devil_die = [devil_x, devil_x, devil_x, devil_x, devil_x]
 ##############################################################################################
 ##### NPC
@@ -239,10 +242,7 @@ pepper_image = pygame.image.load(os.path.join(file_path, "design\\equips\\pepper
 heartstone_image = pygame.image.load(os.path.join(file_path, "design\\equips\\heartstone.png"))
 halfstone_image = pygame.image.load(os.path.join(file_path, "design\\equips\\halfstone.png"))
 poisonapple_image = pygame.image.load(os.path.join(file_path, "design\\equips\\poisonapple.png"))
-ice_images = [
-    pygame.image.load(os.path.join(file_path, "design\\equips\\ice.png")),
-    pygame.image.load(os.path.join(file_path, "design\\equips\\ice_m.png"))
-]
+ice_image = pygame.image.load(os.path.join(file_path, "design\\equips\\ice.png"))
 battery_image = pygame.image.load(os.path.join(file_path, "design\\equips\\battery.png"))
 rollerskate_image = pygame.image.load(os.path.join(file_path, "design\\equips\\rollerskate.png"))
 gloves_image = pygame.image.load(os.path.join(file_path, "design\\equips\\gloves.png"))
@@ -350,4 +350,3 @@ runner_images = [pygame.image.load(os.path.join(file_path, "design\\skeleton.png
 
 test_image = pygame.image.load(os.path.join(file_path, "images\\test_1.png"))
 
-dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))

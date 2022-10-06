@@ -318,8 +318,8 @@ class Mon_golem(Character):
         self.type = []
 
         self.hp = 50
-        self.ap = 1.6
-        self.speed = 0.08
+        self.ap = 1.5
+        self.speed = 0.07
 
 class Mon_ember(Character):
     def __init__(self):
@@ -330,11 +330,11 @@ class Mon_ember(Character):
         self.type = ["shooter"]
 
         self.hp = 25
-        self.ap = 1.4
-        self.speed = 0.2
+        self.ap = 1.3
+        self.speed = 0.18
         self.bullet = fire_atk_image
         self.b_speed = 20
-        self.b_damage = 5
+        self.b_damage = 3
         self.b_type = "ember"
 
 class Mon_flamesnake(Character):
@@ -350,7 +350,7 @@ class Mon_flamesnake(Character):
         self.speed = 0
         self.bullet = fire_atk_image
         self.b_speed = 20
-        self.b_damage = 5
+        self.b_damage = 3
         self.b_type = "ember"
 
 class Mon_firebat(Character):
@@ -362,7 +362,7 @@ class Mon_firebat(Character):
         self.type = ["runner", "toward"]
 
         self.hp = 18
-        self.ap = 1.1
+        self.ap = 1
         self.speed = 0.2
         self.is_dashed = False
         self.dashes = 0
@@ -421,8 +421,8 @@ class Mon_witch(Character):
         self.type = ["runner", "alpha"]
 
         self.hp = 19
-        self.ap = 0.9
-        self.speed = 0.22
+        self.ap = 0.8
+        self.speed = 0.21
         self.is_dashed = False
         self.dashes = 0
 
@@ -435,8 +435,8 @@ class Mon_book(Character):
         self.type = ["toward"]
 
         self.hp = 27
-        self.ap = 1.2
-        self.speed = 0.15
+        self.ap = 1.1
+        self.speed = 0.14
 
 class Mon_magician(Character):
     def __init__(self):
@@ -463,8 +463,8 @@ class Mon_candle(Character):
         self.type = ["mon_candle"]
 
         self.hp = 60
-        self.ap = 1
-        self.speed = 0.3
+        self.ap = 0.8
+        self.speed = 0.24
         self.cycle = 0
 
 class Mon_ember_m(Character):
@@ -535,7 +535,20 @@ class Boss_candle(Character):
                                         # 81 ~ 100 : king castle
 
 # DEVIL BOSS
-class Boss_devil(Character):
+class Boss_devil_first(Character):
+    def __init__(self):
+        image_group = devil_images
+        position = (0,0)
+        Character.__init__(self, image_group, position)
+        self.die_images = devil_die
+        self.type = ["devil", "toward", "runner", "alpha"]
+
+        self.hp = 170
+        self.ap = 1
+        self.speed = 0.1
+        self.cycle = 0
+
+class Boss_devil_final(Character):
     def __init__(self):
         image_group = devil_images
         position = (0,0)
@@ -574,7 +587,7 @@ npc_kingslime = Character(father_slime_images, (540, 360))
 npc_kingslime.direction = "RIGHT"
 npc_coffin = Character(coffin_images, (840, 600))
 
-# npc_devil = Character(devil_images, (540,360))
+npc_devil = Character(devil_images, (540,360))
 
 npc_group = pygame.sprite.Group()
 npc_group.add(npc_kingslime, npc_coffin)

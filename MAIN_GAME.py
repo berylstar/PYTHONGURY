@@ -426,49 +426,45 @@ def scene_boss(doing):
         pygame.display.update(cut_rect)
 
 def scene_finalboss(doing):
+    if not game_con.devil:
+        msg =[
+            ("마왕",                            "아랫층이 소란스럽던데...", "고작 슬라임 한마리인가"),
+            ("마왕",                            "어떻게 여기까지 올라온거지 ?", "당장 내려가라."),
+            ("                      슬라임",    ".....?", "아저씨는 누구세요 ?"),
+            ("마왕",                            "너같은 녀석이 알 필요 없다.", "정해진 위치로 내려가도록."),
+            ("                      슬라임",    "......", "저 위에 뭐가 있는지만 보고 가면 안되나요 ?"),
+            ("마왕",                            "화가 나려고 하는군...", ""),
+        ]
 
-    msg =[
-        ("마왕",                            "아랫층이 소란스럽던데...", "고작 슬라임 한마리인가"),
-        ("마왕",                            "어떻게 여기까지 올라온거지 ?", "당장 내려가라."),
-        ("                      슬라임",    ".....?", "아저씨는 누구세요 ?"),
-        ("마왕",                            "너같은 녀석이 알 필요 없다.", "정해진 위치로 내려가도록."),
-        ("                      슬라임",    "......", "저 위에 뭐가 있는지만 보고 가면 안되나요 ?"),
-        ("마왕",                            "화가 나려고 하는군...", ""),
-    ]
+        index = 0
+        fin = len(msg)-1
 
-    index = 0
-    fin = len(msg)-1
+        game_con.devil = True
 
-    game_con.devil = True
+        corpus_rect = pygame.Rect((350,450), (580,200))
 
-    corpus_rect = pygame.Rect((350,450), (580,200))
-
-    while doing:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                doing = False
-                scene_exit(True)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    sound_con.play_sound(sound_wasd)
-                    if index >= fin:
-                        doing = False
-                        if not game_con.tutorial:
-                            sound_con.play_sound(sound_coin)
-                            player.coin += 10
-                            game_con.tutorial = True
-                    else:
-                        index += 1
-                if event.key == pygame.K_ESCAPE:
-                    sound_con.play_sound(sound_pick)
+        while doing:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     doing = False
-                    scene_esc(True)
+                    scene_exit(True)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        sound_con.play_sound(sound_wasd)
+                        if index >= fin:
+                            doing = False
+                        else:
+                            index += 1
+                    if event.key == pygame.K_ESCAPE:
+                        sound_con.play_sound(sound_pick)
+                        doing = False
+                        scene_esc(True)
 
-        screen.fill(BLACK)
-        screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
-        screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
-        screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
-        pygame.display.update(corpus_rect)
+            screen.fill(BLACK)
+            screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
+            screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
+            screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
+            pygame.display.update(corpus_rect)
 
 def scene_player_dead(doing):
     monster_con.is_blind = False
@@ -996,11 +992,11 @@ def floor_81():
     # if not sound_con.bgm == bgm_0f:
     #     sound_con.play_bgm(bgm_0f)
 
-    # npc_devil.draw(screen)
+    npc_devil.draw(screen)
 
-    # for punch in punch_group:
-    #     if pygame.sprite.collide_mask(punch, npc_devil):
-    #         scene_finalboss(True)
+    for punch in punch_group:
+        if pygame.sprite.collide_mask(punch, npc_devil):
+            scene_finalboss(True)
 
     pass
 
@@ -1027,23 +1023,6 @@ def next_floor(pos):
     background = setting_background(floor)
 
     monster_con.boss_scene = False
-
-    if e_battery in equip_con.equipped_group and e_battery.charge_times < 3:
-        if floor - e_battery.floor >= 10:
-            player.speed += 0.05
-            e_battery.floor = floor
-            e_battery.charge_times += 1
-            # 충전됨에 따라 배터리 이미지도 바꾸기
-
-    if e_ice in equip_con.equipped_group and e_ice.charge_times < 3:
-        if floor - e_ice.floor >= 20:
-            player.speed -= 0.05
-            e_ice.floor = floor
-            e_ice.charge_times += 1
-
-    if e_ice.charge_times == 2:
-        remove_from_equipped_group(e_ice)
-            # 녹음에 따라 얼음 이미지도 바꾸기
 
     if e_crescentmoon in equip_con.equipped_group:
         e_crescentmoon.prob_revival()
@@ -1194,6 +1173,12 @@ def equip_effect():
         if not e_pepper.is_effected:
             player.ap += 4            
             e_pepper.is_effected = True
+    
+    if e_battery in equip_con.equipped_group:
+        if not e_battery.is_effected:
+            player.ap += 5
+            player.speed += 0.1
+            e_battery.is_effected = True
 
     if e_heartstone in equip_con.equipped_group:
         if not e_heartstone.is_effected:
@@ -1211,25 +1196,13 @@ def equip_effect():
         if not e_poisonapple.is_effected:
             player.hp += 10
             player.max_hp += 10
-            player.dp -= 0.1
-            player.damaged_time += 0.1
+            player.damaged_time += 0.2
             e_poisonapple.is_effected = True
 
     if e_ice in equip_con.equipped_group:
         if not e_ice.is_effected:
             player.speed += 0.1
-            e_ice.floor = floor
             e_ice.is_effected = True
-
-    if e_battery in equip_con.equipped_group:
-        if not e_battery.is_effected:
-            e_battery.floor = floor
-            e_battery.is_effected = True
-
-    if e_rollerskate in equip_con.equipped_group:
-        if not e_rollerskate.is_effected:
-            player.speed += 0.1
-            e_rollerskate.is_effected = True
 
     if e_boxerglove in equip_con.equipped_group:
         if not e_boxerglove.is_effected:
@@ -1293,6 +1266,11 @@ def equip_effect():
             item_con.prob_coin += 3
             e_binoculars.is_effected = True
 
+    if e_rollerskate in equip_con.equipped_group:
+        if not e_rollerskate.is_effected:
+            e_rollerskate.activate = True
+            e_rollerskate.is_effected = True
+
     # trafficlight
     # thunder
     # dice
@@ -1316,6 +1294,10 @@ def remove_from_equipped_group(equip):
         elif equip == e_pepper:
             player.ap -= 4
 
+        elif equip == e_battery:
+            player.ap -= 5
+            player.speed -= 0.1
+
         elif equip == e_heartstone:
             player.max_hp -= 50
             player.hp = min(player.hp, player.max_hp)
@@ -1327,20 +1309,9 @@ def remove_from_equipped_group(equip):
         elif equip == e_poisonapple:
             player.hp -= 10
             player.max_hp -= 10
-            player.dp += 0.2
             player.damaged_time -= 0.2
 
         elif equip == e_ice:
-            if e_ice.charge_times == 0:
-                player.speed -= 0.1
-            elif e_ice.charge_times == 1:
-                player.speed -= 0.05
-
-        elif equip == e_battery:
-            player.speed -= 0.1 * e_battery.charge_times
-            e_battery.charge_times = 0
-
-        elif equip == e_rollerskate:
             player.speed -= 0.1
 
         elif equip == e_boxerglove:
@@ -1379,6 +1350,9 @@ def remove_from_equipped_group(equip):
         elif equip == e_binoculars:
             item_con.prob_potion -= 3
             item_con.prob_coin -= 3
+        
+        elif equip == e_rollerskate:
+            e_rollerskate.activate = False
 
         equip.__init__()
         equip.reset()
@@ -1603,10 +1577,11 @@ def monster_die(monster):
 def field_effect(field):
     global saved_floor
 
-    if field.image == web_image and not field.is_activated:
-        player.stop()
-    if field.image in lava_images and not field.is_activated:
-        player.hp -= 0.2
+    if not e_rollerskate.activate:
+        if field.image == web_image and not field.is_activated:
+            player.stop()
+        if field.image in lava_images and not field.is_activated:
+            player.hp -= 0.2
 
     if field == portal:
         player.stop()
@@ -1765,7 +1740,7 @@ D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
 floor = 0
-saved_floor = 41
+saved_floor = 1
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))

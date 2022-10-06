@@ -142,6 +142,12 @@ def monster_floor_setting(pos, floor):
         else:
             spawn_monster(pos, Boss_witch())
             spawn_monster(pos, Boss_book())
+
+    elif floor == 81:
+        spawn_monster(pos, Boss_devil_first())
+
+    elif floor == 100:
+        spawn_monster(pos, Boss_devil_final())
         
 
 def random_boss(floor):
@@ -180,9 +186,6 @@ def random_boss(floor):
             return Boss_magician()
         elif randprob % 2 == 0:
             return Boss_candle()
-
-    elif floor == 100:
-        return Boss_devil()
 
     else:
         return False
