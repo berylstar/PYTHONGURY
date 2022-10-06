@@ -227,7 +227,7 @@ def scene_exit(doing):
 def display_info_ui():
     pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)
-    screen_message(f"{floor}F", WHITE, (240,90), game_font_l)                              #FLOOR
+    screen_message(f"{game_con.floor}F", WHITE, (240,90), game_font_l)                              #FLOOR
 
     screen_message(f"HP: {int(player.hp)}/{player.max_hp}", WHITE, (240,190), game_font_m)                  #HP
 
@@ -416,7 +416,7 @@ def scene_boss(doing):
 
         screen.fill(BLACK)
         cut_rect = pygame.Rect((340,200), (600,100))
-        if floor == 100:
+        if game_con.floor == 100:
             screen_message("FINAL BOSS STAGE", RED, (640,250), game_font_l)
         else:
             screen_message("BOSS STAGE", RED, (640,250), game_font_l)
@@ -515,7 +515,7 @@ def scene_game_over(doing):
 
         screen.fill(BLACK)      # 게임 오버 이미지로 대체 해도되고 그냥 검은 화면으로 해도 되고
         screen_message("GAME OVER", RED, (screen_width//2, screen_height//2), game_font_l)
-        screen_message(f"REACHED AT {floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
+        screen_message(f"REACHED AT {game_con.floor} FLOOR", WHITE, (screen_width//2, screen_height//2 + 50), game_font_m)
         screen_message(f"BEATED {monster_con.mon_count} MONSTERS", WHITE, (screen_width//2, screen_height//2 + 100), game_font_m)
         screen_message("PRESS 'SPACE BAR' TO MAIN", WHITE, (640,640), game_font_m)
         pygame.display.update()
@@ -974,7 +974,7 @@ def screen_message_3(writing, color, position, font):
     screen.blit(msg, msg_rect)
 
 def game_restart():
-    global player, saved_floor
+    global player
     global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
@@ -982,7 +982,7 @@ def game_restart():
         player.coin += 10
     make_floor_zero()
     equip_reset()
-    saved_floor = 1
+    game_con.saved_floor = 1
 
     item_con = ItemController()
     equip_con = EquipController()
@@ -991,9 +991,8 @@ def game_restart():
     random_for_sale()
 
 def make_floor_zero():
-    global floor
 
-    floor = 0
+    game_con.floor = 0
 
     monster_group.empty()
     shooting_group.empty()
@@ -1015,12 +1014,12 @@ def make_floor_zero():
         skill_con.active_skelhead = False
 
 def floor_zero():
-    global floor, background
+    global background
 
     if not sound_con.bgm == bgm_0f:
         sound_con.play_bgm(bgm_0f)
 
-    if floor != 0:
+    if game_con.floor != 0:
         make_floor_zero()
 
     background = background_zero
@@ -1035,7 +1034,7 @@ def floor_zero():
         item_con.first_box = False
 
     if pygame.sprite.collide_mask(player, stair):
-        floor = saved_floor - 1
+        game_con.floor = game_con.saved_floor - 1
 
     for punch in punch_group:
         if pygame.sprite.collide_mask(punch, npc_kingslime):
@@ -1057,33 +1056,33 @@ def floor_81():
                 scene_finalboss(True)
 
 def next_floor(pos):
-    global floor, background
+    global background
 
     sound_con.play_sound(sound_nextfloor)
 
-    floor += 1
+    game_con.floor += 1
     player.hp = min(player.hp+5, player.max_hp)
 
     item_group.empty()
     shooting_group.empty()
 
-    if (floor % 20 == 19):
+    if (game_con.floor % 20 == 19):
         stair.image = stair_images[0]
     else:
         stair.image = stair_images[1]
 
-    monster_setting(pos, floor)
+    monster_setting(pos, game_con.floor)
 
-    random_field_setting(floor)
+    random_field_setting(game_con.floor)
 
-    background = setting_background(floor)
+    background = setting_background(game_con.floor)
 
     monster_con.boss_scene = False
 
     if e_crescentmoon in equip_con.equipped_group:
         e_crescentmoon.prob_revival()
 
-    e_goldenkey.target = floor
+    e_goldenkey.target = game_con.floor
 
 def setting_background(floor):
     randprob = random.randrange(0,3)
@@ -1644,7 +1643,7 @@ def field_effect(field):
 
     if field == portal:
         player.stop()
-        saved_floor = floor
+        saved_floor = game_con.floor
         floor_zero()
 
     if field == key_field:
@@ -1765,6 +1764,9 @@ class Bullet(Punch):
 
 class GameController():
     def __init__(self):
+        self.floor = 0
+        self.saved_floor = 1
+
         self.tutorial = False
         self.shop = False
         self.inven = False
@@ -1798,8 +1800,7 @@ GREEN = (0,255,0)
 D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
-floor = 0
-saved_floor = 1
+
 background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
@@ -1845,9 +1846,9 @@ while running:
             if not player.is_die:
                 if event.key == pygame.K_SPACE:
                     player.space_bar()
-                if event.key == pygame.K_c and floor > 0:
+                if event.key == pygame.K_c and game_con.floor > 0:
                     player.skill_c()
-                if event.key == pygame.K_v and floor > 0:
+                if event.key == pygame.K_v and game_con.floor > 0:
                     player.skill_v()
                 if event.key == pygame.K_i and game_con.shop:
                     scene_inventory(True)
@@ -1872,11 +1873,11 @@ while running:
         skill_con.active_time()
     a_counter = milli_time
 
-    if floor == 0:
+    if game_con.floor == 0:
         floor_zero()      
 
-    elif floor > 0:
-        bgm_setting(floor)
+    elif game_con.floor > 0:
+        bgm_setting(game_con.floor)
 
         second_time = int((pygame.time.get_ticks() - start_ticks) / 1000)
         if b_counter != second_time:
@@ -1902,7 +1903,7 @@ while running:
     if not monster_group:
         if not game_con.shop:
             pass
-        elif floor > 80 and not game_con.devil:
+        elif game_con.floor > 80 and not game_con.devil:
             pass
         else:
             stair.draw(screen)                                                              #STAIR
@@ -1966,7 +1967,7 @@ while running:
             player.hp = 0
             player.stop()
             if not player.is_die:
-                saved_floor = floor
+                game_con.saved_floor = game_con.floor
                 player.is_die = True
                 player.change_image_group(player.die_images)
         
@@ -1991,9 +1992,9 @@ while running:
         screen.blit(blind_image, blind_rect)
     player.draw(screen)                                                                 #PLAYER
 
-    if floor > 0 and floor % 20 == 0 and not monster_con.boss_scene:
+    if game_con.floor > 0 and game_con.floor % 20 == 0 and not monster_con.boss_scene:
         scene_boss(True)
-    elif floor == 81:
+    elif game_con.floor == 81:
         floor_81()
 
     screen.blit(cover_image, (0,0))
