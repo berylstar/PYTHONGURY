@@ -147,11 +147,11 @@ witch_die = [witch_x, witch_x, witch_x]
 
 ##### BOOK
 mon_book_images = [
-    dummy,
-    dummy,
-    dummy
+    pygame.image.load(os.path.join(file_path, "design\\monster\\book_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\book_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\book_2.png")),
 ]
-book_x = dummy
+book_x = pygame.image.load(os.path.join(file_path, "design\\monster\\book_x.png"))
 book_die = [book_x, book_x, book_x]
 
 ##### MAGICIAN
@@ -166,11 +166,11 @@ magician_die = [magician_x, magician_x, magician_x]
 
 ##### CANDLE
 mon_candle_images = [
-    dummy,
-    dummy,
-    dummy,
+    pygame.image.load(os.path.join(file_path, "design\\monster\\candle_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\candle_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\candle_2.png")),
 ]
-candle_x = dummy
+candle_x = pygame.image.load(os.path.join(file_path, "design\\monster\\candle_x.png"))
 candle_die = [candle_x, candle_x, candle_x]
 
 monster_die_images = [

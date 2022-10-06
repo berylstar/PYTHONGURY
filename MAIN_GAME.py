@@ -225,7 +225,7 @@ def scene_exit(doing):
         pygame.display.update(exit_rect)
     
 def display_info_ui():
-    pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))     # 인포 이미지로 대체
+    pygame.draw.rect(screen, BLACK, ((140,60), (200, 600)))
     pygame.draw.rect(screen, WHITE, ((140,60), (200, 600)), 1)
     screen_message(f"{floor}F", WHITE, (240,90), game_font_l)                              #FLOOR
 
@@ -242,14 +242,8 @@ def display_info_ui():
     # screen.blit(block_1, (140,60))
 
 def display_inven_ui():
-    pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))     # 인벤 이미지로 대체
+    pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))
     screen.blit(inven_image, (940,60))
-    # pygame.draw.rect(screen, WHITE, ((940,60), (200, 600)), 1) 
-    # for i in range(MAX_COL+2):
-    #     pygame.draw.line(screen, GREEN, (950 + 60*i, 240), (950 + 60*i, 600))
-    # for i in range(MAX_ROW+2):
-    #     pygame.draw.line(screen, GREEN, (950, 240 + 60*i), (1130, 240 + 60*i))
-    
 
     for equip in equip_con.equipped_group:
         equip.draw(screen)                                                                  #EQUIP
@@ -1555,10 +1549,7 @@ def monster_action():
 
             if "mon_candle" in monster.type:
                 if 0 <= randprob < 30:
-                    monster.cycle += 1
-                    if monster.cycle > 2:
-                        spawn_monster(player.position, Mon_ember_m())
-                        monster.cycle = 0
+                    spawn_monster(player.position, Mon_ember_m())\
 
             if "boss" in monster.type:
                 boss_action(monster)

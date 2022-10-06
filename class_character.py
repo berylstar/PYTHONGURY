@@ -465,11 +465,10 @@ class Mon_candle(Character):
         self.hp = 60
         self.ap = 0.8
         self.speed = 0.24
-        self.cycle = 0
 
 class Mon_ember_m(Character):
     def __init__(self):
-        image_group = images_bigger(mon_ember_images, 0.7)
+        image_group = mon_ember_images
         position = (0,0)
         Character.__init__(self, image_group, position)
         self.die_images = ember_die
