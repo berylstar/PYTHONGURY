@@ -3,12 +3,6 @@ import random
 
 from class_character import *
 from class_field import *
-
-##############################################################################################
-# 몬스터 세팅 방법
-# 1. 전체 랜덤
-# 2. 전체 세팅
-# 3. 전체 랜덤 + 추가 세팅
 ##############################################################################################
 def monster_setting(pos, floor):
     num = (floor % 20) //6 + 1
@@ -30,13 +24,16 @@ def random_away_position(center, object):
                 break 
 
 def spawn_monster(pos, monster):
-    random_away_position(pos, monster)
-    monster_group.add(monster)
+    if not monster:
+        pass
+    else:
+        random_away_position(pos, monster)
+        monster_group.add(monster)
 
 def random_monster(floor):
     randprob = random.randrange(1,101) # 1~100
 
-    if 0 < floor <= 20:
+    if 0 < floor < 20:
         if randprob < 30:
             return Mon_skel()
         elif 30 <= randprob < 60:
@@ -46,7 +43,7 @@ def random_monster(floor):
         elif randprob % 2 == 1:
             return Mon_spider()
 
-    elif 20 < floor <= 40:
+    elif 20 < floor < 40:
         if randprob < 30:
             return Mon_ghost()
         elif 30 <= randprob < 60:
@@ -56,7 +53,7 @@ def random_monster(floor):
         elif randprob % 2 == 1:
             return Mon_zombie()
 
-    elif 40 < floor <= 60:
+    elif 40 < floor < 60:
         if randprob < 30:
             return Mon_ember()
         elif 30 <= randprob < 60:
@@ -65,6 +62,22 @@ def random_monster(floor):
             return Mon_flamesnake()
         elif randprob % 2 == 1:
             return Mon_firebat()
+
+    elif 60 < floor < 80:
+        if randprob < 30:
+            return Mon_magician()
+        elif 30 <= randprob < 60:
+            return Mon_book()
+        elif randprob % 2 == 0:
+            return Mon_candle()
+        elif randprob % 2 == 1:
+            return Mon_witch()
+
+    elif 80 < floor < 100:
+        pass
+
+    else:
+        return False
 
 def monster_floor_setting(pos, floor):
     if 1 <= floor < 5:
@@ -109,6 +122,45 @@ def monster_floor_setting(pos, floor):
     elif floor == 60:
         spawn_monster(pos, random_boss(floor))
 
+    if 61 <= floor < 65:
+        spawn_monster(pos, Mon_book())
+    elif 65 <= floor < 70:
+        spawn_monster(pos, Mon_witch())
+    elif 70 <= floor < 75:
+        spawn_monster(pos, Mon_magician())
+    elif 75 <= floor < 80:
+        spawn_monster(pos, Mon_candle())
+        spawn_monster(pos, Mon_book())
+        pass
+    elif floor == 80:
+        randprob = random.randrange(0,2)
+        if randprob == 1:
+            spawn_monster(pos, random_boss(floor))
+        else:
+            spawn_monster(pos, Boss_witch())
+            spawn_monster(pos, Boss_book())
+
+    elif 82 <= floor < 85:
+        spawn_monster(pos, random_monster(5))
+        spawn_monster(pos, random_monster(25))
+        spawn_monster(pos, random_monster(45))
+        spawn_monster(pos, random_monster(65))
+    elif 85 <= floor < 90:
+        spawn_monster(pos, random_monster(15))
+        spawn_monster(pos, random_monster(35))
+        spawn_monster(pos, random_monster(55))
+        spawn_monster(pos, random_monster(75))
+    elif 90 <= floor < 100:
+        spawn_monster(pos, random_monster(5))
+        spawn_monster(pos, random_monster(15))
+        spawn_monster(pos, random_monster(25))
+        spawn_monster(pos, random_monster(35))
+        spawn_monster(pos, random_monster(55))
+        spawn_monster(pos, random_monster(75))
+        
+    elif floor == 100:
+        spawn_monster(pos, Boss_devil_final())
+        
 def random_boss(floor):
     randprob = random.randrange(1,5)
 
@@ -140,15 +192,21 @@ def random_boss(floor):
         elif randprob == 3 or randprob == 4:
             return Boss_flamesnake()
 
+    elif floor == 80:
+        if randprob % 2 == 1 :
+            return Boss_magician()
+        elif randprob % 2 == 0:
+            return Boss_candle()
+
     else:
-        return Mon_boss()
+        return False
 ##############################################################################################
 def random_field_setting(floor):
     randprob = random.randrange(1,101)
 
     field_group.empty()
 
-    if 0 < floor <= 20:
+    if 0 < floor < 20:
         for i in range(randprob % 3):
             web = Field(web_image, (0,0))
             random_away_position((0,0), web)
@@ -159,7 +217,7 @@ def random_field_setting(floor):
             random_away_position((0,0), water)
             field_group.add(water)
 
-    elif 20 < floor <= 40:
+    elif 20 < floor < 40:
         for i in range(randprob % 4):
             web = Field(web_image, (0,0))
             random_away_position((0,0), web)
@@ -171,8 +229,25 @@ def random_field_setting(floor):
             random_away_position((0,0), deco)
             field_group.add(deco)
 
-    elif 40 < floor <= 60:
-        for i in range(randprob % 3):
-            lava = Field(lava_image, (0,0))
+    elif 40 < floor < 60:
+        num = max(8, randprob%11)
+        aa = 0 
+        for i in range(num):
+            lava = Field(lava_images[aa%3], (0,0))
             random_away_position((0,0), lava)
             field_group.add(lava)
+            aa += 1
+
+    elif 60 < floor < 80:
+        num = max(3, randprob%8)
+        aa = 0 
+        for i in range(num):
+            book = Field(library_deco[aa%3], (0,0))
+            random_away_position((0,0), book)
+            field_group.add(book)
+            aa += 1
+
+        for i in range(randprob % 6):
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)

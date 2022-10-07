@@ -9,7 +9,7 @@ class Character(pygame.sprite.Sprite):
         self.position = position
 
         self.i_i = 0
-        self.image = image_group[self.i_i]
+        self.image = self.image_group[self.i_i]
         self.rect = self.image.get_rect(center=position)
 
         self.direction = "LEFT"
@@ -17,7 +17,7 @@ class Character(pygame.sprite.Sprite):
         self.flip = False
 
         self.is_die = False
-        self.die_images = monster_die_images
+        # self.die_images = monster_die_images
 
     def change_image_group(self, new_images):
         self.i_i = 0
@@ -146,6 +146,7 @@ class Boss_spider(Character):
         image_group = images_bigger(mon_spider_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(spider_die, 2)
         self.type = ["boss", "boss_spider"]
 
         self.hp = 120
@@ -157,6 +158,7 @@ class Boss_bat(Character):
         image_group = images_bigger(mon_bat_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(bat_die, 2)
         self.type = ["boss", "boss_bat", "runner"]
 
         self.hp = 80
@@ -170,6 +172,7 @@ class Boss_frog(Character):
         image_group = images_bigger(mon_frog_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(frog_die, 2)
         self.type = ["boss", "boss_frog"]
 
         self.hp = 200
@@ -194,6 +197,7 @@ class Boss_skel(Character):
         image_group = images_bigger(mon_skel_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(skel_die, 2)
         self.type = ["boss", "boss_skel"]
 
         self.hp = 160
@@ -263,6 +267,7 @@ class Boss_zombie(Character):
         image_group = images_bigger(mon_zombie_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(zombie_die, 2)
         self.type = ["boss", "boss_zombie"]
 
         self.hp = 100
@@ -274,6 +279,7 @@ class Boss_werewolf(Character):
         image_group = images_bigger(mon_werewolf_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(werewolf_die, 2)
         self.type = ["boss", "runner", "toward"]
 
         self.hp = 180
@@ -287,6 +293,7 @@ class Boss_ghost(Character):
         image_group = images_bigger(mon_ghost_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(ghost_die, 2)
         self.type = ["boss", "boss_ghost", "alpha"]
 
         self.hp = 230
@@ -298,6 +305,7 @@ class Boss_scarecrow(Character):
         image_group = images_bigger(mon_scarecrow_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(scarecrow_die, 2)
         self.type = ["boss", "boss_scarecrow"]
 
         self.hp = 200
@@ -373,6 +381,7 @@ class Boss_golem(Character):
         image_group = images_bigger(mon_golem_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(golem_die, 2)
         self.type = ["boss", "toward"]
 
         self.hp = 400
@@ -384,6 +393,7 @@ class Boss_ember(Character):
         image_group = images_bigger(mon_ember_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(ember_die, 2)
         self.type = ["boss", "boss_ember", "shooter"]
 
         self.hp = 220
@@ -400,6 +410,7 @@ class Boss_flamesnake(Character):
         image_group = images_bigger(mon_flamesnake_images, 1.5)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(flamesnake_die, 1.5)
         self.type = ["boss", "boss_flamesnake", "shooter_four"]
 
         self.hp = 250
@@ -484,6 +495,7 @@ class Boss_witch(Character):
         image_group = images_bigger(mon_witch_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(witch_die, 2)
         self.type = ["boss", "runner", "alpha"]
 
         self.hp = 100
@@ -497,6 +509,7 @@ class Boss_book(Character):
         image_group = images_bigger(mon_book_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(book_die, 2)
         self.type = ["toward"]
 
         self.hp = 120
@@ -508,12 +521,13 @@ class Boss_magician(Character):
         image_group = images_bigger(mon_magician_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(magician_die, 2)
         self.type = ["boss", "boss_magician", "shooter", "toward"]
 
         self.hp = 150
         self.ap = 0.7
         self.speed = 0.09
-        self.bullet = dummy
+        self.bullet = magician_atk_image
         self.b_speed = 10
         self.b_damage = 15
         self.b_type = "magic"
@@ -524,6 +538,7 @@ class Boss_candle(Character):
         image_group = images_bigger(mon_candle_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
+        self.die_images = images_bigger(candle_die, 2)
         self.type = ["boss", "mon_candle"]
 
         self.hp = 170
@@ -541,8 +556,8 @@ class Boss_devil_first(Character):
         self.die_images = devil_images
         self.type = ["boss", "devil_first", "toward", "runner", "alpha"]
 
-        self.hp = 170
-        self.ap = 1
+        self.hp = 200
+        self.ap = 0.8
         self.speed = 0.1
         self.is_dashed = False
         self.dashes = 0
@@ -555,8 +570,8 @@ class Boss_devil_final(Character):
         self.die_images = devil_die
         self.type = ["devil_final", "toward", "runner", "alpha"]
 
-        self.hp = 170
-        self.ap = 1
+        self.hp = 1500
+        self.ap = 0.3
         self.speed = 0.1
         self.cycle = 0
         self.is_dashed = False
