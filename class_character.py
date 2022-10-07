@@ -538,7 +538,7 @@ class Boss_devil_first(Character):
         image_group = devil_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = devil_die
+        self.die_images = devil_images
         self.type = ["boss", "devil_first", "toward", "runner", "alpha"]
 
         self.hp = 170

@@ -139,10 +139,11 @@ firebat_die = [firebat_x, firebat_x, firebat_x]
 
 ##### WITCH
 mon_witch_images = [
-    dummy,
-    dummy,
+    pygame.image.load(os.path.join(file_path, "design\\monster\\witch_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\witch_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\witch_2.png")),
 ]
-witch_x = dummy
+witch_x = pygame.image.load(os.path.join(file_path, "design\\monster\\witch_x.png"))
 witch_die = [witch_x, witch_x, witch_x]
 
 ##### BOOK
@@ -156,12 +157,11 @@ book_die = [book_x, book_x, book_x]
 
 ##### MAGICIAN
 mon_magician_images = [
-    dummy,
-    dummy,
-    dummy,
+    pygame.image.load(os.path.join(file_path, "design\\monster\\wizard_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\wizard_1.png")),
 ]
-magician_atk_image = dummy
-magician_x = dummy
+magician_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\wizard_atk.png"))
+magician_x = pygame.image.load(os.path.join(file_path, "design\\monster\\wizard_x.png"))
 magician_die = [magician_x, magician_x, magician_x]
 
 ##### CANDLE
@@ -181,9 +181,9 @@ monster_die_images = [
 
 ##### DEVIL
 devil_images =[
-    dummy,
-    dummy,
-    dummy
+    pygame.image.load(os.path.join(file_path, "design\\monster\\boss_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\boss_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\monster\\boss_2.png")),
 ]
 devil_x = dummy
 devil_die = [devil_x, devil_x, devil_x, devil_x, devil_x]
@@ -203,7 +203,8 @@ coffin_images = [
 ##### FIELD
 stair_images = [
     pygame.image.load(os.path.join(file_path, "design\\field\\stair_0.png")),
-    pygame.image.load(os.path.join(file_path, "design\\field\\stair_1.png"))
+    pygame.image.load(os.path.join(file_path, "design\\field\\stair_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\field\\gate.png")),
 ]
 
 web_image = pygame.image.load(os.path.join(file_path, "design\\field\\web.png"))
@@ -230,6 +231,12 @@ lava_images = [
     pygame.image.load(os.path.join(file_path, "design\\field\\lava_3.png")),
 ]
 
+library_deco = [
+    pygame.image.load(os.path.join(file_path, "design\\field\\book_0.png")),
+    pygame.image.load(os.path.join(file_path, "design\\field\\book_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\field\\book_2.png")),
+]
+
 ##############################################################################################
 ##### ITEM
 potion_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_potion.png"))
@@ -237,6 +244,7 @@ coin_image = pygame.image.load(os.path.join(file_path, "design\\item\\coin.png")
 redcoin_image = pygame.image.load(os.path.join(file_path, "design\\item\\red_coin.png"))
 box_image = pygame.image.load(os.path.join(file_path, "design\\item\\box.png"))
 coins_image = pygame.image.load(os.path.join(file_path, "design\\item\\coins.png"))
+crown_image = pygame.image.load(os.path.join(file_path, "design\\item\\crown.png"))
 
 ##############################################################################################
 ##### EQUIP
@@ -289,9 +297,15 @@ background_third = [
     pygame.image.load(os.path.join(file_path, "design\\floor\\3_2.png")),
     pygame.image.load(os.path.join(file_path, "design\\floor\\3_3.png"))
 ]
-
+background_fourth = [
+    pygame.image.load(os.path.join(file_path, "design\\floor\\4_1.png")),
+    pygame.image.load(os.path.join(file_path, "design\\floor\\4_2.png")),
+    pygame.image.load(os.path.join(file_path, "design\\floor\\4_2.png")),
+]
 ##############################################################################################
 # ETC
+title_logo = pygame.image.load(os.path.join(file_path, "design\\etc\\logo_title.png"))
+team_logo = pygame.image.load(os.path.join(file_path, "design\\etc\\logo_team.png"))
 title_image = pygame.image.load(os.path.join(file_path, "design\\etc\\title.png"))
 cover_image = pygame.image.load(os.path.join(file_path, "images\\cover.png"))
 story_images = [

@@ -27,10 +27,11 @@ def scene_title_game():
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
-        screen_message_3("RE : SLIME", GREEN, (screen_width//2,200), game_font_l)    # 타이틀 로고 이미지로 대체
+        screen.blit(title_logo, (screen_width//2-title_logo.get_width()//2,100))
         screen_message_3(option[0], color[0], (screen_width//2,500), game_font_m)
         screen_message_3(option[1], color[1], (screen_width//2,550), game_font_m)
         screen_message_3(option[2], color[2], (screen_width//2,600), game_font_m)
+        screen.blit(team_logo, (900,600))
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -51,7 +52,10 @@ def scene_title_game():
                     sound_con.play_sound(sound_pick)
                     if index == 0:
                         ready = False
-                        scene_story(True)
+                        if not game_con.ending:
+                            scene_story(True)
+                        else:
+                            game_restart()
                     elif index == 1:
                         scene_esc(True)
                     elif index == 2:
@@ -112,11 +116,13 @@ def scene_esc(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
+        screen.blit(title_logo, (screen_width//2-title_logo.get_width()//2,100))
         screen_message_3(option[0], color[0], (screen_width//2, 430), game_font_m)
         screen_message_3(option[1], color[1], (screen_width//2, 480), game_font_m)
         screen_message_3(option[2], color[2], (screen_width//2, 530), game_font_m)
         screen_message_3(option[3], color[3], (screen_width//2, 580), game_font_m)
         screen_message_3(option[4], color[4], (screen_width//2, 630), game_font_m)
+        screen.blit(team_logo, (900,600))
 
         pygame.display.update()
 
@@ -174,10 +180,12 @@ def scene_sound_setting(doing):
         color[index] = GREEN
 
         screen.blit(title_image, (0,0))
+        screen.blit(title_logo, (screen_width//2-title_logo.get_width()//2,100))
         screen_message_3(option[0], color[0], (screen_width//2, 480), game_font_m)
         screen_message_3(option[1], color[1], (screen_width//2, 530), game_font_m)
         screen_message_3(option[2], color[2], (screen_width//2, 580), game_font_m)
         screen_message_3(option[3], color[3], (screen_width//2, 630), game_font_m)
+        screen.blit(team_logo, (900,600))
 
         pygame.display.update()
 
@@ -238,8 +246,6 @@ def display_info_ui():
     screen.blit(player_icon, life_image_rect)
     screen_message(f"      x{player.life}", WHITE, (220,390), game_font_m)                  #LIFE
     
-    # screen.blit(block_1, (140,60))
-
 def display_inven_ui():
     pygame.draw.rect(screen, BLACK, ((940,60), (200, 600)))
     screen.blit(inven_image, (940,60))
@@ -394,6 +400,9 @@ def scene_tutorial(doing, tuto):
         pygame.display.update(corpus_rect)
 
 def scene_boss(doing):
+
+    if not sound_con.bgm == bgm_boss:
+        sound_con.play_bgm(bgm_boss)
 
     player.stop()
     monster_con.dontmove = True
@@ -857,7 +866,7 @@ def scene_ending(doing):
     scene_credit(True)
 
 def scene_credit(doing):
-    global player_images, punch_d_image, inven_image
+    global player_images, punch_d_image, inven_image, ready
     
     pos_bottom = screen_height + 100        # pos_bottom = 820    
     credit_speed = 0.5
@@ -878,7 +887,7 @@ def scene_credit(doing):
         screen.fill(BLACK)
 
         msg = [
-            ("RE : SLIME", pos_bottom), 
+            ("", pos_bottom), 
 
             ("", pos_bottom+200),
             ("CODE DESIGNER", pos_bottom+350),
@@ -899,13 +908,14 @@ def scene_credit(doing):
             ("SPECIAL THANKS TO", pos_bottom+1550),
             ("YOON YEOJUN & TEAM GSS", pos_bottom+1600),
 
-            ("PYTHONGURY", pos_bottom+1900),
+            ("", pos_bottom+1900),
             ("HANYANG UNIV. ERICA", pos_bottom+2000),
 
             ("THANKS FOR PLAYING", pos_bottom+2500),
         ]
 
-        screen_message(msg[0][0], WHITE, (screen_width//2, msg[0][1]), game_font_l)
+        # screen_message(msg[0][0], WHITE, (screen_width//2, msg[0][1]), game_font_l)
+        screen.blit(title_logo, (screen_width//2-title_logo.get_width()//2, msg[0][1]))
 
         screen.blit(mon_skel_images[0], (screen_width//2-200, msg[1][1]+60))
         screen.blit(father_slime_images[0], (screen_width//2-100, msg[1][1]))
@@ -942,7 +952,8 @@ def scene_credit(doing):
         screen_message(msg[13][0], WHITE, (screen_width//2, msg[13][1]), game_font_m)
         screen_message(msg[14][0], WHITE, (screen_width//2, msg[14][1]), game_font_l)
 
-        screen_message(msg[15][0], WHITE, (screen_width//2, msg[15][1]), game_font_l)
+        # screen_message(msg[15][0], WHITE, (screen_width//2, msg[15][1]), game_font_l)
+        screen.blit(team_logo, (screen_width//2-team_logo.get_width()//2, msg[15][1]))
         screen_message(msg[16][0], WHITE, (screen_width//2, msg[16][1]), game_font_m)
 
         screen_message(msg[17][0], WHITE, (screen_width//2, msg[17][1]), game_font_l)
@@ -960,8 +971,7 @@ def scene_credit(doing):
             punch_d_image = blue_punch
             player.punch = blue_punch
             inven_image = blue_inven
-
-    game_restart()
+            ready = True
 ##############################################################################################
 def screen_message(writing, color, position, font):
     msg = font.render(writing, True, color)
@@ -1019,7 +1029,6 @@ def make_floor_zero():
         skill_con.active_skelhead = False
 
 def floor_zero():
-    global background
 
     if not sound_con.bgm == bgm_0f:
         sound_con.play_bgm(bgm_0f)
@@ -1027,7 +1036,7 @@ def floor_zero():
     if game_con.floor != 0:
         make_floor_zero()
 
-    background = background_zero
+    game_con.background = background_zero
 
     for deco in deco_group:
         deco.draw(screen)
@@ -1051,9 +1060,8 @@ def floor_zero():
             scene_shop(True)
 
 def floor_81():
-    # if not sound_con.bgm == bgm_0f:
-    #     sound_con.play_bgm(bgm_0f)
     if not game_con.devil:
+        npc_devil.direction = "RIGHT"
         npc_devil.draw(screen)
 
         for punch in punch_group:
@@ -1061,8 +1069,6 @@ def floor_81():
                 scene_finalboss(True)
 
 def next_floor(pos):
-    global background
-
     sound_con.play_sound(sound_nextfloor)
 
     game_con.floor += 1
@@ -1073,6 +1079,8 @@ def next_floor(pos):
 
     if (game_con.floor % 20 == 19):
         stair.image = stair_images[0]
+    if game_con.floor == 99:
+        stair.image = stair_images[2]
     else:
         stair.image = stair_images[1]
 
@@ -1080,7 +1088,7 @@ def next_floor(pos):
 
     random_field_setting(game_con.floor)
 
-    background = setting_background(game_con.floor)
+    game_con.background = setting_background(game_con.floor)
 
     monster_con.boss_scene = False
 
@@ -1091,29 +1099,33 @@ def next_floor(pos):
 
 def setting_background(floor):
     randprob = random.randrange(0,3)
-    if floor == 0:
+    if floor == 0 or floor == 81 or floor == 100:
         background = background_zero
-    elif 0 < floor <= 20:
+    elif 0 < floor <= 20 or 81 < floor <= 85:
         background = background_first[randprob]
-    elif 20 < floor <= 40:
+    elif 20 < floor <= 40 or 85 < floor <= 90:
         background = background_second[randprob]
-    elif 40 < floor <= 60:
+    elif 40 < floor <= 60 or 90 < floor <= 95:
         background = background_third[randprob]
+    elif 60 < floor <= 80 or 95 < floor <= 99:
+        background = background_fourth[randprob]
     else:
         background = background_zero
 
     return background
 
 def bgm_setting(floor):
-    if 0 < floor <= 20 and not sound_con.bgm == bgm_first:
+    if 0 < floor < 20 and not sound_con.bgm == bgm_first:
         sound_con.play_bgm(bgm_first)
-    elif 20 < floor <= 40 and not sound_con.bgm == bgm_second:
+    elif 20 < floor < 40 and not sound_con.bgm == bgm_second:
         sound_con.play_bgm(bgm_second)
-    elif 40 < floor <= 60 and not sound_con.bgm == bgm_third:
+    elif 40 < floor < 60 and not sound_con.bgm == bgm_third:
         sound_con.play_bgm(bgm_third)
-    elif 60 < floor <= 80 and not sound_con.bgm == bgm_fourth:
+    elif 60 < floor < 80 and not sound_con.bgm == bgm_fourth:
         sound_con.play_bgm(bgm_fourth)
-    elif 80 < floor <= 100 and not sound_con.bgm == bgm_fifth:
+    elif floor == 81 and not sound_con.bgm == bgm_finalboss:
+        sound_con.play_bgm(bgm_finalboss)
+    elif 81 < floor < 100 and not sound_con.bgm == bgm_fifth:
         sound_con.play_bgm(bgm_fifth)
 
 def show_animation():
@@ -1196,6 +1208,8 @@ def drop_item(monster):
         item_group.add(Item(box_image, monster.position, "boss_box"))
     elif "mini" in monster.type:
         pass
+    elif "devil_final" in monster.type:
+        item_group.add(Item(crown_image, monster.position, "crown"))
     else:
         if randprob <= item_con.prob_potion: # 확률 <= 포션드롭률
             item_group.add(Item(potion_image, monster.position, "potion"))
@@ -1219,6 +1233,8 @@ def item_effect(item):
         scene_treasurebox(True, "boss")
     elif item.info == "normal_box":
         scene_treasurebox(True, "normal")
+    elif item.info == "crown":
+        scene_ending(True)
 
 def equip_effect():
     # mushroom
@@ -1558,6 +1574,9 @@ def monster_action():
             if "boss" in monster.type:
                 boss_action(monster)
 
+            if "devil_final" in monster.type:
+                devil_action(monster)
+
 def boss_action(monster):
     if "boss_spider" in monster.type:       # field spawner
         web = Field(web_image, (0,0))
@@ -1613,6 +1632,15 @@ def boss_action(monster):
             spawn_monster(player.position, Mon_ember())
             monster.cycle = 0
 
+def devil_action(monster):
+    if monster.cycle == 3:
+        spawn_monster(player.position, Mon_spider())
+        spawn_monster(player.position, Mon_zombie())
+        spawn_monster(player.position, Mon_ember())
+    elif monster.cycle == 5:
+        monster.cycle == 0
+    monster.cycle += 1
+
 def monster_die(monster):
     if "boss" in monster.type:
         monster_con.is_blind = False
@@ -1626,8 +1654,6 @@ def monster_die(monster):
             player.speed += 0.15
     elif "devil_first" in monster.type and not monster.is_die:
         scene_finalboss(True)
-    elif "devil_final" in monster.type and not monster.is_die:
-        scene_ending(True)
 
     if not monster.is_die:
         monster.is_die = True
@@ -1638,18 +1664,17 @@ def monster_die(monster):
         monster_group.remove(monster)
 
 def field_effect(field):
-    global saved_floor
-
     if not e_rollerskate.activate:
         if field.image == web_image and not field.is_activated:
             player.stop()
         if field.image in lava_images and not field.is_activated:
             player.hp -= 0.2
-            player.image = player_damaged_image
+            if not player.is_die:
+                player.image = player_damaged_image
 
     if field == portal:
         player.stop()
-        saved_floor = game_con.floor
+        game_con.saved_floor = game_con.floor
         floor_zero()
 
     if field == key_field:
@@ -1771,7 +1796,8 @@ class Bullet(Punch):
 class GameController():
     def __init__(self):
         self.floor = 0
-        self.saved_floor = 50
+        self.saved_floor = 80
+        self.background = background_zero
 
         self.tutorial = False
         self.shop = False
@@ -1806,8 +1832,6 @@ GREEN = (0,255,0)
 D_GREEN = (0,50,0)
 BLUE = (0,0,127)
 YELLOW = (255,255,0)
-
-background = background_zero
 
 main_rect = pygame.Rect(((340,60), (600, 600)))
 info_rect = pygame.Rect(((140,60), (200, 600)))
@@ -1870,7 +1894,7 @@ while running:
 
     player.move(player.to[0] + player.to[1], player.to[2] + player.to[3], fps)
     
-    screen.blit(background, (340,60))                                                           #BACKGROUND
+    screen.blit(game_con.background, (340,60))                                                           #BACKGROUND
 
     milli_time = int((pygame.time.get_ticks() - start_ticks) / 500)
     if a_counter != milli_time:
@@ -1911,6 +1935,8 @@ while running:
             pass
         elif game_con.floor > 80 and not game_con.devil:
             pass
+        elif game_con.floor == 100:
+            pass
         else:
             stair.draw(screen)                                                              #STAIR
 
@@ -1927,8 +1953,10 @@ while running:
         if monster.hp <= 0:
             monster_die(monster)
             if len(monster_group) == 0:
-                random_away_position(player.position, stair)
-
+                if game_con.floor == 99:
+                    stair.rect = stair_zero_floor
+                else:
+                    random_away_position(player.position, stair)
 
     for punch in punch_group:
         if not player.is_die:
@@ -1941,7 +1969,6 @@ while running:
             if pygame.sprite.collide_mask(monster, punch):
                 punch_group.remove(punch)
                 monster.hp -= player.ap
-                sound_con.play_sound(sound_monster_damage)
                 monster.damaged(screen)
 
     for bullet in shooting_group:

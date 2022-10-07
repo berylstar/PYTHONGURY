@@ -206,7 +206,7 @@ def random_field_setting(floor):
 
     field_group.empty()
 
-    if 0 < floor <= 20:
+    if 0 < floor < 20:
         for i in range(randprob % 3):
             web = Field(web_image, (0,0))
             random_away_position((0,0), web)
@@ -217,7 +217,7 @@ def random_field_setting(floor):
             random_away_position((0,0), water)
             field_group.add(water)
 
-    elif 20 < floor <= 40:
+    elif 20 < floor < 40:
         for i in range(randprob % 4):
             web = Field(web_image, (0,0))
             random_away_position((0,0), web)
@@ -229,7 +229,7 @@ def random_field_setting(floor):
             random_away_position((0,0), deco)
             field_group.add(deco)
 
-    elif 40 < floor <= 60:
+    elif 40 < floor < 60:
         num = max(8, randprob%11)
         aa = 0 
         for i in range(num):
@@ -237,3 +237,17 @@ def random_field_setting(floor):
             random_away_position((0,0), lava)
             field_group.add(lava)
             aa += 1
+
+    elif 60 < floor < 80:
+        num = max(3, randprob%8)
+        aa = 0 
+        for i in range(num):
+            book = Field(library_deco[aa%3], (0,0))
+            random_away_position((0,0), book)
+            field_group.add(book)
+            aa += 1
+
+        for i in range(randprob % 6):
+            web = Field(web_image, (0,0))
+            random_away_position((0,0), web)
+            field_group.add(web)

@@ -12,6 +12,9 @@ bgm_second = pygame.mixer.Sound('Soundtrack\\bgm\\second.wav')
 bgm_third = pygame.mixer.Sound('Soundtrack\\bgm\\third.wav')
 bgm_fourth = pygame.mixer.Sound('Soundtrack\\bgm\\fourth.wav')
 bgm_fifth = pygame.mixer.Sound('Soundtrack\\bgm\\fifth.wav')
+
+bgm_boss = pygame.mixer.Sound('Soundtrack\\bgm\\boss.wav')
+bgm_finalboss = pygame.mixer.Sound('Soundtrack\\bgm\\boss_final.wav')
 ##############################################################################################
 # EFFECT
 sound_page = pygame.mixer.Sound('Soundtrack\\effect\\page.wav')
@@ -43,7 +46,6 @@ sound_skill = pygame.mixer.Sound('Soundtrack\\effect\\skill.wav')
 sound_damaged = pygame.mixer.Sound('Soundtrack\\effect\\player_damaged.wav')
 sound_die = pygame.mixer.Sound('Soundtrack\\effect\\player_die.wav')
 sound_reborn = pygame.mixer.Sound('Soundtrack\\effect\\reborn.wav')
-sound_monster_damage = pygame.mixer.Sound('Soundtrack\\effect\\monster_damage.wav')
 ##############################################################################################
 class SoundController():
     def __init__(self):
