@@ -19,7 +19,8 @@ def scene_title_game():
     index = 0
 
     if ready:
-        sound_con.play_bgm(bgm_title)
+        if not sound_con.bgm == bgm_title:
+            sound_con.play_bgm(bgm_title)
 
     while ready:
         for i in range(len(color)):
@@ -354,7 +355,7 @@ def scene_tutorial(doing, tuto):
                 ("                      슬라임",    "근데요...", "여기 있는게 맘에 안드는데요 ?"),
                 ("킹 슬라임",                       "맘에 안들면 바꿀 수 도 있으니께", "'R' 버튼을 눌러봐"),
                 ("킹 슬라임",                       "근데 1원씩 내야혀", "세상에 공짜는 없다 몰러 ?"),
-                ("킹 슬라임",                       "아 그리고 '스킬'이나 '사용'인것들은", "'C'나 'V'로 쓸 수 있는겨"),
+                ("킹 슬라임",                       "아 그리고 '스킬'이나 '사용'인것들은", "'I'에서 등록해야 쓸 수 있는겨"),
                 ("킹 슬라임",                       "'스킬'은 쿨타임이 있는거고", "'사용'은 한번 쓰면 없이지니 조심하고"),
                 ("킹 슬라임",                       "맘에 드는 걸로 잘 해봐", "난 간다잉"),
             ]
@@ -365,7 +366,7 @@ def scene_tutorial(doing, tuto):
                 ("킹 슬라임",                       "'스페이스바'로 장비를 딱 골라서", "여기저기 움직이면서 정리해보라고"),
                 ("                      슬라임",    "으으-", "그래도 뱃 속이 꽉 찬거 같아요."),
                 ("킹 슬라임",                       "그럴 땐 'R'버튼으로 소화해보라고", "배가 편안해질거여"),
-                ("킹 슬라임",                       "아 그리고 아까 스킬 등록하는 거는", "'C'나 'V'로 되는것도 알아두고"),
+                ("킹 슬라임",                       "아 그리고 아까 스킬 등록하는 거는", "'C'나 'V'로 하는것도 알아두고"),
                 ("킹 슬라임",                       "음 내가 뭐 더 알려줄건 없는거 같은디", "이젠 진짜 잘해봐"),
             ]
     elif tuto == "box":
@@ -583,10 +584,10 @@ def scene_shop(doing):
 
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_shop_close)
-                    doing = False
                     if is_inven_overlapped(equip_con.equipped_group):
                         scene_inventory(True)
                     else:
+                        doing = False
                         equip_effect()
 
         screen.blit(shop_image, (340,60))
@@ -708,6 +709,7 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
     
+        screen_message_3("PRESS 'I' TO BACK", WHITE, (screen_width//2, screen_height-100), game_font_m)
         cursor.draw(screen)
         pygame.display.update()
 
@@ -858,7 +860,9 @@ def scene_credit(doing):
     global player_images, punch_d_image, inven_image, ready
     
     pos_bottom = screen_height + 100        # pos_bottom = 820    
-    credit_speed = 0.5
+    credit_speed = 1
+    ii = 0
+    credit_time = pygame.time.get_ticks()
 
     if not sound_con.bgm == bgm_title:
         sound_con.play_bgm(bgm_title)
@@ -867,11 +871,11 @@ def scene_credit(doing):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 scene_exit(True)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    credit_speed = 1.5
-                else:
-                    credit_speed = 0.5
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_SPACE:
+            #         credit_speed = 2
+                # else:
+                #     credit_speed = 0.5
 
         screen.fill(BLACK)
 
@@ -901,38 +905,43 @@ def scene_credit(doing):
             ("HANYANG UNIV. ERICA", pos_bottom+2050),
 
             ("THANKS FOR PLAYING", pos_bottom+2500),
+            ("AND NEW ADVENTURE JUST BEGINS NOW...", pos_bottom+2700),
         ]
 
         screen.blit(title_logo, (screen_width//2-title_logo.get_width()//2, msg[0][1]))
 
-        screen.blit(mon_frog_images[0], (screen_width//2-200, msg[1][1]+60))
-        screen.blit(player_images[0], (screen_width//2-100, msg[1][1]))
-        screen.blit(mon_golem_images[0], (screen_width//2+100, msg[1][1]+60))
-        screen.blit(mon_candle_images[0], (screen_width//2+200, msg[1][1]))
+        screen.blit(coffin_images[0], (screen_width//2-350, msg[1][1]+60))
+        screen.blit(mon_frog_images[ii], (screen_width//2-200, msg[1][1]+60))
+        screen.blit(player_images[ii], (screen_width//2-100, msg[1][1]))
+        screen.blit(mon_golem_images[ii], (screen_width//2+100, msg[1][1]+60))
+        screen.blit(mon_candle_images[ii], (screen_width//2+200, msg[1][1]))
 
         screen_message(msg[2][0], WHITE, (screen_width//2, msg[2][1]), game_font_m)
         screen_message(msg[3][0], WHITE, (screen_width//2, msg[3][1]), game_font_l)
 
-        screen.blit(mon_spider_images[0], (screen_width//2-200, msg[4][1]+60))
-        screen.blit(father_slime_images[0], (screen_width//2-100, msg[4][1]))
-        screen.blit(mon_magician_images[0], (screen_width//2+100, msg[4][1]+60))
-        screen.blit(mon_flamesnake_images[0], (screen_width//2+200, msg[4][1]))
+        screen.blit(mon_book_images[ii], (screen_width//2-300, msg[4][1]+60))
+        screen.blit(mon_spider_images[ii], (screen_width//2-200, msg[4][1]+60))
+        screen.blit(father_slime_images[ii], (screen_width//2-100, msg[4][1]))
+        screen.blit(mon_magician_images[ii], (screen_width//2+100, msg[4][1]+60))
+        screen.blit(mon_flamesnake_images[ii+1], (screen_width//2+200, msg[4][1]))
 
         screen_message(msg[5][0], WHITE, (screen_width//2, msg[5][1]), game_font_m)
         screen_message(msg[6][0], WHITE, (screen_width//2, msg[6][1]), game_font_l)
 
-        screen.blit(mon_bat_images[0], (screen_width//2-200, msg[7][1]+60))
-        screen.blit(mon_zombie_images[0], (screen_width//2-100, msg[7][1]))
-        screen.blit(mon_witch_images[0], (screen_width//2+100, msg[7][1]+60))
-        screen.blit(mon_scarecrow_images[0], (screen_width//2+200, msg[7][1]))
+        screen.blit(mon_spider_images[ii], (screen_width//2-300, msg[7][1]+60))
+        screen.blit(mon_firebat_images[ii], (screen_width//2-200, msg[7][1]+60))
+        screen.blit(mon_zombie_images[ii], (screen_width//2-100, msg[7][1]))
+        screen.blit(mon_witch_images[ii], (screen_width//2+100, msg[7][1]+60))
+        screen.blit(mon_scarecrow_images[ii], (screen_width//2+200, msg[7][1]))
 
         screen_message(msg[8][0], WHITE, (screen_width//2, msg[8][1]), game_font_m)
         screen_message(msg[9][0], WHITE, (screen_width//2, msg[9][1]), game_font_l)
 
-        screen.blit(mon_ember_images[0], (screen_width//2-200, msg[10][1]+60))
-        screen.blit(mon_ghost_images[0], (screen_width//2-100, msg[10][1]))
+        screen.blit(mon_skel_images[ii], (screen_width//2-300, msg[10][1]+60))
+        screen.blit(mon_ember_images[ii], (screen_width//2-200, msg[10][1]+60))
+        screen.blit(mon_ghost_images[ii], (screen_width//2-100, msg[10][1]))
         screen.blit(stair_images[2], (screen_width//2+100, msg[10][1]+60))
-        screen.blit(devil_images[0], (screen_width//2+200, msg[10][1]))
+        screen.blit(devil_images[ii], (screen_width//2+200, msg[10][1]))
 
         screen_message(msg[11][0], WHITE, (screen_width//2, msg[11][1]), game_font_m)
         screen_message(msg[12][0], WHITE, (screen_width//2, msg[12][1]), game_font_l)
@@ -944,12 +953,19 @@ def scene_credit(doing):
         screen_message(msg[16][0], WHITE, (screen_width//2, msg[16][1]), game_font_m)
 
         screen_message(msg[17][0], WHITE, (screen_width//2, msg[17][1]), game_font_l)
+        screen_message(msg[18][0], WHITE, (screen_width//2, msg[18][1]), game_font_m)
 
         pos_bottom -= credit_speed
 
+        if pygame.time.get_ticks() - credit_time > 500:
+            ii += 1
+            credit_time = pygame.time.get_ticks()
+            if ii > 1:
+                ii = 0
+        
         pygame.display.update()
 
-        if pos_bottom < -2500:
+        if pos_bottom < -2800:
             doing = False
             game_con.ending = True
             player_images = player_blue_images
@@ -1064,10 +1080,10 @@ def next_floor(pos):
     item_group.empty()
     shooting_group.empty()
 
-    if (game_con.floor % 20 == 19):
-        stair.image = stair_images[0]
-    elif game_con.floor == 99:
+    if game_con.floor == 99:
         stair.image = stair_images[2]
+    elif (game_con.floor % 20 == 19):
+        stair.image = stair_images[0]
     else:
         stair.image = stair_images[1]
 
@@ -1122,7 +1138,8 @@ def show_animation():
     for npc in npc_group:
         npc.image_update()
     for monster in monster_group:
-        monster.image_update()
+        if not monster.is_die:
+            monster.image_update()
 
 def random_for_sale():
     random.shuffle(equip_con.normal_equips)
@@ -1556,13 +1573,12 @@ def monster_action():
 
             if "mon_candle" in monster.type:
                 if 0 <= randprob < 30:
-                    spawn_monster(player.position, Mon_ember_m())\
+                    spawn_monster(player.position, Mon_ember_m())
 
             if "boss" in monster.type:
                 boss_action(monster)
 
             if "devil_final" in monster.type:
-                print(monster.cycle)
                 devil_action(monster)
 
 def boss_action(monster):
@@ -1607,7 +1623,7 @@ def boss_action(monster):
     elif "boss_flamesnake" in monster.type:
         monster.cycle += 1
         if monster.cycle == 3:
-            spawn_monster(player.position, Mon_ember())
+            spawn_monster(player.position, Mon_ember_m())
             monster.cycle = 0
 
     elif "boss_magician" in monster.type:
@@ -1681,10 +1697,10 @@ def monster_die(monster):
 
     if not monster.is_die:
         monster.is_die = True
-        monster.i_i = 0
-        monster.change_image_group(monster.die_images)
+        monster.image = monster.die_image
+        monster.die_time = pygame.time.get_ticks()
 
-    if monster.i_i >= len(monster.die_images)-1:
+    if pygame.time.get_ticks() - monster.die_time > 300:
         monster_con.mon_count += 1
         drop_item(monster)
         monster_group.remove(monster)
@@ -1912,6 +1928,8 @@ while running:
                 #     if monster_group:
                 #         for monster in monster_group:
                 #             monster.hp -= 1000
+                # if event.key == pygame.K_p:
+                #     scene_credit(True)
 
         if not player.is_die:
             player_move_key()
@@ -1978,7 +1996,7 @@ while running:
             monster_die(monster)
             if len(monster_group) == 0:
                 if game_con.floor == 99:
-                    stair.rect = stair_zero_floor
+                    stair.rect = stair_images[2].get_rect(center=(screen_width//2, 120))
                 else:
                     random_away_position(player.position, stair)
 

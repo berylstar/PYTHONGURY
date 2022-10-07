@@ -161,7 +161,7 @@ class E_CrescentMoon(Equip):
 
     def prob_revival(self):
         randprob = random.randrange(1,101)
-        if randprob <= 3:
+        if randprob <= 7:
             self.revival = True
         else:
             self.revival = False

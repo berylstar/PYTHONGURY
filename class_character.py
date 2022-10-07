@@ -17,7 +17,7 @@ class Character(pygame.sprite.Sprite):
         self.flip = False
 
         self.is_die = False
-        # self.die_images = monster_die_images
+        self.die_time = 0
 
     def change_image_group(self, new_images):
         self.i_i = 0
@@ -91,7 +91,7 @@ class Mon_spider(Character):
         image_group = mon_spider_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = spider_die
+        self.die_image = spider_x
         self.type = ["shooter"]
 
         self.hp = 12
@@ -107,7 +107,7 @@ class Mon_frog(Character):
         image_group = mon_frog_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = frog_die
+        self.die_image = frog_x
         self.type = []
 
         self.hp = 12
@@ -119,7 +119,7 @@ class Mon_bat(Character):
         image_group = mon_bat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = bat_die
+        self.die_image = bat_x
         self.type = ["runner"]
 
         self.hp = 8
@@ -133,7 +133,7 @@ class Mon_skel(Character):
         image_group = mon_skel_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = skel_die
+        self.die_image = skel_x
         self.type = []
 
         self.hp = 21
@@ -146,7 +146,7 @@ class Boss_spider(Character):
         image_group = images_bigger(mon_spider_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(spider_die, 2)
+        self.die_image = pygame.transform.rotozoom(spider_x, 0, 2)
         self.type = ["boss", "boss_spider"]
 
         self.hp = 120
@@ -158,7 +158,7 @@ class Boss_bat(Character):
         image_group = images_bigger(mon_bat_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(bat_die, 2)
+        self.die_image = pygame.transform.rotozoom(bat_x, 0, 2)
         self.type = ["boss", "boss_bat", "runner"]
 
         self.hp = 80
@@ -172,7 +172,7 @@ class Boss_frog(Character):
         image_group = images_bigger(mon_frog_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(frog_die, 2)
+        self.die_image = pygame.transform.rotozoom(frog_x, 0, 2)
         self.type = ["boss", "boss_frog"]
 
         self.hp = 200
@@ -185,7 +185,7 @@ class Mon_frog_m(Character):
         image_group = mon_frog_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = frog_die
+        self.die_image = frog_x
         self.type = ["mini"]
 
         self.hp = 3
@@ -197,7 +197,7 @@ class Boss_skel(Character):
         image_group = images_bigger(mon_skel_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(skel_die, 2)
+        self.die_image = pygame.transform.rotozoom(skel_x, 0, 2)
         self.type = ["boss", "boss_skel"]
 
         self.hp = 160
@@ -214,7 +214,7 @@ class Mon_zombie(Character):
         image_group = mon_zombie_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = zombie_die
+        self.die_image = zombie_x
         self.type = []
 
         self.hp = 23
@@ -226,7 +226,7 @@ class Mon_werewolf(Character):
         image_group = mon_werewolf_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = werewolf_die
+        self.die_image = werewolf_x
         self.type = ["toward"]
 
         self.hp = 30
@@ -238,7 +238,7 @@ class Mon_ghost(Character):
         image_group = mon_ghost_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = ghost_die
+        self.die_image = ghost_x
         self.type = ["alpha"]
 
         self.hp = 20
@@ -250,7 +250,7 @@ class Mon_scarecrow(Character):
         image_group = mon_scarecrow_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = scarecrow_die
+        self.die_image = scarecrow_x
         self.type = ["shooter"]
 
         self.hp = 18
@@ -267,7 +267,7 @@ class Boss_zombie(Character):
         image_group = images_bigger(mon_zombie_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(zombie_die, 2)
+        self.die_image = pygame.transform.rotozoom(zombie_x, 0, 2)
         self.type = ["boss", "boss_zombie"]
 
         self.hp = 100
@@ -279,7 +279,7 @@ class Boss_werewolf(Character):
         image_group = images_bigger(mon_werewolf_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(werewolf_die, 2)
+        self.die_image = pygame.transform.rotozoom(werewolf_x, 0, 2)
         self.type = ["boss", "runner", "toward"]
 
         self.hp = 180
@@ -293,7 +293,7 @@ class Boss_ghost(Character):
         image_group = images_bigger(mon_ghost_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(ghost_die, 2)
+        self.die_image = pygame.transform.rotozoom(ghost_x, 0, 2)
         self.type = ["boss", "boss_ghost", "alpha"]
 
         self.hp = 230
@@ -305,7 +305,7 @@ class Boss_scarecrow(Character):
         image_group = images_bigger(mon_scarecrow_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(scarecrow_die, 2)
+        self.die_image = pygame.transform.rotozoom(scarecrow_x, 0, 2)
         self.type = ["boss", "boss_scarecrow"]
 
         self.hp = 200
@@ -322,7 +322,7 @@ class Mon_golem(Character):
         image_group = mon_golem_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = golem_die
+        self.die_image = golem_x
         self.type = []
 
         self.hp = 50
@@ -334,7 +334,7 @@ class Mon_ember(Character):
         image_group = mon_ember_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = ember_die
+        self.die_image = ember_x
         self.type = ["shooter"]
 
         self.hp = 25
@@ -350,7 +350,7 @@ class Mon_flamesnake(Character):
         image_group = mon_flamesnake_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = flamesnake_die
+        self.die_image = flamesnake_x
         self.type = ["shooter_four"]
 
         self.hp = 32
@@ -366,7 +366,7 @@ class Mon_firebat(Character):
         image_group = mon_firebat_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = firebat_die
+        self.die_image = firebat_x
         self.type = ["runner", "toward"]
 
         self.hp = 18
@@ -381,7 +381,7 @@ class Boss_golem(Character):
         image_group = images_bigger(mon_golem_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(golem_die, 2)
+        self.die_image = pygame.transform.rotozoom(golem_x, 0, 2)
         self.type = ["boss", "toward"]
 
         self.hp = 400
@@ -393,7 +393,7 @@ class Boss_ember(Character):
         image_group = images_bigger(mon_ember_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(ember_die, 2)
+        self.die_image = pygame.transform.rotozoom(ember_x, 0, 2)
         self.type = ["boss", "boss_ember", "shooter"]
 
         self.hp = 220
@@ -410,7 +410,7 @@ class Boss_flamesnake(Character):
         image_group = images_bigger(mon_flamesnake_images, 1.5)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(flamesnake_die, 1.5)
+        self.die_image = pygame.transform.rotozoom(flamesnake_x, 0, 1.5)
         self.type = ["boss", "boss_flamesnake", "shooter_four"]
 
         self.hp = 250
@@ -428,7 +428,7 @@ class Mon_witch(Character):
         image_group = mon_witch_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = witch_die
+        self.die_image = witch_x
         self.type = ["runner", "alpha"]
 
         self.hp = 19
@@ -442,7 +442,7 @@ class Mon_book(Character):
         image_group = mon_book_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = book_die
+        self.die_image = book_x
         self.type = ["toward"]
 
         self.hp = 27
@@ -454,7 +454,7 @@ class Mon_magician(Character):
         image_group = mon_magician_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = magician_die
+        self.die_image = magician_x
         self.type = ["shooter", "toward"]
 
         self.hp = 30
@@ -470,7 +470,7 @@ class Mon_candle(Character):
         image_group = mon_candle_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = candle_die
+        self.die_image = candle_x
         self.type = ["mon_candle"]
 
         self.hp = 60
@@ -482,7 +482,7 @@ class Mon_ember_m(Character):
         image_group = mon_ember_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = ember_die
+        self.die_image = ember_x
         self.type = ["mini"]
 
         self.hp = 5
@@ -495,7 +495,7 @@ class Boss_witch(Character):
         image_group = images_bigger(mon_witch_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(witch_die, 2)
+        self.die_image = pygame.transform.rotozoom(witch_x, 0, 2)
         self.type = ["boss", "runner", "alpha"]
 
         self.hp = 100
@@ -509,7 +509,7 @@ class Boss_book(Character):
         image_group = images_bigger(mon_book_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(book_die, 2)
+        self.die_image = pygame.transform.rotozoom(book_x, 0, 2)
         self.type = ["toward"]
 
         self.hp = 120
@@ -521,7 +521,7 @@ class Boss_magician(Character):
         image_group = images_bigger(mon_magician_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(magician_die, 2)
+        self.die_image = pygame.transform.rotozoom(magician_x, 0, 2)
         self.type = ["boss", "boss_magician", "shooter", "toward"]
 
         self.hp = 150
@@ -538,8 +538,8 @@ class Boss_candle(Character):
         image_group = images_bigger(mon_candle_images, 2)
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = images_bigger(candle_die, 2)
-        self.type = ["boss", "mon_candle"]
+        self.die_image = pygame.transform.rotozoom(candle_x, 0, 2)
+        self.type = ["boss", "boss_candle"]
 
         self.hp = 170
         self.ap = 1
@@ -553,7 +553,7 @@ class Boss_devil_first(Character):
         image_group = devil_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = devil_images
+        self.die_image = devil_images[1]
         self.type = ["boss", "devil_first", "toward", "runner", "alpha"]
 
         self.hp = 200
@@ -567,7 +567,7 @@ class Boss_devil_final(Character):
         image_group = devil_images
         position = (0,0)
         Character.__init__(self, image_group, position)
-        self.die_images = devil_die
+        self.die_image = devil_x
         self.type = ["devil_final", "toward", "runner", "alpha"]
 
         self.hp = 1500

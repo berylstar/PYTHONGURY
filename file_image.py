@@ -31,7 +31,6 @@ mon_skel_images = [
     ]
 skel_atk_images = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\monster\\skel_atk.png")), 0, 0.5)
 skel_x = pygame.image.load(os.path.join(file_path, "design\\monster\\skel_x.png"))
-skel_die = [skel_x, skel_x, skel_x]
 
 ##### SPIDER
 mon_spider_images = [
@@ -41,7 +40,6 @@ mon_spider_images = [
     ]
 spider_atk_image = pygame.transform.rotozoom(pygame.image.load(os.path.join(file_path, "design\\field\\web.png")), 0, 0.5)
 spider_x = pygame.image.load(os.path.join(file_path, "design\\monster\\spider_x.png"))
-spider_die = [spider_x, spider_x, spider_x]
 
 ##### BAT
 mon_bat_images = [
@@ -50,7 +48,6 @@ mon_bat_images = [
     ]
 blind_image = pygame.image.load(os.path.join(file_path, "design\\etc\\blind.png"))
 bat_x = pygame.image.load(os.path.join(file_path, "design\\monster\\bat_x.png"))
-bat_die = [bat_x, bat_x, bat_x]
 
 ##### FROG
 mon_frog_images = [    
@@ -59,7 +56,6 @@ mon_frog_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\frog_0.png")),
     ]
 frog_x = pygame.image.load(os.path.join(file_path, "design\\monster\\frog_x.png"))
-frog_die = [frog_x, frog_x, frog_x]
 #########################
 ##### ZOMBIE
 mon_zombie_images = [
@@ -69,7 +65,6 @@ mon_zombie_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_3.png")),
 ]
 zombie_x = pygame.image.load(os.path.join(file_path, "design\\monster\\zombie_x.png"))
-zombie_die = [zombie_x, zombie_x, zombie_x]
 
 ##### GHOST
 mon_ghost_images = [
@@ -77,7 +72,6 @@ mon_ghost_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_1.png")),
 ]
 ghost_x = pygame.image.load(os.path.join(file_path, "design\\monster\\ghost_x.png"))
-ghost_die = [ghost_x, ghost_x, ghost_x]
 
 ##### WEREWOLF
 mon_werewolf_images = [
@@ -87,7 +81,6 @@ mon_werewolf_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_3.png")),
 ]
 werewolf_x = pygame.image.load(os.path.join(file_path, "design\\monster\\werewolf_x.png"))
-werewolf_die = [werewolf_x, werewolf_x, werewolf_x]
 
 ##### SCARECROW
 mon_scarecrow_images = [
@@ -96,8 +89,6 @@ mon_scarecrow_images = [
 ]
 crow_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_atk.png"))
 scarecrow_x = pygame.image.load(os.path.join(file_path, "design\\monster\\scarecrow_x.png"))
-scarecrow_die = [scarecrow_x, scarecrow_x, scarecrow_x]
-
 #########################
 ##### GOLEM
 mon_golem_images = [
@@ -107,7 +98,6 @@ mon_golem_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\golem_3.png")),
 ]
 golem_x = pygame.image.load(os.path.join(file_path, "design\\monster\\golem_x.png"))
-golem_die = [golem_x, golem_x, golem_x]
 
 ##### EMBER
 mon_ember_images = [
@@ -117,7 +107,6 @@ mon_ember_images = [
     ]
 fire_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_atk.png"))
 ember_x = pygame.image.load(os.path.join(file_path, "design\\monster\\ember_x.png"))
-ember_die = [ember_x, ember_x, ember_x]
 
 ##### FLAME SNAKE
 mon_flamesnake_images = [
@@ -127,7 +116,6 @@ mon_flamesnake_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_1.png")),
     ]
 flamesnake_x = pygame.image.load(os.path.join(file_path, "design\\monster\\flamesnake_x.png"))
-flamesnake_die = [flamesnake_x, flamesnake_x, flamesnake_x]
 
 ##### FIRE BAT
 mon_firebat_images = [
@@ -135,7 +123,6 @@ mon_firebat_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\firebat_1.png")),
 ]
 firebat_x = pygame.image.load(os.path.join(file_path, "design\\monster\\firebat_x.png"))
-firebat_die = [firebat_x, firebat_x, firebat_x]
 
 ##### WITCH
 mon_witch_images = [
@@ -144,7 +131,6 @@ mon_witch_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\witch_2.png")),
 ]
 witch_x = pygame.image.load(os.path.join(file_path, "design\\monster\\witch_x.png"))
-witch_die = [witch_x, witch_x, witch_x]
 
 ##### BOOK
 mon_book_images = [
@@ -153,7 +139,6 @@ mon_book_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\book_2.png")),
 ]
 book_x = pygame.image.load(os.path.join(file_path, "design\\monster\\book_x.png"))
-book_die = [book_x, book_x, book_x]
 
 ##### MAGICIAN
 mon_magician_images = [
@@ -162,7 +147,6 @@ mon_magician_images = [
 ]
 magician_atk_image = pygame.image.load(os.path.join(file_path, "design\\monster\\wizard_atk.png"))
 magician_x = pygame.image.load(os.path.join(file_path, "design\\monster\\wizard_x.png"))
-magician_die = [magician_x, magician_x, magician_x]
 
 ##### CANDLE
 mon_candle_images = [
@@ -171,13 +155,6 @@ mon_candle_images = [
     pygame.image.load(os.path.join(file_path, "design\\monster\\candle_2.png")),
 ]
 candle_x = pygame.image.load(os.path.join(file_path, "design\\monster\\candle_x.png"))
-candle_die = [candle_x, candle_x, candle_x]
-
-# monster_die_images = [
-#     pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
-#     pygame.image.load(os.path.join(file_path, "design\\skeleton.png")),
-#     pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
-# ]
 
 ##### DEVIL
 devil_images =[
@@ -186,7 +163,6 @@ devil_images =[
     pygame.image.load(os.path.join(file_path, "design\\monster\\boss_2.png")),
 ]
 devil_x = pygame.image.load(os.path.join(file_path, "design\\monster\\boss_x.png"))
-devil_die = [devil_x, devil_x, devil_x, devil_x, devil_x]
 ##############################################################################################
 ##### NPC
 father_slime_images = [
