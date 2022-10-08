@@ -67,8 +67,8 @@ def scene_title_game():
 def scene_esc(doing):
     global ready
 
-    option = ["RESUME", "TOGGLE SCREEN", "SOUND SETTING", "RESTART", "EXIT"]
-    color = [GRAY, GRAY, GRAY, GRAY, GRAY]
+    option = ["RESUME", "HELP", "TOGGLE SCREEN", "SOUND SETTING", "RESTART", "EXIT"]
+    color = [GRAY, GRAY, GRAY, GRAY, GRAY, GRAY]
     index = 0
 
     player.stop()
@@ -98,14 +98,17 @@ def scene_esc(doing):
                         doing = False
                         pygame.display.update()
                     elif index == 1:
+                        doing = False
+                        scene_help(True)
+                    elif index == 2:
                         pygame.display.toggle_fullscreen()
                         pygame.display.update()
-                    elif index == 2:
-                        scene_sound_setting(True)
                     elif index == 3:
+                        scene_sound_setting(True)
+                    elif index == 4:
                         doing = False
                         game_restart()
-                    elif index == 4:
+                    elif index == 5:
                         scene_exit(True)
                 if event.key == pygame.K_ESCAPE:
                     sound_con.play_sound(sound_pick)
@@ -118,11 +121,12 @@ def scene_esc(doing):
 
         screen.blit(title_image, (0,0))
         screen.blit(title_logo, (screen_width//2-title_logo.get_width()//2,100))
-        screen_message_3(option[0], color[0], (screen_width//2, 430), game_font_m)
-        screen_message_3(option[1], color[1], (screen_width//2, 480), game_font_m)
-        screen_message_3(option[2], color[2], (screen_width//2, 530), game_font_m)
-        screen_message_3(option[3], color[3], (screen_width//2, 580), game_font_m)
-        screen_message_3(option[4], color[4], (screen_width//2, 630), game_font_m)
+        screen_message_3(option[0], color[0], (screen_width//2, 380), game_font_m)
+        screen_message_3(option[1], color[1], (screen_width//2, 430), game_font_m)
+        screen_message_3(option[2], color[2], (screen_width//2, 480), game_font_m)
+        screen_message_3(option[3], color[3], (screen_width//2, 530), game_font_m)
+        screen_message_3(option[4], color[4], (screen_width//2, 580), game_font_m)
+        screen_message_3(option[5], color[5], (screen_width//2, 630), game_font_m)
         screen.blit(team_logo, (900,600))
 
         pygame.display.update()
@@ -311,6 +315,91 @@ def scene_story(doing):
         
         pygame.display.update()
 
+def scene_help(doing):
+
+    index = 0
+    fin = len(help_images)-1
+
+    while doing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                scene_exit(True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    sound_con.play_sound(sound_page)
+                    if index >= fin:
+                        doing = False
+                    else:
+                        index += 1
+                if event.key == pygame.K_ESCAPE:
+                    sound_con.play_sound(sound_pick)
+                    scene_esc(True)
+
+        screen.fill(BLACK)
+
+        screen.blit(help_images[index], (-50,136))
+        if index == 0:
+            screen_message_2("1. 게임 화면", WHITE, (700, 50), game_font_m)
+            screen_message_2("왼쪽 : 인터페이스", WHITE, (700, 200), game_font_s)
+            screen_message_2("       층수, HP, 코인, 현재 목숨", WHITE, (700, 230), game_font_s)
+            screen_message_2("중앙 : 메인 게임 화면", WHITE, (700, 290), game_font_s)
+            screen_message_2("오른쪽 : 인벤토리", WHITE, (700, 350), game_font_s)
+            screen_message_2("         획득한 장비 관리", WHITE, (700, 380), game_font_s)
+        elif index == 1:
+            screen_message_2("2. 게임 시작", WHITE, (700, 50), game_font_m)
+            screen_message_2("플레이어 : 슬라임", WHITE, (700, 200), game_font_s)
+            screen_message_2("'방향키' - 이동", WHITE, (700, 260), game_font_s)
+            screen_message_2("'스페이스 바' - 펀치", WHITE, (700, 320), game_font_s)
+            screen_message_2("'펀치' : 공격 및 상호작용", WHITE, (700, 350), game_font_s)
+            screen_message_2("'C' or 'V' : 등록한 스킬 사용", WHITE, (700, 410), game_font_s)
+            screen_message_2("             스킬 등록은 인벤토리에서 가능합니다.", WHITE, (700, 440), game_font_s)
+        elif index == 2:
+            screen_message_2("3. 상점", WHITE, (700, 50), game_font_m)
+            screen_message_2("'1' or '2' or '3' - 장비 선택", WHITE, (700, 200), game_font_s)
+            screen_message_2("                    선택된 장비 이름 / 설명 ", WHITE, (700, 230), game_font_s)
+            screen_message_2("                    효과 / 레어도 / 가격 표시", WHITE, (700, 260), game_font_s)
+            screen_message_2("                    한번 더 눌러 구매", WHITE, (700, 290), game_font_s)
+            screen_message_2("'R' - 상점 새로고침", WHITE, (700, 350), game_font_s)
+            screen_message_2("      코인 1개 소모", WHITE, (700, 380), game_font_s)
+            screen_message_2("'스페이스 바' - 상점 나가기", WHITE, (700, 440), game_font_s)
+        elif index == 3:
+            screen_message_2("4. 보물상자", WHITE, (700, 50), game_font_m)
+            screen_message_2("'1' or '2' - 보상 선택", WHITE, (700, 200), game_font_s)
+            screen_message_2("             보상 설명", WHITE, (700, 230), game_font_s)
+            screen_message_2("             한번 더 눌러 획득", WHITE, (700, 260), game_font_s)
+            screen_message_2("'스페이스 바' - 상자 닫기", WHITE, (700, 320), game_font_s)
+            screen_message_2("한번 닫은 상자는 없어지니 조심하세요.", WHITE, (700, 380), game_font_s)
+        elif index == 4:
+            screen_message_2("5. 인벤토리", WHITE, (700, 50), game_font_m)
+            screen_message_2("'I' - 인벤토리 열기/닫기", WHITE, (700, 200), game_font_s)
+            screen_message_2("인벤토리의 '커서'로 장비 설정", WHITE, (700, 260), game_font_s)
+            screen_message_2("'스페이스 바' - 장비 선택", WHITE, (700, 320), game_font_s)
+            screen_message_2("'방향키' - 선택한 장비 이동", WHITE, (700, 380), game_font_s)
+            screen_message_2("           장비가 겹치지 않게 정리하세요.", WHITE, (700, 410), game_font_s)
+            screen_message_2("'R' - 선택한 장비 제거", WHITE, (700, 470), game_font_s)
+            screen_message_2("      제거한 장비는 되돌릴 수 없습니다.", WHITE, (700, 500), game_font_s)
+            screen_message_2("      제거한 장비는 상점에서 다시 등장합니다.", WHITE, (700, 530), game_font_s)
+            screen_message_2("'C' or 'V' - 선택한 키로 스킬/사용 장비 등록", WHITE, (700, 590), game_font_s)
+            screen_message_2("스킬 장비 : 여러번 사용가능 (쿨타임)", WHITE, (700, 650), game_font_s)
+            screen_message_2("사용 장비 : 사용시 제거", WHITE, (700, 680), game_font_s)
+        elif index == 5:
+            screen_message_2("5. 탑", WHITE, (700, 50), game_font_m)
+            screen_message_2("랜덤으로 몬스터들이 생성됩니다.", WHITE, (700, 200), game_font_s)
+            screen_message_2("투명화, 달려오기, 원거리 공격 등 다양한 패턴", WHITE, (700, 230), game_font_s)
+            screen_message_2("펀치와 스킬을 이용해 높은 층으로 올라가세요.", WHITE, (700, 260), game_font_s)
+            screen_message_2("아이템 드롭 - 포션, 코인", WHITE, (700, 320), game_font_s)
+            screen_message_2("1초마다 HP -1", WHITE, (700, 380), game_font_s)
+            screen_message_2("층 오를 때마다 HP +5", WHITE, (700, 410), game_font_s)
+            screen_message_2("거미줄, 용암과 같은 필드효과도 조심하세요.", WHITE, (700, 440), game_font_s)
+            screen_message_2("목숨 - 0이 되면 게임 종료", WHITE, (700, 500), game_font_s)
+        elif index == 6:
+            screen_message_2("6. 보스", WHITE, (700, 50), game_font_m)
+            screen_message_2("20층마다 보스 몬스터 등장", WHITE, (700, 200), game_font_s)
+            screen_message_2("보스 몬스터는 특별 보상 드롭", WHITE, (700, 260), game_font_s)
+            screen_message_2("100층까지 올라갈 수 있을까요 ?", WHITE, (700, 320), game_font_s)
+
+        pygame.display.update()
+
 def scene_tutorial(doing, tuto):
 
     player.stop()
@@ -339,6 +428,7 @@ def scene_tutorial(doing, tuto):
                 ("킹 슬라임",                       "아 - 야 !", "아직 내 말 안 끝났는디 어딜가는겨"),
                 ("킹 슬라임",                       "이 탑에 흐르는 이상한 마력때문에", "힘들어지니께 빨리 움직이는 게 좋을거여."),
                 ("킹 슬라임",                       "젊은 친구가 딱 하니께, 이 돈은 가져가보록 혀.", ""),
+                ("킹 슬라임",                       "물어보고 싶은 게 있으면", "'ESC' -> 'HELP'를 확인혀"),
                 ("킹 슬라임",                       "그럼 잘 해보라고.", ""),
             ]
         else:
@@ -857,7 +947,7 @@ def scene_ending(doing):
     scene_credit(True)
 
 def scene_credit(doing):
-    global player_images, punch_d_image, inven_image, ready
+    global ready
     
     pos_bottom = screen_height + 100        # pos_bottom = 820    
     credit_speed = 1
@@ -953,7 +1043,7 @@ def scene_credit(doing):
         screen_message(msg[16][0], WHITE, (screen_width//2, msg[16][1]), game_font_m)
 
         screen_message(msg[17][0], WHITE, (screen_width//2, msg[17][1]), game_font_l)
-        screen_message(msg[18][0], WHITE, (screen_width//2, msg[18][1]), game_font_m)
+        screen_message(msg[18][0], (0,200,200), (screen_width//2, msg[18][1]), game_font_l)
 
         pos_bottom -= credit_speed
 
@@ -968,12 +1058,7 @@ def scene_credit(doing):
         if pos_bottom < -2800:
             doing = False
             game_con.ending = True
-            player_images = player_blue_images
-            player.image_group = player_blue_images
-            player.die_images = blue_die_images
-            punch_d_image = blue_punch
-            player.punch = blue_punch
-            inven_image = blue_inven
+            version_blue()
             ready = True
 ##############################################################################################
 def screen_message(writing, color, position, font):
@@ -996,6 +1081,7 @@ def game_restart():
     global item_con, equip_con, skill_con, monster_con
 
     player = Player(player_images, player_first_position)
+
     if game_con.tutorial:
         player.coin += 10
     make_floor_zero()
@@ -1007,6 +1093,23 @@ def game_restart():
     skill_con = SkillController()
     monster_con = MonsterController()
     random_for_sale()
+
+def version_blue():
+    global player_images, player_die_images, punch_d_image, player_icon, inven_image, title_image, title_logo
+
+    player_images = player_blue_images
+    player.image_group = player_blue_images
+
+    player_die_images = blue_die_images
+    player.die_images = blue_die_images
+
+    punch_d_image = blue_punch
+    player.punch = blue_punch
+
+    player_icon = player_images[1]
+    inven_image = blue_inven
+    title_image = title_2_image
+    title_logo = title_logo_2
 
 def make_floor_zero():
 
@@ -1928,8 +2031,8 @@ while running:
                 #     if monster_group:
                 #         for monster in monster_group:
                 #             monster.hp -= 1000
-                # if event.key == pygame.K_p:
-                #     scene_credit(True)
+                if event.key == pygame.K_p:
+                    scene_ending(True)
 
         if not player.is_die:
             player_move_key()
