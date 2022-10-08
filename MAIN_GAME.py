@@ -2031,8 +2031,6 @@ while running:
                 #     if monster_group:
                 #         for monster in monster_group:
                 #             monster.hp -= 1000
-                if event.key == pygame.K_p:
-                    scene_ending(True)
 
         if not player.is_die:
             player_move_key()
