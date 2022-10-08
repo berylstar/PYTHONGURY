@@ -398,10 +398,10 @@ def scene_tutorial(doing, tuto):
                     doing = False
                     scene_esc(True)
 
-        screen.fill(BLACK)
+        screen.blit(corpus_image, (350,450))
         screen_message_2(msg[index][0], YELLOW, (400, 470), game_font_m)
-        screen_message_2(msg[index][1], WHITE, (400,530), game_font_s)
-        screen_message_2(msg[index][2], WHITE, (400,570), game_font_s)
+        screen_message_2(msg[index][1], WHITE, (400,550), game_font_s)
+        screen_message_2(msg[index][2], WHITE, (400,590), game_font_s)
         pygame.display.update(corpus_rect)
 
 def scene_boss(doing):
@@ -709,7 +709,7 @@ def scene_inventory(doing):
             screen_message(picked_equip.msg_eff, YELLOW, (640,210), game_font_kor)
             screen_message(picked_equip.msg_eff_2, YELLOW, (640,230), game_font_kor)
     
-        screen_message_3("PRESS 'I' TO BACK", WHITE, (screen_width//2, screen_height-100), game_font_m)
+        screen_message_3("     PRESS 'I' TO BACK     ", WHITE, (640,640), game_font_m)
         cursor.draw(screen)
         pygame.display.update()
 
@@ -795,7 +795,7 @@ def scene_treasurebox(doing, reward):
             screen_message(choice_equip[picked_num-1].msg_eff_2, YELLOW, (640,230), game_font_kor)
         else:
             if exit_flag:
-                screen_message("ARE YOU SURE ?", WHITE, (640,150), game_font_m)
+                screen_message("ARE YOU SURE TO QUIT ?", WHITE, (640,150), game_font_m)
                 picked_num = 0
             elif choice:
                 screen_message("CHOICE '1' or '2' !", WHITE, (640,150), game_font_m)

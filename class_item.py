@@ -22,6 +22,7 @@ class ItemController():
         self.red_coin = False
         
         self.first_box = True
+        self.is_get = False
 ##############################################################################################
 
 item_con = ItemController()

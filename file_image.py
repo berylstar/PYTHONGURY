@@ -3,7 +3,6 @@ import os
 
 file_path = os.path.dirname(__file__)
 ##############################################################################################
-dummy = pygame.image.load(os.path.join(file_path, "design\\skeleton.png"))
 ##### PLAYER
 player_images =[
     pygame.image.load(os.path.join(file_path, "design\\player\\main_0.png")),
@@ -300,6 +299,7 @@ story_images = [
     pygame.image.load(os.path.join(file_path, "design\\story\\12.png")),
     pygame.image.load(os.path.join(file_path, "design\\story\\13.png")),
 ]
+corpus_image = pygame.image.load(os.path.join(file_path, "design\\etc\\corpus.png"))
 shop_image = pygame.image.load(os.path.join(file_path, "design\\etc\\shop.png"))
 sold_out_image = pygame.image.load(os.path.join(file_path, "design\\etc\\sold_out.png"))
 treasurebox_image = pygame.image.load(os.path.join(file_path, "design\\etc\\treasurebox.png"))
@@ -335,4 +335,3 @@ blue_die_images = [
 ]
 blue_inven = pygame.image.load(os.path.join(file_path, "design\\ending\\inven.png"))
 blue_punch = pygame.image.load(os.path.join(file_path, "design\\ending\\blue_punch.png"))
-

@@ -331,7 +331,7 @@ class E_Helmet(Equip):
         image = helmet_image
         Equip.__init__(self, image)
         self.msg_name = "하이바"
-        self.msg_info = "모자랄게 없는 헬멧입니다."
+        self.msg_info = "'모자'랄게 없는 헬멧입니다."
         self.msg_eff = "방어력 +0.3"
 
         self.max_row = 4
