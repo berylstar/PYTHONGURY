@@ -950,7 +950,7 @@ def scene_credit(doing):
     global ready
     
     pos_bottom = screen_height + 100        # pos_bottom = 820    
-    credit_speed = 1
+    credit_speed = 0.5
     ii = 0
     credit_time = pygame.time.get_ticks()
 
@@ -961,11 +961,6 @@ def scene_credit(doing):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 scene_exit(True)
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_SPACE:
-            #         credit_speed = 2
-                # else:
-                #     credit_speed = 0.5
 
         screen.fill(BLACK)
 
@@ -1078,21 +1073,27 @@ def screen_message_3(writing, color, position, font):
 
 def game_restart():
     global player
-    global item_con, equip_con, skill_con, monster_con
+    # global item_con, equip_con, skill_con, monster_con
 
-    player = Player(player_images, player_first_position)
+    while equip_con.equipped_group:
+        for equip in equip_con.equipped_group:
+            remove_from_equipped_group(equip)
+            equip.reset()
+
+    player.reset()
 
     if game_con.tutorial:
         player.coin += 10
+    
     make_floor_zero()
-    equip_reset()
     game_con.saved_floor = 1
 
-    item_con = ItemController()
-    equip_con = EquipController()
-    skill_con = SkillController()
-    monster_con = MonsterController()
     random_for_sale()
+
+    # item_con = ItemController()
+    # equip_con = EquipController()
+    # skill_con = SkillController()
+    # monster_con = MonsterController()
 
 def version_blue():
     global player_images, player_die_images, punch_d_image, player_icon, inven_image, title_image, title_logo
@@ -1467,13 +1468,14 @@ def remove_from_equipped_group(equip):
     sound_con.play_sound(sound_equip_remove)
 
     equip_con.equipped_group.remove(equip)
+
     if equip.is_effected:
         if equip.is_active_c:
             player.equip_c = None
         elif equip.is_active_v:
             player.equip_v = None
 
-        elif equip == e_wax:
+        if equip == e_wax:
             player.ap -= 2
 
         elif equip == e_pepper:
@@ -1539,10 +1541,9 @@ def remove_from_equipped_group(equip):
         elif equip == e_rollerskate:
             e_rollerskate.activate = False
 
-        equip.__init__()
         equip.reset()
 
-        equip_con.equip_off(equip)
+    equip_con.equip_off(equip)
 
 def setting_active_skill(key, picked_equip):
     if picked_equip.active:
@@ -1845,7 +1846,24 @@ class Player(Character):
         self.life = 5
         self.hp = 100
         self.max_hp = 100
-        self.coin = 0
+        self.coin = 100
+        self.ap = 10
+        self.speed = 0.3
+        self.punch = punch_d_image
+        self.dp = 0
+        self.damaged_time = 1
+
+        self.equip_c = None
+        self.equip_v = None
+
+        self.time = 0
+        self.die_images = player_die_images
+
+    def reset(self):
+        self.life = 5
+        self.hp = 100
+        self.max_hp = 100
+        self.coin = 100
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
@@ -2031,6 +2049,8 @@ while running:
                 #     if monster_group:
                 #         for monster in monster_group:
                 #             monster.hp -= 1000
+                if event.key == pygame.K_p:
+                    scene_ending(True)
 
         if not player.is_die:
             player_move_key()
