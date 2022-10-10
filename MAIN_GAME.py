@@ -1846,7 +1846,7 @@ class Player(Character):
         self.life = 5
         self.hp = 100
         self.max_hp = 100
-        self.coin = 100
+        self.coin = 0
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
@@ -1863,7 +1863,7 @@ class Player(Character):
         self.life = 5
         self.hp = 100
         self.max_hp = 100
-        self.coin = 100
+        self.coin = 0
         self.ap = 10
         self.speed = 0.3
         self.punch = punch_d_image
