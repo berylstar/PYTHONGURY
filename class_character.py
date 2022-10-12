@@ -413,7 +413,7 @@ class Boss_flamesnake(Character):
         self.die_image = pygame.transform.rotozoom(flamesnake_x, 0, 1.5)
         self.type = ["boss", "boss_flamesnake", "shooter_four"]
 
-        self.hp = 250
+        self.hp = 300
         self.ap = 3
         self.speed = 0
         self.bullet = fire_atk_image
@@ -475,7 +475,7 @@ class Mon_candle(Character):
 
         self.hp = 60
         self.ap = 0.8
-        self.speed = 0.24
+        self.speed = 0.18
 
 class Mon_ember_m(Character):
     def __init__(self):
