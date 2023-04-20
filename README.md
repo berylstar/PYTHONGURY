@@ -7,13 +7,11 @@
  
  
  
-# TEAM # PYTHONGURY
-# CODE DEVELOPER
+# TEAM PYTHONGURY
+*CODE DEVELOPER*
 Kim Minsang
-
 Bae Sunghyun
-
 Shin Junha
 
-# GRAPHIC DESIGNER
+*GRAPHIC DESIGNER*
 Lee Subin
