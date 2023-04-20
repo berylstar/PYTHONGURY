@@ -1,6 +1,13 @@
-# PYTHONGURY
- 2022 Hanyang Python Game Make Contest
 
+ 2022 Hanyang Python Game Make Contest
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+# TEAM # PYTHONGURY
 # CODE DEVELOPER
 Kim Minsang
 
